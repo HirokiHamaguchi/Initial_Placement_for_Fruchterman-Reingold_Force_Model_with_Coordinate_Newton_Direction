@@ -1,0 +1,145 @@
+\documentclass[a4paper, 10pt, dvipdfmx]{article}
+
+\usepackage{algorithm}      % \begin{algorithm}
+\usepackage{algorithmic}    % \begin{algorithmic}
+\usepackage{amsmath}        % \begin{align*}
+\usepackage{amssymb}        % \mathbb{A}
+\usepackage{amsthm}         % \newtheorem
+\usepackage{ascmac}         % \begin{screen}
+\usepackage{bm,bbm}         % \bm{A}, \bbm{1}
+\usepackage{booktabs}       % \toprule, \midrule, \bottomrule
+\usepackage{caption}        % \captionsetup
+\usepackage{enumitem}       % \begin{enumerate}[label=(\alph*)]
+\usepackage{geometry}       % \geometry{margin=1in}
+\usepackage{hyperref}       % \href{URL}{text}
+\usepackage{ifthen}         % \ifthenelse
+\usepackage{mathrsfs}       % \mathscr{A}
+\usepackage{mathtools}      % \mathrlap
+\usepackage{optidef}        % \begin{mini*}{x}{f(x)}{}{}
+\usepackage{physics}        % \qty, \norm, \abs
+\usepackage{subfiles}       % \subfile{file}
+\usepackage{thm-restate}    % \begin{restatable}{theorem}{thm}
+\usepackage{tikz}           % \begin{tikzpicture}
+\usepackage{xparse}         % \NewDocumentCommand
+% \usepackage{calc}         % \setlength
+% \usepackage{cancel}       % \cancel
+% \usepackage{parskip}      % \setlength{\parskip}{0.5em}
+% \usepackage{csvsimple}    % \csvautotabular
+% \usepackage{diagbox}      % \diagbox
+% \usepackage{dsfont}       % \mathds{1}
+% \usepackage{epsfig}       % \epsfig
+% \usepackage{fancybx}      % \ovalbox
+% \usepackage{float}        % \begin{figure}[H]
+% \usepackage{lipsum}       % \lipsum
+% \usepackage{listings}     % \begin{lstlisting}
+% \usepackage{makecell}     % \makecell{L1\L2}
+% \usepackage{multicol}     % \begin{multicols}{2}
+% \usepackage{multirow}     % \multirow
+% \usepackage{nicematrix}   % \begin{NiceMatrix}
+% \usepackage{qcircuit}     % \Qcircuit
+% \usepackage{siunitx}      % \SI{1}{\second}
+% \usepackage{stfloats}     % \begin{figure*}
+% \usepackage{subcaption}   % \begin{subfigure}
+% \usepackage{ulem}         % \sout
+% \usepackage[hyphens]{url} % \url
+% \usepackage{wrapfig}      % \begin{wrapfigure}
+% \usepackage[all]{xy}      % \xymatrix
+% \usepackage[dvipdfmx]{graphicx}
+% \usepackage[square, sort, comma, numbers]{natbib}
+
+\geometry{margin=1in}
+\hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue}
+
+\definecolor{cA}{HTML}{0072BD}
+\definecolor{cB}{HTML}{EDB120}
+\definecolor{cC}{HTML}{77AC30}
+\definecolor{cD}{HTML}{D95319}
+
+\newcommand{\red}[1]{\textcolor{red}{#1}}
+\newcommand{\blue}[1]{\textcolor{blue}{#1}}
+\newcommand{\cyan}[1]{\textcolor{cyan}{#1}}
+\newcommand{\gray}[1]{\textcolor{gray}{#1}}
+\newcommand{\green}[1]{\textcolor{green}{#1}}
+\newcommand{\brown}[1]{\textcolor{brown}{#1}}
+\newcommand{\black}[1]{\textcolor{black}{#1}}
+\newcommand{\st}{\text{ s.t. }}
+\newcommand{\Img}[1]{\mathrm{Im}\qty(#1)}
+\newcommand{\Ker}[1]{\mathrm{Ker}\qty(#1)}
+\newcommand{\Supp}[1]{\mathrm{supp}\qty(#1)}
+\newcommand{\Rank}[1]{\mathrm{rank}\qty(#1)}
+\newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
+\newcommand{\ceil}[1]{\left\lceil #1 \right\rceil}
+% C++ (https://tex.stackexchange.com/questions/4302/prettiest-way-to-typeset-c-cplusplus)
+\newcommand{\Cpp}{C\nolinebreak[4]\hspace{-.05em}\raisebox{.4ex}{\relsize{-3}{\textbf{++}}}}
+% https://tex.stackexchange.com/questions/28836/typesetting-the-define-equals-symbol
+\newcommand{\defeq}{\coloneqq}
+\newcommand{\eqdef}{\eqqcolon}
+% https://tex.stackexchange.com/questions/5502/how-to-get-a-mid-binary-relation-that-grows
+\newcommand{\relmiddle}[1]{\mathrel{}\middle#1\mathrel{}}
+
+\DeclareMathOperator{\Proj}{Proj}
+\DeclareMathOperator{\Exp}{Exp}
+\DeclareMathOperator{\Hess}{Hess}
+\DeclareMathOperator{\Retr}{Retr}
+\DeclareMathOperator{\Span}{span}
+% \DeclareMathOperator{\myGrad}{grad}
+% \renewcommand{\grad}{\myGrad}
+
+% https://tex.stackexchange.com/questions/564216/newcommand-for-each-letter
+\ExplSyntaxOn
+\NewDocumentCommand{\definealphabet}{mmmm}{
+\int_step_inline:nnn{`#3}{`#4}{
+\cs_new_protected:cpx{#1 \char_generate:nn{##1}{11}}{
+\exp_not:N #2{\char_generate:nn{##1}{11}}}}}
+\ExplSyntaxOff
+
+\definealphabet{bb}{\mathbb}{A}{Z}
+\definealphabet{rm}{\mathrm}{A}{Z}
+\definealphabet{cal}{\mathcal}{A}{Z}
+\definealphabet{frak}{\mathfrak}{a}{z}
+% \definealphabet{scr}{\mathscr}{A}{Z}
+% \definealphabet{frak}{\mathfrak}{A}{Z}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}{Proposition}
+\newtheorem{lemma}{Lemma}
+\newtheorem{definition}{Definition}
+\newtheorem{corollary}{Corollary}
+\newtheorem{remark}{Remark}
+\newtheorem{example}{Example}
+
+% https://qiita.com/rityo_masu/items/efd44bc8f9229e014237
+\allowdisplaybreaks[4]
+
+% \lstset{
+%   language=Python,numbers=left,frame=single,breaklines=true,lineskip=-0.9ex,xleftmargin=3zw,xrightmargin=0zw,
+%   basicstyle=\ttfamily,ndkeywordstyle=\small,identifierstyle=\small,numberstyle=\scriptsize,
+%   commentstyle=\color[rgb]{0,0.6,0},stringstyle=\small\ttfamily\color[rgb]{0.89,0.55,0},keywordstyle=\small\bfseries\color[rgb]{0.28,0.28,0.95},
+% }
+
+\usetikzlibrary{
+  3d,
+  calc,
+  math,
+  matrix,
+  patterns,
+  backgrounds,
+  arrows.meta,
+}
+
+% \graphicspath{{./fig/}}
+
+% \providecommand{\main}{.}
+\newboolean{isMain}
+\setboolean{isMain}{true}
+
+\begin{document}
+
+\title{include.tex}
+\author{Hiroki Hamaguchi}
+\date{\today}
+\maketitle
+
+This file is included in every document via \texttt{subfiles}.
+
+\end{document}

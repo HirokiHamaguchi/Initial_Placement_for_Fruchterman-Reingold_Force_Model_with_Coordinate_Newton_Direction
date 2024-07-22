@@ -1,0 +1,33 @@
+\documentclass[dvipdfmx]{standalone}
+
+\usepackage{amssymb}
+\usepackage{tikz}
+\usepackage{xcolor}
+
+\usetikzlibrary{fit}
+
+\definecolor{cA}{HTML}{0072BD}
+\definecolor{cB}{HTML}{EDB120}
+\definecolor{cC}{HTML}{77AC30}
+\definecolor{cD}{HTML}{D95319}
+
+\begin{document}
+
+\begin{tikzpicture}
+  \begin{scope}[xshift=-6cm]
+    \node [draw=cA, ultra thick, align=center, rounded corners=1em] {
+      \huge{$f=\sum f_i$}\\
+      \textbf{stochastic gradient decent}\\
+      optimize with a fraction of $f_i$
+    };
+  \end{scope}
+  \begin{scope}[xshift=+6cm]
+    \node [draw=cB, ultra thick, align=center, rounded corners=1em] {
+      \huge{$x=\bigcup x_i$}\\
+      \textbf{random subspace algorithm}\\
+      optimize with a fraction of $x_i$
+    };
+  \end{scope}
+\end{tikzpicture}
+
+\end{document}
