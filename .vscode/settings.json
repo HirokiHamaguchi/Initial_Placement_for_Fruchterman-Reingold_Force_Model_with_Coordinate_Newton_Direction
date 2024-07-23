@@ -2,15 +2,20 @@
     "cSpell.words": [
         "Armijo",
         "astype",
+        "dtype",
         "Fruchterman",
+        "getrowview",
         "imshow",
         "jagmesh",
         "kamada",
         "kawai",
         "Kolodziej",
+        "linalg",
         "mmread",
         "ndarray",
         "networkx",
+        "nfixed",
+        "nnodes",
         "nzbounds",
         "Reingold",
         "rowbounds",
@@ -21,6 +26,7 @@
         "Takahashi",
         "Takeda",
         "toarray",
+        "tolil",
         "viridis",
         "Yifan"
     ]
