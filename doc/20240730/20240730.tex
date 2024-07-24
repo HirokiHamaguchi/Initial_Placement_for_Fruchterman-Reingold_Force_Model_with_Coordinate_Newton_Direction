@@ -1,5 +1,5 @@
 \providecommand{\main}{..}
-\documentclass[\main/include]{subfiles}
+\documentclass[\main/main]{subfiles}
 \setboolean{isMain}{false}
 
 \begin{document}
@@ -39,7 +39,8 @@ It might necessary to consider the smoothness of $\nabla^2 f$ or something like 
 I'm sorry for sudden topic change, but I'm currently quite interested in the graph drawing problem. Firstly, let me explain why I'm interested in this topic.
 
 On the last time meeting, I said that Random Subspace Method does work well for a narrow valley, and thus I proposed the CG-Newton method.
-But based on Takeda-sensei's advise, I considered what kind of problems can be well solved by Random Subspace Method, and realized that Random Subspace Method is very suitable for the problem with separable variable $X = (x_1, x_2, \dots, x_n) \quad (x_i \in \bbR^2)$, i.e., the graph drawing problem, which is I'm very interested in from years ago. (Actually, one of the candidates for my graduation thesis theme was about graph drawing.)
+But based on Prof.Takeda's advise, I considered what kind of problems can be well solved by Random Subspace Method, and realized that Random Subspace Method is very suitable for the problem with separable variable $X = (x_1, x_2, \dots, x_n) \quad (x_i \in \bbR^2)$, i.e., the graph drawing problem, which is I'm very interested in from years ago.
+(Actually, one of the candidates for my graduation thesis theme was about graph drawing.)
 
 \begin{mini*}
   {X}{\sum_{i<j} f(x_i,x_j)}{}{}
@@ -53,46 +54,5 @@ Let us consider the case a random matrix $P$ is a permutation matrix like, which
   \centering
   \includegraphics[width=\columnwidth]{separableX.jpg}
 \end{figure}
-
-\section{Introduction}
-
-Graph drawing is one of the most fundamental task in the field of graph theory and it has been proposed many algorithms.
-
-One of the graph drawing algorithms is force-directed algorithm. The algorithm is based on the physical model of a system of particles and springs. The algorithm is simple and easy to implement, and it is widely used in practice.
-
-BarnesHut force approximation scheme [Barnes and Hut 1986]
-
-% Fruchterman and Reingold proposed a force-directed algorithm in 1991.
-% The algorithm is based on the physical model of a system of particles and springs.
-% The algorithm is simple and easy to implement, and it is widely used in practice.
-% The algorithm has been improved by many researchers.
-
-To mitigate this heavy computational cost, several methods have been proposed.
-Barnes and Hut proposed a hierarchical method for force calculation
-\cite{barnesHierarchicalLogForcecalculation1986}.
-
-Kamada and Kawai
-Davidson and Harel proposed algorithm using simulated annealing \cite{davidson1996drawing}.
-
-\section{Preliminary}
-
-Let $F_a$ be the power of attraction and $F_r$ be the power of repulsion. In Fruchterman-Reingold algorithm, these are defined as
-\begin{align*}
-  F_a \defeq \frac{k^2}{d}, \\
-  F_r \defeq \frac{d^2}{k},
-\end{align*}
-and the energy function is defined as
-\begin{equation*}
-  E \defeq E_a + E_r
-\end{equation*}
-
-\section{Numerical Experiment}
-
-We used dataset from \cite{davis2011university} and MatrixMarket \cite{boisvertMatrixMarketWeb1997}.
-
-\url{https://reference.wolfram.com/language/tutorial/GraphDrawingIntroduction.html}
-
-\begin{tikzpicture}
-\end{tikzpicture}
 
 \end{document}

@@ -3,9 +3,7 @@ from networkx.utils import np_random_state
 from src.python.rescale_layout import rescale_layout
 from src.python._process_params import _process_params
 from src.python._fr import _fruchterman_reingold
-from src.python._fr_rs import _fruchterman_reingold_random_subspace
 from src.python._sparse_fr import _sparse_fruchterman_reingold
-from src.python._sparse_fr_rs import _sparse_fruchterman_reingold_random_subspace
 
 
 # Copied from networkx.drawing.layout.py
@@ -140,27 +138,20 @@ def spring_layout(
     if len(G) == 1:
         return {nx.utils.arbitrary_element(G.nodes()): center}
 
-    if method not in ["FR", "FR_RS"]:
-        raise ValueError("method must be 'FR' or 'FR_RS'")
-
     try:
         # Sparse matrix
-        if len(G) < 500:  # sparse solver for large graphs
-            raise ValueError
+        # ! comment out following line
+        # if len(G) < 500:  # sparse solver for large graphs
+        #     raise ValueError
         print("Using sparse solver")  # ! added
         A = nx.to_scipy_sparse_array(G, weight=weight, dtype="f")
         if k is None and fixed is not None:
             # We must adjust k by domain size for layouts not near 1x1
             nnodes, _ = A.shape
             k = dom_size / np.sqrt(nnodes)
-        if method == "FR":
-            pos = _sparse_fruchterman_reingold(
-                A, k, pos_arr, fixed, iterations, threshold, dim, seed
-            )
-        else:
-            pos = _sparse_fruchterman_reingold_random_subspace(
-                A, k, pos_arr, fixed, iterations, threshold, dim, seed
-            )
+        pos = _sparse_fruchterman_reingold(
+            A, k, pos_arr, fixed, iterations, threshold, dim, seed, method
+        )
     except ValueError:
         print("Using dense solver")  # ! added
         A = nx.to_numpy_array(G, weight=weight)
@@ -168,14 +159,9 @@ def spring_layout(
             # We must adjust k by domain size for layouts not near 1x1
             nnodes, _ = A.shape
             k = dom_size / np.sqrt(nnodes)
-        if method == "FR":
-            pos = _fruchterman_reingold(
-                A, k, pos_arr, fixed, iterations, threshold, dim, seed
-            )
-        else:
-            pos = _fruchterman_reingold_random_subspace(
-                A, k, pos_arr, fixed, iterations, threshold, dim, seed
-            )
+        pos = _fruchterman_reingold(
+            A, k, pos_arr, fixed, iterations, threshold, dim, seed, method
+        )
     if fixed is None and scale is not None:
         pos = rescale_layout(pos, scale=scale) + center
     pos = dict(zip(G, pos))

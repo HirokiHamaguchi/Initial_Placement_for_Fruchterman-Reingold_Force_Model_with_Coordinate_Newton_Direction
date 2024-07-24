@@ -1,0 +1,249 @@
+\documentclass[journal]{IEEEtran}
+
+\usepackage{algorithm}      % \begin{algorithm}
+\usepackage{algorithmic}    % \begin{algorithmic}
+\usepackage{amsmath}        % \begin{align*}
+\usepackage{amssymb}        % \mathbb{A}
+\usepackage{amsthm}         % \newtheorem
+\usepackage{ascmac}         % \begin{screen}
+\usepackage{bm,bbm}         % \bm{A}, \bbm{1}
+\usepackage{booktabs}       % \toprule, \midrule, \bottomrule
+\usepackage{caption}        % \captionsetup
+\usepackage{enumitem}       % \begin{enumerate}[label=(\alph*)]
+\usepackage{geometry}       % \geometry{margin=1in}
+\usepackage{hyperref}       % \href{URL}{text}
+\usepackage{ifthen}         % \ifthenelse
+\usepackage{mathrsfs}       % \mathscr{A}
+\usepackage{mathtools}      % \mathrlap
+\usepackage{optidef}        % \begin{mini*}{x}{f(x)}{}{}
+\usepackage{orcidlink}      % \orcidlink
+\usepackage{physics}        % \qty, \norm, \abs
+\usepackage{subfiles}       % \subfile{file}
+\usepackage{thm-restate}    % \begin{restatable}{theorem}{thm}
+\usepackage{tikz}           % \begin{tikzpicture}
+\usepackage{xparse}         % \NewDocumentCommand
+% \usepackage{calc}         % \setlength
+% \usepackage{cancel}       % \cancel
+% \usepackage{parskip}      % \setlength{\parskip}{0.5em}
+% \usepackage{csvsimple}    % \csvautotabular
+% \usepackage{diagbox}      % \diagbox
+% \usepackage{dsfont}       % \mathds{1}
+% \usepackage{epsfig}       % \epsfig
+% \usepackage{fancybx}      % \ovalbox
+% \usepackage{float}        % \begin{figure}[H]
+% \usepackage{lipsum}       % \lipsum
+% \usepackage{listings}     % \begin{lstlisting}
+% \usepackage{makecell}     % \makecell{L1\L2}
+% \usepackage{multicol}     % \begin{multicols}{2}
+% \usepackage{multirow}     % \multirow
+% \usepackage{nicematrix}   % \begin{NiceMatrix}
+% \usepackage{qcircuit}     % \Qcircuit
+% \usepackage{siunitx}      % \SI{1}{\second}
+% \usepackage{stfloats}     % \begin{figure*}
+% \usepackage{subcaption}   % \begin{subfigure}
+% \usepackage{ulem}         % \sout
+% \usepackage[hyphens]{url} % \url
+% \usepackage{wrapfig}      % \begin{wrapfigure}
+% \usepackage[all]{xy}      % \xymatrix
+% \usepackage[dvipdfmx]{graphicx}
+% \usepackage[square, sort, comma, numbers]{natbib}
+
+\geometry{margin=1in}
+\hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue}
+
+\definecolor{cA}{HTML}{0072BD}
+\definecolor{cB}{HTML}{EDB120}
+\definecolor{cC}{HTML}{77AC30}
+\definecolor{cD}{HTML}{D95319}
+
+\newcommand{\red}[1]{\textcolor{red}{#1}}
+\newcommand{\blue}[1]{\textcolor{blue}{#1}}
+\newcommand{\cyan}[1]{\textcolor{cyan}{#1}}
+\newcommand{\gray}[1]{\textcolor{gray}{#1}}
+\newcommand{\green}[1]{\textcolor{green}{#1}}
+\newcommand{\brown}[1]{\textcolor{brown}{#1}}
+\newcommand{\black}[1]{\textcolor{black}{#1}}
+\newcommand{\st}{\text{ s.t. }}
+\newcommand{\Img}[1]{\mathrm{Im}\qty(#1)}
+\newcommand{\Ker}[1]{\mathrm{Ker}\qty(#1)}
+\newcommand{\Supp}[1]{\mathrm{supp}\qty(#1)}
+\newcommand{\Rank}[1]{\mathrm{rank}\qty(#1)}
+\newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
+\newcommand{\ceil}[1]{\left\lceil #1 \right\rceil}
+% C++ (https://tex.stackexchange.com/questions/4302/prettiest-way-to-typeset-c-cplusplus)
+\newcommand{\Cpp}{C\nolinebreak[4]\hspace{-.05em}\raisebox{.4ex}{\relsize{-3}{\textbf{++}}}}
+% https://tex.stackexchange.com/questions/28836/typesetting-the-define-equals-symbol
+\newcommand{\defeq}{\coloneqq}
+\newcommand{\eqdef}{\eqqcolon}
+% https://tex.stackexchange.com/questions/5502/how-to-get-a-mid-binary-relation-that-grows
+\newcommand{\relmiddle}[1]{\mathrel{}\middle#1\mathrel{}}
+
+\DeclareMathOperator{\Proj}{Proj}
+\DeclareMathOperator{\Exp}{Exp}
+\DeclareMathOperator{\Hess}{Hess}
+\DeclareMathOperator{\Retr}{Retr}
+\DeclareMathOperator{\Span}{span}
+% \DeclareMathOperator{\myGrad}{grad}
+% \renewcommand{\grad}{\myGrad}
+
+% https://tex.stackexchange.com/questions/564216/newcommand-for-each-letter
+\ExplSyntaxOn
+\NewDocumentCommand{\definealphabet}{mmmm}{
+\int_step_inline:nnn{`#3}{`#4}{
+\cs_new_protected:cpx{#1 \char_generate:nn{##1}{11}}{
+\exp_not:N #2{\char_generate:nn{##1}{11}}}}}
+\ExplSyntaxOff
+
+\definealphabet{bb}{\mathbb}{A}{Z}
+\definealphabet{rm}{\mathrm}{A}{Z}
+\definealphabet{cal}{\mathcal}{A}{Z}
+\definealphabet{frak}{\mathfrak}{a}{z}
+% \definealphabet{scr}{\mathscr}{A}{Z}
+% \definealphabet{frak}{\mathfrak}{A}{Z}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}{Proposition}
+\newtheorem{lemma}{Lemma}
+\newtheorem{definition}{Definition}
+\newtheorem{corollary}{Corollary}
+\newtheorem{remark}{Remark}
+\newtheorem{example}{Example}
+
+% https://qiita.com/rityo_masu/items/efd44bc8f9229e014237
+\allowdisplaybreaks[4]
+
+% \lstset{
+%   language=Python,numbers=left,frame=single,breaklines=true,lineskip=-0.9ex,xleftmargin=3zw,xrightmargin=0zw,
+%   basicstyle=\ttfamily,ndkeywordstyle=\small,identifierstyle=\small,numberstyle=\scriptsize,
+%   commentstyle=\color[rgb]{0,0.6,0},stringstyle=\small\ttfamily\color[rgb]{0.89,0.55,0},keywordstyle=\small\bfseries\color[rgb]{0.28,0.28,0.95},
+% }
+
+\usetikzlibrary{
+  3d,
+  calc,
+  math,
+  matrix,
+  patterns,
+  backgrounds,
+  arrows.meta,
+}
+
+% \graphicspath{{./fig/}}
+
+% \providecommand{\main}{.}
+\newboolean{isMain}
+\setboolean{isMain}{true}
+
+\begin{document}
+
+\title{Faster Fruchterman--Reingold Algorithm by Random Subspace Method}
+\author{Hiroki Hamaguchi\,\orcidlink{0009-0005-7348-1356}}
+\date{\today}
+\maketitle
+
+\begin{abstract}
+  The abstract goes here.
+\end{abstract}
+
+\begin{IEEEkeywords}
+  Graph drawing, Fruchterman--Reingold algorithm, Random Subspace method.
+\end{IEEEkeywords}
+
+\section{Introduction}
+
+\IEEEPARstart{D}{rawing} graph is one of the most fundamental task in computer science.
+
+One of the graph drawing algorithms is
+force-directed algorithm.
+Davidson and Harel proposed algorithm using simulated annealing~\cite{davidson1996drawing}.
+Kamada and Kawai~\cite{kamadaAlgorithmDrawingGeneral1989} proposed an algorithm.
+Fruchterman--Reingold algorithm~\cite{fruchtermanGraphDrawingForcedirected1991}, as known as spring embedder algorithm, is one of the most popular algorithm.
+The algorithm is based on the physical model of a system of particles and springs.
+
+To mitigate this heavy computational cost, several methods have been proposed.
+
+One of the strategies is to approximate the $N$-body simulation by a hierarchical method, such as the fast multipole method~\cite{greengardFastAlgorithmParticle1987}, the Barnes--Hut approximation~\cite{barnesHierarchicalLogForcecalculation1986}, and multilevel approach~\cite{Hu2006EfficientHF} or stress majorization~\cite{gansnerGraphDrawingStress2005}.
+
+The other method is to just speed up the optimization algorithm as it is, which has the same spirit of our work.
+use Stochastic Gradient Decent~\cite{8419285}.
+GPU parallel architecture
+\cite{gajdosParallelFruchtermanReingold2016},
+and numerical optimization techniques~\cite{6183577}.
+
+In this paper, we will use the Random Subspace method~\cite{NEURIPS2019_bc6dc48b,fujiRandomizedSubspaceRegularized2022,cartisRandomisedSubspaceMethods2022,higuchiFastConvergenceSecondOrder2024} to accelerate the Fruchterman--Reingold algorithm.
+
+% explain the structure of the paper
+
+The rest of the paper is organized as follows.
+In Section~\ref{sec:preliminary}, we define an optimization problem for Fruchterman--Reingold algorithm.
+In Section~\ref{sec:algorithm}, we introduce the Random Subspace method.
+In Section~\ref{sec:experiment}, we show the experimental results.
+Finally, we conclude the paper in Section~\ref{sec:conclusion}.
+
+
+\section{Preliminary}\label{sec:preliminary}
+
+In this section, we define an optimization problem for Fruchterman--Reingold algorithm.
+Let $\bbR_+$ be a set of positive real numbers
+and $A = (a_{i,j}) \in \bbR_+^{n \times n}$ be an adjacency matrix of a graph $G = (V, E)$.
+Each vertex $v_i \in V$ is assigned a position $x_i \in \bbR^d$ and we define $x = (x_1, \dots, x_n) \in \bbR^{d \times n}$ as a matrix of positions.
+For an optimal distance $k$, and a distance $d$ between two vertices $v_i$ and $v_j$, Fruchterman and Reingold defined the power of attraction $F_{i,j}^a: \bbR_+ \to \bbR$ and the power of repulsion $F^r: \bbR_+ \to \bbR$ as
+\begin{equation*}
+  F_{i,j}^a(d) \defeq \frac{a_{i,j} d^2}{k}, \quad F^r(d) \defeq -\frac{k^2}{d}.
+\end{equation*}
+The energy for these powers $E_{i,j}^a,E^r$ and the total energy $E_{i,j}$, stress of the graph, are defined as
+\begin{align*}
+  E_{i,j}^a(d) & \defeq \int_{0}^{d} F_{i,j}^a(r) \dd{r} = \frac{a_{i,j} d^3}{3k}, \\
+  E^r(d)       & \defeq \int_{\infty}^{d} F^r(r) \dd{r} = -k^2\log{d},             \\
+  E_{i,j}(d)   & \defeq
+  \begin{cases}
+    E_{i,j}^a(d) + E^r(d) & \text{if $i \neq j$}, \\
+    0                     & \text{if $i = j$}.
+  \end{cases}
+\end{align*}
+The energy function $E_{i,j}$ is convex for $a_{i,j} \in \bbR_+$ and minimized when $d = k\sqrt[3]{a_{i,j}}$.
+Based on these energies, the optimization problem for Fruchterman--Reingold algorithm is defined as
+\begin{mini}
+  {x \in \bbR^{d \times n}}
+  {f(x) \defeq \sum_{i,j} E_{i,j}(\norm{x_i - x_j})}
+  {\label{eq:fr}}
+  {}
+\end{mini}
+
+In order to introduce the Random Subspace method, we define a function $f_i: \bbR^{d} \to \bbR$ for $1 \leq i \leq n$ as
+\begin{equation*}
+  f_i(x_i) \defeq \sum_{1 \leq j \leq n} E_{i,j}(\norm{x_i - x_j}).
+\end{equation*}
+The gradient and the Hessian of $f_i$ are
+\begin{align*}
+  \nabla f_i(x_i)   & = \sum_{j \neq i} (x_i-x_j) \qty(\frac{a_{i,j}\norm{x_i-x_j}}{k} - \frac{k^2}{\norm{x_i - x_j}}),                    \\
+  \nabla^2 f_i(x_i) & = \sum_{j \neq i} \qty(\frac{a_{i,j}\norm{x_i-x_j}}{k} - \frac{k^2}{\norm{x_i - x_j}}) I_d +                         \\
+                    & \sum_{j \neq i} \qty(\frac{a_{i,j}}{k \norm{x_i-x_j}} + \frac{k^2}{\norm{x_i - x_j}^3}) (x_i - x_j)(x_i - x_j)^\top.
+\end{align*}
+
+As pointed out in~\cite{tunkelang1999numerical},
+the Fruchterman--Reingold algorithm is a gradient descent method for the energy function $f$.
+
+
+\section{Algorithm} \label{sec:algorithm}
+
+\section{Experiment} \label{sec:experiment}
+
+We used dataset from \cite{davis2011university} and MatrixMarket \cite{boisvertMatrixMarketWeb1997}.
+
+\url{https://reference.wolfram.com/language/tutorial/GraphDrawingIntroduction.html}
+
+\section{Conclusion} \label{sec:conclusion}
+
+todo
+
+\section*{Acknowledgment}
+
+The author would like to thank ...
+
+\ifthenelse{\boolean{isMain}}{
+  \bibliographystyle{IEEEtran}
+  \bibliography{FruchtermanReingoldByRandomSubspace}
+}{}
+
+\end{document}
