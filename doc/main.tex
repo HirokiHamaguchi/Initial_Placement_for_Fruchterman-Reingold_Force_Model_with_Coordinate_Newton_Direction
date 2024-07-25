@@ -216,9 +216,9 @@ In order to introduce the Random Subspace method, we define a function $f_i: \bb
 \end{equation*}
 The gradient and the Hessian of $f_i$ are
 \begin{align*}
-  \nabla f_i(x_i)   & = \sum_{j \neq i} (x_i-x_j) \qty(\frac{a_{i,j}\norm{x_i-x_j}}{k} - \frac{k^2}{\norm{x_i - x_j}}),                    \\
-  \nabla^2 f_i(x_i) & = \sum_{j \neq i} \qty(\frac{a_{i,j}\norm{x_i-x_j}}{k} - \frac{k^2}{\norm{x_i - x_j}}) I_d +                         \\
-                    & \sum_{j \neq i} \qty(\frac{a_{i,j}}{k \norm{x_i-x_j}} + \frac{k^2}{\norm{x_i - x_j}^3}) (x_i - x_j)(x_i - x_j)^\top.
+  \nabla f_i(x_i)   & = \sum_{j \neq i} (x_i-x_j) \qty(\frac{a_{i,j}\norm{x_i-x_j}}{k} - \frac{k^2}{\norm{x_i - x_j}^2}),                   \\
+  \nabla^2 f_i(x_i) & = \sum_{j \neq i} \qty(\frac{a_{i,j}\norm{x_i-x_j}}{k} - \frac{k^2}{\norm{x_i - x_j}^2}) I_d +                        \\
+                    & \sum_{j \neq i} \qty(\frac{a_{i,j}}{k \norm{x_i-x_j}} + \frac{2k^2}{\norm{x_i - x_j}^4}) (x_i - x_j)(x_i - x_j)^\top.
 \end{align*}
 
 As pointed out in~\cite{tunkelang1999numerical},

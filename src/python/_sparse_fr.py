@@ -129,7 +129,70 @@ def _sparse_fruchterman_reingold(
                 break
         return pos
     elif method == "FR_RS":
-        raise NotImplementedError("FR_RS method is not implemented yet")
+        # make sure we have a coo_matrix representation
+        try:
+            A = A.tocoo()
+        except AttributeError:
+            A = (sp.sparse.coo_array(A)).tocoo()
+
+        grad = np.zeros((dim, nnodes))
+        hess = np.zeros((dim, dim, nnodes))
+
+        # loop over rows
+        for i in range(A.shape[0]):
+            if i in fixed:
+                continue
+            # difference between this row's node position and all others
+            delta = (pos[i] - pos).T
+            # distance between points
+            distance = np.sqrt((delta**2).sum(axis=0))
+            # enforce minimum distance of 0.01
+            distance = np.where(distance < 0.01, 0.01, distance)
+            # the adjacency matrix row
+            Ai = A.getrowview(i).toarray()  # TODO: revisit w/ sparse 1D container
+            # displacement "force"
+            grad[:, i] += (delta * (Ai * distance / k - k * k / distance**2)).sum(
+                axis=1
+            )
+            hess[:, :, i] += np.eye(dim) * (
+                Ai * distance / k - k**2 / distance**2
+            ) + np.outer(delta, delta) * (
+                Ai / (k * distance) + (2 * k**2) / distance**4
+            )
+        for i in np.random.permutation(nnodes):
+            if i in fixed:
+                continue
+            # subtract gradient and hessian
+            for j in range(nnodes):
+                if j == i or j in fixed:
+                    continue
+                delta = pos[i] - pos[j]
+                distance = np.sqrt((delta**2).sum())
+                distance = max(distance, 0.01)
+                grad[:, j] -= delta * (A[i, j] * distance / k - k * k / distance**2)
+                hess[:, :, j] -= np.eye(dim) * (
+                    A[i, j] * distance / k - k**2 / distance**2
+                ) + np.outer(delta, delta) * (
+                    A[i, j] / (k * distance) + (2 * k**2) / distance**4
+                )
+            # update positions
+            delta_pos = np.linalg.solve(hess[:, :, i], -grad[:, i])
+            pos[i] += delta_pos
+            # add gradient and hessian
+            for j in range(nnodes):
+                if j == i or j in fixed:
+                    continue
+                delta = pos[i] - pos[j]
+                distance = np.sqrt((delta**2).sum())
+                distance = max(distance, 0.01)
+                grad[:, j] += delta * (A[i, j] * distance / k - k * k / distance**2)
+                hess[:, :, j] += np.eye(dim) * (
+                    A[i, j] * distance / k - k**2 / distance**2
+                ) + np.outer(delta, delta) * (
+                    A[i, j] / (k * distance) + (2 * k**2) / distance**4
+                )
+        return pos
+
     else:
         raise ValueError("method is unknown")
 
