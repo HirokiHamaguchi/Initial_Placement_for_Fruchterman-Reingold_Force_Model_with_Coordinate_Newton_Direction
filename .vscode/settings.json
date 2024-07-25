@@ -12,6 +12,7 @@
         "Kolodziej",
         "linalg",
         "mmread",
+        "multipole",
         "ndarray",
         "networkx",
         "nfixed",
@@ -26,6 +27,7 @@
         "Takahashi",
         "Takeda",
         "toarray",
+        "tocoo",
         "tolil",
         "viridis",
         "Yifan"
