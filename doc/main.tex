@@ -201,7 +201,7 @@ The energy for these powers $E_{i,j}^a,E^r$ and the total energy $E_{i,j}$, stre
     0                     & \text{if $i = j$}.
   \end{cases}
 \end{align*}
-The energy function $E_{i,j}$ is convex for $a_{i,j} \in \bbR_+$ and minimized when $d = k\sqrt[3]{a_{i,j}}$.
+The energy function $E_{i,j}$ is convex for $a_{i,j} \in \bbR_+$ and minimized when $d = k/\sqrt[3]{a_{i,j}}$.
 Based on these energies, the optimization problem for Fruchterman--Reingold algorithm is defined as
 \begin{mini}
   {x \in \bbR^{d \times n}}
@@ -215,11 +215,11 @@ In order to introduce the Random Subspace method, we define a function $f_i: \bb
   f_i(x_i) \defeq \sum_{1 \leq j \leq n} E_{i,j}(\norm{x_i - x_j}).
 \end{equation*}
 The gradient and the Hessian of $f_i$ are
-\begin{align*}
-  \nabla f_i(x_i)   & = \sum_{j \neq i} (x_i-x_j) \qty(\frac{a_{i,j}\norm{x_i-x_j}}{k} - \frac{k^2}{\norm{x_i - x_j}^2}),                   \\
-  \nabla^2 f_i(x_i) & = \sum_{j \neq i} \qty(\frac{a_{i,j}\norm{x_i-x_j}}{k} - \frac{k^2}{\norm{x_i - x_j}^2}) I_d +                        \\
-                    & \sum_{j \neq i} \qty(\frac{a_{i,j}}{k \norm{x_i-x_j}} + \frac{2k^2}{\norm{x_i - x_j}^4}) (x_i - x_j)(x_i - x_j)^\top.
-\end{align*}
+\begin{gather*}
+  \nabla f_i(x_i) = \sum_{j \neq i} \qty(\frac{a_{i,j}\norm{x_i-x_j}}{k} - \frac{k^2}{\norm{x_i - x_j}^2}) (x_i-x_j), \\
+  \nabla^2 f_i(x_i) = \sum_{j \neq i} \qty(\frac{a_{i,j}\norm{x_i-x_j}}{k} - \frac{k^2}{\norm{x_i - x_j}^2}) I_d +      \\
+  \sum_{j \neq i} \qty(\frac{a_{i,j}}{k \norm{x_i-x_j}} + \frac{2k^2}{\norm{x_i - x_j}^4}) (x_i - x_j)(x_i - x_j)^\top.
+\end{gather*}
 
 As pointed out in~\cite{tunkelang1999numerical},
 the Fruchterman--Reingold algorithm is a gradient descent method for the energy function $f$.

@@ -1,9 +1,12 @@
 {
     "cSpell.words": [
+        "arange",
         "Armijo",
         "astype",
         "dtype",
+        "eigvals",
         "Fruchterman",
+        "getrow",
         "getrowview",
         "imshow",
         "jagmesh",
@@ -30,7 +33,10 @@
         "toarray",
         "tocoo",
         "tolil",
+        "tqdm",
         "viridis",
-        "Yifan"
+        "xlim",
+        "Yifan",
+        "ylim"
     ]
 }

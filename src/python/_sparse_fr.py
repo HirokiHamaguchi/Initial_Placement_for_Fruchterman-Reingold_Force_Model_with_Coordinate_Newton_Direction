@@ -1,5 +1,6 @@
 import networkx as nx
 from networkx.utils import np_random_state
+from src.python.cost import cost
 
 
 # Copied from networkx.drawing.layout.py
@@ -14,6 +15,7 @@ def _sparse_fruchterman_reingold(
     dim=2,
     seed=None,
     method="FR",
+    verbose=True,
 ):
     # Position nodes in adjacency matrix A using Fruchterman-Reingold
     # Entry point for NetworkX graph is fruchterman_reingold_layout()
@@ -82,117 +84,54 @@ def _sparse_fruchterman_reingold(
             pos += delta_pos
             # cool temperature
             t -= dt
+            if verbose:
+                print(f"{cost(pos,A,k)=}")
             if (np.linalg.norm(delta_pos) / nnodes) < threshold:
                 break
-        return pos
-    elif method == "FR_SGD":
-        # make sure we have a coo_matrix representation
-        try:
-            A = A.tocoo()
-        except AttributeError:
-            A = (sp.sparse.coo_array(A)).tocoo()
-
-        # the initial "temperature" is about .1 of domain area (=1x1)
-        # this is the largest step allowed in the dynamics.
-        t = max(max(pos.T[0]) - min(pos.T[0]), max(pos.T[1]) - min(pos.T[1])) * 0.1
-        # simple cooling scheme.
-        # linearly step down by dt on each iteration so last iteration is size dt.
-        dt = t / (iterations + 1)
-
-        displacement = np.zeros((dim, nnodes))
-        for iteration in range(iterations):
-            displacement *= 0
-            # loop over non-zero
-            for i in range(A.shape[0]):
-                if i in fixed:
-                    continue
-                # difference between this row's node position and all others
-                delta = (pos[i] - pos).T
-                # distance between points
-                distance = np.sqrt((delta**2).sum(axis=0))
-                # enforce minimum distance of 0.01
-                distance = np.where(distance < 0.01, 0.01, distance)
-                # the adjacency matrix row
-                Ai = A.getrowview(i).toarray()  # TODO: revisit w/ sparse 1D container
-                # displacement "force"
-                displacement[:, i] += (
-                    delta * (k * k / distance**2 - Ai * distance / k)
-                ).sum(axis=1)
-            # update positions
-            length = np.sqrt((displacement**2).sum(axis=0))
-            length = np.where(length < 0.01, 0.1, length)
-            delta_pos = (displacement * t / length).T
-            pos += delta_pos
-            # cool temperature
-            t -= dt
-            if (np.linalg.norm(delta_pos) / nnodes) < threshold:
-                break
-        return pos
+            yield pos
     elif method == "FR_RS":
         # make sure we have a coo_matrix representation
         try:
-            A = A.tocoo()
+            A = A.tolil()
         except AttributeError:
-            A = (sp.sparse.coo_array(A)).tocoo()
+            A = (sp.sparse.coo_array(A)).tolil()
 
-        grad = np.zeros((dim, nnodes))
-        hess = np.zeros((dim, dim, nnodes))
+        from tqdm.auto import tqdm
+        import time
 
-        # loop over rows
-        for i in range(A.shape[0]):
-            if i in fixed:
-                continue
-            # difference between this row's node position and all others
-            delta = (pos[i] - pos).T
-            # distance between points
-            distance = np.sqrt((delta**2).sum(axis=0))
-            # enforce minimum distance of 0.01
-            distance = np.where(distance < 0.01, 0.01, distance)
-            # the adjacency matrix row
-            Ai = A.getrowview(i).toarray()  # TODO: revisit w/ sparse 1D container
-            # displacement "force"
-            grad[:, i] += (delta * (Ai * distance / k - k * k / distance**2)).sum(
-                axis=1
-            )
-            hess[:, :, i] += np.eye(dim) * (
-                Ai * distance / k - k**2 / distance**2
-            ) + np.outer(delta, delta) * (
-                Ai / (k * distance) + (2 * k**2) / distance**4
-            )
-        for i in np.random.permutation(nnodes):
-            if i in fixed:
-                continue
-            # subtract gradient and hessian
-            for j in range(nnodes):
-                if j == i or j in fixed:
-                    continue
-                delta = pos[i] - pos[j]
-                distance = np.sqrt((delta**2).sum())
-                distance = max(distance, 0.01)
-                grad[:, j] -= delta * (A[i, j] * distance / k - k * k / distance**2)
-                hess[:, :, j] -= np.eye(dim) * (
-                    A[i, j] * distance / k - k**2 / distance**2
-                ) + np.outer(delta, delta) * (
-                    A[i, j] / (k * distance) + (2 * k**2) / distance**4
+        grad = np.zeros(dim)
+        hess = np.zeros((dim, dim))
+        vertices = np.delete(np.arange(nnodes), fixed)
+        k_inv = 1 / k
+
+        for _ in range(iterations):
+            np.random.shuffle(vertices)
+            for i in vertices:
+                delta = pos[i] - pos
+                distance = np.linalg.norm(delta, axis=1)
+                distance = np.where(distance < 0.01, 0.01, distance)
+                distance_inv = 1 / distance
+                Ai = A.getrow(i).toarray().flatten()
+                coefficient1 = Ai * distance * k_inv - (k * distance_inv) ** 2
+                coefficient2 = Ai * distance_inv * k_inv + (2 * k**2) * (
+                    distance_inv**4
                 )
-            # update positions
-            delta_pos = np.linalg.solve(hess[:, :, i], -grad[:, i])
-            pos[i] += delta_pos
-            # add gradient and hessian
-            for j in range(nnodes):
-                if j == i or j in fixed:
-                    continue
-                delta = pos[i] - pos[j]
-                distance = np.sqrt((delta**2).sum())
-                distance = max(distance, 0.01)
-                grad[:, j] += delta * (A[i, j] * distance / k - k * k / distance**2)
-                hess[:, :, j] += np.eye(dim) * (
-                    A[i, j] * distance / k - k**2 / distance**2
-                ) + np.outer(delta, delta) * (
-                    A[i, j] / (k * distance) + (2 * k**2) / distance**4
+                grad = coefficient1 @ delta
+                hess = np.sum(coefficient1) * np.eye(dim) + np.einsum(
+                    "ij,ik->jk", coefficient2[:, np.newaxis] * delta, delta
                 )
-        return pos
-
+                # update positions
+                minEigen = np.min(np.linalg.eigvals(hess))
+                delta_pos = np.linalg.solve(
+                    hess
+                    + (max(0.0, -1.01 * minEigen) + np.linalg.norm(grad)) * np.eye(dim),
+                    -grad,
+                )
+                # print(f"{-grad=}, {minEigen=}, {delta_pos=}")
+                pos[i] += delta_pos
+            yield pos
+            if verbose:
+                print(f"{cost(pos,A,k)=}")
     else:
         raise ValueError("method is unknown")
 
@@ -205,4 +144,5 @@ if __name__ == "__main__":
     mat = np.array([[0, 1, 2], [1, 0, -1], [2, -1, 0]])
     mat = scipy.sparse.csr_matrix(mat)
     G = nx.Graph(mat)
-    pos = spring_layout(G, iterations=50, seed=0, method="FR_SGD")
+    pos = spring_layout(G, iterations=50, seed=0, method="FR_RS")
+    print(pos)

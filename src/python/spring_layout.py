@@ -138,31 +138,12 @@ def spring_layout(
     if len(G) == 1:
         return {nx.utils.arbitrary_element(G.nodes()): center}
 
-    try:
-        # Sparse matrix
-        # ! comment out following line
-        # if len(G) < 500:  # sparse solver for large graphs
-        #     raise ValueError
-        print("Using sparse solver")  # ! added
-        A = nx.to_scipy_sparse_array(G, weight=weight, dtype="f")
-        if k is None and fixed is not None:
-            # We must adjust k by domain size for layouts not near 1x1
-            nnodes, _ = A.shape
-            k = dom_size / np.sqrt(nnodes)
-        pos = _sparse_fruchterman_reingold(
-            A, k, pos_arr, fixed, iterations, threshold, dim, seed, method
-        )
-    except ValueError:
-        print("Using dense solver")  # ! added
-        A = nx.to_numpy_array(G, weight=weight)
-        if k is None and fixed is not None:
-            # We must adjust k by domain size for layouts not near 1x1
-            nnodes, _ = A.shape
-            k = dom_size / np.sqrt(nnodes)
-        pos = _fruchterman_reingold(
-            A, k, pos_arr, fixed, iterations, threshold, dim, seed, method
-        )
-    if fixed is None and scale is not None:
-        pos = rescale_layout(pos, scale=scale) + center
-    pos = dict(zip(G, pos))
-    return pos
+    # ! Changed a lot
+    A = nx.to_scipy_sparse_array(G, weight=weight, dtype="f")
+    if k is None and fixed is not None:
+        # We must adjust k by domain size for layouts not near 1x1
+        nnodes, _ = A.shape
+        k = dom_size / np.sqrt(nnodes)
+    return _sparse_fruchterman_reingold(
+        A, k, pos_arr, fixed, iterations, threshold, dim, seed, method
+    )
