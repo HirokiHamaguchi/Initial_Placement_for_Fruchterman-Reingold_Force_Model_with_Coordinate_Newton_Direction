@@ -9,7 +9,12 @@ from typing import Union, Generator
 def getMatrixByName(
     name: str, asDense: bool = False
 ) -> Union[np.ndarray, scipy.sparse.coo_matrix]:
-    path = "../../data/" + name + ".mtx"
+    assert os.getcwd().count("FruchtermanReingoldByRandomSubspace") == 1
+    path = (
+        os.getcwd().split("FruchtermanReingoldByRandomSubspace")[0]
+        + "FruchtermanReingoldByRandomSubspace/data/"
+    )
+    path = path + name + ".mtx"
     assert os.path.exists(path), f"Matrix({name}) not found"
     matrix = scipy.io.mmread(path)
     if asDense:
