@@ -7,12 +7,20 @@ from typing import Union
 def visGraph(
     G: Union[nx.Graph, nx.DiGraph, nx.MultiGraph, nx.MultiDiGraph],
     pos: dict,
+    title: str = None,
+    savePath: str = None,
 ) -> None:
     cmap = plt.get_cmap("jet")
     n = G.number_of_nodes()
     colorMap = np.array([cmap(i / (n - 1)) for i in range(n)])
     nx.draw(G, pos, node_size=50, node_color=colorMap)
-    plt.show()
+    if title:
+        plt.title(title)
+    if savePath:
+        plt.savefig(savePath, bbox_inches="tight")
+        plt.close()
+    else:
+        plt.show()
 
 
 if __name__ == "__main__":
