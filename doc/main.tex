@@ -126,6 +126,7 @@
   patterns,
   backgrounds,
   arrows.meta,
+  shapes.geometric,
 }
 
 % \graphicspath{{./fig/}}
@@ -151,68 +152,99 @@
 
 \section{Introduction}
 
-\IEEEPARstart{D}{rawing} graph is one of the most fundamental task in computer science.
+\begin{figure}[b]
+  \centering
+  \begin{tikzpicture}[rotate=0]
+    \def\d{4}
+    \def\r{0.3}
+    \def\u{1.0}
+    \coordinate (M1) at (0,0);
+    \coordinate (M2) at (\d,0);
 
-One of the graph drawing algorithms is
-force-directed algorithm.
-Davidson and Harel proposed algorithm using simulated annealing~\cite{davidson1996drawing}.
-Kamada and Kawai~\cite{kamadaAlgorithmDrawingGeneral1989} proposed an algorithm.
-Fruchterman--Reingold algorithm~\cite{fruchtermanGraphDrawingForcedirected1991}, as known as spring embedder algorithm, is one of the most popular algorithm.
-The algorithm is based on the physical model of a system of particles and springs.
+    \draw (M1) circle(\r) node {$v_i$};
+    \draw (M2) circle(\r) node {$v_j$};
 
-To mitigate this heavy computational cost, several methods have been proposed.
+    \draw (0,+1.6*\r) -- (0,+2.4*\r);
+    \draw (\d,+1.6*\r) -- (\d,+2.4*\r);
+    \draw[{Latex[length=4,width=3]}-{Latex[length=4,width=3]}] ($(M1)+(90:2*\r)$) -- ($(M2)+(90:2*\r)$)
+    node[midway,circle,fill=white,inner sep=0] {$d$};
 
-One of the strategies is to approximate the $N$-body simulation by a hierarchical method, such as the fast multipole method~\cite{greengardFastAlgorithmParticle1987}, the Barnes--Hut approximation~\cite{barnesHierarchicalLogForcecalculation1986}, and multilevel approach~\cite{Hu2006EfficientHF} or stress majorization~\cite{gansnerGraphDrawingStress2005}.
+    \draw[->,thick,line cap=round] (+\r,0) -- (+\u,0) node[right] {$F^a_{i,j}(d)$};
+    \draw[->,thick,line cap=round] (-\r,0) -- (-\u,0) node[left] {$F^r(d)$};
 
-The other method is to just speed up the optimization algorithm as it is, which has the same spirit of our work.
-use Stochastic Gradient Decent~\cite{8419285}.
-GPU parallel architecture
-\cite{gajdosParallelFruchtermanReingold2016},
-and numerical optimization techniques~\cite{6183577}.
+    \draw[dashed,domain=3.9:-3.1,samples=1000,smooth,variable=\x] plot(\x,{-0.7+(pow((\d-\x)/\d,3)/3-ln((\d-\x)/\d))/2.2});
+    \node [star,
+      minimum size=0.25cm,
+      star point ratio=2.25,
+      inner sep=0pt,
+      draw, fill=black]
+    at (0,{-0.7+(1/3)/2.2}) {};
 
-In this paper, we will use the Random Subspace method~\cite{NEURIPS2019_bc6dc48b,fujiRandomizedSubspaceRegularized2022,cartisRandomisedSubspaceMethods2022,higuchiFastConvergenceSecondOrder2024} to accelerate the Fruchterman--Reingold algorithm.
+    \node at (-2.7,0.4) {$E_{i,j}(d)$};
+  \end{tikzpicture}
+  \caption{
+  Fruchterman--Reingold model.
+  The equilibrium of the attractive force $F^a_{i,j}(d)$ and the repulsive force $F^r(d)$ is the optimal distance $d=k/\sqrt[3]{a_{i,j}}$.
+  }
+\end{figure}
 
-% explain the structure of the paper
+% グラフ自動描画法とその応用
+% https://www.jstage.jst.go.jp/article/jssst/12/4/12_4_335/_article/-char/ja
 
-The rest of the paper is organized as follows.
-In Section~\ref{sec:preliminary}, we define an optimization problem for Fruchterman--Reingold algorithm.
-In Section~\ref{sec:algorithm}, we introduce the Random Subspace method.
-In Section~\ref{sec:experiment}, we show the experimental results.
-Finally, we conclude the paper in Section~\ref{sec:conclusion}.
+\IEEEPARstart{G}{raph} is a mathematical structure representing pairwise relationships between objects, and graph drawing is one of the most fundamental tasks in data science. Numerous general algorithms have been proposed for graph drawing. For example, Sugiyama et al. proposed a layered graph drawing~\cite{sugiyamaMethodsVisualUnderstanding1981}, while Davidson and Harel introduced an algorithm using simulated annealing~\cite{davidson1996drawing}. Among these, one of the most popular strategies is force-directed algorithms.
+
+In force-directed algorithms, the graph is modeled as a physical system of particles. These include methods such as the Tutte embedding~\cite{tutteHowDrawGraph1963} for planar graphs, the Kamada--Kawai algorithm~\cite{kamadaAlgorithmDrawingGeneral1989} using vertex distance as a cost function, and the Fruchterman--Reingold (FR) algorithm~\cite{fruchtermanGraphDrawingForcedirected1991}, which is the primary focus of this paper.
+
+The FR algorithm is one of the most widely used force-directed algorithms and is implemented in many modern graph drawing libraries such as NetworkX~\cite{osti_960616} and igraph~\cite{csardiIgraphSoftwarePackage2006}. The algorithm is based on a physical model of a system of particles and springs, positioning vertices so that edges are neither too long nor too short.
+
+However, the FR algorithm is tend to be captured in local minima and has a high computational cost of $\order{n^2}$, where $n$ is the number of vertices in the graph. To address this kind of computational burden, several methods have been proposed. One strategy is to approximate the $n$-body simulation using hierarchical methods such as the fast multipole method~\cite{greengardFastAlgorithmParticle1987}, the Barnes--Hut approximation~\cite{barnesHierarchicalLogForcecalculation1986}, multilevel approaches~\cite{Hu2006EfficientHF}, or stress majorization~\cite{gansnerGraphDrawingStress2005}.
+
+Another approach is to accelerate the optimization algorithm directly, which aligns with the spirit of our work. Recent advances have accelerated the FR algorithm through various methods, including GPU parallel architectures~\cite{gajdosParallelFruchtermanReingold2016}, numerical optimization techniques such as L-BFGS-B~\cite{6183577}, and Stochastic Gradient Descent (SGD)~\cite{8419285}.
+
+In this paper, we propose a new algorithm to calculate the FR model more efficiently, drawing heavily on the Random Subspace method~\cite{NEURIPS2019_bc6dc48b,fujiRandomizedSubspaceRegularized2022,cartisRandomisedSubspaceMethods2022,higuchiFastConvergenceSecondOrder2024}.
+
+The rest of the paper is organized as follows. In Section~\ref{sec:preliminary}, we define the optimization problem for the FR algorithm. In Section~\ref{sec:algorithm}, we introduce the Random Subspace method. In Section~\ref{sec:experiment}, we present the experimental results. Finally, we conclude the paper in Section~\ref{sec:conclusion}.
+
+\begin{figure}[t]
+  \begin{minipage}{0.49\hsize}
+    \centering
+    \includegraphics[width=\columnwidth]{jagmesh1_FR_50iter.png}
+  \end{minipage}
+  \begin{minipage}{0.49\hsize}
+    \centering
+    \includegraphics[width=\columnwidth]{jagmesh1_BFGS_50iter.png}
+  \end{minipage}
+  \caption{Comparison of the FR algorithm (left, NetworkX) and L-BFGS-B (right, my implementation) on the \texttt{jagmesh1} dataset.}
+\end{figure}
 
 
 \section{Preliminary}\label{sec:preliminary}
 
-In this section, we define an optimization problem for Fruchterman--Reingold algorithm.
-Let $\bbR_+$ be a set of positive real numbers
-and $A = (a_{i,j}) \in \bbR_+^{n \times n}$ be an adjacency matrix of a graph $G = (V, E)$.
+In this section, we define an optimization problem for FR algorithm.
+Let $\bbR_+$ be a set of non-negative real numbers, $\bbR_{++}$ be a set of positive real numbers,
+and $A = (a_{i,j}) \in \bbR_+^{n \times n}$ be an adjacency matrix of a undirected graph $G = (V, E)$.
 Each vertex $v_i \in V$ is assigned a position $x_i \in \bbR^d$ and we define $x = (x_1, \dots, x_n) \in \bbR^{d \times n}$ as a matrix of positions.
-For an optimal distance $k$, and a distance $d$ between two vertices $v_i$ and $v_j$, Fruchterman and Reingold defined the power of attraction $F_{i,j}^a: \bbR_+ \to \bbR$ and the power of repulsion $F^r: \bbR_+ \to \bbR$ as
+For an optimal distance $k$, and a distance $d$ between two vertices $v_i$ and $v_j$, Fruchterman and Reingold defined the power of attraction $F_{i,j}^a: \bbR_{+} \to \bbR$ and the power of repulsion $F^r: \bbR_{++} \to \bbR$ as
 \begin{equation*}
   F_{i,j}^a(d) \defeq \frac{a_{i,j} d^2}{k}, \quad F^r(d) \defeq -\frac{k^2}{d}.
 \end{equation*}
-The energy for these powers $E_{i,j}^a,E^r$ and the total energy $E_{i,j}$, stress of the graph, are defined as
+The total energy for these powers $E_{i,j} : \bbR_{++} \to \bbR$, stress of the graph, is defined as
 \begin{align*}
-  E_{i,j}^a(d) & \defeq \int_{0}^{d} F_{i,j}^a(r) \dd{r} = \frac{a_{i,j} d^3}{3k}, \\
-  E^r(d)       & \defeq \int_{\infty}^{d} F^r(r) \dd{r} = -k^2\log{d},             \\
-  E_{i,j}(d)   & \defeq
-  \begin{cases}
-    E_{i,j}^a(d) + E^r(d) & \text{if $i \neq j$}, \\
-    0                     & \text{if $i = j$}.
-  \end{cases}
+  E_{i,j}(d) & \defeq \int_{0}^{d} F_{i,j}^a(r) \dd{r} + \int_{\infty}^{d} F^r(r) \dd{r} \\
+             & = \frac{a_{i,j} d^3}{3k} - k^2\log{d}.
 \end{align*}
-The energy function $E_{i,j}$ is convex for $a_{i,j} \in \bbR_+$ and minimized when $d = k/\sqrt[3]{a_{i,j}}$.
-Based on these energies, the optimization problem for Fruchterman--Reingold algorithm is defined as
+The energy function $E_{i,j}$ is convex for $a_{i,j} \in \bbR_{++}$ and minimized when $d = k/\sqrt[3]{a_{i,j}}$, but is not Lipschitz continuous.
+Based on these energies, the optimization problem for FR algorithm is defined as
 \begin{mini}
   {x \in \bbR^{d \times n}}
-  {f(x) \defeq \sum_{i,j} E_{i,j}(\norm{x_i - x_j})}
+  {f(x) \defeq \sum_{i<j} E_{i,j}(\norm{x_i - x_j})}
   {\label{eq:fr}}
   {}
 \end{mini}
 
 In order to introduce the Random Subspace method, we define a function $f_i: \bbR^{d} \to \bbR$ for $1 \leq i \leq n$ as
 \begin{equation*}
-  f_i(x_i) \defeq \sum_{1 \leq j \leq n} E_{i,j}(\norm{x_i - x_j}).
+  f_i(x_i) \defeq \sum_{j \neq i} E_{i,j}(\norm{x_i - x_j}).
 \end{equation*}
 The gradient and the Hessian of $f_i$ are
 \begin{gather*}
@@ -222,7 +254,7 @@ The gradient and the Hessian of $f_i$ are
 \end{gather*}
 
 As pointed out in~\cite{tunkelang1999numerical},
-the Fruchterman--Reingold algorithm is a gradient descent method for the energy function $f$.
+the FR algorithm is a gradient descent method for the energy function $f$.
 
 
 \section{Algorithm} \label{sec:algorithm}
