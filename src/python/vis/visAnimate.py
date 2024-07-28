@@ -22,6 +22,8 @@ def visAnimate(matrixName: str, methodName: str):
         mat.data = np.abs(mat.data)
 
     assert os.path.exists("temp"), "temp directory does not exist"
+    for f in glob.glob("temp/*"):
+        os.remove(f)
 
     G = nx.Graph(mat)
     for i, pos in enumerate(spring_layout(G, method=methodName, iterations=150)):
@@ -46,7 +48,7 @@ def visAnimate(matrixName: str, methodName: str):
         files = sorted(glob.glob(f"temp/*.png"))
         images = [PIL.Image.open(file) for file in files]
         images[0].save(
-            f"{matrixName}_{methodName}.gif",
+            f"movie/{matrixName}_{methodName}.gif",
             save_all=True,
             append_images=images[1:],
             duration=100,
@@ -55,4 +57,4 @@ def visAnimate(matrixName: str, methodName: str):
 
 
 if __name__ == "__main__":
-    visAnimate("jagmesh1", methodName="BFGS")
+    visAnimate("jagmesh1", methodName="FR")
