@@ -1,3 +1,4 @@
+from matplotlib.pylab import f
 import networkx as nx
 from networkx.utils import np_random_state
 from src.python.cost import cost
@@ -24,6 +25,7 @@ def _sparse_fruchterman_reingold(
     # Sparse version
     import numpy as np
     import scipy as sp
+    from scipy.optimize import minimize
 
     try:
         nnodes, _ = A.shape
@@ -100,122 +102,153 @@ def _sparse_fruchterman_reingold(
 
         k_inv = 1 / k
 
-        def cost_fun(x):
-            pos = x.reshape((nnodes, dim))
-            grad = np.zeros((nnodes, dim))
-            for i in range(nnodes):
-                delta = pos[i] - pos
-                distance = np.linalg.norm(delta, axis=1)
-                distance = np.where(distance < 0.01, 0.01, distance)
-                distance_inv = 1 / distance
-                Ai = A.getrow(i).toarray().flatten()
-                coefficient1 = Ai * distance * k_inv - (k * distance_inv) ** 2
-                grad[i] = coefficient1 @ delta
-            ret = cost(pos, A, k)
-            print(f"{ret=}")
-            return ret, grad.ravel()
-
-        pos_hist = []
-        sp.optimize.minimize(
-            cost_fun,
-            pos.ravel(),
-            method="L-BFGS-B",
-            jac=True,
-            options={"maxiter": iterations, "disp": verbose},
-            callback=lambda x: pos_hist.append(x.reshape((nnodes, dim))),
-        )
-
-        for pos in pos_hist:
-            yield pos
-
-    elif method == "FR_RS":
-        # make sure we have a coo_matrix representation
-        try:
-            A = A.tolil()
-        except AttributeError:
-            A = (sp.sparse.coo_array(A)).tolil()
-
-        grad = np.zeros((nnodes, dim))
-        vertices = np.delete(np.arange(nnodes), fixed)
-        assert len(vertices) == nnodes
-        k_inv = 1 / k
-
-        hess = np.zeros((dim, dim))
-
-        for _ in range(iterations * nnodes):
-            for i in vertices:
-                delta = pos[i] - pos
-                distance = np.linalg.norm(delta, axis=1)
-                distance = np.where(distance < 0.01, 0.01, distance)
-                distance_inv = 1 / distance
-                Ai = A.getrow(i).toarray().flatten()
-                coefficient1 = Ai * distance * k_inv - (k * distance_inv) ** 2
-                grad[i] = coefficient1 @ delta
-
-            # todo speed check
-            i = np.argmax(np.sum(grad**2, axis=1))
-            distance = np.linalg.norm(delta, axis=1)
-            distance = np.where(distance < 0.01, 0.01, distance)
-            distance_inv = 1 / distance
-            Ai = A.getrow(i).toarray().flatten()
-            coefficient1 = Ai * distance * k_inv - (k * distance_inv) ** 2
-            coefficient2 = Ai * distance_inv * k_inv + (2 * k**2) * (distance_inv**4)
-            hess = np.sum(coefficient1) * np.eye(dim) + np.einsum(
-                "ij,ik->jk", coefficient2[:, np.newaxis] * delta, delta
-            )
-            # update positions
-            minEigen = np.min(np.linalg.eigvals(hess))
-            delta_pos = np.linalg.solve(
-                hess + (1.1 * max(0.0, -minEigen)) * np.eye(dim),
-                -grad[i],
-            )
-            # print(f"{-grad=}, {minEigen=}, {delta_pos=}")
-            pos[i] += delta_pos
-
-            # grad -= coefficient1 @ delta
-            # new_delta = pos - pos[i]
-            # new_distance = np.linalg.norm(new_delta, axis=1)
-            # new_distance = np.where(new_distance < 0.01, 0.01, new_distance)
-            # new_coefficient1 = Ai * new_distance * k_inv - (k / new_distance) ** 2
-            # grad += new_coefficient1 @ new_delta
-
-            if verbose:
-                print(f"{cost(pos,A,k)=}")
-            yield pos
-
-        # grad = np.zeros(dim)
-        # hess = np.zeros((dim, dim))
-        # vertices = np.delete(np.arange(nnodes), fixed)
-        # k_inv = 1 / k
-
-        # for _ in range(iterations):
-        #     np.random.shuffle(vertices)
-        #     for i in vertices:
+        # def cost_fun(x):
+        #     pos = x.reshape((nnodes, dim))
+        #     grad = np.zeros((nnodes, dim))
+        #     for i in range(nnodes):
         #         delta = pos[i] - pos
         #         distance = np.linalg.norm(delta, axis=1)
         #         distance = np.where(distance < 0.01, 0.01, distance)
         #         distance_inv = 1 / distance
         #         Ai = A.getrow(i).toarray().flatten()
         #         coefficient1 = Ai * distance * k_inv - (k * distance_inv) ** 2
-        #         coefficient2 = Ai * distance_inv * k_inv + (2 * k**2) * (
-        #             distance_inv**4
-        #         )
-        #         grad = coefficient1 @ delta
-        #         hess = np.sum(coefficient1) * np.eye(dim) + np.einsum(
-        #             "ij,ik->jk", coefficient2[:, np.newaxis] * delta, delta
-        #         )
-        #         # update positions
-        #         minEigen = np.min(np.linalg.eigvals(hess))
-        #         delta_pos = np.linalg.solve(
-        #             hess
-        #             + (max(0.0, -1.01 * minEigen) + np.linalg.norm(grad)) * np.eye(dim),
-        #             -grad,
-        #         )
-        #         # print(f"{-grad=}, {minEigen=}, {delta_pos=}")
-        #         pos[i] += delta_pos
+        #         grad[i] = coefficient1 @ delta
+        #     ret = cost(pos, A, k)
+        #     print(f"{ret=}")
+        #     return ret, grad.ravel()
+
+        # pos_hist = []
+        # sp.optimize.minimize(
+        #     cost_fun,
+        #     pos.ravel(),
+        #     method="L-BFGS-B",
+        #     jac=True,
+        #     options={"maxiter": iterations, "disp": verbose},
+        #     callback=lambda x: pos_hist.append(x.reshape((nnodes, dim))),
+        # )
+
+        # for pos in pos_hist:
         #     yield pos
-        #     if verbose:
-        #         print(f"{cost(pos,A,k)=}")
+
+        from collections import deque
+
+        m = 3
+        vertices = np.delete(np.arange(nnodes), fixed)
+        Rs = deque(maxlen=m)
+        Ss = deque(maxlen=m)
+        Ys = deque(maxlen=m)
+        last_g = np.zeros((nnodes, dim))
+
+        for it in range(iterations):
+            # t = (it / iterations) ** 0.5
+            t = 1
+            print(f"{it=}")
+            print(f"{Rs=}")
+            g = np.zeros((nnodes, dim))
+            for i in vertices:
+                delta = pos[i] - pos
+                distance = np.linalg.norm(delta, axis=1)
+                distance = np.where(distance < 0.01, 0.01, distance)
+                distance_inv = 1 / distance
+                Ai = A.getrow(i).toarray().flatten()
+                coefficient1 = Ai * distance * k_inv - (k**2) * (
+                    distance_inv ** (1 + t)
+                )
+                g[i] = coefficient1 @ delta
+            q = np.copy(g)
+            alphas = []
+            for rho, s, y in zip(reversed(Rs), reversed(Ss), reversed(Ys)):
+                assert np.isclose(rho, 1 / np.sum(s * y))
+                alpha = rho * np.sum(s * q)
+                q -= alpha * y
+                alphas.append(alpha)
+            if it != 0:
+                assert len(Ss) > 0
+                q *= np.sum(Ss[-1] * Ys[-1]) / np.sum(Ys[-1] * Ys[-1])
+            for alpha, rho, s, y in zip(alphas, Rs, Ss, Ys):
+                assert np.isclose(rho, 1 / np.sum(s * y))
+                # assert np.isclose(alpha, rho * np.sum(s * q))
+                beta = rho * np.sum(y * q)
+                q += s * (alpha - beta)
+            q *= -1
+
+            print(f"{g[:3]=}")
+            print(f"{q[:3]=}")
+
+            # line search
+            # t = 1 / np.linalg.norm(q, axis=1)
+            # t = np.where(t > 1, 1, t)
+            # for _ in range(100):
+            #     pos_new = pos + t * q
+            #     if cost(pos_new, A, k) > cost(pos, A, k):
+            #         break
+            #     t *= 0.5
+            # print(f"{t=}")
+            # q *= t[:, np.newaxis]
+
+            assert np.abs(q[fixed]).sum() == 0
+
+            pos += q
+
+            if verbose:
+                print(f"{cost(pos,A,k)=}")
+            yield pos
+
+            Ss.append(q)
+            Ys.append(g - last_g)
+            Rs.append(1 / np.sum(Ss[-1] * Ys[-1]))
+            last_g = np.copy(g)
+
+    elif method == "RS":
+        # make sure we have a coo_matrix representation
+        try:
+            A = A.tolil()
+        except AttributeError:
+            A = (sp.sparse.coo_array(A)).tolil()
+
+        t = max(max(pos.T[0]) - min(pos.T[0]), max(pos.T[1]) - min(pos.T[1])) * 0.1
+        # simple cooling scheme.
+        # linearly step down by dt on each iteration so last iteration is size dt.
+        dt = t / (iterations + 1)
+
+        grad = np.zeros(dim)
+        hess = np.zeros((dim, dim))
+        vertices = np.delete(np.arange(nnodes), fixed)
+        k_inv = 1 / k
+
+        for it in range(iterations):
+            t = (it / iterations) ** 0.5
+            # t = 1
+            np.random.shuffle(vertices)
+            for i in vertices:
+                delta = pos[i] - pos
+                distance = np.linalg.norm(delta, axis=1)
+                distance = np.where(distance < 0.01, 0.01, distance)
+                distance_inv = 1 / distance
+                Ai = A.getrow(i).toarray().flatten()
+                coefficient1 = Ai * distance * k_inv - (k**2) * (
+                    distance_inv ** (1 + t)
+                )
+                coefficient2 = Ai * distance_inv * k_inv + ((1 + t) * k**2) * (
+                    distance_inv ** (3 + t)
+                )
+                grad = coefficient1 @ delta
+                hess = np.sum(coefficient1) * np.eye(dim) + np.einsum(
+                    "ij,ik->jk", coefficient2[:, np.newaxis] * delta, delta
+                )
+                # update positions
+                minEigen = np.min(np.linalg.eigvals(hess))
+                if minEigen < 0.01:
+                    if np.linalg.norm(grad) < 1e-5:
+                        continue
+                    delta_pos = -grad / np.linalg.norm(grad) * t
+                else:
+                    delta_pos = np.linalg.lstsq(hess, -grad, rcond=None)[0]
+                pos[i] += delta_pos
+            yield pos
+            t -= dt
+            if verbose:
+                print(f"{cost(pos,A,k)=}")
     else:
         raise ValueError("method is unknown")
 
@@ -228,5 +261,5 @@ if __name__ == "__main__":
     mat = np.array([[0, 1, 2], [1, 0, -1], [2, -1, 0]])
     mat = scipy.sparse.csr_matrix(mat)
     G = nx.Graph(mat)
-    pos = spring_layout(G, iterations=50, seed=0, method="FR_RS")
+    pos = spring_layout(G, iterations=50, seed=0, method="RS")
     print(pos)

@@ -20,7 +20,7 @@ def spring_layout(
     center=None,
     dim=2,
     seed=None,
-    method="FR",  # ! added method = "FR" or "FR_RS"
+    method="FR",  # ! added method = "FR" or "RS"
 ):
     """Position nodes using Fruchterman-Reingold force-directed algorithm.
 
@@ -91,7 +91,7 @@ def spring_layout(
         by numpy.random.
 
     ! added
-    method: "FR" or "FR_RS" (default: "FR")
+    method: "FR" or "RS" (default: "FR")
 
     Returns
     -------

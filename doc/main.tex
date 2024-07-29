@@ -77,6 +77,7 @@
 \newcommand{\eqdef}{\eqqcolon}
 % https://tex.stackexchange.com/questions/5502/how-to-get-a-mid-binary-relation-that-grows
 \newcommand{\relmiddle}[1]{\mathrel{}\middle#1\mathrel{}}
+\newcommand{\Lhopital}{L'H\^optial}
 
 \DeclareMathOperator{\Proj}{Proj}
 \DeclareMathOperator{\Exp}{Exp}
@@ -237,27 +238,48 @@ The energy function $E_{i,j}$ is convex for $a_{i,j} \in \bbR_{++}$ and minimize
 Based on these energies, the optimization problem for FR algorithm is defined as
 \begin{mini}
   {x \in \bbR^{d \times n}}
-  {f(x) \defeq \sum_{i<j} E_{i,j}(\norm{x_i - x_j})}
+  {f(x) \defeq \sum_{i<j} E_{i,j}(d_{i,j})}
   {\label{eq:fr}}
   {}
 \end{mini}
+where $d_{i,j} = \norm{x_i - x_j}$ is the Euclidean distance.
 
 In order to introduce the Random Subspace method, we define a function $f_i: \bbR^{d} \to \bbR$ for $1 \leq i \leq n$ as
 \begin{equation*}
-  f_i(x_i) \defeq \sum_{j \neq i} E_{i,j}(\norm{x_i - x_j}).
+  f_i(x_i) \defeq \sum_{j \neq i} E_{i,j}(d_{i,j}).
 \end{equation*}
 The gradient and the Hessian of $f_i$ are
 \begin{gather*}
-  \nabla f_i(x_i) = \sum_{j \neq i} \qty(\frac{a_{i,j}\norm{x_i-x_j}}{k} - \frac{k^2}{\norm{x_i - x_j}^2}) (x_i-x_j), \\
-  \nabla^2 f_i(x_i) = \sum_{j \neq i} \qty(\frac{a_{i,j}\norm{x_i-x_j}}{k} - \frac{k^2}{\norm{x_i - x_j}^2}) I_d +      \\
-  \sum_{j \neq i} \qty(\frac{a_{i,j}}{k \norm{x_i-x_j}} + \frac{2k^2}{\norm{x_i - x_j}^4}) (x_i - x_j)(x_i - x_j)^\top.
+  \nabla f_i(x_i) = \sum_{j \neq i} \qty(\frac{a_{i,j}d_{i,j}}{k} - \frac{k^2}{d_{i,j}^2}) (x_i-x_j), \\
+  \nabla^2 f_i(x_i) = \sum_{j \neq i} \qty(\frac{a_{i,j}d_{i,j}}{k} - \frac{k^2}{d_{i,j}^2}) I_d +      \\
+  \sum_{j \neq i} \qty(\frac{a_{i,j}}{k d_{i,j}} + \frac{2k^2}{d_{i,j}^4}) (x_i - x_j)(x_i - x_j)^\top.
 \end{gather*}
 
 As pointed out in~\cite{tunkelang1999numerical},
 the FR algorithm is a gradient descent method for the energy function $f$.
 
-
 \section{Algorithm} \label{sec:algorithm}
+
+For $t \in [0,1)$, let define as
+\begin{equation*}
+  E_{i,j}^t(d) = \frac{a_{i,j} d^3}{3k} - \frac{k^2 d^{1-t} - 1}{1-t}.
+\end{equation*}
+Note that
+\begin{equation*}
+  \lim_{t \to 1} - \frac{k^2 d^{1-t} - 1}{1-t} = -k^2 \log{d}.
+\end{equation*}
+by \Lhopital's rule.
+
+\begin{equation*}
+  f_i^t(x_i) \defeq \sum_{j \neq i} E_{i,j}^t(d_{i,j}).
+\end{equation*}
+The gradient and the Hessian of $f_i$ are
+\begin{gather*}
+  \nabla f_i^t(x_i) = \sum_{j \neq i} \qty(\frac{a_{i,j}d_{i,j}}{k} - \frac{k^2}{d_{i,j}^{1+t}}) (x_i-x_j), \\
+  \nabla^2 f_i^t(x_i) = \sum_{j \neq i} \qty(\frac{a_{i,j}d_{i,j}}{k} - \frac{k^2}{d_{i,j}^{1+t}}) I_d +      \\
+  \sum_{j \neq i} \qty(\frac{a_{i,j}}{k d_{i,j}} + \frac{k^2(1+t)}{d_{i,j}^{3+t}}) (x_i - x_j)(x_i - x_j)^\top.
+\end{gather*}
+
 
 \section{Experiment} \label{sec:experiment}
 

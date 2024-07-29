@@ -73,7 +73,7 @@ def _fruchterman_reingold(
             if (np.linalg.norm(delta_pos) / nnodes) < threshold:
                 break
         return pos
-    elif method == "FR_RS":
-        raise NotImplementedError("FR_RS method is not implemented yet")
+    elif method == "RS":
+        raise NotImplementedError("RS method is not implemented yet")
     else:
-        raise ValueError("method should be either 'FR' or 'FR_RS'")
+        raise ValueError("method should be either 'FR' or 'RS'")

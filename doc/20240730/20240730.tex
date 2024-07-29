@@ -17,7 +17,7 @@ According to Takahashi-san, this method might be related to \href{https://link-s
 \begin{screen}
   Choose $\alpha_{\mathrm{init}}$ and let $\alpha$ be the largest element of $\{ \alpha_{\mathrm{init}} \beta^i \}_{i}$ satisfying
   \begin{equation*}
-    f(x+\alpha d) \leq f(x) + \alpha \sigma \qty(\grad f(x)^\top d+ \frac{1}{2} d^\top \grad^2 f(x) d).
+    f(x+\alpha d) \leq f(x) + \alpha \sigma \qty(\grad f(x)^\top d+ \frac{1}{2} d^\top \grad^2 f(x) d)
   \end{equation*}
 \end{screen}
 Although this is not completely the same as the line search method I implemented, I think this is quite suggestive.
@@ -34,12 +34,19 @@ we can expect that
 However, I don't have any idea what it means and how to utilize it in the analysis.
 It might necessary to consider the smoothness of $\nabla^2 f$ or something like that.
 
+Additionally, I noticed that (at least) some of the existing methods are also optimal for the step-size $\alpha$, not only for the direction $\beta$.
+To show that CG-Newton method's advantage, we might need to assume more conditions on the problem, which I don't know yet.
+
 \section{Graph Drawing}
 
-I'm sorry for sudden topic change, but I'm currently quite interested in the graph drawing problem. Firstly, let me explain why I'm interested in this topic.
+Based on the advice of Prof. Takeda and Prof. Marumo, I began to think that the best thing to do would be to do research that I enjoy the most, so I started a new research project on graph drawing. Of course, it is related to what I have been doing so far, and I believe that I can make the most of what I have been doing so far. I am sorry for the sudden change.
+
+Originally, my former supervisor, Prof. Tanigawa, specializes in graph drawing, and you might think that I am talking about discrete optimization, but after consulting with Prof. Tanigawa, I think that this is rather a continuous optimization problem, so I decided to do research on this topic.
+
+I am using the IEEE template simply because the two main prior studies were both IEEE papers.
 
 On the last time meeting, I said that Random Subspace Method does work well for a narrow valley, and thus I proposed the CG-Newton method.
-But based on Prof.Takeda's advise, I considered what kind of problems can be well solved by Random Subspace Method, and realized that Random Subspace Method is very suitable for the problem with separable variable $X = (x_1, x_2, \dots, x_n) \quad (x_i \in \bbR^2)$, i.e., the graph drawing problem, which is I'm very interested in from years ago.
+But based on Prof.Takeda's advise, I considered what kind of problems can be well solved by Random Subspace Method, and realized that Random Subspace Method is very suitable for the problem with separable variable $X = (x_1, x_2, \dots, x_n) \quad (x_i \in \bbR^2)$, i.e., the graph drawing problem.
 (Actually, one of the candidates for my graduation thesis theme was about graph drawing.)
 
 \begin{mini*}
@@ -50,9 +57,11 @@ As you know, stochastic gradient decent works well for the separable problem ($f
 
 Let us consider the case a random matrix $P$ is a permutation matrix like, which is a practical situation. Then, the separableness of $X$ is necessary to terminate the algorithm in a few step.
 
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=\columnwidth]{separableX.jpg}
-\end{figure}
+Of course, a completely separable problem is too trivial (It is just a sum of independent problems), but I think that the graph drawing problem is a good example of the problem with a moderate separableness.
+
+\section{Next Meeting}
+
+Since currently I'm working on the graduation thesis with Prof. Tanigawa,and I have to go to Hokkaido to attend AQIS (conference) from 2024/08/26 to 2024/08/30, I would like to have the next meeting on September if possible.
+How about your schedule?
 
 \end{document}
