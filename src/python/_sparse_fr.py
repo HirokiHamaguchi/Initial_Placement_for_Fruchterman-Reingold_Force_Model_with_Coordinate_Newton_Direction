@@ -137,15 +137,26 @@ def _sparse_fruchterman_reingold(
         except AttributeError:
             A = (sp.sparse.coo_array(A)).tolil()
 
+<<<<<<< HEAD
         vertices = np.delete(np.arange(nnodes), fixed)
         k_inv = 1 / k
 
         for it in range(iterations):
             # t = (it / iterations) ** 0.5
             t = 1
+=======
+        k_inv = 1 / k
+
+        vertices = np.delete(np.arange(nnodes), fixed)
+        for iteration in range(iterations):
+            t = (iteration / iterations) ** 0.5
+            # t = 1
+>>>>>>> d9f1ca8d5ce63e88bf4575a054212c45f993ae60
             np.random.shuffle(vertices)
+
             for i in vertices:
 
+<<<<<<< HEAD
                 def cost_fun_i(x):
                     # todo iの除外
                     assert t == 1, "change np.log for t!=1"
@@ -160,11 +171,41 @@ def _sparse_fruchterman_reingold(
                     )
                     cost = np.sum(
                         Ai * distance**3 * (1 / 3) * k_inv - (k**2) * np.log(distance)
+=======
+                hess_memo = dict()
+
+                def cost_fun(x):
+                    grad = np.zeros(dim)
+                    hess = np.zeros((dim, dim))
+                    delta = x - pos
+                    delta[i] = 0
+                    distance = np.linalg.norm(delta, axis=1)
+                    distance = np.where(distance < 0.001, 0.001, distance)
+                    distance_inv = 1 / distance
+                    Ai = A.getrow(i).toarray().flatten()
+                    coefficient1 = Ai * distance * k_inv - (k**2) * (
+                        distance_inv ** (1 + t)
+                    )
+                    coefficient2 = Ai * distance_inv * k_inv + ((1 + t) * k**2) * (
+                        distance_inv ** (3 + t)
+                    )
+                    coefficient1[i] = 0
+                    coefficient2[i] = 0
+                    cost = np.sum(
+                        Ai * (distance**3) * (1 / 3) * k_inv
+                        - (k**2)
+                        * (
+                            np.log(distance)
+                            if t == 1
+                            else (distance ** (1 - t) - 1) / (1 - t)
+                        )
+>>>>>>> d9f1ca8d5ce63e88bf4575a054212c45f993ae60
                     )
                     grad = coefficient1 @ delta
                     hess = np.sum(coefficient1) * np.eye(dim) + np.einsum(
                         "ij,ik->jk", coefficient2[:, np.newaxis] * delta, delta
                     )
+<<<<<<< HEAD
 
                     return cost, grad, hess
 
@@ -179,8 +220,28 @@ def _sparse_fruchterman_reingold(
                 )
 
                 pos[i] += delta_pos
+=======
+                    hess_memo[tuple(x.tolist())] = hess
+                    return cost, grad
+
+                def hess_fun(x):
+                    key = tuple(x.tolist())
+                    assert key in hess_memo
+                    return hess_memo[key]
+
+                result = sp.optimize.minimize(
+                    cost_fun,
+                    pos[i],
+                    method="Newton-CG",
+                    jac=True,
+                    hess=hess_fun,
+                    options={"maxiter": 3},
+                )
+                # assert result.success
+                pos[i] = result.x
+
+>>>>>>> d9f1ca8d5ce63e88bf4575a054212c45f993ae60
             yield pos
-            t -= dt
             if verbose:
                 print(f"{cost(pos,A,k)=}")
     else:
