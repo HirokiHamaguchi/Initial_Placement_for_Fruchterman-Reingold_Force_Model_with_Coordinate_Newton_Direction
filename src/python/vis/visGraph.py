@@ -22,8 +22,8 @@ def visGraph(
             plt.arrow(
                 pos[i][0],
                 pos[i][1],
-                grad[i, 0],
-                grad[i, 1],
+                -grad[i, 0],
+                -grad[i, 1],
                 head_width=0.05,
                 head_length=0.1,
                 fc="k",

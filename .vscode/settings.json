@@ -55,6 +55,7 @@
         "Takahashi",
         "Takeda",
         "toarray",
+        "tobytes",
         "tocoo",
         "tolil",
         "tqdm",
