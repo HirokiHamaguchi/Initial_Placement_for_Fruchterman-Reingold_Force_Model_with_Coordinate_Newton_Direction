@@ -1,40 +1,35 @@
-import os
 import glob
+import os
+
 import networkx as nx
 import numpy as np
-import scipy.sparse
-
-from src.python.getMatrix import getMatrixByName
-from src.python.vis.visGraph import visGraph
-from src.python.spring_layout import spring_layout
-from packaging import version
 import PIL
+from packaging import version
+from tqdm.auto import tqdm
+
+from src.python.vis.visGraph import visGraph
 
 
-def visAnimate(matrixName: str, methodName: str):
-    mat = getMatrixByName(matrixName)
-    if scipy.sparse.issparse(mat):
-        mat.setdiag(0)
-        mat.eliminate_zeros()
-        mat.data = np.abs(mat.data)
-    else:
-        mat[np.diag_indices_from(mat)] = 0
-        mat.data = np.abs(mat.data)
+def visAnimate(G: nx.Graph, optResults: np.ndarray, matrixName: str, methodName: str):
+    folderName = "FruchtermanReingoldByRandomSubspace"
+    assert os.getcwd().find(folderName) != -1
+    cwd = os.getcwd()
+    pathToFolder = os.getcwd().split(folderName)[0] + folderName
+    os.chdir(pathToFolder)
 
     assert os.path.exists("temp"), "temp directory does not exist"
     for f in glob.glob("temp/*"):
         os.remove(f)
 
-    G = nx.Graph(mat)
-    for i, pos in enumerate(spring_layout(G, method=methodName, iterations=150)):
-        print(f"iteration: {i}", end="\r")
+    for i, pos_and_grad in tqdm(
+        enumerate(optResults), total=len(optResults), leave=False
+    ):
         visGraph(
             G,
-            pos,
+            *pos_and_grad,
             title=f"{matrixName}_{methodName}_{i}",
             savePath=f"temp/{i:03}.png",
         )
-    print()
 
     if version.parse(PIL.__version__) < version.parse("3.4"):
         # https://stackoverflow.com/questions/24688802/saving-an-animated-gif-in-pillow
@@ -55,6 +50,5 @@ def visAnimate(matrixName: str, methodName: str):
             loop=0,
         )
 
-
-if __name__ == "__main__":
-    visAnimate("jagmesh1", methodName="FR")
+    os.chdir(cwd)
+    print(os.path.join(pathToFolder, "movie", f"{matrixName}_{methodName}.gif"))
