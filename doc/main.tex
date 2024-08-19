@@ -281,6 +281,21 @@ The gradient and the Hessian of $f_i$ are
   \sum_{j \neq i} \qty(\frac{a_{i,j}}{k d_{i,j}} + \frac{k^2(1+t)}{d_{i,j}^{3+t}}) (x_i - x_j)(x_i - x_j)^\top.
 \end{gather*}
 
+\subsection{Line Search}
+
+We want to obtain
+$
+  \arg\min_{\alpha \geq 0} f_i(x + \alpha p).
+$
+
+In line search, we need to compute
+\begin{align*}
+  \pdv{\alpha} f_i(x+\alpha p)
+   & = \pdv{\alpha} \sum_j E_{i,j}(\norm{(x_i + \alpha p) - (x_j + \alpha p)})                                                       \\
+   & = \sum_j \pdv{\alpha} E_{i,j}(\norm{(x_i - x_j) + \alpha (p_i - p_j)})                                                          \\
+   & = \sum_j \dv{d} E_{i,j}(d) \pdv{\alpha} \norm{(x_i - x_j) + \alpha (p_i - p_j)}                                                 \\
+   & = \sum_j \dv{d} E_{i,j}(d) \frac{((x_i - x_j) + \alpha (p_i - p_j))^\top (p_i - p_j)}{\norm{(x_i - x_j) + \alpha (p_i - p_j)}}.
+\end{align*}
 
 \section{Experiment} \label{sec:experiment}
 
