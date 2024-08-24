@@ -46,6 +46,7 @@
         "optresult",
         "Polak",
         "popleft",
+        "randn",
         "Reingold",
         "Ribiere",
         "rowbounds",
