@@ -1,0 +1,321 @@
+\RequirePackage{plautopatch}
+\documentclass[13pt,aspectratio=169,table,dvipdfmx]{beamer}
+
+\usepackage{bxdpx-beamer}
+\usepackage{amsmath, amssymb, amsthm, mathrsfs, amsfonts, dsfont}
+\usepackage[ruled, vlined]{algorithm2e}
+\usepackage{annotate-equations}
+\usepackage{bbm}
+\usepackage{bm}
+\usepackage{booktabs}
+\usepackage{breakcites}
+\usepackage{calc}
+\usepackage[style=base]{caption}
+\usepackage{enumerate}
+\usepackage[T1]{fontenc}
+\usepackage{ifthen}
+\usepackage{listings}
+\usepackage{mathtools}
+\usepackage{mlmodern}
+\usepackage{multirow}
+\usepackage{newtxtext}
+\usepackage{optidef}
+\usepackage[deluxe]{otf}
+\usepackage{physics}
+\usepackage{setspace}
+\usepackage{stfloats}
+\usepackage{subfiles}
+\usepackage{subcaption}
+\usepackage{tikz}
+\usepackage{xparse}
+\usepackage[all]{xy}
+
+% === Commands ===
+
+\definecolor{cA}{HTML}{0072BD}
+\definecolor{cB}{HTML}{EDB120}
+\definecolor{cC}{HTML}{77AC30}
+\definecolor{cD}{HTML}{D95319}
+\newcommand{\red}[1]{\textcolor{red}{#1}}
+\newcommand{\blue}[1]{\textcolor{blue}{#1}}
+\newcommand{\cyan}[1]{\textcolor{cyan}{#1}}
+\newcommand{\gray}[1]{\textcolor{gray}{#1}}
+\newcommand{\green}[1]{\textcolor{green}{#1}}
+\newcommand{\brown}[1]{\textcolor{brown}{#1}}
+\newcommand{\black}[1]{\textcolor{black}{#1}}
+\newcommand{\orange}[1]{\textcolor{orange}{#1}}
+\newcommand{\purple}[1]{\textcolor{purple}{#1}}
+\newcommand{\yellow}[1]{\textcolor{yellow}{#1}}
+\newcommand{\Magenta}[1]{\textcolor{Magenta}{#1}}
+\newcommand{\RoyalBlue}[1]{\textcolor{RoyalBlue}{#1}}
+\newcommand{\RubineRed}[1]{\textcolor{RubineRed}{#1}}
+\newcommand{\ForestGreen}[1]{\textcolor{ForestGreen}{#1}}
+\newcommand{\YellowOrange}[1]{\textcolor{YellowOrange}{#1}}
+\newcommand{\WildStrawberry}[1]{\textcolor{WildStrawberry}{#1}}
+\newcommand{\cAText}[1]{\textcolor{cA}{#1}}
+\newcommand{\cBText}[1]{\textcolor{cB}{#1}}
+\newcommand{\cCText}[1]{\textcolor{cC}{#1}}
+\newcommand{\cDText}[1]{\textcolor{cD}{#1}}
+
+\newcommand{\st}{\text{ s.t. }}
+\newcommand{\Img}[1]{\mathrm{Im}\qty(#1)}
+\newcommand{\Ker}[1]{\mathrm{Ker}\qty(#1)}
+\newcommand{\Supp}[1]{\mathrm{supp}\qty(#1)}
+\newcommand{\Rank}[1]{\mathrm{rank}\qty(#1)}
+\newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
+\newcommand{\ceil}[1]{\left\lceil #1 \right\rceil}
+% C++ (https://tex.stackexchange.com/questions/4302/prettiest-way-to-typeset-c-cplusplus)
+\newcommand{\Cpp}{C\nolinebreak[4]\hspace{-.05em}\raisebox{.4ex}{\relsize{-3}{\textbf{++}}}}
+% https://tex.stackexchange.com/questions/28836/typesetting-the-define-equals-symbol
+\newcommand{\defeq}{\coloneqq}
+\newcommand{\eqdef}{\eqqcolon}
+
+\DeclareMathOperator{\Proj}{Proj}
+\DeclareMathOperator{\Exp}{Exp}
+\DeclareMathOperator{\Hess}{Hess}
+\DeclareMathOperator{\Retr}{Retr}
+\DeclareMathOperator{\Span}{span}
+\DeclareMathOperator{\myGrad}{grad}
+\renewcommand{\grad}{\myGrad}
+
+% https://tex.stackexchange.com/questions/564216/newcommand-for-each-letter
+\ExplSyntaxOn
+\NewDocumentCommand{\definealphabet}{mmmm}{
+\int_step_inline:nnn{`#3}{`#4}{
+\cs_new_protected:cpx{#1 \char_generate:nn{##1}{11}}{
+\exp_not:N #2{\char_generate:nn{##1}{11}}}}}
+\ExplSyntaxOff
+
+\definealphabet{bb}{\mathbb}{A}{Z}
+\definealphabet{rm}{\mathrm}{A}{Z}
+\definealphabet{cal}{\mathcal}{A}{Z}
+% \definealphabet{scr}{\mathscr}{A}{Z}
+\definealphabet{frak}{\mathfrak}{a}{z}
+\definealphabet{frak}{\mathfrak}{A}{Z}
+
+% === Settings ===
+
+% https://qiita.com/rityo_masu/items/efd44bc8f9229e014237
+\allowdisplaybreaks[4]
+
+\usetikzlibrary{
+  3d,
+  fit,
+  calc,
+  math,
+  matrix,
+  patterns,
+  backgrounds,
+  arrows.meta,
+  decorations.pathmorphing,
+}
+
+% This declares a command \Comment
+% The argument will be surrounded by /* ... */
+% https://ja.overleaf.com/learn/latex/Algorithms
+\SetKwComment{Comment}{/* }{ */}
+
+\DontPrintSemicolon
+
+\parindent=0pt
+
+% === Beamer Settings ===
+
+\usetheme{Boadilla}
+
+\usefonttheme{professionalfonts} % Be professional!
+
+% https://tex.stackexchange.com/questions/646333/size-of-integral-symbol-in-section-header-with-mlmodern
+\DeclareFontFamily{OMX}{mlmex}{}
+\DeclareFontShape{OMX}{mlmex}{m}{n}{%
+   <->mlmex10%
+   }{} 
+\renewcommand{\familydefault}{\sfdefault}
+\usefonttheme{structurebold}
+\setbeamerfont{alerted text}{series=\bfseries}
+\setbeamerfont{section in toc}{series=\mdseries}
+\setbeamerfont{itemize/enumerate body}{size=\large}
+
+%Beamer Color
+\definecolor{blendedblue}{rgb}{0.2,0.2,0.7}
+\definecolor{UniBlue}{RGB}{0,150,200} 
+\definecolor{UniGreen}{RGB}{0,200,150}
+\definecolor{AlertOrange}{RGB}{255,76,0}
+\definecolor{AlmostBlack}{RGB}{38,38,38}
+\setbeamercolor{normal text}{fg=AlmostBlack}
+\setbeamercolor{structure}{fg=UniBlue}
+\setbeamercolor{block title}{fg=UniBlue!50!black}
+\setbeamercolor{alerted text}{fg=AlertOrange}
+\setbeamercolor{itemize item}{fg=black}
+\setbeamercolor{itemize subitem}{fg=black}
+\setbeamercolor{itemize subsubitem}{fg=black}
+
+\setbeamertemplate{blocks}[rounded]
+\useinnertheme{circles}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{footline}[page number]
+
+\setbeamertemplate{title page}{%
+    \vspace{2.5em}
+    {\usebeamerfont{title} \usebeamercolor[fg]{title} \inserttitle \par}
+    {\usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle}\insertsubtitle \par}
+    \vspace{1.5em}
+    \begin{flushright}
+        \usebeamerfont{author}\insertauthor\par
+        \usebeamerfont{institute}\insertinstitute \par
+        \vspace{3em}
+        \usebeamerfont{date}\insertdate\par
+        \usebeamercolor[fg]{titlegraphic}\inserttitlegraphic
+    \end{flushright}
+}
+
+% === TITLE ===
+\title{\Huge{Improved Initial Placement for\\Fruchterman--Reingold Algorithm}}
+\author{\Large{Hiroki Hamaguchi}}
+\institute{\large{Supervisors: Prof. Akiko Takeda\\\phantom{Supervisors: }Pierre-Louis Poirion\\\phantom{Supervisors: }Andi Han}}
+\date{2024/06/17}
+
+\newif\ifShowHidden
+\ShowHiddenfalse
+% \ShowHiddentrue
+
+\begin{document}
+
+\ifShowHidden
+    \maketitle
+\fi
+
+\begin{frame}{Introduction: Graph Drawing}
+    \begin{tikzpicture}
+        \node[cA,font=\bfseries] (A) at (-1,0) {Graph Drawing};
+        \node[cB,font=\bfseries] (B) at (-3,-1) {Discrete Based};
+        \node[align=left,anchor=north west] (B1) at ($(B)+(-2,-0.5-0.0)$) {\textcolor{cB}{BFS layout}\\\small{\quad - for tree graph}};
+        \node[align=left,anchor=north west] (B2) at ($(B)+(-2,-0.5-1.2)$) {\textcolor{cB}{Layered graph drawing}\\\small{\quad - for DAG (sugiyama style)}};
+        \node[align=left,anchor=north west] (B3) at ($(B)+(-2,-0.5-2.4)$) {\textcolor{cB}{Spectral layout}\\\small{\quad - eigenvector of Laplacian}};
+        \node[align=left,anchor=north west] (B4) at ($(B)+(-2,-0.5-3.6)$) {\textcolor{cB}{Planar layout}\\\small{\quad - for planar graph}\\\small{\quad \quad (Tutte embedding)}};
+        \node[draw=cB, thick,fit={(B1) (B2) (B3) (B4)}, inner sep=5pt] (BBox) {};
+
+        \node[cC,font=\bfseries] (C) at (+5,-1) {Continuous Based};
+        \node[cC,font=\bfseries] (C1) at ($(C)+(-3,-1)$) {Energy Minimization};
+        \node[cC,font=\bfseries] (C11) at ($(C1)+(0,-1)$) {Kamada--Kawai};
+        \node[cC,font=\bfseries] (C2) at ($(C)+(+3,-1)$) {Force Directed};
+        \node[cC,font=\bfseries] (C21) at ($(C2)+(0,-1)$) {Fruchterman--Reingold};
+
+        \draw[thick,->] (A) |- ($(A)!0.5!(B)$) -| (B);
+        \draw[thick,->] (A) |- ($(A)!0.5!(C)$) -| (C);
+        \draw[thick,->] (C) |- ($(C)!0.5!(C1)$) -| (C1);
+        \draw[thick,->] (C) |- ($(C)!0.5!(C2)$) -| (C2);
+    \end{tikzpicture}
+\end{frame}
+
+
+\ifShowHidden
+    \begin{frame}{Preliminary: Problem Formulation}
+    \end{frame}
+\fi
+
+\ifShowHidden
+    \begin{frame}{Problem: The slowness of the conversion}
+    \end{frame}
+\fi
+
+\ifShowHidden
+    \begin{frame}{Goal: What I want to do}
+        \begin{enumerate}
+            \LARGE
+            \item \red{propose} a better algorithm to solve the problem
+            \item \red{Analyze} the convergence of the proposed algorithm
+            \item \red{Apply} the proposed scheme to other settings
+        \end{enumerate}
+    \end{frame}
+\fi
+
+\ifShowHidden
+    \begin{frame}{Key Observation: stochastic strategy}
+        \begin{tikzpicture}
+            % Define positions for the first cluster (left)
+            \foreach \xA/\yA/\xB/\yB/\xC/\yC/\xD/\yD/\xE/\yE/\xShift/\yShift in {
+                    0/0/0/1/0/-1/1/0/-1/0/0/0,
+                    0/0/0/1/0/-1/1/0/-1/0/5/2,
+                    0/0/0/1/0/-1/1/0/-1/0/9/2,
+                    0/0/0/1/0/-1/1/0/-1/0/5/-2,
+                    0/0/0/1/0/-1/1/0/-1/0/9/-2} {
+                    \begin{scope}[xshift=\xShift cm,yshift=\yShift cm]
+                        \draw[dashed,color=gray,line width=0.5pt] (-1.5, 1.5) rectangle (1.5, -1.5);
+                        \node[circle, fill=red,   minimum size=8pt] (a0) at (\xA, \yA) {};
+                        \node[circle, fill=black, minimum size=8pt] (a1) at (\xB, \yB) {};
+                        \node[circle, fill=black, minimum size=8pt] (a2) at (\xC, \yC) {};
+                        \node[circle, fill=black, minimum size=8pt] (a3) at (\xD, \yD) {};
+                        \node[circle, fill=black, minimum size=8pt] (a4) at (\xE, \yE) {};
+                        \draw[decorate, decoration={coil, segment length=2, aspect=0.5}] (a0) -- (a1);
+                        \draw[decorate, decoration={coil, segment length=2, aspect=0.5}] (a0) -- (a2);
+                        \draw[decorate, decoration={coil, segment length=2, aspect=0.5}] (a0) -- (a3);
+                        \draw[decorate, decoration={coil, segment length=2, aspect=0.5}] (a0) -- (a4);
+                    \end{scope}
+                }
+
+            % \node at (0, -1.5) {others are incorrect};
+            % \node at (5, -3.5) {others are incorrect};
+
+        \end{tikzpicture}
+    \end{frame}
+\fi
+
+\ifShowHidden
+    \begin{frame}{aa}
+        \begin{gather*}
+            \begin{aligned}
+                m_k(y) \defeq & f(x_k) + \langle \grad f(x_k), \red{P_k}y \rangle_{\red{x_k}}                                                                        \\
+                              & + \frac{1}{2} \langle \Hess f(x_k) [\red{P_k}y], \red{P_k}y \rangle_{\red{x_k}} \red{+ \frac{\sigma_k}{2} \norm{P_ky}^2_{\red{x_k}}} \\
+            \end{aligned}\\
+            x_{k+1} = \red{\Retr_{x_k}}(- \red{P_k}d_k)
+        \end{gather*}
+        \begin{itemize}
+            \item (will be) Proposed in the future
+            \item Work In Progress!
+        \end{itemize}
+    \end{frame}
+\fi
+
+\setbeamercolor{structure}{fg=blendedblue}
+\setbeamercolor{block title}{fg=blendedblue!50!black}
+
+\ifShowHidden
+    \begin{frame}{\LARGE{Summary}}
+        \begin{block}{Future Work}
+            \begin{itemize}
+                \item More numerical experiments
+                \item Theoretical analysis
+            \end{itemize}
+        \end{block}
+    \end{frame}
+\fi
+
+\ifShowHidden
+    \begin{frame}{\LARGE{memo}}
+        \begin{itemize}
+            \item 武田先生「PLやAndiがいるのに，彼らからの助言を仰がずに，多様体やrandom subspaceアルゴリズムから離れて，あまり専門家のいない方向へ進んでいくのは，なんだか勿体無い気がしたもので．」
+                  \begin{itemize}
+                      \item これに関しては本当に仰る通りで、非常に申し訳なく思うのですが、一つだけ弁明させて頂くと、「やりたくない」ではなく「それが出来るだけの能が私に無い」に現状は近いです
+                  \end{itemize}
+            \item 「まず問題を見つける(spring layoutがL-BFGSなどでもどうしても遅い) -> 解決策を考える(座標降下など、特定の手法に拘らず全ての選択肢を考える) -> 理論保証をする(収束性など) -> 他手法へも適用可な一般的アルゴリズムへ拡張する」
+                  というボトムアップはかなり得意な自信があります。
+            \item 一方で、「まず一般的なアルゴリズムを考える(random subspace) -> 理論保証をする -> 上手くいく問題を見つける(機械学習など)」
+                  というトップダウンの研究は滅茶苦茶に苦手なのだなと痛感しています。
+            \item 気付くのが遅くなってすみません。。。
+        \end{itemize}
+    \end{frame}
+\fi
+
+\ifShowHidden
+    \begin{frame}[allowframebreaks]{Reference}
+        \scriptsize
+        \beamertemplatetextbibitems
+        \bibliographystyle{hapalike}
+        % \bibliography{../masterThesis.bib}
+        % \begin{thebibliography}{1}
+        % \end{thebibliography}
+    \end{frame}
+\fi
+
+\end{document}
