@@ -42,6 +42,7 @@
                 "-ot",
                 "--interaction=nonstopmode",
                 "--synctex=1",
+                "--shell-escape",
                 "%DOC%"
             ]
         },
@@ -54,6 +55,7 @@
                 "-ot",
                 "--interaction=nonstopmode",
                 "--synctex=1",
+                "--shell-escape",
                 "%DOC%"
             ]
         },
@@ -93,6 +95,7 @@
         "getrowview",
         "gfkp",
         "gnorm",
+        "Graphviz",
         "gtol",
         "Harel",
         "igraph",
@@ -126,6 +129,7 @@
         "rowbounds",
         "SCCG",
         "setdiag",
+        "sfdp",
         "Softw",
         "ssget",
         "ssgetpy",
