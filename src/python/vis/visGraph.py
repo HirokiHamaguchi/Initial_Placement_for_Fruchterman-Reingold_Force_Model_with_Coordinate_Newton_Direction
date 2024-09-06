@@ -10,11 +10,12 @@ def visGraph(
     _dirs: np.ndarray = None,
     title: str = None,
     savePath: str = None,
+    node_size: int = 50,
 ) -> None:
     cmap = plt.get_cmap("jet")
     n = G.number_of_nodes()
     colorMap = np.array([cmap(i / (n - 1)) for i in range(n)])
-    nx.draw(G, pos, node_size=50, node_color=colorMap)
+    nx.draw(G, pos, node_size=node_size, node_color=colorMap)
     if _dirs is not None and np.any(_dirs != 0.0):
         dirs = _dirs.copy()
         assert pos.shape == (n, 2)
