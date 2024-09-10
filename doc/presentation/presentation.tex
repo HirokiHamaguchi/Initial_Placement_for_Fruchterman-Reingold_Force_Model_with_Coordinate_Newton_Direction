@@ -23,6 +23,7 @@
 \usepackage{optidef}
 \usepackage[deluxe]{otf}
 \usepackage{physics}
+\usepackage{pifont}
 \usepackage{setspace}
 \usepackage{stfloats}
 \usepackage{subfiles}
@@ -74,6 +75,8 @@
 \newcommand{\eqdef}{\eqqcolon}
 % https://tex.stackexchange.com/questions/5502/how-to-get-a-mid-binary-relation-that-grows
 \newcommand{\relmiddle}[1]{\mathrel{}\middle#1\mathrel{}}
+\newcommand{\cmark}{\textcolor{cC}{\ding{51}}} % check mark
+\newcommand{\xmark}{\textcolor{cD}{\ding{55}}} % cross mark
 
 \DeclareMathOperator{\Proj}{Proj}
 \DeclareMathOperator{\Exp}{Exp}
@@ -459,119 +462,184 @@
     \end{frame}
 \fi
 
-% \ifShowHidden
-\begin{frame}{The Purpose of this research}
-    \begin{table}
-        \centering
-        \begin{tabular}{c|c|c|c}
-            \toprule
-            Existing works      & A                        & B                         & C                    \\
-            \midrule
-            \textbf{abst}       & L-BFGS for graph drawing & SGD for graph drawing     & SA for graph drawing \\
-            \textbf{What we do} & practical speed up       & counterpart for FR layout & refine the strategy  \\
-            \bottomrule
-        \end{tabular}
-    \end{table}
-\end{frame}
-% \fi
+\ifShowHidden
+    \begin{frame}{The Purpose of this research}
+        \begin{table}
+            \centering
+            \begin{tabular}{c|c|c|c}
+                \toprule
+                Existing works      & A                        & B                         & C                    \\
+                \midrule
+                \textbf{abstract}   & L-BFGS for graph drawing & SGD for graph drawing     & SA for graph drawing \\
+                \textbf{What we do} & practical speed up       & counterpart for FR layout & refine the strategy  \\
+                \bottomrule
+            \end{tabular}
+        \end{table}
+    \end{frame}
+\fi
 
 \ifShowHidden
     \begin{frame}{\LARGE{余談: 試した手法群}}
         \begin{itemize}
             \item シンプルなrandom subspace algorithm
-            \item (丸茂先生のアドバイスにもあった) 頂点毎にL-BFGSを適用
+            \item (丸茂先生から頂いた非常に本質的なアドバイスである) 頂点毎にL-BFGSを適用
                   \begin{itemize}
                       \item (cubic regularized Newton以前の問題)
                   \end{itemize}
             \item CG法
-            \item stochastic CG法 ``Stochastic Conjugate Gradient Algorithm with
-                  Variance Reduction''
-            \item L-BFGS法自体の改良の検討 -> 自作だと数値爆発で諦め
+                  \begin{itemize}
+                      \item 元々の研究課題の一環として、SciPyが実装しているリスタート機能付きの$\beta^{\text{PR}}_+$と強Wolfe条件によるCG法を調べていました
+                      \item Zoutendijk条件による証明について、簡単な部分は理解したつもりですが、randomizedした時にどうすればいいのかは全く分からず
+                  \end{itemize}
+            \item stochastic CG法 ``Stochastic Conjugate Gradient Algorithm with Variance Reduction''
+                  \begin{itemize}
+                      \item ただし、収束性証明は強凸の場合のみ
+                  \end{itemize}
+            \item L-BFGS法自体の改良の検討 $\to$ 自作だと数値爆発で諦め
             \item 汎用的なフレームワークの開発はこの時点で大分諦めました
         \end{itemize}
     \end{frame}
 \fi
 
-% \begin{frame}{Key Technique 1: Separation of the objective function}
-%     \begin{itemize}
-%         \item SA based close
-%         \item
-%     \end{itemize}
-% \end{frame}
+% \ifShowHidden
+\begin{frame}{Key Observation: stochastic strategy}
+    \begin{columns}
+        \begin{column}{0.49\columnwidth}
+            \centering{
+                For far-quadratic objective functions
+                \begin{itemize}
+                    \item[\cmark] \textbf{SGD} excels at rough optimization
+                    \item[\xmark] \textbf{L-BFGS} is ineffective for this case\\
+                        \small{$\order{\abs{V}^2}$ per iteration is too expensive}
+                \end{itemize}}
+        \end{column}
+        \begin{column}{0.49\columnwidth}
+            \centering{
+                For near-quadratic objective functions
+                \begin{itemize}
+                    \item[\cmark] \textbf{L-BFGS} excels at precise optimization
+                    \item[\xmark] \textbf{SGD} is ineffective for this case\\
+                        \small{it is too easy to find a locally optimal solution}
+                \end{itemize}}
+        \end{column}
+    \end{columns}
+    \begin{figure}[htbp]
+        \centering
+        \begin{tikzpicture}
+            \foreach \xA/\yA/\xB/\yB/\xC/\yC/\xD/\yD/\xE/\yE/\xShift/\yShift in {
+                    1.25/1.25/-0.25/0.75/-0.25/-1.25/0.75/-0.25/-1.25/-0.25/-5/0,
+                    0/0/0/1/0/-1/1/0/-1/0/0/0,
+                    0.2/-0.1/-0.3/1.2/-0.2/-0.9/1.1/-0.1/-1.1/0.1/+5/0} {
+                    \begin{scope}[xshift=\xShift cm,yshift=\yShift cm]
+                        \draw[dashed,color=gray,line width=0.5pt] (-1.5, 1.5) rectangle (1.5, -1.5);
+                        \node[circle, fill=red,   minimum size=8pt] (a0) at (\xA, \yA) {};
+                        \node[circle, fill=black, minimum size=8pt] (a1) at (\xB, \yB) {};
+                        \node[circle, fill=black, minimum size=8pt] (a2) at (\xC, \yC) {};
+                        \node[circle, fill=black, minimum size=8pt] (a3) at (\xD, \yD) {};
+                        \node[circle, fill=black, minimum size=8pt] (a4) at (\xE, \yE) {};
+                        \draw[decorate, decoration={coil, segment length=2, aspect=0.5}] (a0) -- (a1);
+                        \draw[decorate, decoration={coil, segment length=2, aspect=0.5}] (a0) -- (a2);
+                        \draw[decorate, decoration={coil, segment length=2, aspect=0.5}] (a0) -- (a3);
+                        \draw[decorate, decoration={coil, segment length=2, aspect=0.5}] (a0) -- (a4);
+                    \end{scope}
+                }
 
-% \begin{frame}{Key Observation: stochastic strategy}
-%     \begin{tikzpicture}
-%         % Define positions for the first cluster (left)
-%         \foreach \xA/\yA/\xB/\yB/\xC/\yC/\xD/\yD/\xE/\yE/\xShift/\yShift in {
-%                 0/0/0/1/0/-1/1/0/-1/0/0/0,
-%                 0/0/0/1/0/-1/1/0/-1/0/5/2,
-%                 0/0/0/1/0/-1/1/0/-1/0/9/2,
-%                 0/0/0/1/0/-1/1/0/-1/0/5/-2,
-%                 0/0/0/1/0/-1/1/0/-1/0/9/-2} {
-%                 \begin{scope}[xshift=\xShift cm,yshift=\yShift cm]
-%                     \draw[dashed,color=gray,line width=0.5pt] (-1.5, 1.5) rectangle (1.5, -1.5);
-%                     \node[circle, fill=red,   minimum size=8pt] (a0) at (\xA, \yA) {};
-%                     \node[circle, fill=black, minimum size=8pt] (a1) at (\xB, \yB) {};
-%                     \node[circle, fill=black, minimum size=8pt] (a2) at (\xC, \yC) {};
-%                     \node[circle, fill=black, minimum size=8pt] (a3) at (\xD, \yD) {};
-%                     \node[circle, fill=black, minimum size=8pt] (a4) at (\xE, \yE) {};
-%                     \draw[decorate, decoration={coil, segment length=2, aspect=0.5}] (a0) -- (a1);
-%                     \draw[decorate, decoration={coil, segment length=2, aspect=0.5}] (a0) -- (a2);
-%                     \draw[decorate, decoration={coil, segment length=2, aspect=0.5}] (a0) -- (a3);
-%                     \draw[decorate, decoration={coil, segment length=2, aspect=0.5}] (a0) -- (a4);
-%                 \end{scope}
-%             }
-
-%         % \node at (0, -1.5) {others are incorrect};
-%         % \node at (5, -3.5) {others are incorrect};
-
-%     \end{tikzpicture}
-% \end{frame}
-
-% \begin{frame}{key technique}
-%     \begin{itemize}
-%         \item random subspace algorithm
-%               \begin{itemize}
-%                   \item \cite{cartisRandomisedSubspaceMethods2022},\cite{fujiRandomizedSubspaceRegularized2022},
-%               \end{itemize}
-%     \end{itemize}
-% \end{frame}
+            \draw[-{Latex[length=10,width=0.4cm]},line width=0.15cm] (-3.1, 0) -- (-1.9, 0);
+            \draw[-{Latex[length=10,width=0.4cm]},line width=0.15cm] (+3.1, 0) -- (+1.9, 0);
+        \end{tikzpicture}
+    \end{figure}
+    \textcolor{cE}{\small{(FRアルゴリズムはL-BFGSに近いが、前者が苦手なことは「ねじれ」の問題として知られている)}}
+\end{frame}
+% \fi
 
 % \ifShowHidden
-%     \begin{frame}{Possible Application 1}
-%         \begin{figure}[htbp]
-%             \centering
-%             \includegraphics[width=0.5\columnwidth]{imgs/applicatoin1d.png}
-%         \end{figure}
-%         \begin{itemize}
-%             \item Optimize $f(x)$ where $x \in \mathbb{R}^{n}$.
-%             \item If two of the points are too close, $f(x)$ drastically increases.
-%             \item Similar algorithms might be applicable to this problem.
-%             \item Is there any concrete instance?
-%             \item Is there any algorithm already well known?
-%         \end{itemize}
-%     \end{frame}
-%     \begin{frame}{Possible Application 2}
-%         \begin{itemize}
-%             \item (Continuous relaxation of) graph isomorphism problem
-%                   \begin{itemize}
-%                       \item displaying symmetry is at least as difficult as graph isomorphism \cite{eades1984heuristic}
-%                       \item When we draw $G \defeq G_1 \cup G_2$, $G$ displays symmetry if $G_1 \cong G_2$.
-%                   \end{itemize}
-%             \item Graph isomorphism problem with Frank-Wolfe algorithm \cite{klusContinuousOptimizationMethods2023}
-%                   \begin{mini*}
-%                       {Q}{||QA-BQ||^2_F}{}{}
-%                       \addConstraint{Q}{\in \left\{ Q \in \mathbb{R}^{n \times n} \relmiddle| Q^\top Q = I_n \right\}}
-%                   \end{mini*}
-%             \item Many-to-Many graph isomorphism \cite{zaslavskiyManytoManyGraphMatching2010}
-%                   \begin{mini*}
-%                       {P}{||G - PHP^\top ||^2_F}{}{}
-%                       \addConstraint{P}{\in \left\{ P \in \{0, 1\}^{n \times n} \relmiddle| P1_n = 1_n, P^\top 1_n = 1_n \right\}}
-%                   \end{mini*}
-%             \item I'm still doubtful, but these papers seems really interesting. (+ Riemannian optimization)
-%         \end{itemize}
-%     \end{frame}
+\begin{frame}{Key Technique 1: Separation of the objective function}
+    \begin{equation*}
+        \mathrm{stress} = \sum_{i<j} f_{i,j}(d_{i,j}) = \sum_{(i,j)\in E} f^a_{i,j}(d_{i,j}) + \sum_{i<j} f^r_{i,j}(d_{i,j})
+    \end{equation*}
+    \begin{itemize}
+        \item \textcolor{cE}{(これはあくまで前座 本題はKey Technique 2です)}
+        \item \textcolor{cE}{(この辺りは本当に全部丸茂先生が仰っていた通りです)}
+        \item SA based close
+    \end{itemize}
+\end{frame}
 % \fi
+
+\ifShowHidden
+    \begin{frame}{Key Observation: stochastic strategy}
+        \begin{itemize}
+            \item これはTSPを部分問題として含む
+                  \begin{itemize}
+                      \item 代表的なTSPの解法: (Held-Karp), 2-opt, 3-opt, Lin-Kernighan, Christofides, etc.
+                      \item 参考になる部分とならない部分がそれぞれある。
+                  \end{itemize}
+        \end{itemize}
+    \end{frame}
+\fi
+
+\ifShowHidden
+    \begin{frame}{Key Technique 2: Randomized subspace algorithm}
+        \begin{itemize}
+            \item Researches on Randomized Subspace Newton (\textbf{RSN}) are conducted.
+                  \begin{itemize}
+                      \item Proposed in~\cite{NEURIPS2019_bc6dc48b}
+                      \item Extended in~\cite{cartisRandomisedSubspaceMethods2022},\cite{fujiRandomizedSubspaceRegularized2022},\cite{higuchiFastConvergenceSecondOrder2024}
+                      \item Analysis is based on~\cite{karimireddyGlobalLinearConvergence2018}
+                  \end{itemize}
+            \item \textcolor{cE}{(疑問:random subspaceを名乗るのにJL lemmaは必須か? 提案論文は不使用)}
+            \item \textcolor{cE}{(単なる勘ですが、この状況まで落とし込めば部分空間法が強いはず)}
+        \end{itemize}
+        \begin{columns}[T]
+            \column{0.5\columnwidth}
+            \begin{itemize}
+                \item Apply some second-order method to subspaces
+                \item graph drawing: optimize over $\prod_{i=1}^{n} \mathbb{R}^2$\\
+                      $\to$ suitable for \textbf{RSN}!
+            \end{itemize}
+            \column{0.5\columnwidth}
+            \begin{figure}[htbp]
+                \centering
+                \includegraphics[width=0.9\columnwidth]{imgs/randomSubspace.pdf}
+            \end{figure}
+        \end{columns}
+    \end{frame}
+\fi
+
+\ifShowHidden
+    \begin{frame}{Possible Application 1}
+        \begin{figure}[htbp]
+            \centering
+            \includegraphics[width=0.5\columnwidth]{imgs/applicatoin1d.png}
+        \end{figure}
+        \begin{itemize}
+            \item Optimize $f(x)$ where $x \in \mathbb{R}^{n}$.
+            \item If two of the points are too close, $f(x)$ drastically increases.
+            \item Similar algorithms might be applicable to this problem.
+            \item Is there any concrete instance?
+            \item Is there any algorithm already well known?
+        \end{itemize}
+    \end{frame}
+    \begin{frame}{Possible Application 2}
+        \begin{itemize}
+            \item (Continuous relaxation of) graph isomorphism problem
+                  \begin{itemize}
+                      \item displaying symmetry is at least as difficult as graph isomorphism \cite{eades1984heuristic}
+                      \item When we draw $G \defeq G_1 \cup G_2$, $G$ displays symmetry if $G_1 \cong G_2$.
+                  \end{itemize}
+            \item Graph isomorphism problem with Frank-Wolfe algorithm \cite{klusContinuousOptimizationMethods2023}
+                  \begin{mini*}
+                      {Q}{||QA-BQ||^2_F}{}{}
+                      \addConstraint{Q}{\in \left\{ Q \in \mathbb{R}^{n \times n} \relmiddle| Q^\top Q = I_n \right\}}
+                  \end{mini*}
+            \item Many-to-Many graph isomorphism \cite{zaslavskiyManytoManyGraphMatching2010}
+                  \begin{mini*}
+                      {P}{||G - PHP^\top ||^2_F}{}{}
+                      \addConstraint{P}{\in \left\{ P \in \{0, 1\}^{n \times n} \relmiddle| P1_n = 1_n, P^\top 1_n = 1_n \right\}}
+                  \end{mini*}
+            \item I'm still doubtful, but these papers seems really interesting. (+ Riemannian optimization)
+        \end{itemize}
+    \end{frame}
+\fi
 
 \setbeamercolor{structure}{fg=blendedblue}
 \setbeamercolor{block title}{fg=blendedblue!50!black}
@@ -587,7 +655,56 @@
     \end{frame}
 \fi
 
+
 \ifShowHidden
+    \begin{frame}[allowframebreaks]{Reference}
+        \scriptsize
+        \beamertemplatetextbibitems
+        \bibliographystyle{hapalike}
+        \bibliography{../FruchtermanReingoldByRandomSubspace.bib}
+        % \begin{thebibliography}{1}
+        % \end{thebibliography}
+    \end{frame}
+\fi
+
+\ifShowHidden
+    \begin{frame}{\LARGE{どう研究したいか}}
+        \begin{itemize}
+            \item 以下は本当に仰る通りで、非常に申し訳なく思います。すいません。
+                  \begin{itemize}
+                      \item
+                            「PLやAndiがいるのに，彼らからの助言を仰がずに，多様体やrandom subspaceアルゴリズムから離れて，あまり専門家のいない方向へ進んでいくのは，なんだか勿体無い気がしたもので．」
+                            「正直，我々の得意とするところから離れるほど，困った時にアドバイスできなくなるし，新規性があるのかどうかも判断つかなくなります．もちろん，やりたいことをやったらいい気もしますが，私のところにきて1つめの研究（学生の持ち込んだ研究）で論文に採択レベルの新規性のある研究ができた人は今のところ，いないので．」
+                  \end{itemize}
+            \item 前提として、5研の皆さんと研究対象は出来る限り近くにしたいです。楽なので。
+            \item 言い訳として、研究のやり方にかなり大きなズレを感じています。\\
+                  (つまり、研究対象自体は本質的には何も変えていないつもりです。)
+                  \begin{itemize}
+                      \item 「まず問題を見つける(spring layoutがL-BFGSなどでも遅い) $\to$ 解決策を考える(座標降下など、特定の手法に拘らず全ての選択肢を考える) $\to$ 収束性など理論保証をする ($\to$ 他手法へも適用可な一般的アルゴリズムへ拡張する)」というボトムアップはかなり得意な自信があります。(e.g. 7研、RA、趣味)
+                      \item 一方で、「まず一般的なアルゴリズムを考える(random subspace) $\to$ 理論保証をする $\to$ 上手くいく問題を見つける(機械学習など)」というトップダウンの研究は滅茶苦茶に苦手なのだなと痛感しています。
+                      \item 理論解析自体は、かなり好きです (e.g. 丸茂先生の夏季学校の問題)
+                  \end{itemize}
+        \end{itemize}
+    \end{frame}
+    \begin{frame}{\LARGE{どう研究するべきか}}
+        \begin{itemize}
+            \item 自分の中での最大の疑問: トップダウン型研究のゴールはどこにあるのか?
+            \item Pierreさんらの「この研究は数値実験を真面目にやっていない」という発言は自分の中でかなり衝撃的 (以前からかなり迷子気味でしたが、これで完全に路頭に迷いました)
+                  \begin{itemize}
+                      \item 想定される「ゴール」というのは中程度の優位性を持ったアルゴリズムの開発でしょうか?
+                      \item しかし、研究の動機(次スライド)をかなり数値実験に置いた人間が私です
+                      \item 一般論として、汎用解法で汎用的な問題に対してSTOAを与えること(トップダウン)は至難の業だが、特定の問題に特定の解法を与えること(ボトムダウン)は比較的容易
+                      \item トップダウンだと、上記2つの間でどうしても矛盾が生じてしまう
+                  \end{itemize}
+            \item 一般論として、トップダウン型研究はどういうモチベーションでやるべきですか?
+                  \begin{itemize}
+                      \item 他分野の研究ならともかく、最適化の研究でトップダウン(手法ありき)はかなり難しい印象を受けています。
+                      \item トップダウン型研究では存在しないゴールテープを追いかける羽目になりませんか?\\どうそれを回避するべきですか?
+                      \item 「上手く行く問題を見つける」というゴールポストずらしで、良い成果が出る未来が\\シンプルに想像できません。
+                      \item 「相補的(by 品川先生)」というのが大きなヒントかなとは感じています。
+                  \end{itemize}
+        \end{itemize}
+    \end{frame}
     \begin{frame}{\LARGE{何を研究したいか}}
         \begin{itemize}
             \item 4月あたりに研究したい分野は特に無いと答えてしまいましたが、数か月経って少しは自分のしたいことが定まってきた気がします
@@ -604,40 +721,11 @@
             \item 梅谷先生も武田先生も共に産業側との接点があるという認識でいますが、そこは割と研究室志望の動機でもあります。
                   \begin{itemize}
                       \item 「世の中の「困った」を解決する」一助になりたい
-                      \item 殆どお金に結びつかない(機械学習/GPT等ではないということ)が需要は存在する問題への、公共財としてのプログラム開発が、人生レベルでの目標の一つ
+                      \item 殆どお金に結びつかない(機械学習/GPT等ではないということ)が需要は存在する問題への、公共財としての実用的なプログラム開発が、人生レベルでの目標の一つ
                             \begin{itemize}
                                 \item networkxへのcontributionはこの研究が論外と否定されたとしてもやっておきたい
                             \end{itemize}
-                      \item 手段(アルゴリズム)に対して拘りは皆無だが、目的(解く問題)に対する拘りはあります
-                  \end{itemize}
-        \end{itemize}
-    \end{frame}
-    \begin{frame}{\LARGE{どう研究したいか}}
-        \begin{itemize}
-            \item 武田先生「PLやAndiがいるのに，彼らからの助言を仰がずに，多様体やrandom subspaceアルゴリズムから離れて，あまり専門家のいない方向へ進んでいくのは，なんだか勿体無い気がしたもので．」
-            \item これに関しては本当に仰る通りで、非常に申し訳なく思います。すいません。迷惑をかけているのも自覚しています。
-            \item 言い訳として、研究のやり方にかなり大きなズレを感じています。
-                  \begin{itemize}
-                      \item 「まず問題を見つける(spring layoutがL-BFGSなどでもどうしても遅い) $\to$ 解決策を考える(座標降下など、特定の手法に拘らず全ての選択肢を考える) $\to$ 理論保証をする(収束性など) ($\to$ 他手法へも適用可な一般的アルゴリズムへ拡張する)」というボトムアップはかなり得意な自信があります。(e.g. 7研、RA、趣味)
-                      \item 一方で、「まず一般的なアルゴリズムを考える(random subspace) $\to$ 理論保証をする $\to$ 上手くいく問題を見つける(機械学習など)」というトップダウンの研究は滅茶苦茶に苦手なのだなと痛感しています。
-                      \item 理論解析自体は、かなり好きです (e.g. 丸茂先生の夏季学校の問題)
-                  \end{itemize}
-        \end{itemize}
-    \end{frame}
-    \begin{frame}{\LARGE{どう研究するべきか}}
-        \begin{itemize}
-            \item 自分の中での最大の疑問: トップダウン型研究のゴールはどこにあるのか?
-            \item PLさんらの「この研究は数値実験を真面目にやっていない」という発言は自分の中でかなり衝撃的(正直に申し上げるとあれでモチベはかなり消失しましたし、あんまり頼れる雰囲気では無くなりました)
-                  \begin{itemize}
-                      \item 連続・離散の実装重視→多少STOAに劣っていても魅力的
-                      \item 離散の理論のみ→strassenの研究などに顕著な意義
-                      \item 連続の理論のみ→離散ほど比較が自明ではない？ 理論的な収束性解析の結果は必ずしも実情を反映しない。
-                  \end{itemize}
-            \item 一般論として、トップダウン型研究では何をゴールに研究すれば良いですか？
-                  \begin{itemize}
-                      \item 他分野の研究ならともかく、最適化の研究でトップダウン(手法ありき)はかなり難しい印象を受けています。
-                      \item トップダウン型研究では存在しないゴールテープを追いかける羽目になりませんか?\\どうそれを回避するべきですか?
-                      \item 「上手く行く問題を見つける」というゴールポストずらしで、良い成果が出る未来が\\シンプルに想像できません。
+                      \item 自分が理論解析に対して消極的(に見える?)のは、この辺りの動機が要因です
                   \end{itemize}
         \end{itemize}
     \end{frame}
@@ -646,26 +734,16 @@
             \item リスクヘッジをご配慮して下さっている印象を受けましたが、学生身分であることへの楽観(新規性皆無 or 先行研究丸被りでも死に至らない)に基づき、(意味のある)リスクを取ること自体は厭わないつもりです
                   \begin{itemize}
                       \item 幸運にも勝ち得た実績でギャンブルをしたい (工学部長賞・JSIAM・QS・山下記念・AQIS)
-                      \item 上振れを引いたら更にリスクをとって上振れを狙いたい性格 破滅したらその時に考える
+                      \item 上振れを引いたら更にリスクをとって上振れを狙いたい性格 破滅したらその時に考えたい楽観主義者
                       \item (我儘を言えば、ハイリスク・ローリターンなことをしていたら私を止めて頂きたいです)
                   \end{itemize}
-            \item 自分が大学院において真に最小化したいリスクは、「卒業できない or 奨学金取れない」ではなく、「将来研究者として自走できない」こと
+            \item 自分が大学院において真に最小化したいリスクは、「卒業できない(流石に卒業くらいはしたいですが……) or 奨学金取れない」ではなく、「将来研究者として自走できない」こと
                   \begin{itemize}
                       \item 奨学金自体はその実績で生活できる分くらいは恐らく確保できそう
-                      \item そういう上振れを引いているのなら、今の自分が取るべきリスクは、研究者としての自走力を養うこと
+                      \item そういう「上振れ」を引いているのなら、今の自分が取るべきリスクは、研究者としての自走力を養うこと
+                      \item 成果がほぼ確約されているが自分が将来やらない類の研究は、可能なら回避したいです
                   \end{itemize}
         \end{itemize}
-    \end{frame}
-\fi
-
-\ifShowHidden
-    \begin{frame}[allowframebreaks]{Reference}
-        \scriptsize
-        \beamertemplatetextbibitems
-        \bibliographystyle{hapalike}
-        \bibliography{../FruchtermanReingoldByRandomSubspace.bib}
-        % \begin{thebibliography}{1}
-        % \end{thebibliography}
     \end{frame}
 \fi
 
