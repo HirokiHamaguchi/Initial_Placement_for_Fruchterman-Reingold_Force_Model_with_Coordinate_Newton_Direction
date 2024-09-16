@@ -4,7 +4,7 @@
 \usepackage{animate}
 \usepackage{bxdpx-beamer}
 \usepackage{amsmath, amssymb, amsthm, mathrsfs, amsfonts, dsfont}
-\usepackage[ruled, vlined]{algorithm2e}
+\usepackage[linesnumbered, ruled, vlined]{algorithm2e}
 \usepackage{annotate-equations}
 \usepackage{bbm}
 \usepackage{bm}
@@ -17,6 +17,7 @@
 \usepackage{ifthen}
 \usepackage{listings}
 \usepackage{mathtools}
+\usepackage{makecell}
 \usepackage{mlmodern}
 \usepackage{multirow}
 \usepackage{newtxtext}
@@ -40,26 +41,16 @@
 \definecolor{cC}{HTML}{77AC30}
 \definecolor{cD}{HTML}{D95319}
 \definecolor{cE}{HTML}{7E2F8E}
-\newcommand{\red}[1]{\textcolor{red}{#1}}
-\newcommand{\blue}[1]{\textcolor{blue}{#1}}
-\newcommand{\cyan}[1]{\textcolor{cyan}{#1}}
-\newcommand{\gray}[1]{\textcolor{gray}{#1}}
-\newcommand{\green}[1]{\textcolor{green}{#1}}
-\newcommand{\brown}[1]{\textcolor{brown}{#1}}
-\newcommand{\black}[1]{\textcolor{black}{#1}}
-\newcommand{\orange}[1]{\textcolor{orange}{#1}}
-\newcommand{\purple}[1]{\textcolor{purple}{#1}}
-\newcommand{\yellow}[1]{\textcolor{yellow}{#1}}
-\newcommand{\Magenta}[1]{\textcolor{Magenta}{#1}}
-\newcommand{\RoyalBlue}[1]{\textcolor{RoyalBlue}{#1}}
-\newcommand{\RubineRed}[1]{\textcolor{RubineRed}{#1}}
-\newcommand{\ForestGreen}[1]{\textcolor{ForestGreen}{#1}}
-\newcommand{\YellowOrange}[1]{\textcolor{YellowOrange}{#1}}
-\newcommand{\WildStrawberry}[1]{\textcolor{WildStrawberry}{#1}}
 \newcommand{\cAText}[1]{\textcolor{cA}{#1}}
 \newcommand{\cBText}[1]{\textcolor{cB}{#1}}
 \newcommand{\cCText}[1]{\textcolor{cC}{#1}}
 \newcommand{\cDText}[1]{\textcolor{cD}{#1}}
+\newcommand{\cEText}[1]{\textcolor{cE}{#1}}
+\newcommand{\red}[1]{\textcolor{red}{#1}}
+\newcommand{\blue}[1]{\textcolor{blue}{#1}}
+\newcommand{\green}[1]{\textcolor{green}{#1}}
+\newcommand{\gray}[1]{\textcolor{gray}{#1}}
+\newcommand{\black}[1]{\textcolor{black}{#1}}
 
 \newcommand{\st}{\text{ s.t. }}
 \newcommand{\Img}[1]{\mathrm{Im}\qty(#1)}
@@ -75,8 +66,8 @@
 \newcommand{\eqdef}{\eqqcolon}
 % https://tex.stackexchange.com/questions/5502/how-to-get-a-mid-binary-relation-that-grows
 \newcommand{\relmiddle}[1]{\mathrel{}\middle#1\mathrel{}}
-\newcommand{\cmark}{\textcolor{cC}{\ding{51}}} % check mark
-\newcommand{\xmark}{\textcolor{cD}{\ding{55}}} % cross mark
+\newcommand{\cmark}{\cCText{\ding{51}}} % check mark
+\newcommand{\xmark}{\cDText{\ding{55}}} % cross mark
 
 \DeclareMathOperator{\Proj}{Proj}
 \DeclareMathOperator{\Exp}{Exp}
@@ -181,13 +172,29 @@
 \title{\Huge{Improved Initial Placement for\\Fruchterman--Reingold Algorithm}}
 \author{\Large{Hiroki Hamaguchi}}
 \institute{\large{Supervisors: Prof. Akiko Takeda\\\phantom{Supervisors: }Pierre-Louis Poirion\\\phantom{Supervisors: }Andi Han}\\\phantom{Supervisors: }if ok, Prof. Naoki Marumo}
-\date{2024/06/17}
+\date{2024/11/29}
 
 \newif\ifShowHidden
-\ShowHiddenfalse
-% \ShowHiddentrue
+% \ShowHiddenfalse
+\ShowHiddentrue
 
 \begin{document}
+
+\ifShowHidden
+    \begin{frame}{\cEText{予定}}
+        \begin{itemize}
+            \item 9月17日 10:00 a.m- ゼミ室6-238
+            \item 前30分: 今までしてきたことの説明
+            \item 中30分: スライド末尾に記した、研究の方向性についてのご相談
+                  \begin{itemize}
+                      \item 勝手にこの方向性に進んできてしまった感があるが、この方向性でよいか?
+                  \end{itemize}
+            \item 後30分: Yesの場合はアドバイスをもらいたい点が山ほどあるのでその議論、\\
+                  Noの場合はどのような方向性がよいかの議論
+            \item 数理輪講は11/29 このスライドはYesの場合に一部使用予定
+        \end{itemize}
+    \end{frame}
+\fi
 
 \ifShowHidden
     \maketitle
@@ -197,16 +204,16 @@
     \begin{frame}{Introduction for Graph Drawing}
         \begin{tikzpicture}
             \node[cA,font=\bfseries] (A) at (0,0) {Graph Drawing};
-            \node[cB,font=\bfseries] (B) at (-3.0,-1) {Discrete Based};
-            \node[align=left,anchor=north west] (B1) at ($(B)+(-2.0,-0.6-0.0)$) {\textcolor{cB}{BFS layout}\\\small{\quad - for tree graph}};
-            \node[align=left,anchor=north west] (B2) at ($(B)+(-2.0,-0.6-1.0)$) {\textcolor{cB}{Planar layout}\\\small{\quad - for planar graph}\\\scriptsize{\quad - \cite{tutteHowDrawGraph1963}}\\\scriptsize{\quad - \cite{chrobakLineartimeAlgorithmDrawing1995}}};
-            \node[align=left,anchor=north west] (B3) at ($(B)+(-2.0,-0.6-3.0)$) {\textcolor{cB}{Layered graph drawing}\\\small{\quad - for DAG}\\\scriptsize{\quad - \cite{sugiyamaMethodsVisualUnderstanding1981}}};
-            \node[align=left,anchor=north west] (B4) at ($(B)+(-2.0,-0.6-4.5)$) {\textcolor{cB}{Spectral layout~}\\\small{\quad - eigenvector of Laplacian}};
+            \node[cB] (B) at (-3.0,-1) {Discrete Based};
+            \node[align=left,anchor=north west] (B1) at ($(B)+(-2.0,-0.6-0.0)$) {\cBText{BFS layout}\\\small{\quad - for tree graph}};
+            \node[align=left,anchor=north west] (B2) at ($(B)+(-2.0,-0.6-1.0)$) {\cBText{Planar layout}\\\small{\quad - for planar graph}\\\scriptsize{\quad - \cite{tutteHowDrawGraph1963}}\\\scriptsize{\quad - \cite{chrobakLineartimeAlgorithmDrawing1995}}};
+            \node[align=left,anchor=north west] (B3) at ($(B)+(-2.0,-0.6-3.0)$) {\cBText{Layered graph drawing}\\\small{\quad - for DAG}\\\scriptsize{\quad - \cite{sugiyamaMethodsVisualUnderstanding1981}}};
+            \node[align=left,anchor=north west] (B4) at ($(B)+(-2.0,-0.6-4.5)$) {\cBText{Spectral layout~}\\\small{\quad - eigenvector of Laplacian}};
             \node[draw=cB, thick,fit={(B1) (B2) (B3) (B4)}, inner sep=5pt] (BBox) {};
 
             \node[cC,font=\bfseries] (C) at (+4.5,-1) {Continuous Based};
-            \node[cC,font=\bfseries] (C1) at ($(C)+(-2.5,-1)$) {Kamada--Kawai (KK)};
-            \node[cC,font=\bfseries] (C11) at ($(C1)+(0,-0.5)$) {\scriptsize{\cite{kamadaAlgorithmDrawingGeneral1989}}};
+            \node[cC] (C1) at ($(C)+(-2.5,-1)$) {Kamada--Kawai (KK)};
+            \node[cC] (C11) at ($(C1)+(0,-0.5)$) {\scriptsize{\cite{kamadaAlgorithmDrawingGeneral1989}}};
             \node at ($(C11)+(0,-1.0)$) {
                 \begin{minipage}{4cm}
                     \begin{gather*}
@@ -227,7 +234,7 @@
             };
 
             \node[align=center] (C3) at ($(C)+(0.5,-4.3)$) {
-            \scriptsize{$d_{i,j}$: distance between nodes $v_i,v_j$ / $l_{i,j}$: optimal distance / $k,a_{i,j}$: constant}
+            \scriptsize{$d_{i,j}$: distance between nodes $v_i,v_j$ \;/\; $l_{i,j}$: optimal distance \;/\; $k,a_{i,j}$: constant}
             };
 
             \node (C01) at ($(C)+(-3.5,-5.5)$) {
@@ -252,7 +259,7 @@
 \ifShowHidden
     \begin{frame}{Definition of FR Layout}
         \begin{itemize}
-            \item Historically, FR layout seeks an equilibrium of two forces:
+            \item Historically, FR layout seeks an \textbf{equilibrium of two forces}:
         \end{itemize}
         \begin{equation*}
             F_{i,j}^a(d) \defeq \frac{a_{i,j} d^2}{k} \text{\quad (attraction)}, \quad F^r(d) \defeq -\frac{k^2}{d} \text{\quad (repulsion)}
@@ -261,7 +268,7 @@
             \item This problem can be redefine as an optimization problem:
         \end{itemize}
         \begin{equation*}
-            \mathrm{minimize} \sum_{i<j} E_{i,j}(d)
+            \mathrm{minimize} \; \sum_{i<j} E_{i,j}(d)
             \quad \mathrm{where} \quad
             E_{i,j}(d) \defeq \int_{0}^{d} F_{i,j}^a(r) \dd{r} + \int_{\infty}^{d} F^r(r) \dd{r} = \frac{a_{i,j} d^3}{3k} - k^2\log{d}
         \end{equation*}
@@ -269,7 +276,10 @@
             \begin{minipage}{0.49\hsize}
                 \centering
                 \includegraphics[width=0.6\columnwidth]{imgs/example_fr.png}
-                \caption{Example of FR layout}
+                \caption{
+                    Example of FR layout
+                    % 3d graph drawing \cite{doi:10.1177/14738716211060306}
+                }
             \end{minipage}
             \begin{minipage}{0.49\hsize}
                 \centering
@@ -287,7 +297,7 @@
                     \draw (0,+1.6*\r*\yAdjust) -- (0,+2.4*\r*\yAdjust);
                     \draw (\d,+1.6*\r*\yAdjust) -- (\d,+2.4*\r*\yAdjust);
                     \draw[{Latex[length=4,width=3]}-{Latex[length=4,width=3]}] ($(M1)+(90:2*\r*\yAdjust)$) -- ($(M2)+(90:2*\r*\yAdjust)$)
-                    node[midway,circle,fill=white,inner sep=0] {$d$};
+                    node[midway,circle,fill=white,inner sep=0] {$d = k/a_{i,j}^{1/3}$};
 
                     \draw[->,thick,line cap=round] (+\r,0) -- (+\u,0) node[right] {$F^a_{i,j}(d)$};
                     \draw[->,thick,line cap=round] (-\r,0) -- (-\u,0) node[left] {$F^r(d)$};
@@ -311,12 +321,12 @@
     \begin{frame}{Algorithm for FR Layout 1}
         \begin{columns}
             \begin{column}{0.4\columnwidth}
-                \textbf{``spring\_layout'' in NetworkX}
+                \textbf{``spring\_layout'' in NetworkX\\and ``fdp'' in Graphviz}
                 \begin{itemize}
                     \item Adaptive cooling scheme
                     \item \textbf{gradient descent method}\\with constant step size\\per each vertex
-                    \item \cite{tunkelang1999numerical}
                     \item strong \textbf{theoretical background}
+                    \item \cite{tunkelang1999numerical}
                 \end{itemize}
             \end{column}
             \begin{column}{0.6\columnwidth}
@@ -335,10 +345,10 @@
                 \begin{itemize}
                     \item Scalable Force-Directed Placement
                     \item \textbf{Multilevel} approach
-                    \item Barnes--Hat algorithm (Q-tree)\cite{Hu2006EfficientHF}
+                    \item Barnes--Hut algorithm (Q-tree)\cite{Hu2006EfficientHF}
                           \cite{barnesHierarchicalLogForcecalculation1986}
                     \item These methods are\\\textbf{out of scope},\\
-                          but our work is still applicable.
+                          but our work is still \textbf{applicable}.
                 \end{itemize}
             \end{column}
             \begin{column}{0.6\columnwidth}
@@ -355,14 +365,15 @@
 \ifShowHidden
     \begin{frame}{Hardness of graph drawing}
         \begin{itemize}
+            \item FR algorithm is powerful for network-like graphs, but \textbf{not for other types}.
+            \item Escaping from a plateau is \textbf{very difficult}.
             \item Drawing $\bigcirc$ $\cong$ untangling tangled earphones
-            \item Escaping from a plateau is very difficult
         \end{itemize}
         \begin{figure}[htbp]
             \begin{minipage}{0.59\hsize}
                 \centering
-                % \animategraphics[autoplay,loop,width=0.8\columnwidth]{5}{imgs/circle/circle-}{1}{50}
-                \includegraphics[width=0.8\columnwidth]{imgs/circle/circle-50.png}
+                \animategraphics[autoplay,loop,width=0.8\columnwidth]{5}{imgs/circle/circle-}{1}{50}
+                % \includegraphics[width=0.8\columnwidth]{imgs/circle/circle-50.png}
                 \caption{FR layout by NetworkX}
             \end{minipage}
             \begin{minipage}{0.40\hsize}
@@ -381,19 +392,29 @@
                   \begin{itemize}
                       \large{
                       \item stress majorization \cite{gansnerGraphDrawingStress2005}
-                      \item \textbf{L-BFGS} method~\cite{6183577} \textcolor{cE}{(8 cites)}
+                      \item \textbf{L-BFGS} method~\cite{6183577} \cEText{(8 cites)}
                       \item GPU based \cite{gajdosParallelFruchtermanReingold2016}
-                      \item \textbf{SGD} (stochastic gradient descent)~\cite{8419285} \textcolor{cE}{(66 cites)}
-                      \item and so on \cite{ahmedGraphDrawingGradient2020,ahmedMulticriteriaScalableGraph2022}
+                      \item \textbf{SGD} (stochastic gradient descent)~\cite{8419285} \cEText{(66 cites)}
+                      \item and so on \cite{ahmedGraphDrawingGradient2020,ahmedMulticriteriaScalableGraph2022,khanManyobjectiveEvolutionaryAlgorithm2024}
                             }
                   \end{itemize}
         \end{itemize}
+        \begin{center}
+            \textcolor{gray}{todo: explanation of L-BFGS and SGD\\
+                L-BFGs: quasi-Newton method with limited memory\\
+                SGD: stochastic gradient descent (mini-batch)}
+        \end{center}
         $\to$ Our research aims to take over this flow of the research.
     \end{frame}
 \fi
 
 \ifShowHidden
     \begin{frame}{Problem: Inapplicability of SGD}
+        \begin{itemize}
+            \item \textbf{SGD} is powerful for KK layout, but \textbf{not for FR layout}.
+            \item KK layout first computes the optimal distance $l_{i,j}$ by Dijkstra's algorithm.
+            \item FR layout has $a_{i,j}=0$ if $v_i,v_j$ are not connected.
+        \end{itemize}
         \begin{columns}
             \begin{column}{0.1\columnwidth}\end{column}
             \begin{column}{0.4\columnwidth}
@@ -435,13 +456,10 @@
                     }
             \end{tikzpicture}
         \end{figure}
-        \begin{itemize}
-            \item KK layout first computes the optimal distance $l_{i,j}$ by Dijkstra's algorithm.
-            \item FR layout has $a_{i,j}=0$ if $v_i,v_j$ are not connected.
-            \item Can we make a variant of SGD for FR layout?
-        \end{itemize}
     \end{frame}
-    \begin{frame}{余談用}
+\fi
+\ifShowHidden
+    \begin{frame}{\cEText{余談: SGDの問題点}}
         Graph Drawing by Stochastic Gradient Descent
         Jonathan X. Zheng, Samraat Pawar, Dan F. M. Goodman
         からの抜粋:
@@ -462,117 +480,149 @@
     \end{frame}
 \fi
 
-\ifShowHidden
-    \begin{frame}{The Purpose of this research}
-        \begin{table}
-            \centering
-            \begin{tabular}{c|c|c|c}
-                \toprule
-                Existing works      & A                        & B                         & C                    \\
-                \midrule
-                \textbf{abstract}   & L-BFGS for graph drawing & SGD for graph drawing     & SA for graph drawing \\
-                \textbf{What we do} & practical speed up       & counterpart for FR layout & refine the strategy  \\
-                \bottomrule
-            \end{tabular}
-        \end{table}
-    \end{frame}
-\fi
+% \ifShowHidden
+\begin{frame}{The Purpose of this research}
+    \begin{table}
+        \centering
+        \begin{tabular}{c|c|c|c}
+            \toprule
+            Existing works                       & \makecell[c]{\cite{6183577}                                                                                         \\\cite{8419285}}    & \cite{ghassemitoosiSimulatedAnnealingPreProcessing2016} & \cite{NEURIPS2019_bc6dc48b}           \\
+            \midrule
+            \textbf{abstract}                    & \makecell[c]{L-BFGS / SGD                                                                                           \\for graph drawing} & \makecell[c]{pre-processing as\\initial placement}                     & \makecell[c]{random subspace\\algorithm}             \\[1.5em]
+            \textbf{limitation}                  & \makecell[c]{L-BFGS is slow                                                                                         \\SGD is un-apllicable} & \makecell[c]{just using\\a circle layout}                     & \makecell[c]{no existing work\\for FR layout}             \\
+            \midrule
+            \textcolor{red}{\textbf{What we do}} & \textcolor{red}{practical speed up} & \textcolor{red}{refine the strategy} & \makecell[c]{\textcolor{red}{apply to} \\\textcolor{red}{FR layout}} \\
+            \bottomrule
+        \end{tabular}
+    \end{table}
+\end{frame}
+% \fi
 
 \ifShowHidden
-    \begin{frame}{\LARGE{余談: 試した手法群}}
+    \begin{frame}{\cEText{余談: 試した手法群}}
         \begin{itemize}
             \item シンプルなrandom subspace algorithm
+                  \begin{itemize}
+                      \item このpair-wise separable functionに対してなら、絶対にrandom subspace的アルゴリズムが上手く機能するはずという直感が、全ての出発点
+                      \item \textbf{ダイレクトな適応だと上手くいかないが、適切な工夫でどうにか出来ないか?} というのがこの研究の核心 想定以上にrandom subspaceは有効そうという結論です
+                  \end{itemize}
             \item (丸茂先生から頂いた非常に本質的なアドバイスである) 頂点毎にL-BFGSを適用
                   \begin{itemize}
-                      \item (cubic regularized Newton以前の問題)
+                      \item シンプルなrandom subspace algorithmと同じ理由で遅い
+                      \item (cubic regularized Newton以前の根本的な問題)
                   \end{itemize}
             \item CG法
                   \begin{itemize}
                       \item 元々の研究課題の一環として、SciPyが実装しているリスタート機能付きの$\beta^{\text{PR}}_+$と強Wolfe条件によるCG法を調べていました
-                      \item Zoutendijk条件による証明について、簡単な部分は理解したつもりですが、randomizedした時にどうすればいいのかは全く分からず
+                      \item Zoutendijk条件による証明について、簡単な部分は理解したつもりですが、subspace化した時にどうすればいいのかは全く分からず
                   \end{itemize}
-            \item stochastic CG法 ``Stochastic Conjugate Gradient Algorithm with Variance Reduction''
+            \item stochastic CG法 {\small ``Stochastic Conjugate Gradient Algorithm with Variance Reduction''}
                   \begin{itemize}
                       \item ただし、収束性証明は強凸の場合のみ
                   \end{itemize}
             \item L-BFGS法自体の改良の検討 $\to$ 自作だと数値爆発で諦め
-            \item 汎用的なフレームワークの開発はこの時点で大分諦めました
         \end{itemize}
     \end{frame}
 \fi
 
-% \ifShowHidden
-\begin{frame}{Key Observation: stochastic strategy}
-    \begin{columns}
-        \begin{column}{0.49\columnwidth}
-            \centering{
-                For far-quadratic objective functions
-                \begin{itemize}
-                    \item[\cmark] \textbf{SGD} excels at rough optimization
-                    \item[\xmark] \textbf{L-BFGS} is ineffective for this case\\
-                        \small{$\order{\abs{V}^2}$ per iteration is too expensive}
-                \end{itemize}}
-        \end{column}
-        \begin{column}{0.49\columnwidth}
-            \centering{
-                For near-quadratic objective functions
-                \begin{itemize}
-                    \item[\cmark] \textbf{L-BFGS} excels at precise optimization
-                    \item[\xmark] \textbf{SGD} is ineffective for this case\\
-                        \small{it is too easy to find a locally optimal solution}
-                \end{itemize}}
-        \end{column}
-    \end{columns}
-    \begin{figure}[htbp]
-        \centering
-        \begin{tikzpicture}
-            \foreach \xA/\yA/\xB/\yB/\xC/\yC/\xD/\yD/\xE/\yE/\xShift/\yShift in {
-                    1.25/1.25/-0.25/0.75/-0.25/-1.25/0.75/-0.25/-1.25/-0.25/-5/0,
-                    0/0/0/1/0/-1/1/0/-1/0/0/0,
-                    0.2/-0.1/-0.3/1.2/-0.2/-0.9/1.1/-0.1/-1.1/0.1/+5/0} {
-                    \begin{scope}[xshift=\xShift cm,yshift=\yShift cm]
-                        \draw[dashed,color=gray,line width=0.5pt] (-1.5, 1.5) rectangle (1.5, -1.5);
-                        \node[circle, fill=red,   minimum size=8pt] (a0) at (\xA, \yA) {};
-                        \node[circle, fill=black, minimum size=8pt] (a1) at (\xB, \yB) {};
-                        \node[circle, fill=black, minimum size=8pt] (a2) at (\xC, \yC) {};
-                        \node[circle, fill=black, minimum size=8pt] (a3) at (\xD, \yD) {};
-                        \node[circle, fill=black, minimum size=8pt] (a4) at (\xE, \yE) {};
-                        \draw[decorate, decoration={coil, segment length=2, aspect=0.5}] (a0) -- (a1);
-                        \draw[decorate, decoration={coil, segment length=2, aspect=0.5}] (a0) -- (a2);
-                        \draw[decorate, decoration={coil, segment length=2, aspect=0.5}] (a0) -- (a3);
-                        \draw[decorate, decoration={coil, segment length=2, aspect=0.5}] (a0) -- (a4);
-                    \end{scope}
-                }
-
-            \draw[-{Latex[length=10,width=0.4cm]},line width=0.15cm] (-3.1, 0) -- (-1.9, 0);
-            \draw[-{Latex[length=10,width=0.4cm]},line width=0.15cm] (+3.1, 0) -- (+1.9, 0);
-        \end{tikzpicture}
-    \end{figure}
-    \textcolor{cE}{\small{(FRアルゴリズムはL-BFGSに近いが、前者が苦手なことは「ねじれ」の問題として知られている)}}
-\end{frame}
-% \fi
-
-% \ifShowHidden
-\begin{frame}{Key Technique 1: Separation of the objective function}
-    \begin{equation*}
-        \mathrm{stress} = \sum_{i<j} f_{i,j}(d_{i,j}) = \sum_{(i,j)\in E} f^a_{i,j}(d_{i,j}) + \sum_{i<j} f^r_{i,j}(d_{i,j})
-    \end{equation*}
-    \begin{itemize}
-        \item \textcolor{cE}{(これはあくまで前座 本題はKey Technique 2です)}
-        \item \textcolor{cE}{(この辺りは本当に全部丸茂先生が仰っていた通りです)}
-        \item SA based close
-    \end{itemize}
-\end{frame}
-% \fi
-
 \ifShowHidden
     \begin{frame}{Key Observation: stochastic strategy}
+        \begin{columns}
+            \begin{column}{0.49\columnwidth}
+                \centering{
+                    For far-quadratic objective functions
+                    \begin{itemize}
+                        \item[\cmark] \textbf{SGD} excels at rough optimization
+                        \item[\xmark] \textbf{L-BFGS} is ineffective for this case\\
+                            \small{$\order{\abs{V}^2}$ per iteration is too expensive}
+                    \end{itemize}}
+            \end{column}
+            \begin{column}{0.49\columnwidth}
+                \centering{
+                    For near-quadratic objective functions
+                    \begin{itemize}
+                        \item[\cmark] \textbf{L-BFGS} excels at precise optimization
+                        \item[\xmark] \textbf{SGD} is ineffective for this case\\
+                            \small{it is too easy to find a locally optimal solution}
+                    \end{itemize}}
+            \end{column}
+        \end{columns}
+        \begin{figure}[htbp]
+            \centering
+            \begin{tikzpicture}
+                \foreach \xA/\yA/\xB/\yB/\xC/\yC/\xD/\yD/\xE/\yE/\xShift/\yShift in {
+                        1.25/1.25/-0.25/0.75/-0.25/-1.25/0.75/-0.25/-1.25/-0.25/-5/0,
+                        0/0/0/1/0/-1/1/0/-1/0/0/0,
+                        0.2/-0.1/-0.3/1.2/-0.2/-0.9/1.1/-0.1/-1.1/0.1/+5/0} {
+                        \begin{scope}[xshift=\xShift cm,yshift=\yShift cm]
+                            \draw[dashed,color=gray,line width=0.5pt] (-1.5, 1.5) rectangle (1.5, -1.5);
+                            \node[circle, fill=red,   minimum size=8pt] (a0) at (\xA, \yA) {};
+                            \node[circle, fill=black, minimum size=8pt] (a1) at (\xB, \yB) {};
+                            \node[circle, fill=black, minimum size=8pt] (a2) at (\xC, \yC) {};
+                            \node[circle, fill=black, minimum size=8pt] (a3) at (\xD, \yD) {};
+                            \node[circle, fill=black, minimum size=8pt] (a4) at (\xE, \yE) {};
+                            \draw[decorate, decoration={coil, segment length=2, aspect=0.5}] (a0) -- (a1);
+                            \draw[decorate, decoration={coil, segment length=2, aspect=0.5}] (a0) -- (a2);
+                            \draw[decorate, decoration={coil, segment length=2, aspect=0.5}] (a0) -- (a3);
+                            \draw[decorate, decoration={coil, segment length=2, aspect=0.5}] (a0) -- (a4);
+                        \end{scope}
+                    }
+
+                \draw[-{Latex[length=10,width=0.4cm]},line width=0.15cm] (-3.1, 0) -- (-1.9, 0);
+                \draw[-{Latex[length=10,width=0.4cm]},line width=0.15cm] (+3.1, 0) -- (+1.9, 0);
+            \end{tikzpicture}
+        \end{figure}
+        \cEText{\small{(本当はSGDでなく、Random subspaceと読み替えてもらう方が正しい)}}\\
+        \cEText{\small{(FRアルゴリズムはL-BFGSに近いが、前者が苦手なことは「ねじれ」の問題として知られている)}}
+    \end{frame}
+\fi
+
+\ifShowHidden
+    \begin{frame}{Key Technique 1: Separation of the objective function}
+        \begin{align*}
+            f(X) =                      & \sum_{i<j} f_{i,j}(d_{i,j}) = \cAText{\overset{\text{attraction}}{\underbrace{\sum_{(i,j)\in E} f^a_{i,j}(d_{i,j})}_{\text{sparse}}}} + \cDText{\overset{\text{repulsion}}{\underbrace{\sum_{i<j} f^r_{i,j}(d_{i,j})}_{\text{dense}}}} \\
+            \to \mathrm{minimize} \quad & \cAText{\sum_{(i,j)\in E} f^a_{i,j}(d_{i,j})} \quad \mathrm{subject \enspace to} \quad \cDText{f^r_{i,j}(d_{i,j}) \leq \epsilon, \quad i<j}                                                                                            \\
+            \to \mathrm{minimize} \quad & \cAText{\sum_{(i,j)\in E} f^a_{i,j}(d_{i,j})} \quad \mathrm{subject \enspace to} \quad \cDText{\text{each $x_i$ has an exclusive $\epsilon'$-ball}}
+        \end{align*}
         \begin{itemize}
-            \item これはTSPを部分問題として含む
+            \item Without constraints, $X=0$ is the optimal solution $\to$ \textbf{closest packing}
+            \item With \textbf{hexagonal close-packed} structure,
+                  $f$ is the sum of $\abs{V}^2 \to \abs{E}$ terms
+            \item partially overlapped with \cite{ghassemitoosiSimulatedAnnealingPreProcessing2016,s22145179}
+            \item \cEText{(これはあくまで前座で、Key Technique 2が上手く動作する為の準備)}
+        \end{itemize}
+    \end{frame}
+\fi
+
+\begin{frame}{proposed algorithm 1}
+    \begin{itemize}
+        \item exact projection: min cost flow problem $(\order{\abs{V}^3})$
+        \item heuristic projection: sort by coordinates $(\order{\abs{V} \log \abs{V}})$
+    \end{itemize}
+    \begin{figure}[htbp]
+        \begin{minipage}{0.45\hsize}
+            \centering
+            \includegraphics[width=\columnwidth]{imgs/hex1.png}
+        \end{minipage}
+        \begin{minipage}{0.45\hsize}
+            \centering
+            \includegraphics[width=\columnwidth]{imgs/hex2.png}
+        \end{minipage}
+    \end{figure}
+\end{frame}
+
+\ifShowHidden
+    \begin{frame}{\cEText{余談: TSPとの関連性}}
+        \begin{itemize}
+            \item 固定された頂点配置に対して、サイクルグラフの頂点の割り当てを考える
+            \item 最小化すべき関数$f^a(d)$を、FRレイアウトに限らず一般化して考える
+            \item 特に、$f^a(d)=d$とした時、これはTSPに他ならない
+            \item TSPは当然NP困難 ヒューリスティックによって解かれる
                   \begin{itemize}
                       \item 代表的なTSPの解法: (Held-Karp), 2-opt, 3-opt, Lin-Kernighan, Christofides, etc.
                       \item 参考になる部分とならない部分がそれぞれある。
                   \end{itemize}
+            \item 面白い関連性として挙げてみました
         \end{itemize}
     \end{frame}
 \fi
@@ -586,8 +636,8 @@
                       \item Extended in~\cite{cartisRandomisedSubspaceMethods2022},\cite{fujiRandomizedSubspaceRegularized2022},\cite{higuchiFastConvergenceSecondOrder2024}
                       \item Analysis is based on~\cite{karimireddyGlobalLinearConvergence2018}
                   \end{itemize}
-            \item \textcolor{cE}{(疑問:random subspaceを名乗るのにJL lemmaは必須か? 提案論文は不使用)}
-            \item \textcolor{cE}{(単なる勘ですが、この状況まで落とし込めば部分空間法が強いはず)}
+            \item \cEText{(疑問:random subspaceを名乗るのにJL-lemmaは必須か? 提案論文は不使用)}
+            \item \cEText{(単なる勘ですが、この状況まで落とし込めば部分空間法が強いはず)}
         \end{itemize}
         \begin{columns}[T]
             \column{0.5\columnwidth}
@@ -605,21 +655,98 @@
     \end{frame}
 \fi
 
+% \ifShowHidden
+\begin{frame}{Advantages of Randomized Subspace Newton}
+    \begin{figure}[htbp]
+        \centering
+        \begin{tikzpicture}[scale=1.5]
+            \coordinate (A) at (0,0);
+            \coordinate (B) at (3,0);
+            \coordinate (C) at (0,2);
+
+            \draw[decorate, decoration={coil, segment length=4, aspect=0.5}] (A) -- (B);
+            \draw[decorate, decoration={coil, segment length=4, aspect=0.5}] (A) -- (C);
+
+            \draw[gray, dashed, ultra thick] (A) -- ++(9/2.8,4/2.8);
+            \draw[red, ultra thick, -] (A) -- ++(1.125,0.57142);
+            \node[star, star points=5, star point ratio=2.25, fill=red,scale=0.5] at ($(A)+(1.125,0.57142)$) {};
+            \node[anchor=west,align=left,gray] at ($(A)+(9/2.8+0.3,4/2.8)$) {\Large{$g=\nabla f$}\\[0.4em]\Large{Descent direction}};
+            \node[anchor=west,align=left,red] at (9/2.8+0.3,0.5) {\Large{$d=(\nabla^2 f)^{-1}\nabla f$}\\[0.4em]\Large{Newton's direction}};
+
+            \coordinate (opt) at ($(B)!0.5!(C)$);
+            \node[star, star points=5, star point ratio=2.25, fill=cA, minimum size=5pt] at (opt) {};
+            \node[above=0.5cm] at (opt) {\large{\cAText{optimal}}};
+
+            \filldraw[red] (A) circle (2pt);
+            \filldraw[black] (B) circle (2pt);
+            \filldraw[black] (C) circle (2pt);
+        \end{tikzpicture}
+    \end{figure}
+    \begin{itemize}
+        \item random subspace problem (subproblem for vertex $i$):
+              \begin{equation*}
+                  \min_{x_i \in \mathbb{R}^2} \sum_{j \in \mathrm{Adj}(i)} \frac{a_{i,j} \norm{x_i - x_j}_2^3}{3k} \quad \leftarrow \text{\textbf{CONVEX} optimization}
+              \end{equation*}
+        \item Original problem, subspace problem, and restricted problem are all \textbf{NON-CONVEX}
+        \item All distance $d_{i,j}=\norm{x_i-x_j}_2 \geq \epsilon'$ $\to$ numerically stable
+    \end{itemize}
+\end{frame}
+% \fi
+
+\ifShowHidden
+    \begin{frame}{proposed algorithm 2}
+        \begin{algorithm}[H]
+            \SetAlgoLined
+            \KwIn{Set of indices $S$, initial vectors $v_i$}
+            \KwOut{Updated vector $v_i$}
+            Initialize $X$ randomly\;
+            \While{not converged}{
+                Randomly select an index $i \in S$ except for the taboo list\;
+                Compute Newton's direction $d_i=(\nabla^2 f_i)^{-1}\nabla f_i$\;
+                Update $v_i$ subject to the constraints\;
+                \If{not updated}{
+                    Add $i$ to the taboo list\;
+                }
+            }
+            \Return $X$\;
+            \caption{Randomized Newton Direction Update for Vector $v_i$}
+        \end{algorithm}
+    \end{frame}
+\fi
+
 \ifShowHidden
     \begin{frame}{Possible Application 1}
-        \begin{figure}[htbp]
-            \centering
-            \includegraphics[width=0.5\columnwidth]{imgs/applicatoin1d.png}
-        \end{figure}
         \begin{itemize}
-            \item Optimize $f(x)$ where $x \in \mathbb{R}^{n}$.
-            \item If two of the points are too close, $f(x)$ drastically increases.
+            \item Originally, this kind of problems are solved by \textbf{stochastic coordinate descent}
+            \item Random subspace algorithms might be applicable to these problems
+        \end{itemize}
+        \begin{figure}[htbp]
+            \begin{minipage}{0.45\hsize}
+                \centering
+                \includegraphics[width=\columnwidth]{imgs/SCD1.png}
+                \caption{\href{https://people.eecs.berkeley.edu/~brecht/opt4ml_book/O4MD_06_Coordinate_Descent.pdf}{hyperlink}}
+            \end{minipage}
+            \begin{minipage}{0.45\hsize}
+                \centering
+                \includegraphics[width=\columnwidth]{imgs/SCD2.png}
+                \caption{\href{https://www.cs.ubc.ca/~schmidtm/Courses/5XX-S22/S3.pdf}{hyperlink}}
+            \end{minipage}
+        \end{figure}
+    \end{frame}
+    \begin{frame}{Possible Application 2}
+        \begin{itemize}
+            \item Optimize $f(x)$ where $x \in \mathbb{R}^{n}$, not $\prod_{i=1}^{n} \mathbb{R}^2$.
+            \item Assume that if two of the points are too close, $f(x)$ drastically increases.
             \item Similar algorithms might be applicable to this problem.
             \item Is there any concrete instance?
             \item Is there any algorithm already well known?
         \end{itemize}
+        \begin{figure}[htbp]
+            \centering
+            \includegraphics[width=0.5\columnwidth]{imgs/applicatoin1d.png}
+        \end{figure}
     \end{frame}
-    \begin{frame}{Possible Application 2}
+    \begin{frame}{Possible Application 3}
         \begin{itemize}
             \item (Continuous relaxation of) graph isomorphism problem
                   \begin{itemize}
@@ -636,7 +763,8 @@
                       {P}{||G - PHP^\top ||^2_F}{}{}
                       \addConstraint{P}{\in \left\{ P \in \{0, 1\}^{n \times n} \relmiddle| P1_n = 1_n, P^\top 1_n = 1_n \right\}}
                   \end{mini*}
-            \item I'm still doubtful, but these papers seems really interesting. (+ Riemannian optimization)
+                  % \item I'm still doubtful, but these papers seems really interesting. (+ Riemannian optimization)
+            \item \cEText{(随分な遠回りでしたが、Random subspace+Riemannian optimization\\という当初の目標への回帰?)}
         \end{itemize}
     \end{frame}
 \fi
@@ -645,30 +773,31 @@
 \setbeamercolor{block title}{fg=blendedblue!50!black}
 
 \ifShowHidden
-    \begin{frame}{\LARGE{Summary}}
+    \begin{frame}{Summary}
         \begin{block}{Future Work}
             \begin{itemize}
                 \item More numerical experiments
                 \item Theoretical analysis
+                \item \cEText{(少なくとも自分が知る限り and 思う限り)かなり面白い話だと思いますし、多少はやる価値がある内容だと自負しています}
             \end{itemize}
         \end{block}
     \end{frame}
 \fi
 
 
-\ifShowHidden
-    \begin{frame}[allowframebreaks]{Reference}
-        \scriptsize
-        \beamertemplatetextbibitems
-        \bibliographystyle{hapalike}
-        \bibliography{../FruchtermanReingoldByRandomSubspace.bib}
-        % \begin{thebibliography}{1}
-        % \end{thebibliography}
-    \end{frame}
-\fi
+% \ifShowHidden
+\begin{frame}[allowframebreaks]{Reference}
+    \scriptsize
+    \beamertemplatetextbibitems
+    \bibliographystyle{hapalike}
+    \bibliography{../FruchtermanReingoldByRandomSubspace.bib}
+    % \begin{thebibliography}{1}
+    % \end{thebibliography}
+\end{frame}
+% \fi
 
 \ifShowHidden
-    \begin{frame}{\LARGE{どう研究したいか}}
+    \begin{frame}{どう研究したいか}
         \begin{itemize}
             \item 以下は本当に仰る通りで、非常に申し訳なく思います。すいません。
                   \begin{itemize}
@@ -677,8 +806,7 @@
                             「正直，我々の得意とするところから離れるほど，困った時にアドバイスできなくなるし，新規性があるのかどうかも判断つかなくなります．もちろん，やりたいことをやったらいい気もしますが，私のところにきて1つめの研究（学生の持ち込んだ研究）で論文に採択レベルの新規性のある研究ができた人は今のところ，いないので．」
                   \end{itemize}
             \item 前提として、5研の皆さんと研究対象は出来る限り近くにしたいです。楽なので。
-            \item 言い訳として、研究のやり方にかなり大きなズレを感じています。\\
-                  (つまり、研究対象自体は本質的には何も変えていないつもりです。)
+            \item 言い訳として、研究のやり方にかなり大きなズレを感じています。
                   \begin{itemize}
                       \item 「まず問題を見つける(spring layoutがL-BFGSなどでも遅い) $\to$ 解決策を考える(座標降下など、特定の手法に拘らず全ての選択肢を考える) $\to$ 収束性など理論保証をする ($\to$ 他手法へも適用可な一般的アルゴリズムへ拡張する)」というボトムアップはかなり得意な自信があります。(e.g. 7研、RA、趣味)
                       \item 一方で、「まず一般的なアルゴリズムを考える(random subspace) $\to$ 理論保証をする $\to$ 上手くいく問題を見つける(機械学習など)」というトップダウンの研究は滅茶苦茶に苦手なのだなと痛感しています。
@@ -686,13 +814,13 @@
                   \end{itemize}
         \end{itemize}
     \end{frame}
-    \begin{frame}{\LARGE{どう研究するべきか}}
+    \begin{frame}{どう研究するべきか}
         \begin{itemize}
             \item 自分の中での最大の疑問: トップダウン型研究のゴールはどこにあるのか?
             \item Pierreさんらの「この研究は数値実験を真面目にやっていない」という発言は自分の中でかなり衝撃的 (以前からかなり迷子気味でしたが、これで完全に路頭に迷いました)
                   \begin{itemize}
                       \item 想定される「ゴール」というのは中程度の優位性を持ったアルゴリズムの開発でしょうか?
-                      \item しかし、研究の動機(次スライド)をかなり数値実験に置いた人間が私です
+                      \item しかし、私は研究の動機(次スライド)をかなり数値実験に置いた人間です
                       \item 一般論として、汎用解法で汎用的な問題に対してSTOAを与えること(トップダウン)は至難の業だが、特定の問題に特定の解法を与えること(ボトムダウン)は比較的容易
                       \item トップダウンだと、上記2つの間でどうしても矛盾が生じてしまう
                   \end{itemize}
@@ -700,12 +828,12 @@
                   \begin{itemize}
                       \item 他分野の研究ならともかく、最適化の研究でトップダウン(手法ありき)はかなり難しい印象を受けています。
                       \item トップダウン型研究では存在しないゴールテープを追いかける羽目になりませんか?\\どうそれを回避するべきですか?
-                      \item 「上手く行く問題を見つける」というゴールポストずらしで、良い成果が出る未来が\\シンプルに想像できません。
+                      \item 「上手く行く問題を見つける」というゴールポストずらしで、良い成果が出る未来が\\シンプルに想像できず、かなり困ってしまいました。
                       \item 「相補的(by 品川先生)」というのが大きなヒントかなとは感じています。
                   \end{itemize}
         \end{itemize}
     \end{frame}
-    \begin{frame}{\LARGE{何を研究したいか}}
+    \begin{frame}{何を研究したいか}
         \begin{itemize}
             \item 4月あたりに研究したい分野は特に無いと答えてしまいましたが、数か月経って少しは自分のしたいことが定まってきた気がします
                   \begin{itemize}
@@ -716,7 +844,8 @@
                   \begin{itemize}
                       \item 「しっかり学ぶ数理最適化」のヒューリスティックの章に対し、詳細な実装例を与えた
                       \item 「メタヒューリスティックの研究者はとても少ないので目指して下さい」とお世辞を頂けた
-                      \item 数理5研で直接その研究をする気は皆無ですが(専門家の助言を受けられる内にそういうことはしたい為、特に丸茂先生の話は許される限り関わりたいです)、近しいことはやはりしたいと思っています
+                      \item (最近分かったこととして、ヒューリスティックとトップダウン研究はかなり相性が悪い)
+                      \item 数理5研で直接その研究をする気は皆無ですが(専門家の助言を受けられる内にそういうことはしたい為、特に丸茂先生の話は許される限り関わりたいです)、問題固有の構造を生かすということは常に意識していたいです
                   \end{itemize}
             \item 梅谷先生も武田先生も共に産業側との接点があるという認識でいますが、そこは割と研究室志望の動機でもあります。
                   \begin{itemize}
@@ -729,12 +858,12 @@
                   \end{itemize}
         \end{itemize}
     \end{frame}
-    \begin{frame}{\LARGE{メモ}}
+    \begin{frame}{メモ}
         \begin{itemize}
             \item リスクヘッジをご配慮して下さっている印象を受けましたが、学生身分であることへの楽観(新規性皆無 or 先行研究丸被りでも死に至らない)に基づき、(意味のある)リスクを取ること自体は厭わないつもりです
                   \begin{itemize}
                       \item 幸運にも勝ち得た実績でギャンブルをしたい (工学部長賞・JSIAM・QS・山下記念・AQIS)
-                      \item 上振れを引いたら更にリスクをとって上振れを狙いたい性格 破滅したらその時に考えたい楽観主義者
+                      \item 上振れを引いたら更にリスクをとって上振れを狙いたい性格 破滅したらその時に考えたい楽観主義者です
                       \item (我儘を言えば、ハイリスク・ローリターンなことをしていたら私を止めて頂きたいです)
                   \end{itemize}
             \item 自分が大学院において真に最小化したいリスクは、「卒業できない(流石に卒業くらいはしたいですが……) or 奨学金取れない」ではなく、「将来研究者として自走できない」こと
@@ -743,6 +872,28 @@
                       \item そういう「上振れ」を引いているのなら、今の自分が取るべきリスクは、研究者としての自走力を養うこと
                       \item 成果がほぼ確約されているが自分が将来やらない類の研究は、可能なら回避したいです
                   \end{itemize}
+        \end{itemize}
+    \end{frame}
+    \begin{frame}{「この研究を続けて良いか?」Noの場合}
+        \begin{itemize}
+            \item PLさんやAndiさんやの助言を仰げる範囲だと、私の能力不足の為、まず数値実験結果でいい結果が出る未来があんまり見えていません。路頭に迷っている状態なので、かなり大きく助言を頂きたいです。
+            \item CG法に関する話の方は、以前お伝えした通り、実質SciPyの下位互換なことが分かってしまいました。
+            \item いずれにせよあまり明確なビジョンを持っていない状態ので、色々と助言を頂ければ幸いです。
+        \end{itemize}
+    \end{frame}
+    \begin{frame}{「この研究を続けて良いか?」Yesの場合}
+        \begin{itemize}
+            \item 論文の形にまとめること / 数値実験をきちんと行うこと など、やるべきことは比較的明確
+            \item 11月中までに論文の原型が書くことが今のところの目標
+            \item まずKey Technique 1の方に対して、理論保証は絶対にしたいと考えています。
+                  \begin{itemize}
+                      \item 当初は「より良い大域最適解へ収束することを言えばよい」$\to$「武田先生がこれまでにした研究の中だとガウシアンホモトピー法の研究が動機としては一番近くて参考になる???」と考えていました
+                      \item ただ、この研究を私が理解した範囲内だと、まず手法が収束すると言えることが前提?
+                      \item 射影勾配法の収束性証明の議論を援用して何か言えるか?
+                      \item また、最適化の専門家から見て自明な改善点は多いと思いますが、それの議論
+                  \end{itemize}
+            \item random subspace(?) の方については、そもそも何が言えれば嬉しいか?
+            \item SGD+tabooはもっとあるかと思っていたら全然ありませんでした。そもそも「研究」の対象ではない?
         \end{itemize}
     \end{frame}
 \fi
