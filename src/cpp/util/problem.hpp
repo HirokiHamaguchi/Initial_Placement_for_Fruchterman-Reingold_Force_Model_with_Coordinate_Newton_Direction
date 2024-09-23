@@ -21,6 +21,10 @@ struct Problem {
   std::vector<double> data;         // edge weight
   std::string matrixName = "test";  // matrix name
 
+  Problem(size_t n, size_t m, double k, std::vector<size_t> row,
+          std::vector<size_t> col, std::vector<double> data)
+      : n(n), m(m), k(k), row(row), col(col), data(data) {}
+
   Problem(const std::string matrixName) : matrixName(matrixName) {
     std::string curPath = std::filesystem::current_path().string();
     assert(curPath.substr(curPath.size() - 8, 8) == "\\src\\cpp");
@@ -70,11 +74,27 @@ struct Problem {
 
     file.close();
     k = 1 / std::sqrt(n);
+
+    assert(isConnected());
   }
 
-  Problem(size_t n, size_t m, double k, std::vector<size_t> row,
-          std::vector<size_t> col, std::vector<double> data)
-      : n(n), m(m), k(k), row(row), col(col), data(data) {}
+  bool isConnected() const {
+    std::vector<std::vector<size_t>> adj(n);
+    for (size_t i = 0; i < m; ++i) {
+      adj[row[i]].push_back(col[i]);
+      adj[col[i]].push_back(row[i]);
+    }
+
+    std::vector<bool> visited(n, false);
+    auto dfs = [&](const auto& f, size_t u) -> void {
+      visited[u] = true;
+      for (size_t v : adj[u])
+        if (!visited[v]) f(f, v);
+    };
+    dfs(dfs, 0);
+
+    return std::all_of(visited.begin(), visited.end(), [](bool v) { return v; });
+  }
 
   double calcScore(const std::vector<std::pair<double, double>>& pos,
                    bool addRepulsive = true) const {

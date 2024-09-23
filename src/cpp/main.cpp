@@ -90,21 +90,23 @@ std::vector<std::vector<std::pair<double, double>>> solve(
 }
 
 int main() {
+  // Step1 : Read input
   Problem problem("494_bus");
 
+  // Step2 : decide initial position
   std::vector<std::pair<double, double>> position(problem.n);
-
   std::random_device rd;
   std::mt19937 gen(rd());
   std::uniform_real_distribution<double> dist(0, 1);
-
   for (int i = 0; i < int(problem.n); ++i) {
     position[i] = {dist(gen), dist(gen)};
   }
-
+  
+  // Step3 : Solve
   std::vector<std::vector<std::pair<double, double>>> positions =
       solve(problem, position);
 
+  // Step4 : Output
   problem.printOutput(positions);
 
   return 0;
