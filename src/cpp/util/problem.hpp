@@ -1,5 +1,6 @@
 #pragma once
 
+#include <Eigen/Core>
 #include <cassert>
 #include <filesystem>
 #include <fstream>
@@ -27,9 +28,9 @@ struct Problem {
 
   Problem(const std::string matrixName) : matrixName(matrixName) {
     std::string curPath = std::filesystem::current_path().string();
-    assert(curPath.substr(curPath.size() - 8, 8) == "\\src\\cpp");
+    assert(curPath.substr(curPath.size() - 8, 8) == "/src/cpp");
     std::string path =
-        curPath.substr(0, curPath.size() - 8) + "\\data\\" + matrixName + ".mtx";
+        curPath.substr(0, curPath.size() - 8) + "/data/" + matrixName + ".mtx";
 
     std::ifstream file(path);
     if (!file.is_open()) {
@@ -38,6 +39,17 @@ struct Problem {
     }
 
     std::string line;
+    std::getline(file, line);
+    assert(std::count(line.begin(), line.end(), ' ') == 4);
+    std::vector<std::string> tokens;
+    std::istringstream iss0(line);
+    for (std::string token; iss0 >> token;) tokens.push_back(token);
+    assert(tokens[0] == "%MatrixMarket" || tokens[0] == "%%MatrixMarket");
+    assert(tokens[1] == "matrix");
+    assert(tokens[2] == "coordinate");
+    std::string field = tokens[3];
+    assert(field == "pattern" || field == "real" || field == "integer");
+
     while (std::getline(file, line)) {
       if (line[0] == '%') continue;
       break;
@@ -52,13 +64,22 @@ struct Problem {
     for (size_t i = 0; i < _m; ++i) {
       std::getline(file, line);
       std::istringstream iss(line);
-      int r, c;
-      double w;
-      iss >> r >> c >> w;
-      r--;
-      c--;
-      if (r == c) continue;
-      edges[std::minmax(r, c)] += std::abs(w);
+      if (field == "pattern") {
+        int r, c;
+        iss >> r >> c;
+        r--;
+        c--;
+        if (r == c) continue;
+        edges[std::minmax(r, c)] += 1;
+      } else {
+        int r, c;
+        double w;
+        iss >> r >> c >> w;
+        r--;
+        c--;
+        if (r == c) continue;
+        edges[std::minmax(r, c)] += std::abs(w);
+      }
     }
 
     m = edges.size();
@@ -96,48 +117,12 @@ struct Problem {
     return std::all_of(visited.begin(), visited.end(), [](bool v) { return v; });
   }
 
-  double calcScore(const std::vector<std::pair<double, double>>& pos,
-                   bool addRepulsive = true) const {
-    double score = 0.0;
-
-    if (addRepulsive) {
-      for (size_t i = 0; i < n; ++i) {
-        for (size_t j = i + 1; j < n; ++j) {
-          double x1 = pos[i].first;
-          double y1 = pos[i].second;
-          double x2 = pos[j].first;
-          double y2 = pos[j].second;
-          double d = std::hypot(x1 - x2, y1 - y2);
-          if (d < 1e-9) {
-            dbg(i, j, x1, y1, x2, y2, d);
-            assert(false);
-          }
-          score -= std::pow(k, 2) * std::log(d);
-        }
-      }
-    }
-
-    for (size_t i = 0; i < m; ++i) {
-      size_t u = row[i];
-      size_t v = col[i];
-      double a = data[i];
-      double x1 = pos[u].first;
-      double y1 = pos[u].second;
-      double x2 = pos[v].first;
-      double y2 = pos[v].second;
-      double d = std::hypot(x1 - x2, y1 - y2);
-      score += a * std::pow(d, 3) / (3.0 * k);
-    }
-
-    return score;
-  }
-
   // positions[turn][vertex]
-  void printOutput(std::vector<std::vector<std::pair<double, double>>> positions) {
+  void printOutput(const Eigen::VectorXf& positions) {
     std::string curPath = std::filesystem::current_path().string();
-    assert(curPath.substr(curPath.size() - 8, 8) == "\\src\\cpp");
+    assert(curPath.substr(curPath.size() - 8, 8) == "/src/cpp");
     std::string path =
-        curPath.substr(0, curPath.size() - 8) + "\\out\\" + matrixName + ".out";
+        curPath.substr(0, curPath.size() - 8) + "/out/" + matrixName + ".out";
     std::ofstream file(path);
     if (!file.is_open()) {
       dbg(path);
@@ -149,9 +134,10 @@ struct Problem {
     for (size_t i = 0; i < m; ++i) {
       file << row[i] << " " << col[i] << " " << data[i] << "\n";
     }
-    file << positions.size() << "\n";
-    for (const auto& turn : positions)
-      for (const auto& pos : turn) file << pos.first << " " << pos.second << "\n";
+    file << 1 << "\n";
+    for (size_t i = 0; i < n; ++i) {
+      file << positions[2 * i] << " " << positions[2 * i + 1] << "\n";
+    }
     file.close();
 
     std::cout << "Output path:" << path << "\n";
