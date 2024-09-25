@@ -2,13 +2,13 @@
   "tasks": [
     {
       "type": "cppbuild",
-      "label": "C/C++: g++.exe build active file",
-      "command": "C:\\Program Files\\mingw64\\bin\\g++.exe",
+      "label": "g++ build active file",
+      "command": "/usr/bin/g++-10",
       "args": [
         "-g",
         "${fileBasename}",
         "-o",
-        "${fileDirname}\\${fileBasenameNoExtension}.exe",
+        "${fileBasenameNoExtension}.out",
         "-std=c++17",
         "-Dhari64",
         "-Wall",
@@ -16,9 +16,11 @@
         "-Wfatal-errors",
         "-fdiagnostics-color=always",
         // "-D_GLIBCXX_DEBUG",
-        "-DDBG_MACRO_NO_WARNING",
-        "-O2",
-        // "-O3",
+        "-I/usr/include/eigen3",
+        "-I${workspaceFolder}/src/cpp/include",
+        // "-O2",
+        "-O3",
+        "-DDBG_MACRO_NO_WARNING"
       ],
       "options": {
         "cwd": "${fileDirname}"
@@ -30,7 +32,6 @@
         "kind": "build",
         "isDefault": true
       },
-      "detail": "Generated task by Debugger."
     }
   ],
   "version": "2.0.0"

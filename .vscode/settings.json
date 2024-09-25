@@ -87,6 +87,7 @@
         "deltak",
         "disp",
         "dtype",
+        "Eigen",
         "eigvals",
         "Fruchterman",
         "fval",
@@ -104,7 +105,9 @@
         "kamada",
         "kawai",
         "Kolodziej",
+        "LBFGS",
         "linalg",
+        "linedraw",
         "linesearch",
         "Lipschitz",
         "lstsq",
@@ -126,6 +129,7 @@
         "randn",
         "Reingold",
         "Ribiere",
+        "Rosenbrock",
         "rowbounds",
         "SCCG",
         "setdiag",
@@ -225,6 +229,7 @@
         "xstring": "cpp",
         "xtr1common": "cpp",
         "xtree": "cpp",
-        "xutility": "cpp"
+        "xutility": "cpp",
+        "cassert": "cpp"
     }
 }
