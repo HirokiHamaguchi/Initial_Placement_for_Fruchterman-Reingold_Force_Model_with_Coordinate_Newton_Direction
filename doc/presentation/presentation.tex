@@ -181,22 +181,6 @@
 \begin{document}
 
 \ifShowHidden
-    \begin{frame}{\cEText{予定}}
-        \begin{itemize}
-            \item 9月17日 10:00 a.m- ゼミ室6-238
-            \item 前30分: 今までしてきたことの説明
-            \item 中30分: スライド末尾に記した、研究の方向性についてのご相談
-                  \begin{itemize}
-                      \item 勝手にこの方向性に進んできてしまった感があるが、この方向性でよいか?
-                  \end{itemize}
-            \item 後30分: Yesの場合はアドバイスをもらいたい点が山ほどあるのでその議論、\\
-                  Noの場合はどのような方向性がよいかの議論
-            \item 数理輪講は11/29 このスライドはYesの場合に一部使用予定
-        \end{itemize}
-    \end{frame}
-\fi
-
-\ifShowHidden
     \maketitle
 \fi
 
@@ -458,27 +442,6 @@
         \end{figure}
     \end{frame}
 \fi
-\ifShowHidden
-    \begin{frame}{\cEText{余談: SGDの問題点}}
-        Graph Drawing by Stochastic Gradient Descent
-        Jonathan X. Zheng, Samraat Pawar, Dan F. M. Goodman
-        からの抜粋:
-
-        \begin{center}
-            \begin{tikzpicture}
-                \draw (0,0) -- (10,0);
-            \end{tikzpicture}
-        \end{center}
-
-        このアイデアにはいくつかの問題があります。
-        ひとつは、すべての長距離の力を同等に扱うことが、グラフ理論上の距離に忠実でないという点です。
-        もうひとつは、これらの力の相対的な強さが、グラフの最終的な配置に大きな影響を与える可能性のある追加パラメータに依存しているという点です【23】。
-        これをグラフ理論上の距離に依存させ続ければ、これらの問題を回避することができますが、最短経路の計算と保存の問題が再び発生します。
-        この依存関係を維持するためのアプローチのひとつとして、Khoury らによるものがあります【21】。
-        彼らは、特異値分解に基づく距離行列の低ランク近似を用いています。
-        これにより非常に高い効果が期待できますが、それでもAPSP（全対最短経路問題）を必要とします。
-    \end{frame}
-\fi
 
 % \ifShowHidden
 \begin{frame}{The Purpose of this research}
@@ -497,33 +460,6 @@
     \end{table}
 \end{frame}
 % \fi
-
-\ifShowHidden
-    \begin{frame}{\cEText{余談: 試した手法群}}
-        \begin{itemize}
-            \item シンプルなrandom subspace algorithm
-                  \begin{itemize}
-                      \item このpair-wise separable functionに対してなら、絶対にrandom subspace的アルゴリズムが上手く機能するはずという直感が、全ての出発点
-                      \item \textbf{ダイレクトな適応だと上手くいかないが、適切な工夫でどうにか出来ないか?} というのがこの研究の核心 想定以上にrandom subspaceは有効そうという結論です
-                  \end{itemize}
-            \item (丸茂先生から頂いた非常に本質的なアドバイスである) 頂点毎にL-BFGSを適用
-                  \begin{itemize}
-                      \item シンプルなrandom subspace algorithmと同じ理由で遅い
-                      \item (cubic regularized Newton以前の根本的な問題)
-                  \end{itemize}
-            \item CG法
-                  \begin{itemize}
-                      \item 元々の研究課題の一環として、SciPyが実装しているリスタート機能付きの$\beta^{\text{PR}}_+$と強Wolfe条件によるCG法を調べていました
-                      \item Zoutendijk条件による証明について、簡単な部分は理解したつもりですが、subspace化した時にどうすればいいのかは全く分からず
-                  \end{itemize}
-            \item stochastic CG法 {\small ``Stochastic Conjugate Gradient Algorithm with Variance Reduction''}
-                  \begin{itemize}
-                      \item ただし、収束性証明は強凸の場合のみ
-                  \end{itemize}
-            \item L-BFGS法自体の改良の検討 $\to$ 自作だと数値爆発で諦め
-        \end{itemize}
-    \end{frame}
-\fi
 
 \ifShowHidden
     \begin{frame}{Key Observation: stochastic strategy}
@@ -572,8 +508,6 @@
                 \draw[-{Latex[length=10,width=0.4cm]},line width=0.15cm] (+3.1, 0) -- (+1.9, 0);
             \end{tikzpicture}
         \end{figure}
-        \cEText{\small{(本当はSGDでなく、Random subspaceと読み替えてもらう方が正しい)}}\\
-        \cEText{\small{(FRアルゴリズムはL-BFGSに近いが、前者が苦手なことは「ねじれ」の問題として知られている)}}
     \end{frame}
 \fi
 
@@ -589,7 +523,6 @@
             \item With \textbf{hexagonal close-packed} structure,
                   $f$ is the sum of $\abs{V}^2 \to \abs{E}$ terms
             \item partially overlapped with \cite{ghassemitoosiSimulatedAnnealingPreProcessing2016,s22145179}
-            \item \cEText{(これはあくまで前座で、Key Technique 2が上手く動作する為の準備)}
         \end{itemize}
     \end{frame}
 \fi
@@ -636,8 +569,6 @@
                       \item Extended in~\cite{cartisRandomisedSubspaceMethods2022},\cite{fujiRandomizedSubspaceRegularized2022},\cite{higuchiFastConvergenceSecondOrder2024}
                       \item Analysis is based on~\cite{karimireddyGlobalLinearConvergence2018}
                   \end{itemize}
-            \item \cEText{(疑問:random subspaceを名乗るのにJL-lemmaは必須か? 提案論文は不使用)}
-            \item \cEText{(単なる勘ですが、この状況まで落とし込めば部分空間法が強いはず)}
         \end{itemize}
         \begin{columns}[T]
             \column{0.5\columnwidth}
@@ -778,7 +709,6 @@
             \begin{itemize}
                 \item More numerical experiments
                 \item Theoretical analysis
-                \item \cEText{(少なくとも自分が知る限り and 思う限り)かなり面白い話だと思いますし、多少はやる価値がある内容だと自負しています}
             \end{itemize}
         \end{block}
     \end{frame}
@@ -795,107 +725,5 @@
     % \end{thebibliography}
 \end{frame}
 % \fi
-
-\ifShowHidden
-    \begin{frame}{どう研究したいか}
-        \begin{itemize}
-            \item 以下は本当に仰る通りで、非常に申し訳なく思います。すいません。
-                  \begin{itemize}
-                      \item
-                            「PLやAndiがいるのに，彼らからの助言を仰がずに，多様体やrandom subspaceアルゴリズムから離れて，あまり専門家のいない方向へ進んでいくのは，なんだか勿体無い気がしたもので．」
-                            「正直，我々の得意とするところから離れるほど，困った時にアドバイスできなくなるし，新規性があるのかどうかも判断つかなくなります．もちろん，やりたいことをやったらいい気もしますが，私のところにきて1つめの研究（学生の持ち込んだ研究）で論文に採択レベルの新規性のある研究ができた人は今のところ，いないので．」
-                  \end{itemize}
-            \item 前提として、5研の皆さんと研究対象は出来る限り近くにしたいです。楽なので。
-            \item 言い訳として、研究のやり方にかなり大きなズレを感じています。
-                  \begin{itemize}
-                      \item 「まず問題を見つける(spring layoutがL-BFGSなどでも遅い) $\to$ 解決策を考える(座標降下など、特定の手法に拘らず全ての選択肢を考える) $\to$ 収束性など理論保証をする ($\to$ 他手法へも適用可な一般的アルゴリズムへ拡張する)」というボトムアップはかなり得意な自信があります。(e.g. 7研、RA、趣味)
-                      \item 一方で、「まず一般的なアルゴリズムを考える(random subspace) $\to$ 理論保証をする $\to$ 上手くいく問題を見つける(機械学習など)」というトップダウンの研究は滅茶苦茶に苦手なのだなと痛感しています。
-                      \item 理論解析自体は、かなり好きです (e.g. 丸茂先生の夏季学校の問題)
-                  \end{itemize}
-        \end{itemize}
-    \end{frame}
-    \begin{frame}{どう研究するべきか}
-        \begin{itemize}
-            \item 自分の中での最大の疑問: トップダウン型研究のゴールはどこにあるのか?
-            \item Pierreさんらの「この研究は数値実験を真面目にやっていない」という発言は自分の中でかなり衝撃的 (以前からかなり迷子気味でしたが、これで完全に路頭に迷いました)
-                  \begin{itemize}
-                      \item 想定される「ゴール」というのは中程度の優位性を持ったアルゴリズムの開発でしょうか?
-                      \item しかし、私は研究の動機(次スライド)をかなり数値実験に置いた人間です
-                      \item 一般論として、汎用解法で汎用的な問題に対してSTOAを与えること(トップダウン)は至難の業だが、特定の問題に特定の解法を与えること(ボトムダウン)は比較的容易
-                      \item トップダウンだと、上記2つの間でどうしても矛盾が生じてしまう
-                  \end{itemize}
-            \item 一般論として、トップダウン型研究はどういうモチベーションでやるべきですか?
-                  \begin{itemize}
-                      \item 他分野の研究ならともかく、最適化の研究でトップダウン(手法ありき)はかなり難しい印象を受けています。
-                      \item トップダウン型研究では存在しないゴールテープを追いかける羽目になりませんか?\\どうそれを回避するべきですか?
-                      \item 「上手く行く問題を見つける」というゴールポストずらしで、良い成果が出る未来が\\シンプルに想像できず、かなり困ってしまいました。
-                      \item 「相補的(by 品川先生)」というのが大きなヒントかなとは感じています。
-                  \end{itemize}
-        \end{itemize}
-    \end{frame}
-    \begin{frame}{何を研究したいか}
-        \begin{itemize}
-            \item 4月あたりに研究したい分野は特に無いと答えてしまいましたが、数か月経って少しは自分のしたいことが定まってきた気がします
-                  \begin{itemize}
-                      \item 「離散と連続の橋渡し」 離散に対する思い入れが思ってた以上に大きかったです
-                      \item 離散と連続の両面を持つ問題に対して、それぞれの特性を活かしたアルゴリズムを考えるのが最高に楽しい
-                  \end{itemize}
-            \item 自分が研究職を志す動機は梅谷先生に2年前メールをしたのが恐らく原点です。
-                  \begin{itemize}
-                      \item 「しっかり学ぶ数理最適化」のヒューリスティックの章に対し、詳細な実装例を与えた
-                      \item 「メタヒューリスティックの研究者はとても少ないので目指して下さい」とお世辞を頂けた
-                      \item (最近分かったこととして、ヒューリスティックとトップダウン研究はかなり相性が悪い)
-                      \item 数理5研で直接その研究をする気は皆無ですが(専門家の助言を受けられる内にそういうことはしたい為、特に丸茂先生の話は許される限り関わりたいです)、問題固有の構造を生かすということは常に意識していたいです
-                  \end{itemize}
-            \item 梅谷先生も武田先生も共に産業側との接点があるという認識でいますが、そこは割と研究室志望の動機でもあります。
-                  \begin{itemize}
-                      \item 「世の中の「困った」を解決する」一助になりたい
-                      \item 殆どお金に結びつかない(機械学習/GPT等ではないということ)が需要は存在する問題への、公共財としての実用的なプログラム開発が、人生レベルでの目標の一つ
-                            \begin{itemize}
-                                \item networkxへのcontributionはこの研究が論外と否定されたとしてもやっておきたい
-                            \end{itemize}
-                      \item 自分が理論解析に対して消極的(に見える?)のは、この辺りの動機が要因です
-                  \end{itemize}
-        \end{itemize}
-    \end{frame}
-    \begin{frame}{メモ}
-        \begin{itemize}
-            \item リスクヘッジをご配慮して下さっている印象を受けましたが、学生身分であることへの楽観(新規性皆無 or 先行研究丸被りでも死に至らない)に基づき、(意味のある)リスクを取ること自体は厭わないつもりです
-                  \begin{itemize}
-                      \item 幸運にも勝ち得た実績でギャンブルをしたい (工学部長賞・JSIAM・QS・山下記念・AQIS)
-                      \item 上振れを引いたら更にリスクをとって上振れを狙いたい性格 破滅したらその時に考えたい楽観主義者です
-                      \item (我儘を言えば、ハイリスク・ローリターンなことをしていたら私を止めて頂きたいです)
-                  \end{itemize}
-            \item 自分が大学院において真に最小化したいリスクは、「卒業できない(流石に卒業くらいはしたいですが……) or 奨学金取れない」ではなく、「将来研究者として自走できない」こと
-                  \begin{itemize}
-                      \item 奨学金自体はその実績で生活できる分くらいは恐らく確保できそう
-                      \item そういう「上振れ」を引いているのなら、今の自分が取るべきリスクは、研究者としての自走力を養うこと
-                      \item 成果がほぼ確約されているが自分が将来やらない類の研究は、可能なら回避したいです
-                  \end{itemize}
-        \end{itemize}
-    \end{frame}
-    \begin{frame}{「この研究を続けて良いか?」Noの場合}
-        \begin{itemize}
-            \item PLさんやAndiさんやの助言を仰げる範囲だと、私の能力不足の為、まず数値実験結果でいい結果が出る未来があんまり見えていません。路頭に迷っている状態なので、かなり大きく助言を頂きたいです。
-            \item CG法に関する話の方は、以前お伝えした通り、実質SciPyの下位互換なことが分かってしまいました。
-            \item いずれにせよあまり明確なビジョンを持っていない状態ので、色々と助言を頂ければ幸いです。
-        \end{itemize}
-    \end{frame}
-    \begin{frame}{「この研究を続けて良いか?」Yesの場合}
-        \begin{itemize}
-            \item 論文の形にまとめること / 数値実験をきちんと行うこと など、やるべきことは比較的明確
-            \item 11月中までに論文の原型が書くことが今のところの目標
-            \item まずKey Technique 1の方に対して、理論保証は絶対にしたいと考えています。
-                  \begin{itemize}
-                      \item 当初は「より良い大域最適解へ収束することを言えばよい」$\to$「武田先生がこれまでにした研究の中だとガウシアンホモトピー法の研究が動機としては一番近くて参考になる???」と考えていました
-                      \item ただ、この研究を私が理解した範囲内だと、まず手法が収束すると言えることが前提?
-                      \item 射影勾配法の収束性証明の議論を援用して何か言えるか?
-                      \item また、最適化の専門家から見て自明な改善点は多いと思いますが、それの議論
-                  \end{itemize}
-            \item random subspace(?) の方については、そもそも何が言えれば嬉しいか?
-            \item SGD+tabooはもっとあるかと思っていたら全然ありませんでした。そもそも「研究」の対象ではない?
-        \end{itemize}
-    \end{frame}
-\fi
 
 \end{document}
