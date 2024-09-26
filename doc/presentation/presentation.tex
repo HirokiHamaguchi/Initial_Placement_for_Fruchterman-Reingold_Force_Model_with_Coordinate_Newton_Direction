@@ -171,12 +171,12 @@
 % === TITLE ===
 \title{\Huge{Improved Initial Placement for\\Fruchterman--Reingold Algorithm}}
 \author{\Large{Hiroki Hamaguchi}}
-\institute{\large{Supervisors: Prof. Akiko Takeda\\\phantom{Supervisors: }Pierre-Louis Poirion\\\phantom{Supervisors: }Andi Han}\\\phantom{Supervisors: }if ok, Prof. Naoki Marumo}
+\institute{\large{Supervisors: Prof. Akiko Takeda}}
 \date{2024/11/29}
 
 \newif\ifShowHidden
-\ShowHiddenfalse
-% \ShowHiddentrue
+% \ShowHiddenfalse
+\ShowHiddentrue
 
 \begin{document}
 
@@ -184,28 +184,38 @@
     \maketitle
 \fi
 
-\begin{frame}
+\begin{frame}{Introduction for Graph Drawing}
+    \begin{columns}
+        \begin{column}{0.59\columnwidth}
+            \begin{itemize}
+                \item Graph $G = (V,E)$ (vertices $V$  / edges $E$)
+                \item Examples: Social Network, Transportation, Web, Molecular, Gene, etc.
+                \item \textbf{Graph Visualization} is an important task.
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.39\columnwidth}
+            \begin{figure}[htbp]
+                \centering
+                \includegraphics[width=0.75\columnwidth]{imgs/example_fr.png}
+            \end{figure}
+        \end{column}
+    \end{columns}
     \begin{figure}[htbp]
-        \begin{minipage}{0.33\hsize}
+        \begin{minipage}{0.49\columnwidth}
             \centering
-            \includegraphics[width=40mm]{imgs/social_graph.png}
-            \caption{
-                Social Network Graph
-                By \href{https://en.wikipedia.org/wiki/Social_graph#/media/File:Social_graph.gif}{Festys}, \href{https://creativecommons.org/licenses/by-sa/3.0}{CC BY-SA 3.0}, via Wikimedia Commons
+            \includegraphics[height=32mm]{imgs/graph_social.jpg}
+            \caption*{
+                Social Network Graph\quad
+                \gray{\footnotesize{Designed by \href{www.freepik.com}{Freepik}}}
             }
         \end{minipage}
-        \begin{minipage}{0.33\hsize}
+        \begin{minipage}{0.49\columnwidth}
             \centering
-            \includesvg[width=\columnwidth]{imgs/High_Speed_Railroad_Map_of_Europe.svg}
-            \caption{
-                Railroad Graph
-                By \href{https://commons.wikimedia.org/wiki/File:High_Speed_Railroad_Map_of_Europe.svg}{Akwa and others},\href{https://creativecommons.org/licenses/by-sa/3.0}{CC BY-SA 3.0}, via Wikimedia Commons
+            \includegraphics[height=32mm]{imgs/graph_railway.png}
+            \caption*{
+                Railroad Graph\quad
+                \gray{\footnotesize{By \href{https://commons.wikimedia.org/wiki/File:High_Speed_Railroad_Map_of_Europe.svg}{Bernese media},\href{https://creativecommons.org/licenses/by-sa/3.0}{CC BY-SA 3.0}}}
             }
-        \end{minipage}
-        \begin{minipage}{0.33\hsize}
-            \centering
-            % \includegraphics[width=40mm]{path3.png}
-            % \caption{caption3}
         \end{minipage}
     \end{figure}
 \end{frame}
@@ -328,7 +338,7 @@
 \fi
 
 \ifShowHidden
-    \begin{frame}{Algorithm for FR Layout 1}
+    \begin{frame}{Algorithm for FR Layout}
         \begin{columns}
             \begin{column}{0.4\columnwidth}
                 \textbf{``spring\_layout'' in NetworkX\\and ``fdp'' in Graphviz}
@@ -348,28 +358,6 @@
             \end{column}
         \end{columns}
     \end{frame}
-    \begin{frame}{Algotithm for FR Layout 2}
-        \begin{columns}
-            \begin{column}{0.4\columnwidth}
-                \textbf{``sfdp'' in Graphviz}
-                \begin{itemize}
-                    \item Scalable Force-Directed Placement
-                    \item \textbf{Multilevel} approach
-                    \item Barnes--Hut algorithm (Q-tree)\cite{Hu2006EfficientHF}
-                          \cite{barnesHierarchicalLogForcecalculation1986}
-                    \item These methods are\\\textbf{out of scope},\\
-                          but our work is still \textbf{applicable}.
-                \end{itemize}
-            \end{column}
-            \begin{column}{0.6\columnwidth}
-                \begin{figure}[htbp]
-                    \centering
-                    \includegraphics[width=0.7\columnwidth]{imgs/BH.png}
-                    \caption{\footnotesize{\url{https://jheer.github.io/barnes-hut/}}}
-                \end{figure}
-            \end{column}
-        \end{columns}
-    \end{frame}
 \fi
 
 \ifShowHidden
@@ -382,7 +370,7 @@
         \begin{figure}[htbp]
             \begin{minipage}{0.59\hsize}
                 \centering
-                \animategraphics[autoplay,loop,width=0.8\columnwidth]{5}{imgs/circle/circle-}{1}{50}
+                \animategraphics[autoplay,loop,width=0.8\columnwidth]{5}{imgs/circle/circle-}{1}{1}
                 % \includegraphics[width=0.8\columnwidth]{imgs/circle/circle-50.png}
                 \caption{FR layout by NetworkX}
             \end{minipage}
@@ -469,23 +457,23 @@
     \end{frame}
 \fi
 
-% \ifShowHidden
-\begin{frame}{The Purpose of this research}
-    \begin{table}
-        \centering
-        \begin{tabular}{c|c|c|c}
-            \toprule
-            Existing works                       & \makecell[c]{\cite{6183577}                                                                                         \\\cite{8419285}}    & \cite{ghassemitoosiSimulatedAnnealingPreProcessing2016} & \cite{NEURIPS2019_bc6dc48b}           \\
-            \midrule
-            \textbf{abstract}                    & \makecell[c]{L-BFGS / SGD                                                                                           \\for graph drawing} & \makecell[c]{pre-processing as\\initial placement}                     & \makecell[c]{random subspace\\algorithm}             \\[1.5em]
-            \textbf{limitation}                  & \makecell[c]{L-BFGS is slow                                                                                         \\SGD is un-apllicable} & \makecell[c]{just using\\a circle layout}                     & \makecell[c]{no existing work\\for FR layout}             \\
-            \midrule
-            \textcolor{red}{\textbf{What we do}} & \textcolor{red}{practical speed up} & \textcolor{red}{refine the strategy} & \makecell[c]{\textcolor{red}{apply to} \\\textcolor{red}{FR layout}} \\
-            \bottomrule
-        \end{tabular}
-    \end{table}
-\end{frame}
-% \fi
+\ifShowHidden
+    \begin{frame}{The Purpose of this research}
+        \begin{table}
+            \centering
+            \begin{tabular}{c|c|c|c}
+                \toprule
+                Existing works                       & \makecell[c]{\cite{6183577}                                                                                         \\\cite{8419285}}    & \cite{ghassemitoosiSimulatedAnnealingPreProcessing2016} & \cite{NEURIPS2019_bc6dc48b}           \\
+                \midrule
+                \textbf{abstract}                    & \makecell[c]{L-BFGS / SGD                                                                                           \\for graph drawing} & \makecell[c]{pre-processing as\\initial placement}                     & \makecell[c]{random subspace\\algorithm}             \\[1.5em]
+                \textbf{limitation}                  & \makecell[c]{L-BFGS is slow                                                                                         \\SGD is un-apllicable} & \makecell[c]{just using\\a circle layout}                     & \makecell[c]{no existing work\\for FR layout}             \\
+                \midrule
+                \textcolor{red}{\textbf{What we do}} & \textcolor{red}{practical speed up} & \textcolor{red}{refine the strategy} & \makecell[c]{\textcolor{red}{apply to} \\\textcolor{red}{FR layout}} \\
+                \bottomrule
+            \end{tabular}
+        \end{table}
+    \end{frame}
+\fi
 
 \ifShowHidden
     \begin{frame}{Key Observation: stochastic strategy}
@@ -553,38 +541,26 @@
     \end{frame}
 \fi
 
-\begin{frame}{proposed algorithm 1}
-    \begin{itemize}
-        \item exact projection: min cost flow problem $(\order{\abs{V}^3})$
-        \item heuristic projection: sort by coordinates $(\order{\abs{V} \log \abs{V}})$
-    \end{itemize}
-    \begin{figure}[htbp]
-        \begin{minipage}{0.45\hsize}
-            \centering
-            \includegraphics[width=\columnwidth]{imgs/hex1.png}
-        \end{minipage}
-        \begin{minipage}{0.45\hsize}
-            \centering
-            \includegraphics[width=\columnwidth]{imgs/hex2.png}
-        \end{minipage}
-    \end{figure}
-\end{frame}
-
 \ifShowHidden
-    \begin{frame}{\cEText{余談: TSPとの関連性}}
+    \begin{frame}{proposed algorithm 1}
         \begin{itemize}
-            \item 固定された頂点配置に対して、サイクルグラフの頂点の割り当てを考える
-            \item 最小化すべき関数$f^a(d)$を、FRレイアウトに限らず一般化して考える
-            \item 特に、$f^a(d)=d$とした時、これはTSPに他ならない
-            \item TSPは当然NP困難 ヒューリスティックによって解かれる
-                  \begin{itemize}
-                      \item 代表的なTSPの解法: (Held-Karp), 2-opt, 3-opt, Lin-Kernighan, Christofides, etc.
-                      \item 参考になる部分とならない部分がそれぞれある。
-                  \end{itemize}
-            \item 面白い関連性として挙げてみました
+            \item exact projection: min cost flow problem $(\order{\abs{V}^3})$
+            \item heuristic projection: sort by coordinates $(\order{\abs{V} \log \abs{V}})$
         \end{itemize}
+        \begin{figure}[htbp]
+            \begin{minipage}{0.45\hsize}
+                \centering
+                \includegraphics[width=\columnwidth]{imgs/hex1.png}
+            \end{minipage}
+            \begin{minipage}{0.45\hsize}
+                \centering
+                \includegraphics[width=\columnwidth]{imgs/hex2.png}
+            \end{minipage}
+        \end{figure}
     \end{frame}
 \fi
+
+% \item 代表的なTSPの解法: (Held-Karp), 2-opt, 3-opt, Lin-Kernighan, Christofides, etc.
 
 \ifShowHidden
     \begin{frame}{Key Technique 2: Randomized subspace algorithm}
@@ -672,36 +648,58 @@
 \fi
 
 \ifShowHidden
-    \begin{frame}{Possible Application 1}
-        \begin{itemize}
-            \item Originally, this kind of problems are solved by \textbf{stochastic coordinate descent}
-            \item Random subspace algorithms might be applicable to these problems
-        \end{itemize}
-        \begin{figure}[htbp]
-            \begin{minipage}{0.45\hsize}
-                \centering
-                \includegraphics[width=\columnwidth]{imgs/SCD1.png}
-                \caption{\href{https://people.eecs.berkeley.edu/~brecht/opt4ml_book/O4MD_06_Coordinate_Descent.pdf}{hyperlink}}
-            \end{minipage}
-            \begin{minipage}{0.45\hsize}
-                \centering
-                \includegraphics[width=\columnwidth]{imgs/SCD2.png}
-                \caption{\href{https://www.cs.ubc.ca/~schmidtm/Courses/5XX-S22/S3.pdf}{hyperlink}}
-            \end{minipage}
-        \end{figure}
-    \end{frame}
-    \begin{frame}{Possible Application 2}
-        \begin{itemize}
-            \item Optimize $f(x)$ where $x \in \mathbb{R}^{n}$, not $\prod_{i=1}^{n} \mathbb{R}^2$.
-            \item Assume that if two of the points are too close, $f(x)$ drastically increases.
-            \item Similar algorithms might be applicable to this problem.
-            \item Is there any concrete instance?
-            \item Is there any algorithm already well known?
-        \end{itemize}
-        \begin{figure}[htbp]
-            \centering
-            \includegraphics[width=0.5\columnwidth]{imgs/applicatoin1d.png}
-        \end{figure}
+    % \begin{frame}{Possible Application 1}
+    %     \begin{itemize}
+    %         \item Originally, this kind of problems are solved by \textbf{stochastic coordinate descent}
+    %         \item Random subspace algorithms might be applicable to these problems
+    %     \end{itemize}
+    %     \begin{figure}[htbp]
+    %         \begin{minipage}{0.45\hsize}
+    %             \centering
+    %             \includegraphics[width=\columnwidth]{imgs/SCD1.png}
+    %             \caption{\href{https://people.eecs.berkeley.edu/~brecht/opt4ml_book/O4MD_06_Coordinate_Descent.pdf}{hyperlink}}
+    %         \end{minipage}
+    %         \begin{minipage}{0.45\hsize}
+    %             \centering
+    %             \includegraphics[width=\columnwidth]{imgs/SCD2.png}
+    %             \caption{\href{https://www.cs.ubc.ca/~schmidtm/Courses/5XX-S22/S3.pdf}{hyperlink}}
+    %         \end{minipage}
+    %     \end{figure}
+    % \end{frame}
+    % \begin{frame}{Possible Application 2}
+    %     \begin{itemize}
+    %         \item Optimize $f(x)$ where $x \in \mathbb{R}^{n}$, not $\prod_{i=1}^{n} \mathbb{R}^2$.
+    %         \item Assume that if two of the points are too close, $f(x)$ drastically increases.
+    %         \item Similar algorithms might be applicable to this problem.
+    %         \item Is there any concrete instance?
+    %         \item Is there any algorithm already well known?
+    %     \end{itemize}
+    %     \begin{figure}[htbp]
+    %         \centering
+    %         \includegraphics[width=0.5\columnwidth]{imgs/applicatoin1d.png}
+    %     \end{figure}
+    % \end{frame}
+    \begin{frame}{Algotithm for FR Layout 2}
+        \begin{columns}
+            \begin{column}{0.4\columnwidth}
+                \textbf{``sfdp'' in Graphviz}
+                \begin{itemize}
+                    \item Scalable Force-Directed Placement
+                    \item \textbf{Multilevel} approach
+                    \item Barnes--Hut algorithm (Q-tree)\cite{Hu2006EfficientHF}
+                          \cite{barnesHierarchicalLogForcecalculation1986}
+                    \item These methods are\\\textbf{out of scope},\\
+                          but our work is still \textbf{applicable}.
+                \end{itemize}
+            \end{column}
+            \begin{column}{0.6\columnwidth}
+                \begin{figure}[htbp]
+                    \centering
+                    \includegraphics[width=0.7\columnwidth]{imgs/BH.png}
+                    \caption{\footnotesize{\url{https://jheer.github.io/barnes-hut/}}}
+                \end{figure}
+            \end{column}
+        \end{columns}
     \end{frame}
     \begin{frame}{Possible Application 3}
         \begin{itemize}
@@ -721,8 +719,25 @@
                       \addConstraint{P}{\in \left\{ P \in \{0, 1\}^{n \times n} \relmiddle| P1_n = 1_n, P^\top 1_n = 1_n \right\}}
                   \end{mini*}
                   % \item I'm still doubtful, but these papers seems really interesting. (+ Riemannian optimization)
-            \item \cEText{(随分な遠回りでしたが、Random subspace+Riemannian optimization\\という当初の目標への回帰?)}
         \end{itemize}
+    \end{frame}
+\fi
+
+\ifShowHidden
+    \begin{frame}{End of the Presentation}
+        \begin{block}{Summary}
+            \begin{itemize}
+                \item Fruchterman--Reingold layout is a tough problem
+                \item Hexagonal close-packed structure + RSN result in a powerful initialization
+                \item initialization + L-BFGS give a great solution
+            \end{itemize}
+        \end{block}
+        \begin{block}{Acknowledgement}
+            \large{
+                This work was heavily inspired by the insightful discussions and valuable contributions of \textbf{Pierre-Louis Poirion}, \textbf{Andi Han} and \textbf{Naoki Marumo}.\\
+                I would like to express my sincere gratitude to them.
+            }
+        \end{block}
     \end{frame}
 \fi
 
@@ -730,26 +745,14 @@
 \setbeamercolor{block title}{fg=blendedblue!50!black}
 
 \ifShowHidden
-    \begin{frame}{Summary}
-        \begin{block}{Future Work}
-            \begin{itemize}
-                \item More numerical experiments
-                \item Theoretical analysis
-            \end{itemize}
-        \end{block}
+    \begin{frame}[allowframebreaks]{Reference}
+        \scriptsize
+        \beamertemplatetextbibitems
+        \bibliographystyle{hapalike}
+        \bibliography{../FruchtermanReingoldByRandomSubspace.bib}
+        % \begin{thebibliography}{1}
+        % \end{thebibliography}
     \end{frame}
 \fi
-
-
-% \ifShowHidden
-\begin{frame}[allowframebreaks]{Reference}
-    \scriptsize
-    \beamertemplatetextbibitems
-    \bibliographystyle{hapalike}
-    \bibliography{../FruchtermanReingoldByRandomSubspace.bib}
-    % \begin{thebibliography}{1}
-    % \end{thebibliography}
-\end{frame}
-% \fi
 
 \end{document}
