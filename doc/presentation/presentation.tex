@@ -175,14 +175,40 @@
 \date{2024/11/29}
 
 \newif\ifShowHidden
-% \ShowHiddenfalse
-\ShowHiddentrue
+\ShowHiddenfalse
+% \ShowHiddentrue
 
 \begin{document}
 
 \ifShowHidden
     \maketitle
 \fi
+
+\begin{frame}
+    \begin{figure}[htbp]
+        \begin{minipage}{0.33\hsize}
+            \centering
+            \includegraphics[width=40mm]{imgs/social_graph.png}
+            \caption{
+                Social Network Graph
+                By \href{https://en.wikipedia.org/wiki/Social_graph#/media/File:Social_graph.gif}{Festys}, \href{https://creativecommons.org/licenses/by-sa/3.0}{CC BY-SA 3.0}, via Wikimedia Commons
+            }
+        \end{minipage}
+        \begin{minipage}{0.33\hsize}
+            \centering
+            \includesvg[width=\columnwidth]{imgs/High_Speed_Railroad_Map_of_Europe.svg}
+            \caption{
+                Railroad Graph
+                By \href{https://commons.wikimedia.org/wiki/File:High_Speed_Railroad_Map_of_Europe.svg}{Akwa and others},\href{https://creativecommons.org/licenses/by-sa/3.0}{CC BY-SA 3.0}, via Wikimedia Commons
+            }
+        \end{minipage}
+        \begin{minipage}{0.33\hsize}
+            \centering
+            % \includegraphics[width=40mm]{path3.png}
+            % \caption{caption3}
+        \end{minipage}
+    \end{figure}
+\end{frame}
 
 \ifShowHidden
     \begin{frame}{Introduction for Graph Drawing}
