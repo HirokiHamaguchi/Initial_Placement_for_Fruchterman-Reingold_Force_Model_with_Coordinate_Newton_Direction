@@ -8,7 +8,8 @@
 #include "util/function.hpp"
 #include "util/problem.hpp"
 
-Eigen::VectorXf solve_LBFGS(const Problem& problem, const Eigen::VectorXf& x_init) {
+std::vector<Eigen::VectorXf> solve_LBFGS(const Problem& problem,
+                                         const Eigen::VectorXf& x_init) {
   LBFGSpp::LBFGSParam<float> param;
   param.m = 10;
   param.max_iterations = 100;
@@ -19,15 +20,15 @@ Eigen::VectorXf solve_LBFGS(const Problem& problem, const Eigen::VectorXf& x_ini
   float fx;
 
   auto t0 = std::chrono::high_resolution_clock::now();
-  int niter = solver.minimize(fun, x, fx);
+  auto [niter, positions] = solver.minimize(fun, x, fx);
+  dbg(niter, fx, solver.final_grad_norm());
   auto t1 = std::chrono::high_resolution_clock::now();
 
   std::cout << "Elapsed time: "
-            << std::chrono::duration_cast<std::chrono::seconds>(t1 - t0).count()
+            << std::chrono::duration_cast<std::chrono::milliseconds>(t1 - t0).count() /
+                   1000.0
             << " seconds\n"
-            << " iterations : " << niter << "\n"
-            << "f(x) = " << fx << "\n"
-            << "||grad|| = " << solver.final_grad_norm() << std::endl;
+            << std::endl;
 
-  return x;
+  return positions;
 }

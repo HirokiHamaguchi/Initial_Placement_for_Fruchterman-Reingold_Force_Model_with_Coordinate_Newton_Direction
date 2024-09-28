@@ -14,17 +14,23 @@
 #include "dbg.h"
 
 struct Problem {
-  size_t n;                         // number of vertices
-  size_t m;                         // number of edges
-  double k;                         // constant for score calculation
-  std::vector<size_t> row;          // edge u
-  std::vector<size_t> col;          // edge v
-  std::vector<double> data;         // edge weight
-  std::string matrixName = "test";  // matrix name
+  size_t n;                  // number of vertices
+  size_t m;                  // number of edges
+  double k;                  // constant for score calculation
+  std::vector<size_t> row;   // edge u
+  std::vector<size_t> col;   // edge v
+  std::vector<double> data;  // edge weight
+  std::vector<std::vector<std::pair<size_t, double>>> adj;  // adjacency list
+  std::string matrixName = "test";                          // matrix name
 
   Problem(size_t n, size_t m, double k, std::vector<size_t> row,
           std::vector<size_t> col, std::vector<double> data)
-      : n(n), m(m), k(k), row(row), col(col), data(data) {}
+      : n(n), m(m), k(k), row(row), col(col), data(data) {
+    assert(row.size() == m);
+    assert(col.size() == m);
+    assert(data.size() == m);
+    makeAdj();
+  }
 
   Problem(const std::string matrixName) : matrixName(matrixName) {
     std::string curPath = std::filesystem::current_path().string();
@@ -94,22 +100,25 @@ struct Problem {
     }
 
     file.close();
-    k = 1 / std::sqrt(n);
 
+    k = 1 / std::sqrt(n);
+    makeAdj();
     assert(isConnected());
   }
 
-  bool isConnected() const {
-    std::vector<std::vector<size_t>> adj(n);
+  void makeAdj() {
+    adj.resize(n);
     for (size_t i = 0; i < m; ++i) {
-      adj[row[i]].push_back(col[i]);
-      adj[col[i]].push_back(row[i]);
+      adj[row[i]].emplace_back(col[i], data[i]);
+      adj[col[i]].emplace_back(row[i], data[i]);
     }
+  }
 
+  bool isConnected() const {
     std::vector<bool> visited(n, false);
     auto dfs = [&](const auto& f, size_t u) -> void {
       visited[u] = true;
-      for (size_t v : adj[u])
+      for (auto [v, _] : adj[u])
         if (!visited[v]) f(f, v);
     };
     dfs(dfs, 0);
@@ -118,7 +127,7 @@ struct Problem {
   }
 
   // positions[turn][vertex]
-  void printOutput(const Eigen::VectorXf& positions) {
+  void printOutput(const std::vector<Eigen::VectorXf>& positions) {
     std::string curPath = std::filesystem::current_path().string();
     assert(curPath.substr(curPath.size() - 8, 8) == "/src/cpp");
     std::string path =
@@ -134,10 +143,10 @@ struct Problem {
     for (size_t i = 0; i < m; ++i) {
       file << row[i] << " " << col[i] << " " << data[i] << "\n";
     }
-    file << 1 << "\n";
-    for (size_t i = 0; i < n; ++i) {
-      file << positions[2 * i] << " " << positions[2 * i + 1] << "\n";
-    }
+    file << positions.size() << "\n";
+    for (auto& position : positions)
+      for (size_t i = 0; i < n; ++i)
+        file << position[2 * i] << " " << position[2 * i + 1] << "\n";
     file.close();
 
     std::cout << "Output path:" << path << "\n";
