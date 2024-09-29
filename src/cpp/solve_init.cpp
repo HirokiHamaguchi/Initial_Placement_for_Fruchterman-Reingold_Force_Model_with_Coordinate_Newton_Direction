@@ -46,70 +46,28 @@ std::vector<Eigen::VectorXf> solve_init(const Problem& problem) {
     // move the vertex
     auto [x, y] = grid.points[i].hex2xy(problem.k);
     Hex new_v = grid.points[i];
+    int cnt = 0;
     while (grid.points[i] == new_v) {
       new_v = Hex::xy2hex(x + newton_x, y + newton_y, problem.k);
       newton_x *= 1.5;
       newton_y *= 1.5;
+      cnt++;
+      if (cnt++ >= 2) break;
     }
-    assert(grid.isInside(new_v));
-    std::vector<Hex> path = grid.linedraw(grid.points[i], new_v);
+    if (grid.points[i] != new_v) {
+      assert(grid.isInside(new_v));
+      std::vector<Hex> path = grid.linedraw(grid.points[i], new_v);
 
-    // assert(path.size() >= 2);
-    // if (path.size() == 2) {
-    //   std::vector<int> vertices;
-    //   for (auto& hex : path) {
-    //     int v = grid.array[hex.q][hex.r];
-    //     if (v != -1) vertices.push_back(v);
-    //   }
-    //   assert(std::count(vertices.begin(), vertices.end(), i) == 1);
-
-    // double scoreBefore = 0, scoreAfter = 0;
-    // for (int v : vertices) {
-    //   for (auto [u, w] : problem.adj[v]) {
-    //     auto [dx, dy] = (grid.points[v] - grid.points[u]).hex2xy(problem.k);
-    //     double d = std::hypot(dx, dy);
-    //     scoreBefore += w * std::pow(d, 3) / (3.0 * problem.k);
-    //   }
-    // }
-
-    // int& curr = grid.array[path[0].q][path[0].r];
-    // int& next = grid.array[path[1].q][path[1].r];
-    // if (next != -1)
-    //   std::swap(grid.points[curr], grid.points[next]);
-    // else
-    //   grid.points[i] = path[1];
-    // std::swap(curr, next);
-
-    // for (int v : vertices) {
-    //   for (auto [u, w] : problem.adj[v]) {
-    //     auto [dx, dy] = (grid.points[v] - grid.points[u]).hex2xy(problem.k);
-    //     double d = std::hypot(dx, dy);
-    //     scoreAfter += w * std::pow(d, 3) / (3.0 * problem.k);
-    //   }
-    // }
-
-    // if (scoreAfter > scoreBefore) {
-    //   // dbg("rollback");
-    //   std::swap(curr, next);
-    //   if (next != -1)
-    //     std::swap(grid.points[curr], grid.points[next]);
-    //   else
-    //     grid.points[i] = path[0];
-    // } else {
-    //   // dbg("move");
-    // }
-    // } else {
-    // move vertex along path
-    for (int j = 0; j < int(path.size()) - 1; ++j) {
-      int& curr = grid.array[path[j].q][path[j].r];
-      int& next = grid.array[path[j + 1].q][path[j + 1].r];
-      if (next != -1)
-        std::swap(grid.points[curr], grid.points[next]);
-      else
-        grid.points[i] = path[j + 1];
-      std::swap(curr, next);
+      for (int j = 0; j < int(path.size()) - 1; ++j) {
+        int& curr = grid.array[path[j].q][path[j].r];
+        int& next = grid.array[path[j + 1].q][path[j + 1].r];
+        if (next != -1)
+          std::swap(grid.points[curr], grid.points[next]);
+        else
+          grid.points[i] = path[j + 1];
+        std::swap(curr, next);
+      }
     }
-    // }
 
     // add hist
     if (loopCnt % (LOOP_CNT / 30) == 0) {

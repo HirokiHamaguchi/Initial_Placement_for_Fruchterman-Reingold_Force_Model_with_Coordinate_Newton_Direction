@@ -85,7 +85,7 @@ class Grid {
   // std::map<std::pair<int, int>, float> logDistStore;
 
   Grid(int n, float k) : n(n), n2(0), k(k) {
-    while (3 * n2 * n2 + 3 * n2 + 1 < n) n2++;
+    while (3 * n2 * n2 + 3 * n2 + 1 < 2 * n) n2++;
 
     for (int r = 0; r <= 2 * n2; ++r) {
       for (int q = 0; q <= 2 * n2; ++q) {
