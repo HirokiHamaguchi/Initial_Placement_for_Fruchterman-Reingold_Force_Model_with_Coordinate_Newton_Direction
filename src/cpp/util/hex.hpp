@@ -1,16 +1,21 @@
 #pragma once
 
+#include <algorithm>
 #include <cassert>
+#include <climits>
 #include <cmath>
 #include <iostream>
 #include <map>
 #include <random>
 #include <vector>
 
+#include "problem.hpp"
+
 /**
  * @brief Hex class
  * @ref https://www.redblobgames.com/grids/hexagons/
  */
+const double kCoeff = 1.0;
 class Hex {
  public:
   int q, r;
@@ -27,6 +32,7 @@ class Hex {
   bool operator!=(const Hex& other) const { return !(*this == other); }
 
   std::pair<float, float> hex2xy(float k) const {
+    k *= kCoeff;
     return {k * (q + r / 2.0), k * (r * std::sqrt(3) / 2.0)};
   }
 
@@ -40,6 +46,7 @@ class Hex {
   }
 
   static Hex xy2hex(float x, float y, float k) {
+    k *= kCoeff;
     float r = y * 2.0 / (k * std::sqrt(3));
     float q = x / k - r / 2.0;
     return Hex::round(q, r, -q - r);
@@ -78,22 +85,23 @@ class Grid {
  public:
   int n;   // number of vertices
   int n2;  // length of the side of the hexagon
-  float k;
+  double k;
+  double k2;
   std::vector<Hex> points;
   std::vector<std::vector<int>> array;
-  std::vector<std::tuple<double, double, double, double, double>> distStore;
-  // std::map<std::pair<int, int>, float> logDistStore;
 
-  Grid(int n, float k) : n(n), n2(0), k(k) {
-    while (3 * n2 * n2 + 3 * n2 + 1 < 2 * n) n2++;
+  Grid(int n, double k) : n(n), n2(0), k(k) {
+    k2 = std::pow(k, 2);
 
+    int hexSize = 2 * n;
+    while (3 * n2 * n2 + 3 * n2 + 1 < hexSize) n2++;
     for (int r = 0; r <= 2 * n2; ++r) {
       for (int q = 0; q <= 2 * n2; ++q) {
         if (r + q < n2 || r + q > 3 * n2) continue;
         points.emplace_back(q, r);
       }
     }
-    assert(int(points.size()) >= n);
+    assert(int(points.size()) >= hexSize);
 
     std::mt19937 g(0);
     std::shuffle(points.begin(), points.end(), g);
@@ -101,16 +109,6 @@ class Grid {
 
     array.resize(2 * n2 + 1, std::vector<int>(2 * n2 + 1, -1));
     for (size_t i = 0; i < points.size(); ++i) array[points[i].q][points[i].r] = i;
-
-    distStore.resize(400);
-    for (int q = -10; q < 10; ++q) {
-      for (int r = -10; r < 10; ++r) {
-        distStore[20 * (q + 10) + (r + 10)] = calc_grad_hess<true>(q, r, 1.0);
-        // logDistStore[20 * (q + 10) + (r + 10)] =
-        //     (q == 0 && r == 0) ? std::numeric_limits<float>::infinity()
-        //                        : std::log(distStore[{q, r}].second);
-      }
-    }
   }
 
   bool isCorrectState() const {
@@ -119,24 +117,29 @@ class Grid {
     return true;
   }
 
-  template <bool init = false>
   std::tuple<double, double, double, double, double> calc_grad_hess(int dq, int dr,
                                                                     double w) const {
-    if (!init && abs(dq) < 10 && abs(dr) < 10) {
-      auto [gx, gy, hxx, hxy, hyy] = distStore[20 * (dq + 10) + (dr + 10)];
-      return {w * gx, w * gy, w * hxx, w * hxy, w * hyy};
-    } else {
-      auto delta = Hex(dq, dr).hex2xy(k);
-      double dist = std::hypot(delta.first, delta.second);
-      double coeff1 = dist / k;
-      double coeff2 = 1 / (dist * k);
-      double gx = coeff1 * delta.first;
-      double gy = coeff1 * delta.second;
-      double hxx = coeff1 + coeff2 * delta.first * delta.first;
-      double hxy = coeff2 * delta.first * delta.second;
-      double hyy = coeff1 + coeff2 * delta.second * delta.second;
-      return {w * gx, w * gy, w * hxx, w * hxy, w * hyy};
-    }
+    auto delta = Hex(dq, dr).hex2xy(k);
+    double dist = std::hypot(delta.first, delta.second);
+    assert(dist > 1e-9);
+
+    // * Method 1: only use attractive force
+    double coeff1 = w * dist / k;
+    double coeff2 = w / (dist * k);
+
+    // * Method 2: use both attractive and repulsive forces
+    // double d2 = std::pow(dist, 2);
+    // double d4 = std::pow(d2, 2);
+    // double coeff1 = w * dist / k - k2 / d2;
+    // double coeff2 = w / (dist * k) + 2 * k2 / d4;
+
+    double gx = coeff1 * delta.first;
+    double gy = coeff1 * delta.second;
+    double hxx = coeff1 + coeff2 * delta.first * delta.first;
+    double hxy = coeff2 * delta.first * delta.second;
+    double hyy = coeff1 + coeff2 * delta.second * delta.second;
+
+    return {gx, gy, hxx, hxy, hyy};
   }
 
   bool isInside(const Hex& hex) const {
@@ -153,8 +156,6 @@ class Grid {
     for (int i = 0; i <= N; ++i)
       results.push_back(Hex::lerp(a_nudge_q, a_nudge_r, a_nudge_s, b_nudge_q, b_nudge_r,
                                   b_nudge_s, step * i));
-    assert(std::all_of(results.begin(), results.end(),
-                       [this](const Hex& hex) { return isInside(hex); }));
     return results;
   }
 
@@ -184,5 +185,13 @@ class Grid {
     }
 
     return score;
+  }
+
+  Eigen::VectorXf toPosition() const {
+    assert(isCorrectState());
+    Eigen::VectorXf position(2 * n);
+    for (int i = 0; i < n; ++i)
+      std::tie(position[2 * i], position[2 * i + 1]) = points[i].hex2xy(k);
+    return position;
   }
 };

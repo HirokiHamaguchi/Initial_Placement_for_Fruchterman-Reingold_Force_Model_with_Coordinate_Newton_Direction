@@ -72,7 +72,8 @@ class LBFGSSolver {
   /// \return Number of iterations used and the history of the iterates.
   ///
   template <typename Foo>
-  inline std::pair<int, std::vector<Vector>> minimize(Foo& f, Vector& x, Scalar& fx) {
+  inline std::pair<int, std::vector<Vector>> minimize(Foo& f, Vector& x, Scalar& fx,
+                                                      const bool measureTime) {
     using std::abs;
 
     // Dimension of the vector
@@ -91,9 +92,13 @@ class LBFGSSolver {
     // std::cout << "f(x0) = " << fx << ", ||grad|| = " << m_gnorm << std::endl <<
     // std::endl;
 
+    // history of the objective function values
+    std::vector<Vector> hist;
+
     // Early exit if the initial x is already a minimizer
     if (m_gnorm <= m_param.epsilon || m_gnorm <= m_param.epsilon_rel * x.norm()) {
-      return {1, {}};
+      hist.push_back(x);
+      return {1, hist};
     }
 
     // Initial direction
@@ -104,14 +109,12 @@ class LBFGSSolver {
     constexpr Scalar eps = std::numeric_limits<Scalar>::epsilon();
     // s and y vectors
     Vector vecs(n), vecy(n);
-    // history of the objective function values
-    std::vector<Vector> hist;
 
     // Number of iterations used
     int k = 1;
     for (;;) {
       // std::cout << "Iter " << k << " begins" << std::endl << std::endl;
-      if (k % 10 == 1) hist.push_back(x);
+      if (!measureTime && k % 10 == 1) hist.push_back(x);
 
       // Save the curent x and gradient
       m_xp.noalias() = x;
@@ -133,6 +136,7 @@ class LBFGSSolver {
 
       // Convergence test -- gradient
       if (m_gnorm <= m_param.epsilon || m_gnorm <= m_param.epsilon_rel * x.norm()) {
+        hist.push_back(x);
         return {k, hist};
       }
       // Convergence test -- objective function value
@@ -140,13 +144,16 @@ class LBFGSSolver {
         const Scalar fxd = m_fx[k % fpast];
         if (k >= fpast &&
             abs(fxd - fx) <=
-                m_param.delta * std::max(std::max(abs(fx), abs(fxd)), Scalar(1)))
+                m_param.delta * std::max(std::max(abs(fx), abs(fxd)), Scalar(1))) {
+          hist.push_back(x);
           return {k, hist};
+        }
 
         m_fx[k % fpast] = fx;
       }
       // Maximum number of iterations
       if (m_param.max_iterations != 0 && k >= m_param.max_iterations) {
+        hist.push_back(x);
         return {k, hist};
       }
 
@@ -165,7 +172,7 @@ class LBFGSSolver {
       k++;
     }
 
-    return {k, hist};
+    assert(false);
   }
 
   ///
