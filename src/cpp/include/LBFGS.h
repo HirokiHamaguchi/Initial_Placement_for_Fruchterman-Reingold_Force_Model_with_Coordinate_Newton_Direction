@@ -6,6 +6,7 @@
 
 // clang-format off
 #include <Eigen/Core>
+#include <iostream>
 #include "LBFGSpp/Param.h"
 #include "LBFGSpp/BFGSMat.h"
 #include "LBFGSpp/LineSearchBacktracking.h"
@@ -112,8 +113,10 @@ class LBFGSSolver {
 
     // Number of iterations used
     int k = 1;
+    const char* clear_line = "\33[2K";   // 現在の行をクリア
+    const char* move_cursor = "\33[1G";  // カーソルを行の先頭に移動
     for (;;) {
-      // std::cout << "Iter " << k << " begins" << std::endl << std::endl;
+      std::cerr << clear_line << move_cursor << "Iter: " << k << std::flush;
       if (!measureTime && k % 10 == 1) hist.push_back(x);
 
       // Save the curent x and gradient
@@ -137,6 +140,7 @@ class LBFGSSolver {
       // Convergence test -- gradient
       if (m_gnorm <= m_param.epsilon || m_gnorm <= m_param.epsilon_rel * x.norm()) {
         hist.push_back(x);
+        std::cerr << clear_line << move_cursor << std::flush;
         return {k, hist};
       }
       // Convergence test -- objective function value
@@ -146,6 +150,7 @@ class LBFGSSolver {
             abs(fxd - fx) <=
                 m_param.delta * std::max(std::max(abs(fx), abs(fxd)), Scalar(1))) {
           hist.push_back(x);
+          std::cerr << clear_line << move_cursor << std::flush;
           return {k, hist};
         }
 
@@ -154,6 +159,7 @@ class LBFGSSolver {
       // Maximum number of iterations
       if (m_param.max_iterations != 0 && k >= m_param.max_iterations) {
         hist.push_back(x);
+        std::cerr << clear_line << move_cursor << std::flush;
         return {k, hist};
       }
 

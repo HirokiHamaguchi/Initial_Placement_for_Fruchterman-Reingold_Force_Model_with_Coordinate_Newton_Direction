@@ -15,7 +15,6 @@
  * @brief Hex class
  * @ref https://www.redblobgames.com/grids/hexagons/
  */
-const double kCoeff = 1.0;
 class Hex {
  public:
   int q, r;
@@ -31,11 +30,6 @@ class Hex {
 
   bool operator!=(const Hex& other) const { return !(*this == other); }
 
-  std::pair<float, float> hex2xy(float k) const {
-    k *= kCoeff;
-    return {k * (q + r / 2.0), k * (r * std::sqrt(3) / 2.0)};
-  }
-
   int length() const { return (std::abs(q) + std::abs(r) + std::abs(-q - r)) / 2; }
 
   int distance(const Hex& other) const { return (*this - other).length(); }
@@ -43,13 +37,6 @@ class Hex {
   friend std::ostream& operator<<(std::ostream& os, const Hex& hex) {
     os << "Hex(" << hex.q << ", " << hex.r << ")";
     return os;
-  }
-
-  static Hex xy2hex(float x, float y, float k) {
-    k *= kCoeff;
-    float r = y * 2.0 / (k * std::sqrt(3));
-    float q = x / k - r / 2.0;
-    return Hex::round(q, r, -q - r);
   }
 
   static Hex round(float q, float r, float s) {
@@ -81,18 +68,19 @@ class Hex {
   }
 };
 
-class Grid {
- public:
+struct Grid {
   int n;   // number of vertices
   int n2;  // length of the side of the hexagon
   double k;
-  double k2;
   std::vector<Hex> points;
   std::vector<std::vector<int>> array;
 
-  Grid(int n, double k) : n(n), n2(0), k(k) {
-    k2 = std::pow(k, 2);
+ private:
+  double k2;
+  double kForHex;
 
+ public:
+  Grid(int n, double k) : n(n), n2(0), k(k), k2(std::pow(k, 2)), kForHex(k) {
     int hexSize = 2 * n;
     while (3 * n2 * n2 + 3 * n2 + 1 < hexSize) n2++;
     for (int r = 0; r <= 2 * n2; ++r) {
@@ -111,15 +99,32 @@ class Grid {
     for (size_t i = 0; i < points.size(); ++i) array[points[i].q][points[i].r] = i;
   }
 
+  void setKForHex(double kForHex) { this->kForHex = kForHex; }
+
+  inline bool isInside(const Hex& hex) const {
+    return 0 <= hex.q && hex.q < 2 * n2 + 1 && 0 <= hex.r && hex.r < 2 * n2 + 1;
+  }
+  inline std::pair<float, float> hex2xy(double q, double r) const {
+    return {kForHex * (q + r / 2.0), kForHex * (r * std::sqrt(3) / 2.0)};
+  }
+  inline std::pair<float, float> hex2xy(int i) const {
+    return hex2xy(points[i].q, points[i].r);
+  }
+  Hex xy2hex(float x, float y) {
+    float r = y * 2.0 / (kForHex * std::sqrt(3));
+    float q = x / kForHex - r / 2.0;
+    return Hex::round(q, r, -q - r);
+  }
+
   bool isCorrectState() const {
     for (size_t i = 0; i < points.size(); ++i)
       if (array[points[i].q][points[i].r] != int(i)) return false;
     return true;
   }
 
-  std::tuple<double, double, double, double, double> calc_grad_hess(int dq, int dr,
-                                                                    double w) const {
-    auto delta = Hex(dq, dr).hex2xy(k);
+  void calc_grad_hess(int dq, int dr, double w, double& gx, double& gy, double& hxx,
+                      double& hxy, double& hyy) const {
+    auto delta = hex2xy(dq, dr);
     double dist = std::hypot(delta.first, delta.second);
     assert(dist > 1e-9);
 
@@ -133,17 +138,11 @@ class Grid {
     // double coeff1 = w * dist / k - k2 / d2;
     // double coeff2 = w / (dist * k) + 2 * k2 / d4;
 
-    double gx = coeff1 * delta.first;
-    double gy = coeff1 * delta.second;
-    double hxx = coeff1 + coeff2 * delta.first * delta.first;
-    double hxy = coeff2 * delta.first * delta.second;
-    double hyy = coeff1 + coeff2 * delta.second * delta.second;
-
-    return {gx, gy, hxx, hxy, hyy};
-  }
-
-  bool isInside(const Hex& hex) const {
-    return 0 <= hex.q && hex.q < 2 * n2 + 1 && 0 <= hex.r && hex.r < 2 * n2 + 1;
+    gx += coeff1 * delta.first;
+    gy += coeff1 * delta.second;
+    hxx += coeff1 + coeff2 * delta.first * delta.first;
+    hxy += coeff2 * delta.first * delta.second;
+    hyy += coeff1 + coeff2 * delta.second * delta.second;
   }
 
   std::vector<Hex> linedraw(const Hex& a, const Hex& b) const {
@@ -166,7 +165,8 @@ class Grid {
       double k2 = std::pow(k, 2);
       for (size_t u = 0; u < problem.n; ++u) {
         for (size_t v = u + 1; v < problem.n; ++v) {
-          auto [dx, dy] = (points[u] - points[v]).hex2xy(k);
+          Hex hex = points[u] - points[v];
+          auto [dx, dy] = hex2xy(hex.q, hex.r);
           double d = std::hypot(dx, dy);
           assert(d > 1e-9);
           score -= k2 * std::log(d);
@@ -179,7 +179,8 @@ class Grid {
       size_t v = problem.col[i];
       assert(u < v);
       double w = problem.data[i];
-      auto [dx, dy] = (points[u] - points[v]).hex2xy(k);
+      Hex hex = points[u] - points[v];
+      auto [dx, dy] = hex2xy(hex.q, hex.r);
       double d = std::hypot(dx, dy);
       score += w * std::pow(d, 3) / (3.0 * problem.k);
     }
@@ -187,11 +188,33 @@ class Grid {
     return score;
   }
 
+  double computeKForHex(const Problem& problem) {
+    // Minimize_x x^3 score_a - k^2 n(n-1) \log(x)
+    // where score_a = \sum_{i < j} w_{ij} d_{ij}^3 / (3k)
+    double score_a = calcScore(problem, false);
+    double coeff_r = std::pow(k, 2) * n * (n - 1);
+
+    // Minimize f(x) = x^3 score_a - coeff_r \log(x) : convex
+    // f'(x) = 3x^2 score_a - coeff_r / x
+    // f''(x) = 6x score_a + coeff_r / x^2
+    double x = 1.0;
+    for (int iter = 0; iter < 10; ++iter) {
+      double df = 3 * std::pow(x, 2) * score_a - coeff_r / x;
+      double ddf = 6 * x * score_a + coeff_r / std::pow(x, 2);
+      double dx = df / ddf;
+      if (std::abs(dx) < 1e-9) break;
+      x -= dx;
+    }
+    dbg(x);
+    setKForHex(kForHex * x);
+    return kForHex * x;
+  }
+
   Eigen::VectorXf toPosition() const {
     assert(isCorrectState());
     Eigen::VectorXf position(2 * n);
     for (int i = 0; i < n; ++i)
-      std::tie(position[2 * i], position[2 * i + 1]) = points[i].hex2xy(k);
+      std::tie(position[2 * i], position[2 * i + 1]) = hex2xy(i);
     return position;
   }
 };
