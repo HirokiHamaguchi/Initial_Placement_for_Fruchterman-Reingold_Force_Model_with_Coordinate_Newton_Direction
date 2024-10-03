@@ -117,7 +117,7 @@ class LBFGSSolver {
     const char* move_cursor = "\33[1G";  // カーソルを行の先頭に移動
     for (;;) {
       std::cerr << clear_line << move_cursor << "Iter: " << k << std::flush;
-      if (!measureTime && k % 10 == 1) hist.push_back(x);
+      if (!measureTime) hist.push_back(x);
 
       // Save the curent x and gradient
       m_xp.noalias() = x;

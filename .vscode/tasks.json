@@ -15,10 +15,10 @@
         "-Wextra",
         "-Wfatal-errors",
         "-fdiagnostics-color=always",
-        "-D_GLIBCXX_DEBUG",
+        // "-D_GLIBCXX_DEBUG",
         "-I/usr/include/eigen3",
         "-I${workspaceFolder}/src/cpp/include",
-        // "-O2",
+        "-O2",
         // "-O3",
         "-DDBG_MACRO_NO_WARNING"
       ],

@@ -15,11 +15,13 @@
 #include "util/problem.hpp"
 
 std::vector<Eigen::VectorXf> solve_FR(const Problem& problem,
-                                      const Eigen::VectorXf& _pos, int iterations,
-                                      double threshold) {
+                                      const Eigen::VectorXf& _pos,
+                                      const bool measureTime) {
   std::vector<Eigen::VectorXf> positions;
   size_t nnodes = problem.n;
   size_t dim = 2;
+  int iterations = 100;
+  double threshold = 1e-3;
   Eigen::MatrixXf pos = Eigen::Map<const Eigen::MatrixXf>(_pos.data(), dim, nnodes);
 
   const double k = std::sqrt(1.0 / nnodes);
@@ -51,7 +53,7 @@ std::vector<Eigen::VectorXf> solve_FR(const Problem& problem,
     pos += delta_pos;
     t -= dt;
     if (delta_pos.norm() / nnodes < threshold) break;
-    if (iteration % 10 == 0)
+    if (!measureTime && iteration % 10 == 0)
       positions.push_back(Eigen::Map<Eigen::VectorXf>(pos.data(), pos.size()));
   }
 

@@ -126,7 +126,54 @@ struct Problem {
     return std::all_of(visited.begin(), visited.end(), [](bool v) { return v; });
   }
 
-  // positions[turn][vertex]
+  double calcScore(const Eigen::VectorXf& position,
+                   bool includeRepulsive = true) const {
+    double score = 0.0;
+
+    if (includeRepulsive) {
+      double k2 = std::pow(k, 2);
+      for (size_t u = 0; u < n; ++u) {
+        for (size_t v = u + 1; v < n; ++v) {
+          double d = (position.segment<2>(2 * u) - position.segment<2>(2 * v)).norm();
+          assert(d > 1e-9);
+          score -= k2 * std::log(d);
+        }
+      }
+    }
+
+    for (size_t i = 0; i < m; ++i) {
+      size_t u = row[i];
+      size_t v = col[i];
+      assert(u < v);
+      double w = data[i];
+      double d = (position.segment<2>(2 * u) - position.segment<2>(2 * v)).norm();
+      score += w * std::pow(d, 3) / (3.0 * k);
+    }
+
+    return score;
+  }
+
+  void optimalScaling(Eigen::VectorXf& position) const {
+    // Minimize_x x^3 score_a - k^2 n(n-1) \log(x)
+    // where score_a = \sum_{i < j} w_{ij} d_{ij}^3 / (3k)
+    double score_a = calcScore(position, false);
+    double coeff_r = std::pow(k, 2) * n * (n - 1);
+
+    // Minimize f(x) = x^3 score_a - coeff_r \log(x) : convex
+    // f'(x) = 3x^2 score_a - coeff_r / x
+    // f''(x) = 6x score_a + coeff_r / x^2
+    double x = 1.0;
+    for (int iter = 0; iter < 10; ++iter) {
+      double df = 3 * std::pow(x, 2) * score_a - coeff_r / x;
+      double ddf = 6 * x * score_a + coeff_r / std::pow(x, 2);
+      double dx = df / ddf;
+      if (std::abs(dx) < 1e-9) break;
+      x -= dx;
+    }
+
+    position *= x;
+  }
+
   void printOutput(const std::vector<Eigen::VectorXf>& positions) {
     std::string curPath = std::filesystem::current_path().string();
     assert(curPath.substr(curPath.size() - 8, 8) == "/src/cpp");
