@@ -30,18 +30,7 @@ std::pair<double, double> computeDxDy(double gx, double gy, double hxx, double h
     double newton_x = inv_det * (-hyy * gx + hxy * gy);
     double newton_y = inv_det * (-hxx * gy + hxy * gx);
     return {newton_x, newton_y};
-  } else if (lambda1 > 0 || lambda2 > 0) {
-    // indefinite (saddle point)
-    // double norm = std::hypot(gx, gy);
-    // double coeff = 0;
-    // return {-gx * coeff, -gy * coeff};
-    return {0, 0};
   } else {
-    // negative definite (concave quadratic)
-    // dbg(lambda1, lambda2);
-    // double norm = std::hypot(gx, gy);
-    // double coeff = 0;
-    // return {-gx * coeff, -gy * coeff};
-    return {0, 0};
+    assert(false);
   }
 }

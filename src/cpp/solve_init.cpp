@@ -18,14 +18,14 @@ void addHist(int loopCnt, const int LOOP_CNT, const bool measureTime, Grid& grid
   if (loopCnt % (LOOP_CNT / 20) == 0) positions.push_back(grid.toPosition());
 }
 
-std::vector<Eigen::VectorXf> solve_init(const Problem& problem,
-                                        const bool measureTime) {
+std::vector<Eigen::VectorXf> solve_init(const Problem& problem, const bool measureTime,
+                                        const int seed) {
   auto t0 = std::chrono::high_resolution_clock::now();
 
   Grid grid(problem.n, problem.k);
   std::vector<Eigen::VectorXf> positions = {grid.toPosition()};
 
-  std::mt19937 gen(0);
+  std::mt19937 gen(seed);
   std::uniform_int_distribution<int> dist(0, problem.n - 1);
   const int LOOP_CNT = problem.n * 100;
   size_t fail = 0;
@@ -50,13 +50,21 @@ std::vector<Eigen::VectorXf> solve_init(const Problem& problem,
     Hex new_v = grid.xy2hex(x + dx, y + dy);
     if (grid.points[i] == new_v) {
       addHist(loopCnt, LOOP_CNT, measureTime, grid, positions);
+      fail++;
+      if (fail >= problem.n) {
+        std::cerr << "Early stop (fail = " << fail << ")" << std::endl;
+        break;
+      }
       continue;
     }
 
     // update along path
     bool isSucceed = grid.updateAlongPath(problem, i, new_v);
     fail = (isSucceed ? 0 : fail + 1);
-    if (fail >= problem.n) break;
+    if (fail >= problem.n) {
+      std::cerr << "Early stop (fail = " << fail << ")" << std::endl;
+      break;
+    }
 
     addHist(loopCnt, LOOP_CNT, measureTime, grid, positions);
   }

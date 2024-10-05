@@ -23,6 +23,7 @@ struct Problem {
   std::vector<std::vector<std::pair<size_t, double>>> adj;  // adjacency list
   std::string matrixName = "test";                          // matrix name
 
+  Problem() : n(0), m(0), k(0.0) {}
   Problem(size_t n, size_t m, double k, std::vector<size_t> row,
           std::vector<size_t> col, std::vector<double> data)
       : n(n), m(m), k(k), row(row), col(col), data(data) {

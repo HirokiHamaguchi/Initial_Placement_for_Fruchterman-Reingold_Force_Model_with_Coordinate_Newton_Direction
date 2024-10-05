@@ -101,12 +101,13 @@ struct Grid {
       double scoreAfter = calcScoreForVertices(problem, vertices);
 
       if (scoreAfter > scoreBefore) {
-        std::swap(curr, next);
-        if (next != -1)
-          std::swap(points[curr], points[next]);
-        else
-          points[i] = path[0];
-        return false;
+        // std::swap(curr, next);
+        // if (next != -1)
+        //   std::swap(points[curr], points[next]);
+        // else
+        //   points[i] = path[0];
+        // return false;
+        return true;
       } else {
         return true;
       }
