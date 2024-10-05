@@ -135,6 +135,7 @@
         "Polak",
         "popleft",
         "randn",
+        "Raphson",
         "Reingold",
         "Ribiere",
         "Rosenbrock",
