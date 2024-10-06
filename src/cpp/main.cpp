@@ -40,7 +40,7 @@ int main(int argc, char* argv[]) {
   bool measureTime;
   if (argc == 1) {
     problem = Problem("jagmesh1");
-    measureTime = true;
+    measureTime = false;
   } else if (argc == 3) {
     std::string problemStr = argv[1];
     std::string measureTimeStr = argv[2];
@@ -68,7 +68,7 @@ int main(int argc, char* argv[]) {
         auto t1 = std::chrono::high_resolution_clock::now();
         double elapsedTime = std::chrono::duration<double>(t1 - t0).count();
         std::cout << "Elapsed time: " << elapsedTime << " seconds" << std::endl;
-        time += elapsedTime, score += problem.calcScore(positions.back());
+        time += elapsedTime, score += problem.calcScore(newPositions.back());
         if (positions.empty()) positions = newPositions;
       }
       time /= nTrials, score /= nTrials;

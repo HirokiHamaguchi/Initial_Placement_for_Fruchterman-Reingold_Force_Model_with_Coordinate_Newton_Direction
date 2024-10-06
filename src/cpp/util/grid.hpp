@@ -74,55 +74,21 @@ struct Grid {
     hyy += coeff1 + coeff2 * delta.second * delta.second;
   }
 
-  bool updateAlongPath(const Problem& problem, int i, const Hex& new_v) {
+  void updateAlongPath(int i, const Hex& new_v) {
     std::vector<Hex> path;
     for (auto& hex : linedraw(points[i], new_v))
       if (isInside(hex)) path.push_back(hex);
-    assert(std::all_of(path.begin(), path.end(),
-                       [&](const Hex& hex) { return isInside(hex); }));
-
     assert(path.size() >= 2);
-    if (path.size() == 2) {
-      std::vector<int> vertices;
-      for (auto& hex : path) {
-        int v = array[hex.q][hex.r];
-        if (v != -1) vertices.push_back(v);
-      }
-      assert(std::count(vertices.begin(), vertices.end(), i) == 1);
 
-      double scoreBefore = calcScoreForVertices(problem, vertices);
-      int& curr = array[path[0].q][path[0].r];
-      int& next = array[path[1].q][path[1].r];
+    // move vertex along path
+    for (int j = 0; j < int(path.size()) - 1; ++j) {
+      int& curr = array[path[j].q][path[j].r];
+      int& next = array[path[j + 1].q][path[j + 1].r];
       if (next != -1)
         std::swap(points[curr], points[next]);
       else
-        points[i] = path[1];
+        points[i] = path[j + 1];
       std::swap(curr, next);
-      double scoreAfter = calcScoreForVertices(problem, vertices);
-
-      if (scoreAfter > scoreBefore) {
-        // std::swap(curr, next);
-        // if (next != -1)
-        //   std::swap(points[curr], points[next]);
-        // else
-        //   points[i] = path[0];
-        // return false;
-        return true;
-      } else {
-        return true;
-      }
-    } else {
-      // move vertex along path
-      for (int j = 0; j < int(path.size()) - 1; ++j) {
-        int& curr = array[path[j].q][path[j].r];
-        int& next = array[path[j + 1].q][path[j + 1].r];
-        if (next != -1)
-          std::swap(points[curr], points[next]);
-        else
-          points[i] = path[j + 1];
-        std::swap(curr, next);
-      }
-      return true;
     }
   }
 
@@ -153,22 +119,6 @@ struct Grid {
       results.push_back(Hex::lerp(a_nudge_q, a_nudge_r, a_nudge_s, b_nudge_q, b_nudge_r,
                                   b_nudge_s, step * i));
     return results;
-  }
-
-  // * Only For updateAlongPath
-  double calcScoreForVertices(const Problem& problem,
-                              const std::vector<int>& vertices) {
-    double score = 0;
-    for (int v : vertices) {
-      for (auto [u, w] : problem.adj[v]) {
-        double dq = points[v].q - points[u].q;
-        double dr = points[v].r - points[u].r;
-        auto [dx, dy] = hex2xy(dq, dr);
-        double d = std::hypot(dx, dy);
-        score += w * std::pow(d, 3) / (3.0 * problem.k);
-      }
-    }
-    return score;
   }
 
   // * For Util

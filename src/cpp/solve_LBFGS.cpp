@@ -13,7 +13,7 @@ std::vector<Eigen::VectorXf> solve_LBFGS(const Problem& problem,
                                          const bool measureTime) {
   LBFGSpp::LBFGSParam<float> param;
   param.m = 10;
-  param.max_iterations = 50;
+  param.max_iterations = 60;
   param.epsilon_rel = 1e-3;
   LBFGSpp::LBFGSSolver<float> solver(param);
 

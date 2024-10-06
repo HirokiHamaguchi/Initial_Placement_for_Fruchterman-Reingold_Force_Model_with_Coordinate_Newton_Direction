@@ -27,7 +27,7 @@ std::vector<Eigen::VectorXf> solve_init(const Problem& problem, const bool measu
 
   std::mt19937 gen(seed);
   std::uniform_int_distribution<int> dist(0, problem.n - 1);
-  const int LOOP_CNT = problem.n * 100;
+  const int LOOP_CNT = problem.n * 200;
   size_t fail = 0;
   for (int loopCnt = 0; loopCnt < LOOP_CNT; loopCnt++) {
     // randomly select a vertex
@@ -59,13 +59,9 @@ std::vector<Eigen::VectorXf> solve_init(const Problem& problem, const bool measu
     }
 
     // update along path
-    bool isSucceed = grid.updateAlongPath(problem, i, new_v);
-    fail = (isSucceed ? 0 : fail + 1);
-    if (fail >= problem.n) {
-      std::cerr << "Early stop (fail = " << fail << ")" << std::endl;
-      break;
-    }
+    grid.updateAlongPath(i, new_v);
 
+    fail = 0;
     addHist(loopCnt, LOOP_CNT, measureTime, grid, positions);
   }
   positions.push_back(grid.toPosition());

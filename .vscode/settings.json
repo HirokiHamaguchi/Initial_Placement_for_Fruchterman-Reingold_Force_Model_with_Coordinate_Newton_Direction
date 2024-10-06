@@ -86,6 +86,7 @@
         "astype",
         "BFGS",
         "Broyden",
+        "circulant",
         "colwise",
         "deltak",
         "disp",
