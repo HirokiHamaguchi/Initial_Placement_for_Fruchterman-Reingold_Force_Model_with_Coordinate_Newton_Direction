@@ -2,6 +2,7 @@
 #include "solve_FR.cpp"
 #include "solve_LBFGS.cpp"
 #include "solve_init.cpp"
+#include "solve_init2.cpp"
 #include "util/function.hpp"
 #include "util/problem.hpp"
 
@@ -40,7 +41,7 @@ int main(int argc, char* argv[]) {
   bool measureTime;
   if (argc == 1) {
     problem = Problem("jagmesh1");
-    measureTime = false;
+    measureTime = true;
   } else if (argc == 3) {
     std::string problemStr = argv[1];
     std::string measureTimeStr = argv[2];
@@ -56,8 +57,8 @@ int main(int argc, char* argv[]) {
   }
 
   if (measureTime) {
-    // Solve by each method
     for (auto& method : {L_BFGS, RS_L_BFGS}) {
+      // Solve by each method
       double time = 0.0;
       double score = 0.0;
       std::vector<Eigen::VectorXf> positions;
