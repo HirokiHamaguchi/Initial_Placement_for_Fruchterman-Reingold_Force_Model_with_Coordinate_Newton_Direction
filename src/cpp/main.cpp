@@ -17,7 +17,7 @@ std::vector<Eigen::VectorXf> main_sub(const Method method, const Problem& proble
                                       const bool measureTime, const int seed) {
   std::vector<Eigen::VectorXf> positions;
   if (method == RS_FR || method == RS_L_BFGS) {
-    positions = solve_init(problem, measureTime, seed);
+    positions = solve_init2(problem, measureTime, seed);
   } else {
     std::srand(0);
     Eigen::VectorXf position = Eigen::VectorXf::Random(2 * problem.n);
@@ -41,7 +41,7 @@ int main(int argc, char* argv[]) {
   bool measureTime;
   if (argc == 1) {
     problem = Problem("jagmesh1");
-    measureTime = true;
+    measureTime = false;
   } else if (argc == 3) {
     std::string problemStr = argv[1];
     std::string measureTimeStr = argv[2];

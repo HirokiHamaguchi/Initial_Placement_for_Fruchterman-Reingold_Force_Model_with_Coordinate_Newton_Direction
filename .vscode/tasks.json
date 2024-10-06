@@ -20,7 +20,8 @@
         "-I${workspaceFolder}/src/cpp/include",
         "-O2",
         // "-O3",
-        "-DDBG_MACRO_NO_WARNING"
+        "-DDBG_MACRO_NO_WARNING",
+        "-I/home/hari64boli64/ac-library-master"
       ],
       "options": {
         "cwd": "${fileDirname}"
