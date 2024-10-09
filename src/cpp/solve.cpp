@@ -4,6 +4,7 @@
 #include "solve_init.cpp"
 #include "util/function.hpp"
 #include "util/problem.hpp"
+#include "util/timer.hpp"
 
 enum Method {
   FR,         // Fruchterman-Reingold method
@@ -14,32 +15,33 @@ enum Method {
 
 std::string MethodStr[4] = {"FR", "L_BFGS", "RS_FR", "RS_L_BFGS"};
 
-std::tuple<std::vector<double>, std::vector<Eigen::VectorXf>, double> solve(
+std::pair<std::vector<std::pair<double, double>>, std::vector<Eigen::VectorXf>> solve(
     const Method method, const Problem& problem, const bool measureTime,
     const int seed) {
-  std::vector<double> hist;
+  std::vector<std::pair<double, double>> hist;
   std::vector<Eigen::VectorXf> positions;
 
-  auto t0 = std::chrono::high_resolution_clock::now();
+  Timer timer;
+
   if (method == RS_FR || method == RS_L_BFGS) {
-    positions = solve_init(problem, measureTime, seed);
+    solve_init(problem, measureTime, seed, positions, hist, timer);
   } else {
+    timer.start();
     std::srand(0);
     Eigen::VectorXf position = Eigen::VectorXf::Random(2 * problem.n);
     for (int i = 0; i < position.size(); ++i) position[i] = std::abs(position[i]);
     positions.push_back(position);
+    timer.stop();
   }
+
   std::vector<Eigen::VectorXf> positions2;
   if (method == L_BFGS || method == RS_L_BFGS) {
-    std::tie(hist, positions2) = solve_LBFGS<FunctionFR>(problem, positions.back());
+    solve_LBFGS<FunctionFR>(problem, positions, hist, timer);
   } else if (method == FR || method == RS_FR) {
-    positions2 = solve_FR(problem, positions.back());
+    solve_FR(problem, positions, hist, timer);
   }
-  auto t1 = std::chrono::high_resolution_clock::now();
-  double elapsedTime = std::chrono::duration<double>(t1 - t0).count();
 
-  if (method == FR || method == RS_FR)
-    for (auto& pos : positions2) hist.push_back(problem.calcScore(pos));
-  positions.insert(positions.end(), positions2.begin(), positions2.end());
-  return {hist, positions, elapsedTime};
+  assert(!timer.isMeasuring);
+
+  return {hist, positions};
 }

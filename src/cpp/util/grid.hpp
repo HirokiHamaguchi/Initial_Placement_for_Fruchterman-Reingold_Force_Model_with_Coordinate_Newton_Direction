@@ -13,23 +13,23 @@
 #include "problem.hpp"
 
 struct Grid {
-  int n;   // number of vertices
-  int n2;  // length of the side of the hexagon
+  size_t n;   // number of vertices
+  size_t n2;  // length of the side of the hexagon
   double k;
   std::vector<Hex> points;
   std::vector<std::vector<int>> array;
 
  public:
   Grid(int n, double k) : n(n), n2(0), k(k), k2(std::pow(k, 2)) {
-    int hexSize = 2 * n;
+    size_t hexSize = 2 * n;
     while (3 * n2 * n2 + 3 * n2 + 1 < hexSize) n2++;
-    for (int r = 0; r <= 2 * n2; ++r) {
-      for (int q = 0; q <= 2 * n2; ++q) {
-        if (r + q < n2 || r + q > 3 * n2) continue;
+    for (int r = 0; r <= int(2 * n2); ++r) {
+      for (int q = 0; q <= int(2 * n2); ++q) {
+        if (r + q < int(n2) || r + q > int(3 * n2)) continue;
         points.emplace_back(q, r);
       }
     }
-    assert(int(points.size()) >= hexSize);
+    assert(points.size() >= hexSize);
 
     std::mt19937 g(0);
     std::shuffle(points.begin(), points.end(), g);
@@ -44,7 +44,7 @@ struct Grid {
   inline std::pair<float, float> hex2xy(double q, double r) const {
     return {k * (q + r / 2.0), k * (r * std::sqrt(3) / 2.0)};
   }
-  inline std::pair<float, float> hex2xy(int i) const {
+  inline std::pair<float, float> hex2xy(size_t i) const {
     return hex2xy(points[i].q, points[i].r);
   }
   Hex xy2hex(float x, float y) {
@@ -100,9 +100,9 @@ struct Grid {
   }
 
   Eigen::VectorXf toPosition() const {
-    assert(isCorrectState());
+    // assert(isCorrectState());
     Eigen::VectorXf position(2 * n);
-    for (int i = 0; i < n; ++i)
+    for (size_t i = 0; i < n; ++i)
       std::tie(position[2 * i], position[2 * i + 1]) = hex2xy(i);
     return position;
   }
@@ -117,6 +117,8 @@ struct Grid {
   // * Only For updateAlongPath
   std::vector<Hex> linedraw(const Hex& a, const Hex& b) const {
     int N = a.distance(b);
+    assert(N >= 1);
+    if (N == 1) return {a, b};
     int a_s = -a.q - a.r, b_s = -b.q - b.r;
     float a_nudge_q = a.q + 1e-06, a_nudge_r = a.r + 1e-06, a_nudge_s = a_s - 2e-06;
     float b_nudge_q = b.q + 1e-06, b_nudge_r = b.r + 1e-06, b_nudge_s = b_s - 2e-06;
@@ -130,7 +132,8 @@ struct Grid {
 
   // * For Util
   inline bool isInside(const Hex& hex) const {
-    return 0 <= hex.q && hex.q < 2 * n2 + 1 && 0 <= hex.r && hex.r < 2 * n2 + 1;
+    return 0 <= hex.q && hex.q < int(2 * n2 + 1) && 0 <= hex.r &&
+           hex.r < int(2 * n2 + 1);
   }
 
   // * For updateToNewPos

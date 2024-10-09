@@ -25,17 +25,19 @@ int main(int argc, char* argv[]) {
   }
 
   if (!measureTime) {
-    auto [hist, positions, elapsedTime] = solve(method, problem, measureTime, 0);
-    std::cout << "Elapsed time: " << elapsedTime << " seconds" << std::endl;
-    std::cout << "Score: " << problem.calcScore(positions.back()) << std::endl;
+    auto [hist, positions] = solve(method, problem, measureTime, 0);
+    assert(!hist.empty());
+    std::cout << "Elapsed time: " << hist.back().second << " seconds" << std::endl;
+    std::cout << "Score: " << hist.back().first << std::endl;
     problem.printOutput(positions);
     return 0;
   }
 
   std::vector<std::string> matrixNames = {
-      // "jagmesh1", "jagmesh2", "jagmesh3", "dwt_221",  "dwt_1005", "dwt_1005",
+      "jagmesh1",
+      // "jagmesh2", "jagmesh3", "dwt_221",  "dwt_1005", "dwt_1005",
       // "arc130",   "ash85",    "ash292",   "bcspwr08", "bp_800",   "can_715",
-      "ash85",
+      // "ash85",
   };
   std::vector<Method> methods = {
       // FR, RS_FR, L_BFGS, RS_L_BFGS
@@ -57,19 +59,18 @@ int main(int argc, char* argv[]) {
       double score = 0.0;
       double variance = 0.0;
       std::vector<Eigen::VectorXf> positions;
-      const int nTrials = 1;
+      const int nTrials = 2;
       for (int seed = 0; seed < nTrials; seed++) {
-        auto [hist, newPositions, elapsedTime] =
-            solve(method, problem, measureTime, seed);
-        std::cout << "Elapsed time: " << elapsedTime << " seconds" << std::endl;
-        time += elapsedTime;
-        double nowScore = problem.calcScore(newPositions.back());
-        score += nowScore;
-        variance += nowScore * nowScore;
+        auto [hist, newPositions] = solve(method, problem, measureTime, seed);
+        std::cout << "Elapsed time: " << hist.back().second << " seconds" << std::endl;
+        score += hist.back().first;
+        variance += std::pow(hist.back().first, 2);
         if (seed == 0) {
           positions = newPositions;
           histStr += std::to_string(hist.size()) + "\n";
-          for (auto& score : hist) histStr += std::to_string(score) + " ";
+          for (auto [score, _] : hist) histStr += std::to_string(score) + " ";
+          histStr += "\n";
+          for (auto [_, time] : hist) histStr += std::to_string(time) + " ";
           histStr += "\n";
         }
       }

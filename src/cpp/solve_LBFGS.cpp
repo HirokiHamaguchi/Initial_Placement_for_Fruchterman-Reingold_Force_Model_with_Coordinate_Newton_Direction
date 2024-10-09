@@ -6,10 +6,12 @@
 #include <iostream>
 
 #include "util/problem.hpp"
+#include "util/timer.hpp"
 
 template <typename MyFunction>
-std::pair<std::vector<double>, std::vector<Eigen::VectorXf>> solve_LBFGS(
-    const Problem& problem, const Eigen::VectorXf& x_init) {
+void solve_LBFGS(const Problem& problem, std::vector<Eigen::VectorXf>& positions,
+                 std::vector<std::pair<double, double>>& hist, Timer& timer) {
+  timer.start();
   LBFGSpp::LBFGSParam<float> param;
   param.m = 10;
   param.max_iterations = 100;
@@ -17,11 +19,12 @@ std::pair<std::vector<double>, std::vector<Eigen::VectorXf>> solve_LBFGS(
   LBFGSpp::LBFGSSolver<float> solver(param);
 
   MyFunction fun(problem);
-  Eigen::VectorXf x = x_init;
+  assert(!positions.empty());
+  Eigen::VectorXf x = positions.back();
   float fx;
 
-  auto [niter, hist, positions] = solver.minimize(fun, x, fx);
-  dbg(niter, fx, solver.final_grad_norm());
+  int niter = solver.minimize(fun, x, fx, hist, positions, timer);
+  timer.stop();
 
-  return {hist, positions};
+  dbg(niter, fx, solver.final_grad_norm());
 }

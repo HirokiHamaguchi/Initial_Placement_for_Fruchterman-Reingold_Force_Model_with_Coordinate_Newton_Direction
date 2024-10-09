@@ -6,6 +6,14 @@
 
 std::pair<double, double> computeDxDy(double gx, double gy, double hxx, double hxy,
                                       double hyy, [[maybe_unused]] double k) {
+  // constant step size
+  // if (false) {
+  //   double stepSizeCoeff = k / std::hypot(gx, gy);
+  //   gx *= stepSizeCoeff;
+  //   gy *= stepSizeCoeff;
+  //   return {-gx, -gy};
+  // }
+
   // positive definite (convex)
   double det = hxx * hyy - hxy * hxy;
   assert(det >= -1e-9);
