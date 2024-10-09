@@ -15,9 +15,8 @@
 #include "util/problem.hpp"
 
 std::vector<Eigen::VectorXf> solve_FR(const Problem& problem,
-                                      const Eigen::VectorXf& _pos,
-                                      const bool measureTime) {
-  std::vector<Eigen::VectorXf> positions;
+                                      const Eigen::VectorXf& _pos) {
+  std::vector<Eigen::VectorXf> positions = {_pos};
   size_t nnodes = problem.n;
   size_t dim = 2;
   int iterations = 100;
@@ -52,12 +51,9 @@ std::vector<Eigen::VectorXf> solve_FR(const Problem& problem,
 
     pos += delta_pos;
     t -= dt;
+    positions.push_back(Eigen::Map<Eigen::VectorXf>(pos.data(), pos.size()));
     if (delta_pos.norm() / nnodes < threshold) break;
-    if (!measureTime && iteration % 10 == 0)
-      positions.push_back(Eigen::Map<Eigen::VectorXf>(pos.data(), pos.size()));
   }
-
-  positions.push_back(Eigen::Map<Eigen::VectorXf>(pos.data(), pos.size()));
 
   return positions;
 }

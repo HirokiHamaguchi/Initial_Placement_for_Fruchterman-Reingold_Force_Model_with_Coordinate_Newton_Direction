@@ -1,47 +1,15 @@
-#include "include/LBFGS.h"
-#include "solve_FR.cpp"
-#include "solve_LBFGS.cpp"
-#include "solve_init.cpp"
-#include "solve_init2.cpp"
-#include "util/function.hpp"
-#include "util/problem.hpp"
-
-enum Method {
-  FR,         // Fruchterman-Reingold method
-  L_BFGS,     // Limited-memory Broyden-Fletcher-Goldfarb-Shanno method
-  RS_FR,      // Init:RS / Optimize:FR
-  RS_L_BFGS,  // Init:RS / Optimize:L_BFGS
-};
-
-std::vector<Eigen::VectorXf> main_sub(const Method method, const Problem& problem,
-                                      const bool measureTime, const int seed) {
-  std::vector<Eigen::VectorXf> positions;
-  if (method == RS_FR || method == RS_L_BFGS) {
-    positions = solve_init2(problem, measureTime, seed);
-  } else {
-    std::srand(0);
-    Eigen::VectorXf position = Eigen::VectorXf::Random(2 * problem.n);
-    for (int i = 0; i < position.size(); ++i) position[i] = std::abs(position[i]);
-    positions.push_back(position);
-  }
-  std::vector<Eigen::VectorXf> positions2;
-  if (method == L_BFGS || method == RS_L_BFGS) {
-    positions2 = solve_LBFGS<FunctionFR>(problem, positions.back(), measureTime);
-  } else if (method == FR || method == RS_FR) {
-    positions2 = solve_FR(problem, positions.back(), measureTime);
-  }
-  positions.insert(positions.end(), positions2.begin(), positions2.end());
-  return positions;
-}
+#include "solve.cpp"
 
 int main(int argc, char* argv[]) {
   // Read input
-  Method method = RS_L_BFGS;  // only for !measureTime
+  Method method;
   Problem problem;
   bool measureTime;
+
   if (argc == 1) {
+    method = RS_L_BFGS;
     problem = Problem("jagmesh1");
-    measureTime = false;
+    measureTime = true;
   } else if (argc == 3) {
     std::string problemStr = argv[1];
     std::string measureTimeStr = argv[2];
@@ -56,39 +24,73 @@ int main(int argc, char* argv[]) {
     exit(1);
   }
 
-  if (measureTime) {
-    for (auto& method : {L_BFGS, RS_L_BFGS}) {
+  if (!measureTime) {
+    auto [hist, positions, elapsedTime] = solve(method, problem, measureTime, 0);
+    std::cout << "Elapsed time: " << elapsedTime << " seconds" << std::endl;
+    std::cout << "Score: " << problem.calcScore(positions.back()) << std::endl;
+    problem.printOutput(positions);
+    return 0;
+  }
+
+  std::vector<std::string> matrixNames = {
+      // "jagmesh1", "jagmesh2", "jagmesh3", "dwt_221",  "dwt_1005", "dwt_1005",
+      // "arc130",   "ash85",    "ash292",   "bcspwr08", "bp_800",   "can_715",
+      "ash85",
+  };
+  std::vector<Method> methods = {
+      // FR, RS_FR, L_BFGS, RS_L_BFGS
+      RS_L_BFGS,
+  };
+
+  std::string histStr =
+      std::to_string(matrixNames.size()) + " " + std::to_string(methods.size()) + "\n";
+
+  for (std::string matrixName : matrixNames) {
+    problem = Problem(matrixName);
+    histStr += matrixName + "\n";
+    std::cout << matrixName << std::endl;
+    for (auto& method : methods) {
+      histStr += MethodStr[method] + "\n";
+      std::cout << MethodStr[method] << std::endl;
       // Solve by each method
       double time = 0.0;
       double score = 0.0;
+      double variance = 0.0;
       std::vector<Eigen::VectorXf> positions;
       const int nTrials = 1;
       for (int seed = 0; seed < nTrials; seed++) {
-        auto t0 = std::chrono::high_resolution_clock::now();
-        auto newPositions = main_sub(method, problem, measureTime, seed);
-        auto t1 = std::chrono::high_resolution_clock::now();
-        double elapsedTime = std::chrono::duration<double>(t1 - t0).count();
+        auto [hist, newPositions, elapsedTime] =
+            solve(method, problem, measureTime, seed);
         std::cout << "Elapsed time: " << elapsedTime << " seconds" << std::endl;
-        time += elapsedTime, score += problem.calcScore(newPositions.back());
-        if (positions.empty()) positions = newPositions;
+        time += elapsedTime;
+        double nowScore = problem.calcScore(newPositions.back());
+        score += nowScore;
+        variance += nowScore * nowScore;
+        if (seed == 0) {
+          positions = newPositions;
+          histStr += std::to_string(hist.size()) + "\n";
+          for (auto& score : hist) histStr += std::to_string(score) + " ";
+          histStr += "\n";
+        }
       }
-      time /= nTrials, score /= nTrials;
+      time /= nTrials;
+      score /= nTrials;
+      variance = variance / nTrials - score * score;
       // Output
+      histStr += "Average_Elapsed_time: " + std::to_string(time) + "\n";
+      histStr += "Average_Score: " + std::to_string(score) + "\n";
+      histStr += "Variance_Score: " + std::to_string(variance) + "\n";
       std::cout << "Average Elapsed time: " << time << " seconds" << std::endl;
       std::cout << "Average Score: " << score << std::endl;
+      std::cout << "Variance Score: " << variance << std::endl;
       problem.printOutput(positions);
     }
-  } else {
-    // Solve by the specified method
-    auto t0 = std::chrono::high_resolution_clock::now();
-    std::vector<Eigen::VectorXf> positions = main_sub(method, problem, measureTime, 0);
-    auto t1 = std::chrono::high_resolution_clock::now();
-    double time = std::chrono::duration<double>(t1 - t0).count();
-    // Output
-    std::cout << "Average Elapsed time: " << time << " seconds" << std::endl;
-    std::cout << "Final Score: " << problem.calcScore(positions.back()) << std::endl;
-    problem.printOutput(positions);
   }
+  std::string fileName = "out/_hist.txt";
+  auto [histPath, fileForHist] = openFile(fileName);
+  fileForHist << histStr;
+  fileForHist.close();
+  std::cout << "Hist path: " << histPath << std::endl;
 
   return 0;
 }

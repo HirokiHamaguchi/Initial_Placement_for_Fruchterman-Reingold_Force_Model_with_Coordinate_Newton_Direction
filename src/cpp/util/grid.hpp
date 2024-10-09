@@ -1,7 +1,6 @@
 #pragma once
 
 #include <algorithm>
-#include <atcoder/mincostflow>
 #include <cassert>
 #include <climits>
 #include <cmath>
@@ -78,9 +77,14 @@ struct Grid {
   }
 
   void updateAlongPath(int i, const Hex& new_v) {
-    std::vector<Hex> path;
-    for (auto& hex : linedraw(points[i], new_v))
-      if (isInside(hex)) path.push_back(hex);
+    std::vector<Hex> path = linedraw(points[i], new_v);
+    if (std::any_of(path.begin(), path.end(),
+                    [&](const Hex& hex) { return !isInside(hex); })) {
+      std::vector<Hex> newPath;
+      for (auto& hex : path)
+        if (isInside(hex)) newPath.push_back(hex);
+      std::swap(path, newPath);
+    }
     assert(path.size() >= 2);
 
     // move vertex along path
@@ -93,72 +97,6 @@ struct Grid {
         points[i] = path[j + 1];
       std::swap(curr, next);
     }
-  }
-
-  bool updateToNewPos(const Eigen::VectorXf& _newPos, const int loopCnt) {
-    for (int i = 0; i < n; ++i) array[points[i].q][points[i].r] = -1;
-
-    Eigen::VectorXf newPos = _newPos;
-    float cx = 0.0, cy = 0.0;
-    for (int i = 0; i < n; ++i) {
-      cx += newPos[2 * i], cy += newPos[2 * i + 1];
-    }
-    cx /= n, cy /= n;
-    auto [originX, originY] = hex2xy(n2, n2);
-    for (int i = 0; i < n; ++i) {
-      newPos[2 * i] += originX - cx;
-      newPos[2 * i + 1] += originY - cy;
-    }
-
-    atcoder::mcf_graph<long long, long long> graph(n + (2 * n2 + 1) * (2 * n2 + 1) + 2);
-    int s = n + (2 * n2 + 1) * (2 * n2 + 1), t = s + 1;
-    // source -> vertex
-    for (int i = 0; i < n; ++i) graph.add_edge(s, i, 1, 0);
-    // vertex -> hex
-    for (int i = 0; i < n; ++i) {
-      double x = newPos[2 * i], y = newPos[2 * i + 1];
-      Hex hex = xy2hex(x, y);
-      for (int dq = -50; dq <= 50; dq++) {
-        for (int dr = -50; dr <= 50; dr++) {
-          if (std::abs(dq) + std::abs(dr) > 50) continue;
-          Hex newHex = hex + Hex(dq, dr);
-          if (!isInside(newHex)) continue;
-          auto [x2, y2] = hex2xy(newHex.q, newHex.r);
-          int hexIdx = n + (newHex.q * (2 * n2 + 1) + newHex.r);
-          long long cost =
-              std::llround(std::pow(x - x2, 2) + std::pow(y - y2, 2) * 1000000);
-          graph.add_edge(i, hexIdx, 1, cost);
-        }
-      }
-    }
-    // hex -> sink
-    for (int q = 0; q <= 2 * n2; ++q) {
-      for (int r = 0; r <= 2 * n2; ++r) {
-        graph.add_edge(n + (q * (2 * n2 + 1) + r), t, 1, 0);
-      }
-    }
-
-    auto [flow, cost] = graph.flow(s, t, n);
-    dbg(flow, cost);
-    if (flow != n) assert(false);
-
-    std::vector<Hex> newPoints(n);
-    auto edges = graph.edges();
-    for (auto& e : edges) {
-      if (e.from < n && e.flow == 1) {
-        int i = e.from;
-        int hexIdx = e.to - n;
-        assert(newPoints[i].q == -INT_MAX && newPoints[i].r == -INT_MAX);
-        newPoints[i] = Hex(hexIdx / (2 * n2 + 1), hexIdx % (2 * n2 + 1));
-      }
-    }
-
-    assert(std::all_of(newPoints.begin(), newPoints.end(), [&](const Hex& hex) {
-      return hex.q != -INT_MAX && hex.r != -INT_MAX;
-    }));
-    std::swap(points, newPoints);
-    for (int i = 0; i < n; ++i) array[points[i].q][points[i].r] = i;
-    return points != newPoints;
   }
 
   Eigen::VectorXf toPosition() const {

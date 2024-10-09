@@ -73,8 +73,8 @@ class LBFGSSolver {
   /// \return Number of iterations used and the history of the iterates.
   ///
   template <typename Foo>
-  inline std::pair<int, std::vector<Vector>> minimize(Foo& f, Vector& x, Scalar& fx,
-                                                      const bool measureTime) {
+  inline std::tuple<int, std::vector<double>, std::vector<Vector>> minimize(
+      Foo& f, Vector& x, Scalar& fx) {
     using std::abs;
 
     // Dimension of the vector
@@ -93,13 +93,13 @@ class LBFGSSolver {
     // std::cout << "f(x0) = " << fx << ", ||grad|| = " << m_gnorm << std::endl <<
     // std::endl;
 
-    // history of the objective function values
-    std::vector<Vector> hist;
+    // history of the objective function values and vectors
+    std::vector<double> fx_hist = {fx};
+    std::vector<Vector> x_hist = {x};
 
     // Early exit if the initial x is already a minimizer
     if (m_gnorm <= m_param.epsilon || m_gnorm <= m_param.epsilon_rel * x.norm()) {
-      hist.push_back(x);
-      return {1, hist};
+      return {1, fx_hist, x_hist};
     }
 
     // Initial direction
@@ -117,7 +117,6 @@ class LBFGSSolver {
     const char* move_cursor = "\33[1G";  // カーソルを行の先頭に移動
     for (;;) {
       std::cerr << clear_line << move_cursor << "Iter: " << k << std::flush;
-      if (!measureTime) hist.push_back(x);
 
       // Save the curent x and gradient
       m_xp.noalias() = x;
@@ -139,9 +138,8 @@ class LBFGSSolver {
 
       // Convergence test -- gradient
       if (m_gnorm <= m_param.epsilon || m_gnorm <= m_param.epsilon_rel * x.norm()) {
-        hist.push_back(x);
         std::cerr << clear_line << move_cursor << std::flush;
-        return {k, hist};
+        return {k, fx_hist, x_hist};
       }
       // Convergence test -- objective function value
       if (fpast > 0) {
@@ -149,18 +147,15 @@ class LBFGSSolver {
         if (k >= fpast &&
             abs(fxd - fx) <=
                 m_param.delta * std::max(std::max(abs(fx), abs(fxd)), Scalar(1))) {
-          hist.push_back(x);
           std::cerr << clear_line << move_cursor << std::flush;
-          return {k, hist};
+          return {k, fx_hist, x_hist};
         }
-
         m_fx[k % fpast] = fx;
       }
       // Maximum number of iterations
       if (m_param.max_iterations != 0 && k >= m_param.max_iterations) {
-        hist.push_back(x);
         std::cerr << clear_line << move_cursor << std::flush;
-        return {k, hist};
+        return {k, fx_hist, x_hist};
       }
 
       // Update s and y
@@ -176,6 +171,8 @@ class LBFGSSolver {
       // Reset step = 1.0 as initial guess for the next line search
       step = Scalar(1);
       k++;
+      fx_hist.push_back(fx);
+      x_hist.push_back(x);
     }
 
     assert(false);

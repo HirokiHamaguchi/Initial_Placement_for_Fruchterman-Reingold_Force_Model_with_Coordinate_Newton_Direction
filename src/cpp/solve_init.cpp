@@ -7,15 +7,15 @@
 #include <iostream>
 #include <random>
 
-#include "util/forSolvers.hpp"
+#include "util/computeDxDy.hpp"
 #include "util/grid.hpp"
 #include "util/hex.hpp"
 #include "util/problem.hpp"
 
 void addHist(int loopCnt, const int LOOP_CNT, const bool measureTime, Grid& grid,
              std::vector<Eigen::VectorXf>& positions) {
-  if (measureTime) return;
-  if (loopCnt % (LOOP_CNT / 20) == 0) positions.push_back(grid.toPosition());
+  // if (measureTime) return;
+  if (loopCnt % grid.n == 0) positions.push_back(grid.toPosition());
 }
 
 std::vector<Eigen::VectorXf> solve_init(const Problem& problem, const bool measureTime,
@@ -27,7 +27,7 @@ std::vector<Eigen::VectorXf> solve_init(const Problem& problem, const bool measu
 
   std::mt19937 gen(seed);
   std::uniform_int_distribution<int> dist(0, problem.n - 1);
-  const int LOOP_CNT = problem.n * 200;
+  const int LOOP_CNT = problem.n * 300;
   size_t fail = 0;
   for (int loopCnt = 0; loopCnt < LOOP_CNT; loopCnt++) {
     // randomly select a vertex
@@ -51,6 +51,7 @@ std::vector<Eigen::VectorXf> solve_init(const Problem& problem, const bool measu
     if (grid.points[i] == new_v) {
       addHist(loopCnt, LOOP_CNT, measureTime, grid, positions);
       fail++;
+      dbg(fail);
       if (fail >= problem.n) {
         std::cerr << "Early stop (fail = " << fail << ")" << std::endl;
         break;

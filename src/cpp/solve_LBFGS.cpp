@@ -8,12 +8,11 @@
 #include "util/problem.hpp"
 
 template <typename MyFunction>
-std::vector<Eigen::VectorXf> solve_LBFGS(const Problem& problem,
-                                         const Eigen::VectorXf& x_init,
-                                         const bool measureTime) {
+std::pair<std::vector<double>, std::vector<Eigen::VectorXf>> solve_LBFGS(
+    const Problem& problem, const Eigen::VectorXf& x_init) {
   LBFGSpp::LBFGSParam<float> param;
   param.m = 10;
-  param.max_iterations = 60;
+  param.max_iterations = 100;
   param.epsilon_rel = 1e-3;
   LBFGSpp::LBFGSSolver<float> solver(param);
 
@@ -21,9 +20,8 @@ std::vector<Eigen::VectorXf> solve_LBFGS(const Problem& problem,
   Eigen::VectorXf x = x_init;
   float fx;
 
-  auto [niter, positions] = solver.minimize(fun, x, fx, measureTime);
-  assert(!measureTime || int(positions.size()) <= 1);
+  auto [niter, hist, positions] = solver.minimize(fun, x, fx);
   dbg(niter, fx, solver.final_grad_norm());
 
-  return positions;
+  return {hist, positions};
 }

@@ -12,6 +12,7 @@
 #include <vector>
 
 #include "dbg.h"
+#include "openFile.hpp"
 
 struct Problem {
   size_t n;                  // number of vertices
@@ -176,16 +177,7 @@ struct Problem {
   }
 
   void printOutput(const std::vector<Eigen::VectorXf>& positions) {
-    std::string curPath = std::filesystem::current_path().string();
-    assert(curPath.substr(curPath.size() - 8, 8) == "/src/cpp");
-    std::string path =
-        curPath.substr(0, curPath.size() - 8) + "/out/" + matrixName + ".out";
-    std::ofstream file(path);
-    if (!file.is_open()) {
-      dbg(path);
-      std::cerr << "Error: file not found\n";
-      exit(1);
-    }
+    auto [path, file] = openFile("out/" + matrixName + ".out");
 
     file << n << " " << m << " " << k << "\n";
     for (size_t i = 0; i < m; ++i) {
