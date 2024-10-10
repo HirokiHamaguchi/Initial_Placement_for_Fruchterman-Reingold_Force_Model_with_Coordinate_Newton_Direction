@@ -1,11 +1,9 @@
 \documentclass[dvipdfmx,journal]{IEEEtran}
 
-\usepackage{algorithm}      % \begin{algorithm}
-\usepackage{algorithmic}    % \begin{algorithmic}
+\usepackage[ruled, vlined]{algorithm2e}    % \begin{algorithm2e}
 \usepackage{amsmath}        % \begin{align*}
 \usepackage{amssymb}        % \mathbb{A}
 \usepackage{amsthm}         % \newtheorem
-\usepackage{ascmac}         % \begin{screen}
 \usepackage{bm,bbm}         % \bm{A}, \bbm{1}
 \usepackage{booktabs}       % \toprule, \midrule, \bottomrule
 \usepackage{caption}        % \captionsetup
@@ -158,9 +156,6 @@
 
 \section{Introduction}
 
-% グラフ自動描画法とその応用
-% https://www.jstage.jst.go.jp/article/jssst/12/4/12_4_335/_article/-char/ja
-
 \IEEEPARstart{G}{raph} is a mathematical structure representing pairwise relationships between objects, and graph drawing is one of the most fundamental tasks in data science. Indeed, Numerous general algorithms have been proposed for graph drawing~\cite{tutteHowDrawGraph1963,chrobakLineartimeAlgorithmDrawing1995,sugiyamaMethodsVisualUnderstanding1981,ghassemitoosiSimulatedAnnealingPreProcessing2016}
 Among these, one of the most popular strategies is force-directed algorithms.
 
@@ -174,24 +169,42 @@ Another approach is to accelerate the optimization algorithm directly, which ali
 
 Based on such advances, in this paper, we investigate the ability of another algorithm: Random Subspace Newton (RSN). The RSN method is a variant of the Newton method that uses a random subspace to approximate the Hessian matrix. The RSN method and its variant have been proposed in the context of optimization problems~\cite{NEURIPS2019_bc6dc48b,fujiRandomizedSubspaceRegularized2022,cartisRandomisedSubspaceMethods2022,higuchiFastConvergenceSecondOrder2024}.
 
+\begin{table}[t]
+  \centering
+  \begin{tabular}{cc}
+    \large{\textbf{FR}}                                                                                                                & \large{\textbf{L-BFGS}}   \\
+    \begin{minipage}{0.45\columnwidth}
+      \centering
+      \includegraphics[width=\columnwidth]{/home/hari64boli64/University/FruchtermanReingoldByRandomSubspace/doc/jagmesh1_FR_50iter.png}
+    \end{minipage} &
+    \begin{minipage}{0.45\columnwidth}
+      \centering
+      \includegraphics[width=\columnwidth]{/home/hari64boli64/University/FruchtermanReingoldByRandomSubspace/doc/jagmesh1_LBFGS_50iter.png}
+    \end{minipage}                           \\
+    \large{\textbf{proposed}}                                                                                                          & \large{\textbf{+ L-BFGS}} \\
+    \begin{minipage}{0.45\columnwidth}
+      \centering
+      \includegraphics[width=\columnwidth]{/home/hari64boli64/University/FruchtermanReingoldByRandomSubspace/doc/jagmesh1_LBFGS_50iter.png}
+    \end{minipage}
+                                                                                                                                       &
+    \begin{minipage}{0.45\columnwidth}
+      \centering
+      \includegraphics[width=\columnwidth]{/home/hari64boli64/University/FruchtermanReingoldByRandomSubspace/doc/jagmesh1_LBFGS_50iter.png}
+    \end{minipage}
+  \end{tabular}
+  \begin{tikzpicture}[overlay, remember picture]
+    \draw[->, thick] (-0.3,1.3) -- (+0.3,1.3);
+  \end{tikzpicture}
+  \caption{Comparison of the FR algorithm (left, NetworkX) and L-BFGS-B (right, my implementation) on the \texttt{jagmesh1} dataset.}
+  \label{table:four_images}
+\end{table}
+
 The rest of the paper is organized as follows.
 In Section~\ref{sec:preliminary}, we define the optimization problem for the FR algorithm.
 In Section~\ref{sec:RSN}, we introduce the Random Subspace method and report a its problem when directly applied to the FR algorithm.
 In Section~\ref{sec:algorithm}, we propose a new algorithm that combines the FR algorithm with the Random Subspace method.
 In Section~\ref{sec:experiment}, we present the experimental results.
 Finally, we conclude and discuss future work in Section~\ref{sec:discussion}.
-
-\begin{figure}[t]
-  \begin{minipage}{0.49\hsize}
-    \centering
-    \includegraphics[width=\columnwidth]{/home/hari64boli64/University/FruchtermanReingoldByRandomSubspace/doc/jagmesh1_FR_50iter.png}
-  \end{minipage}
-  \begin{minipage}{0.49\hsize}
-    \centering
-    \includegraphics[width=\columnwidth]{/home/hari64boli64/University/FruchtermanReingoldByRandomSubspace/doc/jagmesh1_LBFGS_50iter.png}
-  \end{minipage}
-  \caption{Comparison of the FR algorithm (left, NetworkX) and L-BFGS-B (right, my implementation) on the \texttt{jagmesh1} dataset.}
-\end{figure}
 
 \section{Preliminary}\label{sec:preliminary}
 
@@ -213,7 +226,7 @@ Finally, we conclude and discuss future work in Section~\ref{sec:discussion}.
       \draw[{Latex[length=4,width=3]}-{Latex[length=4,width=3]}] ($(M1)+(90:2*\r)$) -- ($(M2)+(90:2*\r)$)
       node[midway,circle,fill=white,inner sep=0] {$d$};
 
-      \draw[->,thick,line cap=round] (+\r,0) -- (+\u,0) node[right] {$F^a_{i,j}(d)$};
+      \draw[->,thick,line cap=round] (+\r,0) -- (+\u,0) node[right] {$F_{i,j}^a(d)$};
       \draw[->,thick,line cap=round] (-\r,0) -- (-\u,0) node[left] {$F^r(d)$};
 
       \draw[dashed,domain=3.9:-3.1,samples=1000,smooth,variable=\x] plot(\x,{-0.7+(pow((\d-\x)/\d,3)/3-ln((\d-\x)/\d))/2.2});
@@ -227,48 +240,98 @@ Finally, we conclude and discuss future work in Section~\ref{sec:discussion}.
       \node at (-2.7,0.4) {$E_{i,j}(d)$};
     \end{tikzpicture}
     \caption{
-    Fruchterman--Reingold model.
-    The equilibrium of the attractive force $F^a_{i,j}(d)$ and the repulsive force $F^r(d)$ is the optimal distance $d=k/\sqrt[3]{a_{i,j}}$.
+      Fruchterman--Reingold model.
+      The equilibrium of the attractive force $F_{i,j}^a(d)$ and the repulsive force $F^r(d)$ is the optimal distance $d=k/\sqrt[3]{w_{i,j}}$.
     }
   \end{minipage}
   \begin{minipage}{0.49\hsize}
     \centering
     \includegraphics[width=\columnwidth]{energy_3d.png}
-    \caption{Energy function $E_{i,j}(d)$ for $a_{i,j} = 1$ and $k = 1$. Although $E_{i,j}$ is convex for $d$, but not for $x_i$.}
+    \caption{Energy function $E_{i,j}(d)$ for $w_{i,j} = 1$ and $k = 1$. Although $E_{i,j}$ is convex for $d$, but not for $x_i$ and $x_j$.}
     \label{fig:label}
   \end{minipage}
 \end{figure*}
 
-In this section, we define an optimization problem for FR algorithm.
-Let $\bbR_{> 0}$ be a set of positive real numbers,
-and $A = (a_{i,j}) \in \bbR_{> 0}^{n \times n}$ be an adjacency matrix of a graph $G = (V, E)$.
-FR algorithm is also applicable to a directed unconnected graph, but we focus on the undirected connected graph for simplicity. In particular, the connectivity of the graph is indispensable for the solution to be bounded, and for a unconnected graph, we can apply algorithms to each connected component independently, if necessary.
+Firstly, in this section, we formulate the FR layout as a continuous optimization problem, and introduce the conventional approaches to this problem, namely the FR algorithm and the L-BFGS algorithm.
 
-Each vertex $v_i \in V$ is assigned a position $x_i \in \bbR^d$ and we define $x = (x_1, \dots, x_n) \in \bbR^{d \times n}$ as a matrix of positions.
-For an parameter $k$ and a distance $d$ between two vertices $v_i$ and $v_j$, Fruchterman and Reingold~\cite{fruchtermanGraphDrawingForcedirected1991} defined the power of attraction $F_{i,j}^a: \bbR_{> 0} \to \bbR$ and the power of repulsion $F^r: \bbR_{> 0} \to \bbR$ as
+\subsection{Fruchterman--Reingold layout}
+
+Let us define
+$\bbR_{> 0} \defeq \qty{ x \in \bbR \mid x > 0 }, \quad \bbR_{\geq 0} \defeq \qty{ x \in \bbR \mid x \geq 0 }$,
+and let $W = (w_{i,j}) \in \bbR_{\geq 0}^{n \times n}$ be an adjacency matrix of a undirected connected graph $G = (V, E)$. $V = \qty{v_i \mid 1 \leq i \leq n}$ is a set of vertices and $E = \qty{(v_i, v_j) \mid w_{i,j} > 0}$ is a set of edges. We call $w_{i,j}$ as a weight of the edge $(v_i, v_j)$.
+
+The FR algorithm in NetworkX, for example, can handle directed unconnected graphs with $w_{i,j} < 0$, but we will not consider such cases here.
+For directed graphs, slight modifications of algorithms or converting them to undirected graphs may be effective. For unconnected graphs, algorithms can be applied to each connected component independently. When some weights $w_{i,j}$ are negative, the optimization problem may become unbounded, but with $w_{i,j} >0$, the problem is always bounded and solvable.
+
+Each vertex $v_i \in V$ is assigned to a point on a plane $x_i \in \bbR^2$ and we define $x = (x_1, \dots, x_n) \in \bbR^{2 \times n}$ as the configuration of the graph.
+For an parameter $k$ and a distance $d_{i,j} \defeq \norm{x_i - x_j}_2$ between two vertices $v_i$ and $v_j$, Fruchterman and Reingold~\cite{fruchtermanGraphDrawingForcedirected1991} defined the power of attraction $F_{i,j}^a: \bbR_{> 0} \to \bbR$ and the power of repulsion $F^r: \bbR_{> 0} \to \bbR$ as
 \begin{equation*}
-  F_{i,j}^a(d) \defeq \frac{a_{i,j} d^2}{k}, \quad F^r(d) \defeq -\frac{k^2}{d}.
+  F_{i,j}^a(d) \defeq \frac{w_{i,j} d^2}{k}, \quad F^r(d) \defeq -\frac{k^2}{d}.
 \end{equation*}
-The total energy for these powers $E_{i,j} : \bbR_{> 0} \to \bbR$, stress of the graph, is defined as
+We refer this Force-Directed layout as the Fruchterman--Reingold (FR) layout.
+The energy for these powers $E_{i,j}(d)$ can be defined as
 \begin{align*}
   E_{i,j}(d) & \defeq \int_{0}^{d} F_{i,j}^a(r) \dd{r} + \int_{\infty}^{d} F^r(r) \dd{r} \\
-             & = \frac{a_{i,j} d^3}{3k} - k^2\log{d}.
+             & = \frac{w_{i,j} d^3}{3k} - k^2\log{d}.
 \end{align*}
+As a remark, the energy function $E_{i,j}$ is convex for $d$ and minimized when $d^* = k/\sqrt[3]{w_{i,j}}$, but it is not Lipschitz continuous, and is not convex for $x_i$ (?correct expression?). Refer to Figure~\ref{fig:label}.
 
-The energy function $E_{i,j}$ is convex for $a_{i,j} \in \bbR_{> 0}$ and minimized when $d = k/\sqrt[3]{a_{i,j}}$, but is not Lipschitz continuous.
-Based on these energies, the optimization problem for FR algorithm is defined as
+Now, the optimization problem for FR layout can be formulated as the minimization of the energy function $f: \bbR^{2 \times n} \to \bbR$, as known as a stress of the graph:
 \begin{mini}
-  {x \in \bbR^{d \times n}}
+  {x \in \bbR^{2 \times n}}
   {f(x) \defeq \sum_{i<j} E_{i,j}(d_{i,j})}
   {\label{eq:fr}}
   {}
 \end{mini}
-where $d_{i,j} = \norm{x_i - x_j}$ is the Euclidean distance.
 
+\subsection{Fruchterman--Reingold algorithm}
+
+The most standard approach to solve the optimization problem~\eqref{eq:fr} is the Fruchterman--Reingold algorithm~\cite{fruchtermanGraphDrawingForcedirected1991}, the original force-directed algorithm for graph drawing. Let us consider this algorithm in the context of the optimization problem~\eqref{eq:fr}.
 As pointed out in~\cite{tunkelang1999numerical},
-the FR algorithm is a gradient descent method for the energy function $f$, with constant step size and cooling schedule.
+the FR algorithm can be regarded as a gradient descent method for the energy function $f$ with cooling schedule.
 
-\section{Random Subspace Newton} \label{sec:RSN}
+Let denote $f_i(x): \bbR^2 \to \bbR$ as the energy function for the vertex $v_i$:
+\begin{equation*}
+  f_i(x_i) \defeq \sum_{j \neq i} E_{i,j}(d_{i,j}).
+\end{equation*}
+The gradient and Hessian (for later sections) of $f_i$ are
+\begin{gather*}
+  \nabla f_i(x_i) = \sum_{j \neq i} \qty(\frac{w_{i,j}d_{i,j}}{k} - \frac{k^2}{d_{i,j}^2}) (x_i-x_j), \\
+  \nabla^2 f_i(x_i) = \sum_{j \neq i} \qty(\frac{w_{i,j}d_{i,j}}{k} - \frac{k^2}{d_{i,j}^2}) I_d +      \\
+  \sum_{j \neq i} \qty(\frac{w_{i,j}}{k d_{i,j}} + \frac{2k^2}{d_{i,j}^4}) (x_i - x_j)(x_i - x_j)^\top.
+\end{gather*}
+
+The pseudo code of the FR algorithm is as follows:
+\begin{algorithm}[ht]
+  \caption{Fruchterman--Reingold algorithm}
+  \label{alg:fr}
+  \KwIn{Graph $G = (V, E)$ with its weights $W$}
+  \KwOut{Point configuration $x \in \bbR^{2 \times n}$}
+
+  $\text{define parameters } k, t, dt, \text{iterations}$\;
+  $x_i \gets \text{random}$ for all $v_i \in V$\;
+  \For{$j \gets 0$ \KwTo \textit{iterations}}{
+    $\text{compute gradient } \nabla f_i(x_i)$ for all $v_i \in V$\;
+    $x_i \gets x_i + t \frac{\nabla f_i(x_i)}{
+        \norm{\nabla f_i(x_i)}_{2}}$ for all $v_i \in V$\;
+    $t \gets t - dt$\;
+    \If{\text{convergence condition}}{
+      \textbf{break}\;
+    }
+  }
+  \Return $\text{pos}$
+\end{algorithm}
+
+Algorithm~\ref{alg:fr} is based on the original implementation~\cite{fruchtermanGraphDrawingForcedirected1991} and implementation in NetworkX~\cite{osti_960616}.
+The $t$ in the parameter represents the temperature, which is used to control the step size of the gradient descent. This temperature assures the convergence to a certain configuration, which might not be a local minimum of the energy function. There are some ways to define the parameters or cooling schedule, such as linear cooling, exponential cooling, or adaptive cooling.
+
+\subsection{L-BFGS algorithm}
+
+Another approach to solve the optimization problem~\eqref{eq:fr} is to use the L-BFGS algorithm~\cite{6183577}, which is a quasi-Newton method that approximates the Hessian matrix using the gradient information. The L-BFGS algorithm is widely used in optimization problems, and there are many implementations available, such as SciPy~\cite{2020SciPy-NMeth} and C++ L-BFGS~\cite{liuLimitedMemoryBFGSMethod2019}.
+
+For the optimization problem~\eqref{eq:fr}, the L-BFGS algorithm can be applied via flattening the configuration $x$ to a vector $x \in \bbR^{2n}$.
+
+\section{Random Subspace Newton}\label{sec:RSN}
 
 In this section, we introduce the Random Subspace Newton (RSN) method and report a its problem when directly applied to the FR algorithm.
 
@@ -286,17 +349,6 @@ The RSN method resembles the stochastic coordinate descent method, which updates
 Moreover, recent studies have explored its application not only to convex optimization problems but also to non-convex optimization problems~\cite{fujiRandomizedSubspaceRegularized2022}.
 
 \subsection{Random Subspace Newton for FR Algorithm}
-
-we define a function $f_i: \bbR^{d} \to \bbR$ for $1 \leq i \leq n$ as
-\begin{equation*}
-  f_i(x_i) \defeq \sum_{j \neq i} E_{i,j}(d_{i,j}).
-\end{equation*}
-The gradient and the Hessian of $f_i$ are
-\begin{gather*}
-  \nabla f_i(x_i) = \sum_{j \neq i} \qty(\frac{a_{i,j}d_{i,j}}{k} - \frac{k^2}{d_{i,j}^2}) (x_i-x_j), \\
-  \nabla^2 f_i(x_i) = \sum_{j \neq i} \qty(\frac{a_{i,j}d_{i,j}}{k} - \frac{k^2}{d_{i,j}^2}) I_d +      \\
-  \sum_{j \neq i} \qty(\frac{a_{i,j}}{k d_{i,j}} + \frac{2k^2}{d_{i,j}^4}) (x_i - x_j)(x_i - x_j)^\top.
-\end{gather*}
 
 In this way, the problem exhibits a natural affinity with the RSN method, as it inherently defines a subspace of the solution space for the FR layout.
 
@@ -346,7 +398,7 @@ In this situation, our research aims to investigate the effectiveness of the RSN
   \end{tikzpicture}
   \caption{
     Visualization of the problem of the subspace method.
-    Let a graph as shown in the left (optimal), where $k$ and all positive edge weights $a_{i,j}$ are set to 1.
+    Let a graph as shown in the left (optimal), where $k$ and all positive edge weights $w_{i,j}$ are set to 1.
     For the situation in the middle (success), the RSN works effectively.
     However, in the situation depicted on the right (failure),
     where the points are set as $x_0=(0,0), x_1=(-1,0), x_2=(-0.85,0.155), x_3=(-0.85,-0.155), x_4=(1,0)$,
@@ -404,12 +456,12 @@ In this section, we address the problem of finding the optimal scaling factor th
 Formulating the optimization through scaling, the task reduces to selecting an appropriate scaling factor $x \in \bbR_{> 0}$ that minimizes the following energy function:
 
 \begin{align*}
-  \phi(x) \defeq {} & \qty(\sum_{i < j} \frac{w_{ij} (xd_{ij})^3}{3k}) - k^2 \sum_{i < j} \log(x d_{ij})                                  \\
+  \phi(x) \defeq {} & \qty(\sum_{i < j} \frac{w_{ij} (xd_{ij})^3}{3k}) - k^2 \sum_{i < j} \log(x d_{ij})                                    \\
   \begin{split}
     = {} & x^3 \qty(\sum_{i < j} \frac{w_{ij} d_{ij}^3}{3k}) - \log(x)(k^2 n(n-1))\\
     & - k^2 \sum_{i < j} \log(d_{ij})
   \end{split} \\
-  \phi'(x) = {}     & 3x^2 \qty(\sum_{i < j} \frac{w_{ij} d_{ij}^3}{3k}) - \frac{k^2 n(n-1)}{x}                                           \\
+  \phi'(x) = {}     & 3x^2 \qty(\sum_{i < j} \frac{w_{ij} d_{ij}^3}{3k}) - \frac{k^2 n(n-1)}{x}                                             \\
   \phi''(x) = {}    & 6x \qty(\sum_{i < j} \frac{w_{ij} d_{ij}^3}{3k}) + \frac{k^2 n(n-1)}{x^2}
 \end{align*}
 

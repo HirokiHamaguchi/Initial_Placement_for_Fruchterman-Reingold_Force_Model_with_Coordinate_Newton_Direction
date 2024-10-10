@@ -1,21 +1,21 @@
 {
     "latex-workshop.latex.recipes": [
-        {
-            "name": "ptex2pdf*2",
-            "tools": [
-                "ptex2pdf",
-                "ptex2pdf",
-            ]
-        },
-        {
-            "name": "ptex2pdf&pbibtex",
-            "tools": [
-                "ptex2pdf",
-                "pbibtex",
-                "ptex2pdf",
-                "ptex2pdf"
-            ]
-        },
+        // {
+        //     "name": "ptex2pdf*2",
+        //     "tools": [
+        //         "ptex2pdf",
+        //         "ptex2pdf",
+        //     ]
+        // },
+        // {
+        //     "name": "ptex2pdf&pbibtex",
+        //     "tools": [
+        //         "ptex2pdf",
+        //         "pbibtex",
+        //         "ptex2pdf",
+        //         "ptex2pdf"
+        //     ]
+        // },
         {
             "name": "uplatex",
             "tools": [
@@ -268,6 +268,7 @@
         "cinttypes": "cpp",
         "typeindex": "cpp",
         "format": "cpp",
-        "semaphore": "cpp"
+        "semaphore": "cpp",
+        "csignal": "cpp"
     }
 }
