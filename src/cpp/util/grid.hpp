@@ -13,18 +13,20 @@
 #include "problem.hpp"
 
 struct Grid {
-  size_t n;   // number of vertices
-  size_t n2;  // length of the side of the hexagon
+  size_t n;        // number of vertices
+  size_t n2;       // length of the side of the hexagon
+  size_t arraySz;  // size of the array
   double k;
   std::vector<Hex> points;
-  std::vector<std::vector<int>> array;
+  std::vector<int> array;
 
  public:
   Grid(int n, double k) : n(n), n2(0), k(k), k2(std::pow(k, 2)) {
     size_t hexSize = 2 * n;
     while (3 * n2 * n2 + 3 * n2 + 1 < hexSize) n2++;
-    for (int r = 0; r <= int(2 * n2); ++r) {
-      for (int q = 0; q <= int(2 * n2); ++q) {
+    arraySz = 2 * n2 + 1;
+    for (int r = 0; r < int(arraySz); ++r) {
+      for (int q = 0; q < int(arraySz); ++q) {
         if (r + q < int(n2) || r + q > int(3 * n2)) continue;
         points.emplace_back(q, r);
       }
@@ -35,10 +37,9 @@ struct Grid {
     std::shuffle(points.begin(), points.end(), g);
     points.resize(n);
 
-    array.resize(2 * n2 + 1, std::vector<int>(2 * n2 + 1, -1));
-    for (size_t i = 0; i < points.size(); ++i) array[points[i].q][points[i].r] = i;
-
-    initializeDeltaHexList();
+    array.resize(arraySz * arraySz, -1);
+    for (size_t i = 0; i < points.size(); ++i)
+      array[to1DIndex(points[i].q, points[i].r)] = i;
   }
 
   inline std::pair<float, float> hex2xy(double q, double r) const {
@@ -59,15 +60,15 @@ struct Grid {
     double dist = std::hypot(delta.first, delta.second);
     assert(dist > 1e-9);
 
-    // * Method 1: only use attractive force
+    // * Only use attractive force
     double coeff1 = w * dist / k;
     double coeff2 = w / (dist * k);
 
-    // * Method 2: use both attractive and repulsive forces
-    // double d2 = std::pow(dist, 2);
-    // double d4 = std::pow(d2, 2);
-    // double coeff1 = w * dist / k - k2 / d2;
-    // double coeff2 = w / (dist * k) + 2 * k2 / d4;
+    // // Method 2: use both attractive and repulsive forces (deprecated)
+    // // double d2 = std::pow(dist, 2);
+    // // double d4 = std::pow(d2, 2);
+    // // double coeff1 = w * dist / k - k2 / d2;
+    // // double coeff2 = w / (dist * k) + 2 * k2 / d4;
 
     gx += coeff1 * delta.first;
     gy += coeff1 * delta.second;
@@ -89,8 +90,8 @@ struct Grid {
 
     // move vertex along path
     for (int j = 0; j < int(path.size()) - 1; ++j) {
-      int& curr = array[path[j].q][path[j].r];
-      int& next = array[path[j + 1].q][path[j + 1].r];
+      int& curr = array[to1DIndex(path[j].q, path[j].r)];
+      int& next = array[to1DIndex(path[j + 1].q, path[j + 1].r)];
       if (next != -1)
         std::swap(points[curr], points[next]);
       else
@@ -132,29 +133,16 @@ struct Grid {
 
   // * For Util
   inline bool isInside(const Hex& hex) const {
-    return 0 <= hex.q && hex.q < int(2 * n2 + 1) && 0 <= hex.r &&
-           hex.r < int(2 * n2 + 1);
-  }
-
-  // * For updateToNewPos
-  std::vector<Hex> deltaHexList;
-  void initializeDeltaHexList() {
-    assert(deltaHexList.empty());
-    int maxDist = 2 * n2 + 1;
-    for (int dq = -maxDist; dq <= +maxDist; ++dq)
-      for (int dr = -maxDist; dr <= +maxDist; ++dr) deltaHexList.emplace_back(dq, dr);
-    std::sort(deltaHexList.begin(), deltaHexList.end(),
-              [&](const Hex& a, const Hex& b) {
-                auto [x1, y1] = hex2xy(a.q, a.r);
-                auto [x2, y2] = hex2xy(b.q, b.r);
-                return (x1 * x1 + y1 * y1) < (x2 * x2 + y2 * y2);
-              });
+    return 0 <= hex.q && hex.q < int(arraySz) && 0 <= hex.r && hex.r < int(arraySz);
   }
 
   // * For debugging
   bool isCorrectState() const {
     for (size_t i = 0; i < points.size(); ++i)
-      if (array[points[i].q][points[i].r] != int(i)) return false;
+      if (array[to1DIndex(points[i].q, points[i].r)] != int(i)) return false;
     return true;
   }
+
+  // * Utility function to convert 2D indices to 1D index
+  inline size_t to1DIndex(int q, int r) const { return q * arraySz + r; }
 };
