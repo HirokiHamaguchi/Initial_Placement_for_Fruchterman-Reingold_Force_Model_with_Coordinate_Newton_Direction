@@ -75,7 +75,11 @@
         }
     ],
     "editor.tabSize": 2,
+    "material-icon-theme.folders.associations": {
+        "main": "docs",
+    },
     "cSpell.words": [
+        "Akiko",
         "amax",
         "Andi",
         "arange",
