@@ -141,23 +141,36 @@
 \end{abstract}
 
 \begin{IEEEkeywords}
-  Graph drawing, Fruchterman--Reingold algorithm, Random Subspace method.
+  Graph Drawing, Optimization, Fruchterman--Reingold Layout, Random Subspace Method.
 \end{IEEEkeywords}
 
 \section{Introduction}\label{sec:introduction}
 
-\IEEEPARstart{G}{raph} is a mathematical structure representing pairwise relationships between objects, and graph drawing is one of the most fundamental tasks in data science. Indeed, Numerous general algorithms have been proposed for graph drawing~\cite{tutteHowDrawGraph1963,chrobakLineartimeAlgorithmDrawing1995,sugiyamaMethodsVisualUnderstanding1981,ghassemitoosiSimulatedAnnealingPreProcessing2016}
+\IEEEPARstart{G}{raph} is a mathematical structure representing pairwise relationships between objects, and graph drawing is one of the most fundamental tasks in data science. Indeed, numerous kinds of algorithms have been proposed for graph drawing~\cite{tutteHowDrawGraph1963,chrobakLineartimeAlgorithmDrawing1995,sugiyamaMethodsVisualUnderstanding1981,ghassemitoosiSimulatedAnnealingPreProcessing2016}.
 Among these, one of the most popular strategies is force-directed algorithms.
 
-In force-directed algorithms, the graph is modeled as a physical system of particles. These include methods such as the Kamada--Kawai (KK) layout~\cite{kamadaAlgorithmDrawingGeneral1989} using shortest path distances for a cost function, and the Fruchterman--Reingold (FR) layout~\cite{fruchtermanGraphDrawingForcedirected1991,kobourovSpringEmbeddersForce2012}, which is the primary focus of this paper.
+In force-directed algorithms, we model a graph as a system of particles with forces acting between them.
+This class of algorithms includes the Kamada--Kawai (KK) layout~\cite{kamadaAlgorithmDrawingGeneral1989},
+Eades' spring embedder~\cite{eades1984heuristic}, and the Fruchterman--Reingold (FR) layout~\cite{fruchtermanGraphDrawingForcedirected1991,kobourovSpringEmbeddersForce2012}, which serves as the central focus of this study.
 
-The FR algorithm is one of the most widely used force-directed algorithms. It is also implemented in many modern graph drawing libraries such as NetworkX~\cite{osti_960616}, Graphviz~\cite{ellsonGraphvizOpenSource2002}, and igraph~\cite{csardiIgraphSoftwarePackage2006}. The FR layout is based on a physical model of a system of particles and springs, and FR algorithm seeks the equilibrium of the forces between nodes.
+The FR algorithm is one of the most widely used force-directed algorithms. It is also implemented in many modern graph drawing libraries such as NetworkX~\cite{osti_960616}, Graphviz~\cite{ellsonGraphvizOpenSource2002}, and igraph~\cite{csardiIgraphSoftwarePackage2006}.
 
-However, since both the KK layout and the FR layout requires to compute the forces or energies between all pairs of vertices, they have a high computational cost of $\order{n^2}$ per iteration, where $n$ is the number of vertices in the graph. To address this kind of computational burden, several methods have been proposed. One strategy is to approximate the $n$-body simulation using hierarchical methods such as the fast multipole method~\cite{greengardFastAlgorithmParticle1987}, the Barnes--Hut approximation~\cite{barnesHierarchicalLogForcecalculation1986}, multilevel approaches~\cite{Hu2006EfficientHF}, or stress majorization~\cite{gansnerGraphDrawingStress2005}.
+However, both the KK layout and the FR layout suffer from high computational complexity, specifically $\order{\abs{V}^2}$ per iteration as it is, where $\abs{V}$ denotes the number of vertices. This computational burden makes it difficult to apply these algorithms to large-scale graphs.
 
-Another approach is to accelerate the optimization algorithm directly, which aligns with the spirit of our work. Recent researches have accelerated the algorithms for FR layout and KK layout through various methods, including GPU parallel architectures~\cite{gajdosParallelFruchtermanReingold2016}, numerical optimization techniques such as L-BFGS~\cite{6183577}, and Stochastic Gradient Descent (SGD)~\cite{8419285}.
+To address this kind of burden, several methods have been developed. These include approximating the $n$-body simulation using multipole expansions~\cite{greengardFastAlgorithmParticle1987} or the Barnes--Hut approximation~\cite{barnesHierarchicalLogForcecalculation1986}, gradually refining the layouts using a multilevel approach~\cite{Hu2006EfficientHF} and employing stress majorization~\cite{gansnerGraphDrawingStress2005}.
+
+Another approach is to directly accelerate the optimization process, which aligns with the aim of our work. Recent researches have accelerated the algorithms for FR layout or KK layout through various methods, including adaptation to GPU parallel architectures~\cite{gajdosParallelFruchtermanReingold2016}, utilizing numerical optimization techniques such as L-BFGS~\cite{6183577}, and Stochastic Gradient Descent (SGD)~\cite{8419285}.
 
 Based on such advances, in this paper, we investigate the ability of another algorithm: subspace methods.
+Subspace methods are a class of optimization algorithms that restrict the optimization to a lower-dimensional subspace of the solution space, which can significantly reduce the computational cost per iteration.
+We propose a new algorithm for the FR layout that leverages the subspace method, and we demonstrate its effectiveness through experiments.
+
+The rest of the paper is organized as follows.
+In Section~\ref{sec:preliminary}, we define the optimization problem for the FR algorithm.
+In Section~\ref{sec:RQ}, we present our research question based on previous works.
+In Section~\ref{sec:algorithm}, we propose a new algorithm that utilizes the subspace method for the FR layout.
+In Section~\ref{sec:experiment}, we present our experimental results.
+Finally, we conclude and discuss future work in Section~\ref{sec:discussion}.
 
 \begin{figure}[t]
   \centering
@@ -191,13 +204,6 @@ Based on such advances, in this paper, we investigate the ability of another alg
   \label{table:four_images}
 \end{figure}
 
-The rest of the paper is organized as follows.
-In Section~\ref{sec:preliminary}, we define the optimization problem for the FR algorithm.
-In Section~\ref{sec:RQ}, we present our research question based on previous works.
-In Section~\ref{sec:algorithm}, we propose a new algorithm that utilizes the subspace method for the FR layout.
-In Section~\ref{sec:experiment}, we present our experimental results.
-Finally, we conclude and discuss future work in Section~\ref{sec:discussion}.
-
 \section{Preliminary}\label{sec:preliminary}
 
 \begin{figure}[t]
@@ -210,34 +216,36 @@ Finally, we conclude and discuss future work in Section~\ref{sec:discussion}.
   \label{fig:frLayout}
 \end{figure}
 
-Firstly, in this section, we formulate the FR layout as a continuous optimization problem, and introduce the conventional approaches to this problem, namely the FR algorithm and the L-BFGS method.
+In this section, we formulate the FR layout as a continuous optimization problem, and introduce the conventional approaches to this problem, namely the FR algorithm and the L-BFGS method.
 
 \subsection{Fruchterman--Reingold layout}\label{ssec:frLayout}
 
-Let us define
-$\bbR_{> 0} \defeq \qty{ x \in \bbR \mid x > 0 }, \quad \bbR_{\geq 0} \defeq \qty{ x \in \bbR \mid x \geq 0 }$,
-and let $W = (w_{i,j}) \in \bbR_{\geq 0}^{n \times n}$ be an adjacency matrix of a undirected connected graph $G_W = (V, E)$. $V = \qty{v_i \mid 1 \leq i \leq n}$ is a set of vertices and $E = \qty{(v_i, v_j) \mid w_{i,j} > 0}$ is a set of edges. We call $w_{i,j}$ as a weight of the edge $(v_i, v_j)$.
+Let $\bbR_{> 0} \defeq \qty{ x \in \bbR \mid x > 0 }, \quad \bbR_{\geq 0} \defeq \qty{ x \in \bbR \mid x \geq 0 }$, and let $W = (w_{i,j}) \in \bbR_{\geq 0}^{n \times n}$ be an adjacency matrix of a graph $G_W = (V, E)$, where $V = \qty{v_i \mid 1 \leq i \leq n}$ is a set of vertices and $E = \qty{(v_i, v_j) \mid w_{i,j} > 0}$ is a set of edges. We call $w_{i,j}$ as a weight of the edge $(v_i, v_j)$.
 
-The FR algorithm in NetworkX, for example, can handle directed unconnected graphs with $w_{i,j} < 0$, but we will not consider such cases here.
-For directed graphs, slight modifications of algorithms or converting them to undirected graphs may be effective. For unconnected graphs, algorithms can be applied to each connected component independently. When $w_{i,j} < 0$ for some $(i,j)$, the optimization problem may become unbounded, but with $w_{i,j} \geq 0$ for all $(i,j)$ and the connectivity, the problem is always bounded and solvable.
-
+We will only consider undirected connected graphs with non-negative weights.
+Although the FR algorithm in NetworkX, for example, can handle directed unconnected graphs with negative weights, this paper does not focus on such cases.
+For directed graphs, slight modifications of algorithms or converting them to undirected graphs may be effective.
+For unconnected graphs, algorithms can be applied to each connected component independently.
+When negative weights are present, the optimization problem may become unbounded, but with non-negative weights and ensuring the graph's connectivity, the problem is always bounded and solvable.
 In summary, the conditions for $W$ is formulated as follows:
 \begin{equation}\label{eq:WCondition}
   W \in \bbR_{\geq 0}^{n \times n}, \quad W = W^\top, \quad \text{$G_W$ is connected}.
 \end{equation}
 
-Each vertex $v_i \in V$ is assigned to a point on a plane $x_i \in \bbR^2$ and we define $X = (x_1, \dots, x_n) \in \bbR^{2 \times n}$ as the configuration of the graph.
-For an parameter $k$ and a distance $d_{i,j} \defeq \norm{x_i - x_j}_2$ between two vertices $v_i$ and $v_j$, Fruchterman and Reingold~\cite{fruchtermanGraphDrawingForcedirected1991} defined the power of attraction $F_{i,j}^a: \bbR_{> 0} \to \bbR$ and the power of repulsion $F^r: \bbR_{> 0} \to \bbR$ as
+Fruchterman and Reingold~\cite{fruchtermanGraphDrawingForcedirected1991} proposed a force-directed layout called the Fruchterman--Reingold (FR) layout, as known as a spring layout~\cite{osti_960616}.
+Let $x_i \in \bbR^2$ be the position of the vertex $v_i \in V$, and $X = (x_1, \dots, x_n) \in \bbR^{2 \times n}$ be the configuration of the graph.
+For a parameter $k$ and a distance $d_{i,j} \defeq \norm{x_i - x_j}_2$ between two vertices $v_i$ and $v_j$, the attraction force $F_{i,j}^a: \bbR_{> 0} \to \bbR$ and the repulsion force $F^r: \bbR_{> 0} \to \bbR$ is defined as
 \begin{equation*}
   F_{i,j}^a(d) \defeq \frac{w_{i,j} d^2}{k}, \quad F^r(d) \defeq -\frac{k^2}{d}.
 \end{equation*}
-We refer this force-directed layout as the Fruchterman--Reingold (FR) layout.
-The energy for these powers $E_{i,j}(d)$ can be defined as
+FR layout seeks the equilibrium of the forces between all pairs of vertices, as shown in Figure~\ref{fig:frLayout}.
+
+We can also interrupt forces by its scalar potential~\cite{6183577}, in other words, energy $E_{i,j}: \bbR_{> 0} \to \bbR$, which is defined by
 \begin{align*}
   E_{i,j}(d) & \defeq \int_{0}^{d} F_{i,j}^a(r) \dd{r} + \int_{\infty}^{d} F^r(r) \dd{r} \\
              & = \frac{w_{i,j} d^3}{3k} - k^2\log{d}.
 \end{align*}
-As a remark, the energy function $E_{i,j}$ is convex as a function of $d$ and minimized when $d^* = k/\sqrt[3]{w_{i,j}}$, but it is not Lipschitz continuous, and is not convex as a function of $x_i$. Refer to Figure~\ref{fig:energy3d}.
+As a remark, this energy function $E_{i,j}$ is convex as a function of $d$ and minimized when $d^* = k/\sqrt[3]{w_{i,j}}$, but it is not Lipschitz continuous and is not convex as a function of $x_i$. Refer to Figure~\ref{fig:energy3d}.
 
 \begin{figure}[t]
   \centering
@@ -253,6 +261,7 @@ Now, the optimization problem for FR layout can be formulated as the minimizatio
   {\label{eq:fr}}
   {}
 \end{mini}
+This is because seeking an equilibrium of the forces is equivalent to minimizing the energy function $E_{i,j}$ for all pairs of vertices.
 In the following, we will discuss the optimization of this problem.
 
 \begin{figure*}[t]
@@ -282,7 +291,7 @@ In the following, we will discuss the optimization of this problem.
 
 \subsection{Fruchterman--Reingold algorithm}\label{ssec:frAlgorithm}
 
-The Fruchterman--Reingold algorithm~\cite{fruchtermanGraphDrawingForcedirected1991}, the original force-directed algorithm for this layout, can be regarded as a most standard approach to solve the optimization problem~\eqref{eq:fr}.
+The Fruchterman--Reingold algorithm~\cite{fruchtermanGraphDrawingForcedirected1991}, the original force-directed algorithm for this layout, can be regarded as a most standard approach for solving the optimization problem~\eqref{eq:fr}.
 As pointed out in~\cite{tunkelang1999numerical}, the FR algorithm can be regarded as a gradient descent method for the energy function $f$ with a cooling global temperature $t$.
 
 Let denote $f_i(x): \bbR^2 \to \bbR$ as the energy function for the vertex $v_i$:
@@ -317,38 +326,52 @@ The pseudo code of the FR algorithm is shown in Algorithm~\ref{alg:fr}. It is ba
   \Return $\text{pos}$
 \end{algorithm}
 
-In Algorithm~\ref{alg:fr}, the initial placement of points is determined randomly. In general, under proper normalization of the input, each point is uniformly distributed within a unit square.
+In Algorithm~\ref{alg:fr}, the initial placement of points is determined randomly. Under proper input normalization, each point is uniformly distributed within a unit square in general.
+
 The parameter $t$ denotes the temperature, which governs the step size of the gradient descent. As the temperature gradually decreases, the algorithm converges to a particular configuration, though this configuration is not necessarily the optimal solution.
 
 \subsection{L-BFGS method}\label{ssec:lbfgs}
 
 Another approach to solve the optimization problem~\eqref{eq:fr} is to use the Limited-memory Broyden--Fletcher--Goldfarb--Shanno (L-BFGS) algorithm~\cite{6183577}.
-The L-BFGS method is an optimization technique used for large-scale problems, which approximates the inverse Hessian matrix using only a few recent gradient vectors, making it more memory-efficient than the standard BFGS method~\cite{liuLimitedMemoryBFGS1989}.
-This makes L-BFGS particularly suitable for high-dimensional optimization tasks, and since it is a sophisticated method than the gradient descent method, the superior performance than the FR algorithm is reported in~\cite{6183577}.
+The L-BFGS method is an optimization technique used for large-scale problems, which approximates the inverse Hessian matrix using only a few recent gradient vectors, making it more memory-efficient than the standard BFGS method (quasi-Newton method)~\cite{liuLimitedMemoryBFGS1989}.
+This makes L-BFGS particularly suitable for high-dimensional optimization tasks. Since it is a more sophisticated method than the gradient descent method, the superior performance of the FR algorithm is reported in~\cite{6183577}.
 
-There are many implementations of L-BFGS available, such as SciPy~\cite{2020SciPy-NMeth} and C++ L-BFGS~\cite{qiuYixuanLBFGSpp2024,okazakiChokkanLiblbfgs2024}.
+There are many implementations of L-BFGS available, such as SciPy~\cite{2020SciPy-NMeth} and C++ L-BFGS~\cite{qiuYixuanLBFGSpp2024,okazakiChokkanLiblbfgs2024}, which we used in our experiments.
 
 For the optimization problem~\eqref{eq:fr}, the L-BFGS method can be applied via flattening the configuration $X \in \bbR^{2 \times n}$ to a vector $\overline{X} \in \bbR^{2n}$.
-However, it is worth noting that this method ignores the structure of $X$, and treats the problem just as a general optimization problem. Thus, we can expect that there could be a room for improvement by leveraging what we have ignored in this L-BFGS method.
+However, it is worth noting that this method ignores the structure of $X$ and treats the problem just as a general optimization problem.
+Thus, we can expect room for improvement by leveraging what we have ignored in this L-BFGS method.
 
 \section{Research Question}\label{sec:RQ}
 
 Now, we declare the research question of this paper: ``Can we accelerate the optimization process for the FR layout by leveraging the inherent structure of the problem?''.
 
-In the previous section, we presented the FR algorithm and L-BFGS method.
-However, both methods face specific challenges during optimization, leading to inefficiencies and slow convergence as detailed in Section~\ref{ssec:twist}.
+In the previous section, we presented the FR algorithm and L-BFGS method. However, both methods face specific challenges during optimization, leading to inefficiencies and slow convergence, as detailed in Section~\ref{ssec:twist}.
 Addressing these challenges forms a part of our research question, and we aim to introduce a new algorithm capable of overcoming these limitations. To achieve this, we will review key prior studies in Sections~\ref{ssec:sgd} and~\ref{ssec:introRSN}.
 
-\subsection{ねじれの発生}\label{ssec:twist}
+\subsection{twist in the optimization process}\label{ssec:twist}
 
-いくつかの実験及び先行研究の報告を基にすると、FR layoutに対する最適化を考える上での最大の難点は、"ねじれ"の解消であると我々は考えている。
+First, we observe the challenges appeared in existing methods.
+We identify that the most significant difficulty in optimizing the FR layout lies in resolving "twists".
 
-ねじれという言葉の用法自体は比較的少ないと認識しているが、例えば\cite{cheongSnapshotVisualizationComplex2018}などでもこの言葉が用いられている。本論文におけるねじれとは、数学的に厳密な語ではなく、図示した際に現れる明らかに不必要な線分の交差や、本来円環状などの簡潔な構造が絡まっているように見える状況を指している。
-図~\ref{fig:circle}などに示したような状況が具体例である。
+The term "twist" does not refer to a mathematically rigorous concept; rather, it describes situations where unnecessary intersections of edges or tangled structures appear in visual representations.
+Although the usage of the term "twist" is not common, it has been mentioned in works such as~\cite{cheongSnapshotVisualizationComplex2018}. Figure~\ref{fig:circle} illustrates a circle graph example of this situation.
 
-これがもし、グニャグニャに曲がっているが辺同士の交差が一切ない状況にある場合、FR algorithmやL-BFGS methodによる最適化は比較的速やかに進んでいく。しかし、そうでない場合、勾配が小さくなってしまい、通常の連続最適化では停滞してしまい、その解消は難しい。
+The presence or absence of "twist" can impact optimization efficiency.
+In the case shown in Figure~\ref{fig:circle}, even if vertices are disordered, optimization method proceeds relatively smoothly when no intersections between edges exist.
+However, when "twist" exists, mutual interactions may diminish the gradient, causing the optimization to stagnate in typical continuous optimization processes, making it challenging to resolve the "twist".
+Therefore, providing an initial placement of points that resolve "twist" as much as possible can significantly influence the efficiency of the optimization process.
 
-故に、あらかじめできる限りねじれを解消するような初期配置を与えることは、最適化の効率に大きく影響を及ぼしうると考えられる。
+% まず、既存の手法における課題を観察し整理する。
+% いくつかの実験及び先行研究の報告を基にすると、FR layoutに対する最適化を考える上での最大の難点は、"ねじれ"の解消であると我々は考えている。
+
+% 本論文におけるねじれとは、数学的に厳密な語ではなく、図示した際に現れる明らかに不必要な線分の交差や、本来円環状などの簡潔な構造が絡まっているように見える状況を指している。
+% ねじれという言葉の用法自体は比較的少ないと認識しているが、例えば\cite{cheongSnapshotVisualizationComplex2018}などでもこの言葉が用いられている。
+% 図~\ref{fig:circle}などに示したような状況が具体例である。
+
+% ねじれの有無は、最適化の効率に大きな影響を及ぼすと我々は考えている。
+% 図~\ref{fig:circle}の状況において、頂点がぐちゃぐちゃに配置こそされているが辺同士の交差が一切ない状況にある場合、FR algorithmやL-BFGS methodによる最適化は比較的速やかに進んでいく。しかし、そうでない場合、相互の絡み合いによって勾配が小さくなってしまい、通常の連続最適化では最適化が停滞してしまい、その解消は難しい。
+% 故に、あらかじめできる限りねじれを解消するような初期配置を与えることは、最適化の効率に大きく影響を及ぼしうると考えられる。
 
 \subsection{SGD for KK layout}\label{ssec:sgd}
 
