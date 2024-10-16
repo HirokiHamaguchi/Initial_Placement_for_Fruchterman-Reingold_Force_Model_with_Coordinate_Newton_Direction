@@ -269,6 +269,7 @@ In the following, we will discuss the optimization of this problem.
       Comparison of \texttt{sfdp} in Graphviz, \texttt{fdp} in Graphviz, and \texttt{spring\_layout} in NetworkX for the circle graph with $\abs{V} = 300$.
       Every algorithm is run with the default parameters, but both \texttt{fdp} and \texttt{spring\_layout} fails to beautifully visualize the circle.
     }
+    \label{fig:circle}
   \end{minipage}
   \begin{minipage}{0.49\hsize}
     \centering
@@ -341,9 +342,14 @@ Addressing these challenges forms a part of our research question, and we aim to
 
 \subsection{ねじれの発生}\label{ssec:twist}
 
-% ねじれるよ。
-% FR algorithmでもねじれるし、L-BFGSでもねじれる。
-% 最適化で言えば、プラトーが発生する。
+いくつかの実験及び先行研究の報告を基にすると、FR layoutに対する最適化を考える上での最大の難点は、"ねじれ"の解消であると我々は考えている。
+
+ねじれという言葉の用法自体は比較的少ないと認識しているが、例えば\cite{cheongSnapshotVisualizationComplex2018}などでもこの言葉が用いられている。本論文におけるねじれとは、数学的に厳密な語ではなく、図示した際に現れる明らかに不必要な線分の交差や、本来円環状などの簡潔な構造が絡まっているように見える状況を指している。
+図~\ref{fig:circle}などに示したような状況が具体例である。
+
+これがもし、グニャグニャに曲がっているが辺同士の交差が一切ない状況にある場合、FR algorithmやL-BFGS methodによる最適化は比較的速やかに進んでいく。しかし、そうでない場合、勾配が小さくなってしまい、通常の連続最適化では停滞してしまい、その解消は難しい。
+
+故に、あらかじめできる限りねじれを解消するような初期配置を与えることは、最適化の効率に大きく影響を及ぼしうると考えられる。
 
 \subsection{SGD for KK layout}\label{ssec:sgd}
 
@@ -483,12 +489,12 @@ In this section, we address the problem of finding the optimal scaling factor th
 Formulating the optimization through scaling, the task reduces to selecting an appropriate scaling factor $x \in \bbR_{> 0}$ that minimizes the following energy function:
 
 \begin{align*}
-  \phi(x) \defeq {} & \qty(\sum_{i < j} \frac{w_{ij} (xd_{ij})^3}{3k}) - k^2 \sum_{i < j} \log(x d_{ij})                                    \\
+  \phi(x) \defeq {} & \qty(\sum_{i < j} \frac{w_{ij} (xd_{ij})^3}{3k}) - k^2 \sum_{i < j} \log(x d_{ij})                                     \\
   \begin{split}
-    = {} & x^3 \qty(\sum_{i < j} \frac{w_{ij} d_{ij}^3}{3k}) - \log(x)(k^2 n(n-1))\\
-    & - k^2 \sum_{i < j} \log(d_{ij})
+    = {} & x^3 \qty(\sum_{i < j} \frac{w_{ij} d_{ij}^3}{3k}) - \log(x)(k^2 n(n-1)) \\
+         & - k^2 \sum_{i < j} \log(d_{ij})
   \end{split} \\
-  \phi'(x) = {}     & 3x^2 \qty(\sum_{i < j} \frac{w_{ij} d_{ij}^3}{3k}) - \frac{k^2 n(n-1)}{x}                                             \\
+  \phi'(x) = {}     & 3x^2 \qty(\sum_{i < j} \frac{w_{ij} d_{ij}^3}{3k}) - \frac{k^2 n(n-1)}{x}                                              \\
   \phi''(x) = {}    & 6x \qty(\sum_{i < j} \frac{w_{ij} d_{ij}^3}{3k}) + \frac{k^2 n(n-1)}{x^2}
 \end{align*}
 
