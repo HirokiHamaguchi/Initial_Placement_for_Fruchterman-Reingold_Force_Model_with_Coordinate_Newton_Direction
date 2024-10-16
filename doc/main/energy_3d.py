@@ -38,10 +38,10 @@ ax.plot_surface(
 
 
 # Set plot labels and title
-ax.set_xlabel("$x_1$")
-ax.set_ylabel("$x_2$")
-ax.set_zlabel("$E(d)$")
+ax.set_xlabel("$x_i$", fontsize=20)
+ax.set_ylabel("$x_j$", fontsize=20)
+ax.set_zlabel("$E_{i,j}(d)$", fontsize=20)
 
 # plt.show()
 plt.tight_layout()
-plt.savefig("doc/energy_3d.png", dpi=300)
+plt.savefig("doc/main/energy_3d.png", dpi=300)
