@@ -36,9 +36,8 @@ struct Problem {
 
   Problem(const std::string matrixName) : matrixName(matrixName) {
     std::string curPath = std::filesystem::current_path().string();
-    assert(curPath.substr(curPath.size() - 8, 8) == "/src/cpp");
-    std::string path =
-        curPath.substr(0, curPath.size() - 8) + "/data/" + matrixName + ".mtx";
+    std::string path = curPath + "/../../data/" + matrixName + ".mtx";
+    assert(std::filesystem::exists(path));
 
     std::ifstream file(path);
     if (!file.is_open()) {
@@ -176,8 +175,9 @@ struct Problem {
     position *= x;
   }
 
-  void printOutput(const std::vector<Eigen::VectorXf>& positions) {
-    auto [path, file] = openFile("out/" + matrixName + ".out");
+  void printOutput(const std::vector<Eigen::VectorXf>& positions,
+                   const std::string _path = "") const {
+    auto [path, file] = openFile(_path.empty() ? "out/" + matrixName + ".out" : _path);
 
     file << n << " " << m << " " << k << "\n";
     for (size_t i = 0; i < m; ++i) {

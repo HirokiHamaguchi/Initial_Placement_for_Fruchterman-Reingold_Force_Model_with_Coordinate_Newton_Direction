@@ -1,31 +1,13 @@
-#include "solve.cpp"
+#include "solve/solve.cpp"
 
 int main(int argc, char* argv[]) {
   // Read input
-  Method method;
-  Problem problem;
-  bool measureTime;
-
-  if (argc == 1) {
-    method = RS_L_BFGS;
-    problem = Problem("jagmesh1");
-    measureTime = true;
-  } else if (argc == 3) {
-    std::string problemStr = argv[1];
-    std::string measureTimeStr = argv[2];
-    problem = Problem(problemStr);
-    if (measureTimeStr != "true" && measureTimeStr != "false") {
-      std::cerr << "Error: invalid measureTime\n";
-      exit(1);
-    }
-    measureTime = (measureTimeStr == "true");
-  } else {
-    std::cerr << "Error: invalid number of arguments\n";
-    exit(1);
-  }
+  Method method = FR;
+  Problem problem("jagmesh1");
+  bool measureTime = false;
 
   if (!measureTime) {
-    auto [hist, positions] = solve(method, problem, measureTime, 0);
+    auto [hist, positions] = solve(method, problem, measureTime, 0, 100);
     assert(!hist.empty());
     std::cout << "Elapsed time: " << hist.back().second << " seconds" << std::endl;
     std::cout << "Score: " << hist.back().first << std::endl;

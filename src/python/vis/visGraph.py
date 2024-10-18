@@ -13,6 +13,8 @@ def visGraph(
     node_size: int = 50,
     width: float = 1.0,
 ) -> None:
+    plt.figure(figsize=(8, 8))
+    plt.axis("equal")
     cmap = plt.get_cmap("jet")
     n = G.number_of_nodes()
     colorMap = np.array([cmap(i / (n - 1)) for i in range(n)])
@@ -21,7 +23,6 @@ def visGraph(
         dirs = _dirs.copy()
         assert pos.shape == (n, 2)
         assert dirs.shape == (n, 2)
-        dirs /= np.max(np.linalg.norm(dirs, axis=1)) / 0.3
         for i in range(n):
             plt.arrow(
                 pos[i][0],
@@ -36,7 +37,8 @@ def visGraph(
     if title:
         plt.title(title)
     if savePath:
-        plt.savefig(savePath, bbox_inches="tight")
+        plt.tight_layout()
+        plt.savefig(savePath, bbox_inches="tight", pad_inches=0.0, dpi=300)
         plt.close()
     else:
         plt.show()
