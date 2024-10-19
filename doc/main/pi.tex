@@ -1,46 +1,76 @@
 \documentclass[dvipdfmx,tikz]{standalone}
 \usepackage{tikz}
 \usepackage{ifthen}
+
+
+\usetikzlibrary{
+  shapes,
+  shapes.geometric,
+  arrows.meta,
+  calc,
+}
+
+\definecolor{cA}{HTML}{0072BD}
+\definecolor{cB}{HTML}{EDB120}
+\definecolor{cC}{HTML}{77AC30}
+\definecolor{cD}{HTML}{D95319}
+
 \begin{document}
 \begin{tikzpicture}
   \foreach \x in {0,...,2}{
       \pgfmathsetmacro{\range}{ifthenelse(mod(\x,2)==1,8,7)}
       \foreach \y in {0,...,\range}{
           \pgfmathsetmacro\shift{mod(\x,2)*0.5}
-          \coordinate (a\x\y) at (\x, {-sqrt(3)/2*\y + \shift});
+          \coordinate (a\x\y) at ({\y - \shift},{-sqrt(3)/2*\x});
         }}
+
+  \foreach \xy in {00,10,01,12,11,22,20}{
+      \draw[cA,very thick] (a\xy) circle (4pt);
+    }
+  \draw[cA,thick] (a00) -- (a10) -- (a01) -- (a12) -- (a11) -- (a22) -- (a20) -- (a00);
+
+  \foreach \xy in {13,03,04,15,14,25,23}{
+      \draw[cB,very thick] (a\xy) circle (4pt);
+    }
+  \draw[cB,thick] (a13) -- (a03) -- (a04) -- (a15) -- (a14) -- (a25) -- (a23) -- (a13);
+
+  \foreach \xy in {16,06,07,18,17,27,26}{
+      \draw[cC,very thick] (a\xy) circle (4pt);
+    }
+  \draw[cC,thick] (a16) -- (a06) -- (a07) -- (a18) -- (a17) -- (a27) -- (a26) -- (a16);
+
   \foreach \x in {0,...,2}{
       \pgfmathsetmacro{\range}{ifthenelse(mod(\x,2)==1,8,7)}
       \foreach \y in {0,...,\range}{
-          \filldraw[draw=black,fill=black] (a\x\y) circle (1pt);
+          \filldraw[draw=black,fill=black] (a\x\y) circle (1.5pt);
         }
     }
 
-  \draw (a00) circle (3pt);
-  \draw (a10) circle (3pt);
-  \draw (a01) circle (3pt);
-  \draw (a12) circle (3pt);
-  \draw (a11) circle (3pt);
-  \draw (a22) circle (3pt);
-  \draw (a20) circle (3pt);
-  \draw (a00) -- (a10) -- (a01) -- (a12) -- (a11) -- (a22) -- (a20) -- (a00);
+  \begin{scope}[xshift=0.5cm,yshift=3cm]
+    \foreach \i in {0,...,6}{
+        \pgfmathsetmacro{\angle}{90+360/7*\i}
+        \filldraw[draw=black,fill=black] (\angle:1) circle (1.5pt);
+        \node at (\angle:0.7) {\small $v_\i$};
+      }
+    \node[regular polygon, regular polygon sides=7, minimum size=2cm, draw, thick] at (0,0) {};
+  \end{scope}
 
-  \draw (a13) circle (3pt);
-  \draw (a03) circle (3pt);
-  \draw (a04) circle (3pt);
-  \draw (a15) circle (3pt);
-  \draw (a14) circle (3pt);
-  \draw (a25) circle (3pt);
-  \draw (a23) circle (3pt);
-  \draw (a13) -- (a03) -- (a04) -- (a15) -- (a14) -- (a25) -- (a23) -- (a13);
+  \draw[-{Stealth[length=3mm,width=2mm]},thick,cA] ($(a11) + (0.0,2.8)$) -- ($(a11) + (0,1.2)$) node[above left=0.1cm] {\large $\pi_1$};
+  \draw[-{Stealth[length=3mm,width=2mm]},thick,cB] ($(a11) + (0.1,2.8)$) -- ($(a11) + (0.1,2.0)$) -- ($(a14) + (0,2.0)$) -- ($(a14) + (0,1.2)$) node[above left=0.1cm] {\large $\pi_2$};
+  \draw[-{Stealth[length=3mm,width=2mm]},thick,cC] ($(a11) + (0.2,2.8)$) -- ($(a11) + (0.2,2.1)$) -- ($(a17) + (0,2.1)$) -- ($(a17) + (0,1.2)$) node[above left=0.1cm] {\large $\pi_3$};
 
-  \draw (a16) circle (3pt);
-  \draw (a06) circle (3pt);
-  \draw (a07) circle (3pt);
-  \draw (a18) circle (3pt);
-  \draw (a17) circle (3pt);
-  \draw (a27) circle (3pt);
-  \draw (a26) circle (3pt);
-  \draw (a16) -- (a06) -- (a07) -- (a18) -- (a17) -- (a27) -- (a26) -- (a16);
+  \node[align=center,anchor=center] at (+4.5,3) {
+    \begin{tabular}{cccc}
+                              &
+      \textcolor{cA}{$\pi_1$} &
+      \textcolor{cB}{$\pi_2$} &
+      \textcolor{cC}{$\pi_3$}   \\
+      $f(X)=$                 &
+      \textcolor{cA}{1.000}   &
+      \textcolor{cB}{1.000}   &
+      \textcolor{cC}{1.000}
+    \end{tabular}
+  };
+
 \end{tikzpicture}
 \end{document}
