@@ -46,7 +46,7 @@
         }
     }
 
-  \begin{scope}[xshift=0.5cm,yshift=3cm]
+  \begin{scope}[xshift=1.6cm,yshift=1.6cm]
     \foreach \i in {0,...,6}{
         \pgfmathsetmacro{\angle}{90+360/7*\i}
         \filldraw[draw=black,fill=black] (\angle:1) circle (1.5pt);
@@ -55,22 +55,11 @@
     \node[regular polygon, regular polygon sides=7, minimum size=2cm, draw, thick] at (0,0) {};
   \end{scope}
 
-  \draw[-{Stealth[length=3mm,width=2mm]},thick,cA] ($(a11) + (0.0,2.8)$) -- ($(a11) + (0,1.2)$) node[above left=0.1cm] {\large $\pi_1$};
-  \draw[-{Stealth[length=3mm,width=2mm]},thick,cB] ($(a11) + (0.1,2.8)$) -- ($(a11) + (0.1,2.0)$) -- ($(a14) + (0,2.0)$) -- ($(a14) + (0,1.2)$) node[above left=0.1cm] {\large $\pi_2$};
-  \draw[-{Stealth[length=3mm,width=2mm]},thick,cC] ($(a11) + (0.2,2.8)$) -- ($(a11) + (0.2,2.1)$) -- ($(a17) + (0,2.1)$) -- ($(a17) + (0,1.2)$) node[above left=0.1cm] {\large $\pi_3$};
-
-  \node[align=center,anchor=center] at (+4.5,3) {
-    \begin{tabular}{cccc}
-                              &
-      \textcolor{cA}{$\pi_1$} &
-      \textcolor{cB}{$\pi_2$} &
-      \textcolor{cC}{$\pi_3$}   \\
-      $f(X)=$                 &
-      \textcolor{cA}{1.000}   &
-      \textcolor{cB}{1.000}   &
-      \textcolor{cC}{1.000}
-    \end{tabular}
-  };
-
+  \node[anchor=center] at (0,1.6) {\Large G:};
+  \node[anchor=center,align=center] at ($(a05)+(0,1.6)$) {
+    \large{projections:}\\
+    \Large{
+      \textcolor{cA}{$\pi_1$}, \textcolor{cB}{$\pi_2$}, \textcolor{cC}{$\pi_3$}
+    }};
 \end{tikzpicture}
 \end{document}
