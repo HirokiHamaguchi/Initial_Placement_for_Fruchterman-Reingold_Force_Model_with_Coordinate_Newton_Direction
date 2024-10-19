@@ -176,8 +176,8 @@ struct Problem {
   }
 
   void printOutput(const std::vector<Eigen::VectorXf>& positions,
-                   const std::string _path = "") const {
-    auto [path, file] = openFile(_path.empty() ? "out/" + matrixName + ".out" : _path);
+                   const std::string pathSuffix = "") const {
+    auto [path, file] = openFile("out/" + matrixName + pathSuffix + ".out");
 
     file << n << " " << m << " " << k << "\n";
     for (size_t i = 0; i < m; ++i) {
