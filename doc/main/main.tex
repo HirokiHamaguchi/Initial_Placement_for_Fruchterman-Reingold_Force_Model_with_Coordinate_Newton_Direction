@@ -177,21 +177,21 @@ Finally, we conclude and discuss future work in Section~\ref{sec:discussion}.
     \large{\textbf{FR}}                           & \large{\textbf{L-BFGS}}   \\
     \begin{minipage}{0.45\columnwidth}
       \centering
-      \includegraphics[scale=0.05]{jagmesh1_FR.png}
+      \includegraphics[scale=0.05]{jagmesh1/jagmesh1_FR.png}
     \end{minipage} &
     \begin{minipage}{0.45\columnwidth}
       \centering
-      \includegraphics[scale=0.05]{jagmesh1_L_BFGS.png}
+      \includegraphics[scale=0.05]{jagmesh1/jagmesh1_L_BFGS.png}
     \end{minipage}                          \\
     \large{\textbf{proposed}}                     & \large{\textbf{+ L-BFGS}} \\
     \begin{minipage}{0.45\columnwidth}
       \centering
-      \includegraphics[scale=0.05]{jagmesh1_RS.png}
+      \includegraphics[scale=0.05]{jagmesh1/jagmesh1_RS.png}
     \end{minipage}
                                                   &
     \begin{minipage}{0.45\columnwidth}
       \centering
-      \includegraphics[scale=0.05]{jagmesh1_RS_L_BFGS.png}
+      \includegraphics[scale=0.05]{jagmesh1/jagmesh1_RS_L_BFGS.png}
     \end{minipage}
   \end{tabular}
   \begin{tikzpicture}[overlay, remember picture]
@@ -207,7 +207,7 @@ Finally, we conclude and discuss future work in Section~\ref{sec:discussion}.
 
 \begin{figure}[t]
   \centering
-  \includegraphics[height=5.5cm]{fr_layout.pdf}
+  \includegraphics[height=5.5cm]{fr_layout/fr_layout.pdf}
   \caption{
     (Top) Fruchterman--Reingold layout. It models $\order{n^2}$ springs between all pairs of vertices.
     (Bottom) The equilibrium between attractive force $F_{i,j}^a(d)$ and repulsive force $F^r(d)$ is achieved at $d = k/\sqrt[3]{w_{i,j}}$, which equals $k$ when $w_{i,j} = 1$.
@@ -248,7 +248,7 @@ As a remark, this energy function $E_{i,j}$ is convex as a function of $d$ and m
 
 \begin{figure}[t]
   \centering
-  \includegraphics[height=5.5cm]{energy_3d.png}
+  \includegraphics[height=5.5cm]{energy_3d/energy_3d.png}
   \caption{Energy function $E_{i,j}(d)$ for $x_j=(0,0)$, $w_{i,j} = 1$ and $k = 1$. Although $E_{i,j}$ is convex as a function of $d$, it is not convex as a function of $x_i$. As $x_i$ approaches $x_j$, the energy function diverges.}
   \label{fig:energy3d}
 \end{figure}
@@ -308,7 +308,7 @@ The parameter $t$ denotes the temperature, which governs the step size of the gr
 
 \begin{figure}[t]
   \centering
-  \includegraphics[width=0.804\columnwidth]{comparison_FRandLBFGS.pdf}
+  \includegraphics[width=0.804\columnwidth]{comparison/comparison_FRandLBFGS.pdf}
   \caption{
     For the graph on the left, which is in progress of L-BFGS, the FR algorithm and the L-BFGS method are executed for 1 iteration respectively.
     The L-BFGS achieves a lower $f(X)$, as it approximates the Hessian of $f$.
@@ -339,9 +339,9 @@ Addressing these challenges forms a part of our research question, and we aim to
   \centering
   \begin{tabular}{ccc}
     \texttt{sfdp}                                             & \texttt{fdp} & \texttt{spring\_layout} \\
-    \includegraphics[width=0.27\columnwidth]{circle_sfdp.png} &
-    \includegraphics[width=0.27\columnwidth]{circle_fdp.png}  &
-    \includegraphics[width=0.27\columnwidth]{circle_fr.png}                                            \\
+    \includegraphics[width=0.27\columnwidth]{circle/circle_sfdp.png} &
+    \includegraphics[width=0.27\columnwidth]{circle/circle_fdp.png}  &
+    \includegraphics[width=0.27\columnwidth]{circle/circle_fr.png}                                            \\
   \end{tabular}
   \caption{
     Comparison of \texttt{sfdp} in Graphviz, \texttt{fdp} in Graphviz, and \texttt{spring\_layout} in NetworkX for the circle graph with $\abs{V} = 300$.
@@ -406,7 +406,7 @@ Although its direct application to the FR layout is not effective as we depicted
 
 \begin{figure}[t]
   \centering
-  \includegraphics[width=\columnwidth]{randomSubspace.pdf}
+  \includegraphics[width=\columnwidth]{randomSubspace/randomSubspace.pdf}
   \caption{
     Visual explanation of Random Subspace Newton
     \orange{TODO}
@@ -468,7 +468,7 @@ See Figure \ref{fig:pi} for reference.
 
 \begin{figure}[t]
   \centering
-  \includegraphics[width=\columnwidth]{pi.pdf}
+  \includegraphics[width=\columnwidth]{pi/pi.pdf}
   \caption{concept of $\pi$}
   \label{fig:pi}
 \end{figure}
@@ -492,7 +492,7 @@ Through this approach, a high-quality initial solution for the optimization prob
 
 \begin{figure}[t]
   \centering
-  \includegraphics[width=\columnwidth]{hex.pdf}
+  \includegraphics[width=\columnwidth]{hex/hex.pdf}
   \caption{Visual explanation of the one iteration of the proposed algorithm. Step1. Compute the Newton direction for a randomly selected vertex. Step2. decide the path from the original position to the new position. Step3. move the vertex along the path.}
   \label{fig:hex}
 \end{figure}
