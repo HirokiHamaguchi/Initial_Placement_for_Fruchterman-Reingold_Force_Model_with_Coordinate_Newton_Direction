@@ -10,7 +10,8 @@
 
 template <typename MyFunction>
 void solve_LBFGS(const Problem& problem, std::vector<Eigen::VectorXf>& positions,
-                 std::vector<std::pair<double, double>>& hist, Timer& timer,const int MAX_ITER) {
+                 std::vector<std::pair<double, double>>& hist, Timer& timer,
+                 const int MAX_ITER) {
   timer.start();
   LBFGSpp::LBFGSParam<float> param;
   param.m = 10;

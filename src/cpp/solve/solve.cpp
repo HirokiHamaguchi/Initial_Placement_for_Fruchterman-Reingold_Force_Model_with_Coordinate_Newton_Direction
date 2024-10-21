@@ -27,7 +27,7 @@ std::pair<std::vector<std::pair<double, double>>, std::vector<Eigen::VectorXf>> 
     solve_init(problem, measureTime, seed, positions, hist, timer);
   } else {
     timer.start();
-    std::srand(0);
+    std::srand(seed);
     Eigen::VectorXf position = Eigen::VectorXf::Random(2 * problem.n);
     for (int i = 0; i < position.size(); ++i) position[i] = std::abs(position[i]);
     positions.push_back(position);

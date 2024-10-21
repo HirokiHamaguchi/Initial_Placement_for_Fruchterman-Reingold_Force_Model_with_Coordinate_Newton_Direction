@@ -7,12 +7,11 @@
 #include <string>
 #include <utility>
 
-std::pair<std::string, std::ofstream> openFile(std::string fileName) {
-  std::string curPath = std::filesystem::current_path().string();
-  std::string path = curPath + "/../../" + fileName;
+std::pair<std::string, std::ofstream> openFile(std::string path) {
   std::ofstream file(path);
   if (!file.is_open()) {
-    std::cerr << "Error: file not found\n";
+    std::cerr << "Error: file not found on \"openFile\" (path: " << path << ")"
+              << std::endl;
     exit(1);
   }
   return {path, std::move(file)};

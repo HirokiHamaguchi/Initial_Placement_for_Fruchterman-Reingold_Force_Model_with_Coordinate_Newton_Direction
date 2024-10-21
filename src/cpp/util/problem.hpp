@@ -36,7 +36,11 @@ struct Problem {
 
   Problem(const std::string matrixName) : matrixName(matrixName) {
     std::string curPath = std::filesystem::current_path().string();
-    std::string path = curPath + "/../../data/" + matrixName + ".mtx";
+    size_t folderPathSize = curPath.find("FruchtermanReingoldByRandomSubspace");
+    assert(folderPathSize != std::string::npos);
+    curPath = curPath.substr(
+        0, folderPathSize + std::string("FruchtermanReingoldByRandomSubspace").size());
+    std::string path = curPath + "/data/" + matrixName + ".mtx";
     assert(std::filesystem::exists(path));
 
     std::ifstream file(path);
@@ -176,8 +180,8 @@ struct Problem {
   }
 
   void printOutput(const std::vector<Eigen::VectorXf>& positions,
-                   const std::string pathSuffix = "") const {
-    auto [path, file] = openFile("out/" + matrixName + pathSuffix + ".out");
+                   std::string _path) const {
+    auto [path, file] = openFile(_path);
 
     file << n << " " << m << " " << k << "\n";
     for (size_t i = 0; i < m; ++i) {
@@ -189,6 +193,6 @@ struct Problem {
         file << position[2 * i] << " " << position[2 * i + 1] << "\n";
     file.close();
 
-    std::cout << "Output path:" << path << "\n";
+    std::cout << "Output path: " << path << "\n";
   }
 };

@@ -25,11 +25,17 @@ std::vector<Eigen::VectorXf> solve_FR(const Problem& problem,
   int iterations = MAX_ITER;
   double threshold = 1e-3;
   assert(!positions.empty());
+
   Eigen::MatrixXf pos =
       Eigen::Map<const Eigen::MatrixXf>(positions.back().data(), dim, nnodes);
 
+  // rescale layout to fit in a unit square (from networkX rescale_layout)
+  pos.colwise() -= pos.rowwise().mean();
+  float lim = pos.array().abs().maxCoeff();
+  if (lim > 0) pos *= 1.0 / lim;
+
   const double k = problem.k;  // std::sqrt(1.0 / nnodes);
-  double t = (pos.rowwise().maxCoeff() - pos.rowwise().minCoeff()).maxCoeff() * 0.1;
+  double t = 0.1;
   double dt = t / (iterations + 1);
 
   Eigen::MatrixXf displacement = Eigen::MatrixXf::Zero(dim, nnodes);
