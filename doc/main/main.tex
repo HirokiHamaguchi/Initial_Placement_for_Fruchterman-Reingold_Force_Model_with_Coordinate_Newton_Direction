@@ -133,14 +133,16 @@
 \maketitle
 
 \begin{abstract}
-  日本語で書かれている場合、執筆中を表す。
-  \orange{オレンジの文章は正確性が疑問視される記述やTODOな記述。}
-  \blue{また、orcidlinkが壊れているのでauthorのところで暫定措置を取っているが、これは日本語を全削除してdvipdfmxを取り除けばok。}
+  If written in Japanese, it indicates that it is in progress.
+  \orange{The sentences in orange indicate descriptions that have questionable accuracy or are marked as TODO.}
+  \blue{The ORCID link is currently broken, so a temporary measure has been taken in the author section. This can be resolved by completely removing the Japanese text and removing dvipdfmx.}
+  \green{
+    Be mindful of the differences between cycle, circular, and circle. cycle graph / closest packing of circles.}
   \lipsum[1]
 \end{abstract}
 
 \begin{IEEEkeywords}
-  Graph Drawing, Optimization, Fruchterman--Reingold Layout, Random Subspace Method.
+  Graph Drawing, Optimization, Fruchterman--Reingold Layout, Subspace Method, Random Subspace Newton.
 \end{IEEEkeywords}
 
 \section{Introduction}\label{sec:introduction}
@@ -174,7 +176,7 @@ Finally, we conclude and discuss future work in Section~\ref{sec:discussion}.
 \begin{figure}[t]
   \centering
   \begin{tabular}{cc}
-    \large{\textbf{FR}}                           & \large{\textbf{L-BFGS}}   \\
+    \large{\textbf{FR}}                                    & \large{\textbf{L-BFGS}}   \\
     \begin{minipage}{0.45\columnwidth}
       \centering
       \includegraphics[scale=0.05]{jagmesh1/jagmesh1_FR.png}
@@ -183,12 +185,12 @@ Finally, we conclude and discuss future work in Section~\ref{sec:discussion}.
       \centering
       \includegraphics[scale=0.05]{jagmesh1/jagmesh1_L_BFGS.png}
     \end{minipage}                          \\
-    \large{\textbf{proposed}}                     & \large{\textbf{+ L-BFGS}} \\
+    \large{\textbf{proposed}}                              & \large{\textbf{+ L-BFGS}} \\
     \begin{minipage}{0.45\columnwidth}
       \centering
       \includegraphics[scale=0.05]{jagmesh1/jagmesh1_RS.png}
     \end{minipage}
-                                                  &
+                                                           &
     \begin{minipage}{0.45\columnwidth}
       \centering
       \includegraphics[scale=0.05]{jagmesh1/jagmesh1_RS_L_BFGS.png}
@@ -209,8 +211,8 @@ Finally, we conclude and discuss future work in Section~\ref{sec:discussion}.
   \centering
   \includegraphics[height=5.5cm]{fr_layout/fr_layout.pdf}
   \caption{
-    (Top) Fruchterman--Reingold layout. It models $\order{n^2}$ springs between all pairs of vertices.
-    (Bottom) The equilibrium between attractive force $F_{i,j}^a(d)$ and repulsive force $F^r(d)$ is achieved at $d = k/\sqrt[3]{w_{i,j}}$, which equals $k$ when $w_{i,j} = 1$.
+    (Top) Fruchterman--Reingold layout. It models $\order{n^2}$ forces between all pairs of vertices.
+    (Bottom) Forces $F_{i,j}^a(d)$ and $F^r(d)$ work between $v_i$ and $v_j$. The equilibrium of them is achieved at $d = k/\sqrt[3]{w_{i,j}}$, which equals $k$ when $w_{i,j} = 1$.
   }
   \label{fig:frLayout}
 \end{figure}
@@ -338,26 +340,26 @@ Addressing these challenges forms a part of our research question, and we aim to
 \begin{figure}[t]
   \centering
   \begin{tabular}{ccc}
-    \texttt{sfdp}                                             & \texttt{fdp} & \texttt{spring\_layout} \\
-    \includegraphics[width=0.27\columnwidth]{circle/circle_sfdp.png} &
-    \includegraphics[width=0.27\columnwidth]{circle/circle_fdp.png}  &
-    \includegraphics[width=0.27\columnwidth]{circle/circle_fr.png}                                            \\
+    \texttt{sfdp}                                                  & \texttt{fdp} & \texttt{spring\_layout} \\
+    \includegraphics[width=0.27\columnwidth]{cycle/cycle_sfdp.png} &
+    \includegraphics[width=0.27\columnwidth]{cycle/cycle_fdp.png}  &
+    \includegraphics[width=0.27\columnwidth]{cycle/cycle_fr.png}                                            \\
   \end{tabular}
   \caption{
-    Comparison of \texttt{sfdp} in Graphviz, \texttt{fdp} in Graphviz, and \texttt{spring\_layout} in NetworkX for the circle graph with $\abs{V} = 300$.
-    Every algorithm is run with the default parameters, but both \texttt{fdp} and \texttt{spring\_layout} fails to beautifully visualize the circle.
+    Comparison of \texttt{sfdp} in Graphviz, \texttt{fdp} in Graphviz, and \texttt{spring\_layout} in NetworkX for the cycle graph with $\abs{V} = 300$.
+    Every algorithm is run with the default parameters, but both \texttt{fdp} and \texttt{spring\_layout} fails to beautifully visualize the cycle.
   }
-  \label{fig:circle}
+  \label{fig:cycle}
 \end{figure}
 
 First, we observe the challenges appeared in existing methods.
 We identify that the most significant difficulty in optimizing the FR layout lies in resolving "twists".
 
 The term "twist" does not refer to a mathematically rigorous concept; rather, it describes situations where unnecessary intersections of edges or tangled structures appear in visual representations.
-Although the usage of the term "twist" is not common, it has been mentioned in works such as~\cite{cheongSnapshotVisualizationComplex2018}. Figure~\ref{fig:circle} illustrates a circle graph example of this situation.
+Although the usage of the term "twist" is not common, it has been mentioned in works such as~\cite{cheongSnapshotVisualizationComplex2018}. Figure~\ref{fig:cycle} illustrates a cycle graph example of this situation.
 
 The presence or absence of "twist" can impact optimization efficiency.
-In the case shown in Figure~\ref{fig:circle}, even if vertices are disordered, optimization method proceeds relatively smoothly when no intersections between edges exist.
+In the case shown in Figure~\ref{fig:cycle}, even if vertices are disordered, optimization method proceeds relatively smoothly when no intersections between edges exist.
 However, when "twist" exists, mutual interactions may diminish the gradient, causing the optimization to stagnate in typical continuous optimization processes, making it challenging to resolve the "twist".
 Therefore, providing an initial placement of points that resolve "twist" as much as possible can significantly influence the efficiency of the optimization process.
 
@@ -445,7 +447,7 @@ where $\epsilon$ is a suitably chosen positive constant. This conversion is reas
 
 However, problem \eqref{eq:frApprox2} still involves $\order{\abs{V}^2}$ constraints, which negates the advantage of computing the objective function with $\order{\abs{E}}$ complexity.
 To further simplify, we incorporate the concept of fixed initial configurations for the FR layout~\cite{ghassemitoosiSimulatedAnnealingPreProcessing2016}.
-This study reports that a circular initial placement obtained by Simulated Annealing (SA) allows for \orange{a rapid derivation of an initial solution to the optimization problem.}
+This study reports that a cycle initial placement obtained by Simulated Annealing (SA) allows for \orange{a rapid derivation of an initial solution to the optimization problem.}
 Similarly, by simplifying problem \eqref{eq:frApprox2}, we obtain the following discrete optimization problem:
 \begin{mini}
   {\pi: V \to Q}
@@ -540,6 +542,9 @@ compiled by GCC 9.4.0 and a cluster computer powered by Intel(R) Core(TM) i7-105
 All the codes are available at GitHub~\cite{Hamaguchi_stabilizer_extent_2024}.
 The implementation about hexagonal grid is based on~\cite{patelHexagonalGrids2013}.
 
+fdp - graphviz version 2.43.0 (0)
+sfdp - graphviz version 2.43.0 (0)
+
 \url{https://reference.wolfram.com/language/tutorial/GraphDrawingIntroduction.html}
 
 \subsection{網羅的な実験結果}\label{ssec:exprAll}
@@ -558,7 +563,7 @@ Thirdly, 本研究のスコープであるグラフ描画を超えた、別の�
 \orange{todo: sfdpのアルゴリズムをきちんと述べる}
 
 本論文では、$\abs{V} \leq 1000$なグラフに対して、提案手法が有効であることを示したが、より大規模な問題に対しても適用可能であると考えられる。
-例えばGraphviz~\cite{ellsonGraphvizOpenSourceGraph2002}のScalable Force-Directed Placement (sfdp)では、$\abs{V}>1000$などのより大規模なグラフに対し、頂点の縮約を行う事で高速化を図っている。図~\ref{fig:circle}に示したsfdpの結果も、この手法の有用性を示している。
+例えばGraphviz~\cite{ellsonGraphvizOpenSourceGraph2002}のScalable Force-Directed Placement (sfdp)では、$\abs{V}>1000$などのより大規模なグラフに対し、頂点の縮約を行う事で高速化を図っている。図~\ref{fig:cycle}に示したsfdpの結果も、この手法の有用性を示している。
 この頂点の縮約という操作は、本提案手法と衝突することなく、両者を組み合わせることが可能であると考えられる。具体的には、縮約後の$\abs{V}<1000$となるグラフに対して提案手法を適用することを繰り返せば、より大規模な問題に対しても適用可能であると考えられ、より高速かつより高品質な解を得ることができると考えられる。
 このような取り組みは、今後の課題の一つとして挙げられる。
 
