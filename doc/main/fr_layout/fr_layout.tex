@@ -57,11 +57,11 @@
 
     \draw (0,+1.6*\r) -- (0,+2.4*\r);
     \draw (\d,+1.6*\r) -- (\d,+2.4*\r);
-    \draw[{Latex[length=4,width=3]}-{Latex[length=4,width=3]}] ($(M1)+(90:2*\r)$) -- ($(M2)+(90:2*\r)$)
+    \draw[{Stealth[length=2mm]}-{Stealth[length=2mm]}] ($(M1)+(90:2*\r)$) -- ($(M2)+(90:2*\r)$)
     node[midway,circle,fill=white,inner sep=0] {$d$};
 
-    \draw[->,thick,line cap=round] (+\r,0) -- (+\u,0) node[right] {$F_{i,j}^a(d)$};
-    \draw[->,thick,line cap=round] (-\r,0) -- (-\u,0) node[left] {$F^r(d)$};
+    \draw[-{Stealth[length=2mm]},thick,line cap=round] (+\r,0) -- (+\u,0) node[right] {$F_{i,j}^a(d)$};
+    \draw[-{Stealth[length=2mm]},thick,line cap=round] (-\r,0) -- (-\u,0) node[left] {$F^r(d)$};
 
     \draw[dashed,domain=3.9:-3.1,samples=1000,smooth,variable=\x] plot(\x,{-0.7+(pow((\d-\x)/\d,3)/3-ln((\d-\x)/\d))/2.2});
     \node [star,

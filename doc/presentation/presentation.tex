@@ -127,7 +127,7 @@
 % https://tex.stackexchange.com/questions/646333/size-of-integral-symbol-in-section-header-with-mlmodern
 \DeclareFontFamily{OMX}{mlmex}{}
 \DeclareFontShape{OMX}{mlmex}{m}{n}{%
-   <->mlmex10%
+   <-{Stealth[length=2mm]}mlmex10%
    }{} 
 \renewcommand{\familydefault}{\sfdefault}
 \usefonttheme{structurebold}
@@ -268,10 +268,10 @@
       };
       \node[draw=cC, thick,fit={(C01) (C02) (C03)}, inner sep=5pt] (CBox) {};
 
-      \draw[thick,->] (A) |- ($(A)!0.5!(B)$) -| (B);
-      \draw[thick,->] (A) |- ($(A)!0.5!(C)$) -| (C);
-      \draw[thick,->] (C) |- ($(C)!0.5!(C1)$) -| (C1);
-      \draw[thick,->] (C) |- ($(C)!0.5!(C2)$) -| (C2);
+      \draw[thick,-{Stealth[length=2mm]}] (A) |- ($(A)!0.5!(B)$) -| (B);
+      \draw[thick,-{Stealth[length=2mm]}] (A) |- ($(A)!0.5!(C)$) -| (C);
+      \draw[thick,-{Stealth[length=2mm]}] (C) |- ($(C)!0.5!(C1)$) -| (C1);
+      \draw[thick,-{Stealth[length=2mm]}] (C) |- ($(C)!0.5!(C2)$) -| (C2);
     \end{tikzpicture}
   \end{frame}
 \fi
@@ -316,11 +316,11 @@
 
           \draw (0,+1.6*\r*\yAdjust) -- (0,+2.4*\r*\yAdjust);
           \draw (\d,+1.6*\r*\yAdjust) -- (\d,+2.4*\r*\yAdjust);
-          \draw[{Latex[length=4,width=3]}-{Latex[length=4,width=3]}] ($(M1)+(90:2*\r*\yAdjust)$) -- ($(M2)+(90:2*\r*\yAdjust)$)
+          \draw[{Stealth[length=4,width=3]}-{Stealth[length=4,width=3]}] ($(M1)+(90:2*\r*\yAdjust)$) -- ($(M2)+(90:2*\r*\yAdjust)$)
           node[midway,circle,fill=white,inner sep=0] {$d = k/a_{i,j}^{1/3}$};
 
-          \draw[->,thick,line cap=round] (+\r,0) -- (+\u,0) node[right] {$F^a_{i,j}(d)$};
-          \draw[->,thick,line cap=round] (-\r,0) -- (-\u,0) node[left] {$F^r(d)$};
+          \draw[-{Stealth[length=2mm]},thick,line cap=round] (+\r,0) -- (+\u,0) node[right] {$F^a_{i,j}(d)$};
+          \draw[-{Stealth[length=2mm]},thick,line cap=round] (-\r,0) -- (-\u,0) node[left] {$F^r(d)$};
 
           \draw[dashed,domain=3.9:-3.1,samples=1000,smooth,variable=\x] plot(\x,{(-0.7+(pow((\d-\x)/\d,3)/3-ln((\d-\x)/\d))/2.2)*\yAdjust});
           \node [star,
@@ -484,7 +484,7 @@
           \begin{itemize}
             \item[\cmark] \textbf{SGD} excels at rough optimization
             \item[\xmark] \textbf{L-BFGS} is ineffective for this case\\
-              \small{$\order{\abs{V}^2}$ per iteration is too expensive}
+                  \small{$\order{\abs{V}^2}$ per iteration is too expensive}
           \end{itemize}}
       \end{column}
       \begin{column}{0.49\columnwidth}
@@ -493,7 +493,7 @@
           \begin{itemize}
             \item[\cmark] \textbf{L-BFGS} excels at precise optimization
             \item[\xmark] \textbf{SGD} is ineffective for this case\\
-              \small{it is too easy to find a locally optimal solution}
+                  \small{it is too easy to find a locally optimal solution}
           \end{itemize}}
       \end{column}
     \end{columns}
@@ -518,8 +518,8 @@
             \end{scope}
           }
 
-        \draw[-{Latex[length=10,width=0.4cm]},line width=0.15cm] (-3.1, 0) -- (-1.9, 0);
-        \draw[-{Latex[length=10,width=0.4cm]},line width=0.15cm] (+3.1, 0) -- (+1.9, 0);
+        \draw[-{Stealth[length=10,width=0.4cm]},line width=0.15cm] (-3.1, 0) -- (-1.9, 0);
+        \draw[-{Stealth[length=10,width=0.4cm]},line width=0.15cm] (+3.1, 0) -- (+1.9, 0);
       \end{tikzpicture}
     \end{figure}
   \end{frame}
