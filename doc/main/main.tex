@@ -122,7 +122,11 @@
 \begin{document}
 \bstctlcite{IEEEexample:BSTcontrol}
 
-\title{Fruchterman--Reingold Layout with\\Subspace Method as Initial Placement}
+\title{
+  An Initial Placement
+  for Fruchterman--Reingold Layout
+  by Subspace Newton Direction
+}
 \author{
   \orcidlinki{Hiroki Hamaguchi}{0009-0005-7348-1356} % TODO: fix
   \orcidlinki{Naoki Marumo}{0000-0002-7372-4275} % ? maybe dvipdfmx problem
@@ -137,18 +141,18 @@
   Typically, this problem is solved using the FR algorithm, a gradient descent-like method, or the L-BFGS, quasi-Newton method.
   However, these methods are computationally expensive per iteration, which makes achieving high-quality visualizations for large-scale graphs challenging.
 
-  In this paper, to accelerate the optimization process, we propose a new initial placement obtained by the subspace method.
+  In this paper, to accelerate the optimization process, we propose a new initial placement obtained by subspace newton direction.
   We first reformulate the problem as a discrete optimization problem using a hexagonal lattice
   and then iteratively move a randomly selected vertex along the Newton direction defined in the subspace.
   We can use the FR algorithm or L-BFGS method to obtain the final configuration.
 
-  We demonstrate the effectiveness of our proposed approach through experiments, highlighting the potential of the subspace method for graph drawing tasks.
+  We demonstrate the effectiveness of our proposed approach through experiments, highlighting the potential of subspace-based methods for graph drawing tasks.
   Additionally, we suggest combining our method with other graph drawing techniques for further improvement.
-  We hope that this work will inspire future research of subspace methods not only in graph drawing but also in broader graph-related applications.
+  We hope that this work will inspire future research of subspace-based methods not only in graph drawing but also in broader graph-related applications.
 \end{abstract}
 
 \begin{IEEEkeywords}
-  Graph Drawing, Optimization, Fruchterman--Reingold Layout, Subspace Method, Random Subspace Newton.
+  Graph Drawing, Optimization, Fruchterman--Reingold Layout, subspace-based method, Random Subspace Newton.
 \end{IEEEkeywords}
 
 \section{Introduction}\label{sec:introduction}
@@ -164,18 +168,18 @@ Eades' spring embedder~\cite{eades1984heuristic}, and the Fruchterman--Reingold 
 The FR layout, also known as spring layout or spring-electrical model, is one of the most widely used layouts.
 It is also implemented in many modern graph drawing libraries such as NetworkX~\cite{hagberg2008exploring}, Graphviz~\cite{ellsonGraphvizOpenSource2002}, and igraph~\cite{csardiIgraphSoftwarePackage2006}.
 
-However, both the KK layout and the FR layout suffer from high computational complexity, specifically $\order{\abs{V}^2}$ per iteration as it is, where $\abs{V}$ denotes the number of vertices.
+However, both the KK layout and the FR layout suffer from high computational complexity, specifically $\order{n^2}$ per iteration as it is, where $n$ denotes the number of vertices.
 This computational burden makes it challenging to achieve high-quality visualizations for large-scale graphs.
 
 To address this kind of burden, we can leverage several methods, such as approximating the $n$-body simulation using multipole expansions~\cite{greengardFastAlgorithmParticle1987} or the Barnes--Hut approximation~\cite{barnesHierarchicalLogForcecalculation1986}, gradually refining the layouts using a multilevel approach~\cite{Hu2006EfficientHF} and employing stress majorization~\cite{gansnerGraphDrawingStress2005}.
 
 Another approach is to directly accelerate the optimization process, which aligns with the aim of our work.
-Recent research has accelerated the algorithms for FR layout or KK layout through various methods, including adaptation to GPU parallel architectures~\cite{gajdosParallelFruchtermanReingold2016}, utilizing numerical optimization techniques such as L-BFGS~\cite{6183577}, and Stochastic Gradient Descent (SGD)~\cite{8419285}.
+Recent research has accelerated the algorithms through various methods, including adaptation to GPU parallel architectures~\cite{gajdosParallelFruchtermanReingold2016}, utilizing numerical optimization techniques such as L-BFGS~\cite{6183577}, and Stochastic Gradient Descent (SGD)~\cite{8419285}.
 
 \begin{figure}[t]
   \centering
   \begin{tabular}{cc}
-    \large{\textbf{FR}}       & \large{\textbf{L-BFGS}}   \\
+    \large{\textbf{FR}}                                    & \large{\textbf{L-BFGS}}   \\
     \begin{minipage}{0.45\columnwidth}
       \centering
       \includegraphics[scale=0.05]{jagmesh1/jagmesh1_FR.png}
@@ -183,13 +187,13 @@ Recent research has accelerated the algorithms for FR layout or KK layout throug
     \begin{minipage}{0.45\columnwidth}
       \centering
       \includegraphics[scale=0.05]{jagmesh1/jagmesh1_L_BFGS.png}
-    \end{minipage}                             \\
-    \large{\textbf{proposed}} & \large{\textbf{+ L-BFGS}} \\
+    \end{minipage}                          \\
+    \large{\textbf{proposed}}                              & \large{\textbf{+ L-BFGS}} \\
     \begin{minipage}{0.45\columnwidth}
       \centering
       \includegraphics[scale=0.05]{jagmesh1/jagmesh1_RS.png}
     \end{minipage}
-                              &
+                                                           &
     \begin{minipage}{0.45\columnwidth}
       \centering
       \includegraphics[scale=0.05]{jagmesh1/jagmesh1_RS_L_BFGS.png}
@@ -204,17 +208,20 @@ Recent research has accelerated the algorithms for FR layout or KK layout throug
   \label{table:four_images}
 \end{figure}
 
-Based on such advances, in this paper, we propose a new initial placement for the FR layout.
-Our goal is to accelerate the optimization process by leveraging the inherent structure of the problem.
-To achieve this, we employ a subspace method, which means randomly select a vertex and move it along the Newton direction defined in the subspace.
-In this way, we provide a high-quality initial configuration in advance, improving the overall optimization process of the FR layout.
-We also demonstrate its effectiveness through experiments.
+\red{
+  Based on such advances, in this paper, we propose a new initial placement for the FR layout.
+  Our goal is to accelerate the optimization process by leveraging the inherent structure of the problem.
+  To achieve this, we optimize the position of $n$ vertices one by one with the Newton direction, which is defined in the subspace $\bbR^2$ of the entire variable space $\bbR^{2 \times n}$.
+  In this way, we provide a high-quality initial configuration in advance, improving the overall optimization process.
+  We also demonstrate its effectiveness through experiments.
+}
 
-The rest of the paper is organized as follows.
+The rest is as follows.
 In Sec.~\ref{sec:preliminary}, we define the optimization problem for the FR layout.
 In Sec.~\ref{sec:RQ}, we present our research question based on previous works.
-In Sec.~\ref{sec:algorithm}, we propose a new algorithm that utilizes the subspace method for the FR layout.
-In Sec.~\ref{sec:experiment}, we present our experimental results.
+In Sec.~\ref{sec:algorithm}, we propose a new initial placement algorithm.
+In Sec.~\ref{sec:experiment}, we show the experimental results.
+\red{In Sec.~\ref{sec:challenges}, we discuss the potential of the subspace methods, the key concept of our research.}
 Finally, we discuss future work and conclude the paper in Sec.~\ref{sec:discussion}.
 
 \section{Preliminary}\label{sec:preliminary}
@@ -224,7 +231,7 @@ Finally, we discuss future work and conclude the paper in Sec.~\ref{sec:discussi
   \includegraphics[height=5.5cm]{fr_layout/fr_layout.pdf}
   \caption{
     (Top) Fruchterman--Reingold layout. It models $\order{n^2}$ forces between all pairs of vertices.
-    (Bottom) Forces $F_{i,j}^a(d)$ and $F^r(d)$ work between $v_i$ and $v_j$. The equilibrium of them is achieved at $d = k/\sqrt[3]{w_{i,j}}$, which equals $k$ when $w_{i,j} = 1$.
+    (Bottom) Forces $F_{i,j}^\mathrm{a}(d)$ and $F^\mathrm{r}(d)$ work between $v_i$ and $v_j$. The equilibrium of them is achieved at $d = k/\sqrt[3]{w_{i,j}}$, which equals $k$ when $w_{i,j} = 1$.
   }
   \label{fig:frLayout}
 \end{figure}
@@ -247,53 +254,54 @@ In summary, the conditions for $W$ is formulated as follows:
 
 Fruchterman and Reingold~\cite{fruchtermanGraphDrawingForcedirected1991} proposed a force-directed layout called the Fruchterman--Reingold (FR) layout, as known as a spring layout~\cite{hagberg2008exploring} or spring-electrical model~\cite{Hu2006EfficientHF}.
 Let $x_i \in \bbR^2$ be the position of the vertex $v_i \in V$, and $X = (x_1, \dots, x_n) \in \bbR^{2 \times n}$ be the configuration of the graph.
-For a parameter $k$ and a distance $d_{i,j} \defeq \norm{x_i - x_j}_2$ between two vertices $v_i$ and $v_j$, the attraction force $F_{i,j}^a: \bbR_{> 0} \to \bbR$ and the repulsion force $F^r: \bbR_{> 0} \to \bbR$ is defined as
+Let $\norm{\cdot}$ denote the Euclidean distance in $\bbR^2$. For a parameter $k$ and a distance $d_{i,j} \defeq \norm{x_i - x_j}$ between two vertices $v_i$ and $v_j$, the attraction force $F_{i,j}^\mathrm{a}\colon \bbR_{> 0} \to \bbR$ and the repulsion force $F^\mathrm{r}\colon \bbR_{> 0} \to \bbR$ is defined as
 \begin{equation*}
-  F_{i,j}^a(d_{i,j}) \defeq \frac{w_{i,j} d_{i,j}^2}{k}, \quad F^r(d_{i,j}) \defeq -\frac{k^2}{d_{i,j}}.
+  F_{i,j}^\mathrm{a}(d) \defeq \frac{w_{i,j} d^2}{k}, \quad F^\mathrm{r}(d) \defeq -\frac{k^2}{d}.
 \end{equation*}
 FR layout seeks the equilibrium of the forces between all pairs of vertices, as shown in Fig.~\ref{fig:frLayout}.
 
 We can also interrupt forces by its scalar potential~\cite{6183577}, in other words, energy $E_{i,j}: \bbR_{> 0} \to \bbR$, which is defined by
 \begin{align}
-  E_{i,j}(d_{i,j}) & \defeq \int_{0}^{d_{i,j}} F_{i,j}^a(r) \dd{r} + \int_{\infty}^{d_{i,j}} F^r(r) \dd{r} \notag \\
-                   & = \frac{w_{i,j} d_{i,j}^3}{3k} - k^2\log{d_{i,j}}. \label{eq:Eij}
+  E_{i,j}^\mathrm{a}(d) & \defeq \int_{0}^{d} F_{i,j}^\mathrm{a}(r) \dd{r} = \frac{w_{i,j} d^3}{3k},\notag \\
+  E^\mathrm{r}(d)       & \defeq \int_{\infty}^{d} F^\mathrm{r}(r) \dd{r} = -k^2\log{d}, \notag            \\
+  E_{i,j}(d)            & \defeq E_{i,j}^\mathrm{a}(d) + E^\mathrm{r}(d). \label{eq:Eijr}
 \end{align}
-As a remark, this energy function $E_{i,j}$ is convex as a function of $d$ and minimized when $d^* = k/\sqrt[3]{w_{i,j}}$.
-Though, $E_{i,j}$ is not Lipschitz continuous and is not convex as a function of $x_i$ for a fixed $x_j$. Refer to Fig.~\ref{fig:energy3d}.
+As a remark, this energy function $E_{i,j}$ is convex and minimized when $d = k/\sqrt[3]{w_{i,j}}$, but $E_{i,j}$ is not Lipschitz continuous.
+Plus, a function $x_i \mapsto E_{i,j}(\norm{x_i - x_j})$ is not convex for a fixed $x_j$. Refer to Fig.~\ref{fig:energy3d}.
 
 \begin{figure}[t]
   \centering
   \includegraphics[height=5.5cm]{energy_3d/energy_3d.png}
-  \caption{Energy function $E_{i,j}(d_{i,j})$ for $x_j=(0,0)$, $w_{i,j} = 1$ and $k = 1$. Although $E_{i,j}$ is convex as a function of $d_{i,j}$, it is not convex as a function of $x_i$. As $x_i$ approaches $x_j$, the energy function diverges.}
+  \caption{Energy function $E_{i,j}(\norm{x_i - x_j})$ for $x_j=(0,0)$, $w_{i,j} = 1$ and $k = 1$. Although $E_{i,j}$ is convex as a function of $d$, it is not convex as a function of $x_i$. As $x_i$ approaches $x_j$, the energy function diverges.}
   \label{fig:energy3d}
 \end{figure}
 
-Now, the optimization problem for FR layout can be formulated as the minimization of the energy function $f: \bbR^{2 \times n} \to \bbR$, as known as a stress of the graph:
+Now, the optimization problem for FR layout can be formulated as the minimization of the energy function $f: \bbR^{2 \times n} \to \bbR$, as known as the stress of the graph:
 \begin{mini}
   {X \in \bbR^{2 \times n}}
-  {f(X) \defeq \sum_{i<j} E_{i,j}(d_{i,j}).}
+  {f(X) \defeq \sum_{i<j} E_{i,j}(\norm{x_i - x_j}).}
   {\label{eq:fr}}
   {}
 \end{mini}
-Seeking an equilibrium of the forces is equivalent to minimizing the energy function $E_{i,j}$ for all pairs of vertices.
-In the following, we will discuss the optimization of this problem.
+Seeking an equilibrium of the forces is equivalent to seeking a local minimum of the energy function $E_{i,j}$ for all pairs of vertices.
+In the following, we will discuss this optimization problem~\eqref{eq:fr}.
 
 \subsection{Fruchterman--Reingold algorithm}\label{ssec:frAlgorithm}
 
 The Fruchterman--Reingold algorithm~\cite{fruchtermanGraphDrawingForcedirected1991}, which is the original force-directed algorithm for this layout, can be regarded as a most standard approach for solving the optimization problem~\eqref{eq:fr}.
 As mentioned in Ref.~\cite{tunkelang1999numerical}, the FR algorithm can be regarded as a variant of gradient descent (steepest descent) method for the energy function $f$ with a cooling global temperature $t$.
 
-Let denote $f_i: \bbR^2 \to \bbR$ as the energy function for the vertex $v_i$:
+Let denote $f_i: \bbR^2 \to \bbR$ as the energy function for the vertex $v_i$ at $x_i$:
 \begin{equation*}
-  f_i(x_i) \defeq \sum_{j \neq i} E_{i,j}(d_{i,j}).
+  \red{f_i(x_i) \defeq \sum_{j \neq i} E_{i,j}(\norm{x_i - x_j}).}
 \end{equation*}
 The gradient of $f_i$ is
 \begin{equation}\label{eq:gradientFi}
-  \nabla f_i(x_i) = \sum_{j \neq i} \qty(\frac{w_{i,j}d_{i,j}}{k} - \frac{k^2}{d_{i,j}^2}) (x_i-x_j),
+  \nabla f_i(x_i) = \sum_{j \neq i} \qty(\frac{w_{i,j}\norm{x_i - x_j}}{k} - \frac{k^2}{\norm{x_i - x_j}^2}) (x_i-x_j),
 \end{equation}
 which is the sum of forces acting on the vertex $v_i$.
 
-We showed the pseudo-code of the FR algorithm in Algorithm~\ref{alg:fr}. It is based on the original implementation~\cite{fruchtermanGraphDrawingForcedirected1991} and implementation in NetworkX~\cite{hagberg2008exploring} with some omitted details.
+We show the pseudo-code of the FR algorithm in Algorithm~\ref{alg:fr}. It is based on the original pseudo-code~\cite{fruchtermanGraphDrawingForcedirected1991} and implementation in NetworkX~\cite{hagberg2008exploring} with some omitted details.
 
 \begin{algorithm}[ht]
   \caption{Fruchterman--Reingold algorithm}
@@ -301,14 +309,14 @@ We showed the pseudo-code of the FR algorithm in Algorithm~\ref{alg:fr}. It is b
   \KwIn{Graph $G_W = (V, E)$}
   \KwOut{Point configuration $X = (x_1, \dots, x_n)$}
 
-  $\text{Define parameters } k, t, dt, \text{iterations}$\;
+  $\text{Define parameters } \red{k, t, \Delta_t, N_\mathrm{iter}}$\;
   Define initial placement of $v_i \in V$ randomly\;
-  \For{$j \gets 0$ \KwTo \textit{iterations}}{
+  \For{\red{$n_\mathrm{iter} \gets 0$ \KwTo $N_\mathrm{iter}$}}{
     $\text{compute gradient } \nabla f_i(x_i)$ for all $v_i \in V$\;
-    $x_i \gets x_i + t \frac{\nabla f_i(x_i)}{
+    $x_i \gets x_i - t \frac{\nabla f_i(x_i)}{
         \norm{\nabla f_i(x_i)}}$ for all $v_i \in V$\;
-    $t \gets t - dt$\;
-    \If{\text{convergence condition}}{
+    $t \gets t - \Delta_t$\;
+    \If{\text{convergence condition is satisfied}}{
       \textbf{break}\;
     }
   }
@@ -333,7 +341,7 @@ The parameter $t$ denotes the temperature, which governs the step size along the
 
 Another approach to solve the optimization problem~\eqref{eq:fr} is to use the Limited-memory Broyden--Fletcher--Goldfarb--Shanno (L-BFGS) algorithm~\cite{6183577}.
 The L-BFGS method is an optimization technique used for large-scale problems, which approximates the inverse Hessian matrix using only a few recent gradient vectors, making it more memory-efficient than the standard BFGS method (quasi-Newton method)~\cite{liuLimitedMemoryBFGS1989}.
-Thus, L-BFGS is particularly suitable for high-dimensional optimization tasks. L-BFGS is more sophisticated than the gradient descent method, and the superior performance of the L-BFGS method to the FR algorithm reported in Ref.\cite{6183577} also indicates this fact. Also refer to Fig.~\ref{fig:comparisonFRandLBFGS}.
+Thus, L-BFGS is particularly suitable for high-dimensional optimization tasks. L-BFGS is more sophisticated than the gradient descent method, and the superior performance of the L-BFGS method to the FR algorithm reported in Ref.\cite{6183577} also indicates this fact. Refer to Fig.~\ref{fig:comparisonFRandLBFGS} for a comparison.
 
 There are many implementations of L-BFGS available, such as SciPy~\cite{2020SciPy-NMeth} and C++ L-BFGS~\cite{qiuYixuanLBFGSpp2024,okazakiChokkanLiblbfgs2024}, which we used in our experiments.
 
@@ -346,7 +354,7 @@ Thus, we can expect room for improvement by leveraging what we have ignored in t
 Now, we declare the research question of this paper: ``Can we accelerate the optimization process for the FR layout by leveraging the inherent structure of the problem?''.
 
 In the previous section, we presented the FR algorithm and L-BFGS method. However, both methods face specific challenges during optimization, leading to inefficiencies and slow convergence, as detailed in Sec.~\ref{ssec:twist}.
-Addressing these challenges forms a part of our research question, and we aim to develop a new algorithm capable of overcoming these limitations. To achieve this goal, we will review key prior studies in Sections~\ref{ssec:sgd} and~\ref{ssec:introRSN}.
+Addressing these challenges forms a part of our research question, and we aim to develop a new algorithm capable of overcoming these limitations. To achieve this goal, we will review key prior studies in Sections~\ref{ssec:sgd} and~\ref{ssec:introNewton}.
 
 \subsection{``twist'' in the optimization process}\label{ssec:twist}
 
@@ -366,7 +374,7 @@ Addressing these challenges forms a part of our research question, and we aim to
 \end{figure}
 
 First, we observe the challenges that appeared in existing methods.
-One of the more challenging aspects of optimizing the FR layout is addressing the issue of ``twist'' in general.
+One of the most challenging aspects of optimizing the FR layout is addressing the issue of ``twist'' in general.
 
 The term ``twist'' does not refer to a mathematically rigorous concept; rather, it describes situations where unnecessary intersections of edges or tangled structures appear in visual representations.
 Although the term ``twist'' is uncommon, works such as Ref.~\cite{cheongSnapshotVisualizationComplex2018} also mentioned this ``twist'' phenomenon. Fig.~\ref{fig:cycle} illustrates cycle graph examples of this situation.
@@ -382,69 +390,37 @@ Moreover, the effectiveness of Stochastic Gradient Descent (SGD) for Kama--Kawai
 
 The KK layout is an energy-based layout, which minimizes the energy function $f^{\mathrm{KK}}$ defined as
 \begin{equation*}
-  f^{\mathrm{KK}}_{i,j}(d_{i,j}) \defeq w_{i,j} (d_{i,j}-l_{i,j})^2, \quad
-  f^{\mathrm{KK}}(X) \defeq \sum_{i<j} f^{\mathrm{KK}}_{i,j}(d_{i,j}),
+  f^{\mathrm{KK}}_{i,j}(d) \defeq w_{i,j} (d-l_{i,j})^2, \;
+  f^{\mathrm{KK}}(X) \defeq \sum_{i<j} f^{\mathrm{KK}}_{i,j}(\norm{x_i - x_j}),
 \end{equation*}
 where $l_{i,j}$ is the optimal distance between $v_i$ and $v_j$ calculated from the shortest path distance in the graph $G_W$.
 
 The SGD method is an optimization method often used in machine learning to minimize a sum of differentiable functions, and Ref.~\cite{8419285} applied its modified version to the KK layout.
-It randomly selects pairs of vertices $(i,j)$ and adjusts their positions to minimize $f^{\mathrm{KK}}_{i,j}$ along the gradient direction:
-\begin{align*}
-  x_i & \gets x_i - \frac{\min(w_{i,j}\eta,1)}{4w_{i,j}} \pdv{x_i} f^{\mathrm{KK}}_{i,j}(d_{i,j}), \\
-  x_j & \gets x_j - \frac{\min(w_{i,j}\eta,1)}{4w_{i,j}} \pdv{x_j} f^{\mathrm{KK}}_{i,j}(d_{i,j})
-\end{align*}
-with a learning rate $\eta$.
+It randomly selects pairs of vertices $(i,j)$ and adjusts their positions to minimize $f^{\mathrm{KK}}_{i,j}$ along the gradient direction with a learning rate $\eta$.
 
-However, in contrast to the KK layout, the FR layout assigns the function $E_{i,j}(d_{i,j})=-k^2\log{d_{i,j}}$ to all $(i,j) \notin E (\iff w_{i,j}=0)$, making SGD less effective for the FR layout.
-However, the superiority of SGD in the KK layout, which focuses on ``randomly selected edge,'' suggests that an optimization method focusing on ``randomly selected vertex'' may also be effective in the FR layout.
-This observation motivates us to explore the application of Random Subspace Newton (RSN) to the FR layout, as discussed in the next subsection.
+However, in contrast to the KK layout, the FR layout assigns the function $E_{i,j}(d)=-k^2\log{d}$ to all $(i,j) \notin E (\iff w_{i,j}=0)$, making SGD less effective for the FR layout.
+Nevertheless, the superiority of SGD in the KK layout, which focuses on ``randomly selected edge,'' suggests that an optimization method focusing on ``randomly selected vertex'' may also be effective in the FR layout.
+This observation motivates us to propose a new algorithm combined with the next subsection.
 
-\subsection{Introduction of Random Subspace Newton}\label{ssec:introRSN}
+\subsection{Newton's method}\label{ssec:introNewton}
 
-We introduce the RSN method, which is NOT a proposed method but a concept that heavily inspired our proposed algorithm.
-The RSN method and its variant have been proposed in the context of optimization problems~\cite{NEURIPS2019_bc6dc48b,
-  fujiRandomizedSubspaceRegularized2022,
-  cartisRandomisedSubspaceMethods2022,
-  nozawaRandomizedSubspaceGradient2023,
-  higuchiFastConvergenceSecondOrder2024}.
+\red{
+  First, we briefly explain the Newton's method.
+  This method updates variable $x \in \bbR^n$ of a convex function $f: \bbR^n \to \bbR$ by
+  \begin{equation*}
+    x \gets x - \nabla^2 f(x)^{-1} \nabla f(x).
+  \end{equation*}
+  Since $f$ is convex, the Hessian matrix $\nabla^2 f(x) \in \bbR^{n \times n}$ is positive semi-definite, and the update direction (Newton direction) is a descent direction. Plus, the updated $x$ is an optimal solution of the quadratic approximation of $f$ at $x$, ensuring Newton's method's fast convergence.
+  Newton's method requires the computation of the inverse Hessian matrix $\nabla^2 f(x)^{-1} \in \bbR^{n \times n}$ at each iteration, posing a high computational cost for large-scale problems.
+}
 
-First, we briefly explain the Newton's method.
-This method updates variable $x \in \bbR^n$ of a convex function $f: \bbR^n \to \bbR$ by
-\begin{equation*}
-  x \gets x - \nabla^2 f(x)^{-1} \nabla f(x).
-\end{equation*}
-Since $f$ is convex, the Hessian matrix $\nabla^2 f(x) \in \bbR^{n \times n}$ is positive semi-definite, and the update direction (Newton direction) is a descent direction. Plus, the updated $x$ is an optimal solution of the quadratic approximation of $f$ at $x$, ensuring Newton's method's fast convergence.
-Newton's method requires the computation of the inverse Hessian matrix $\nabla^2 f(x)^{-1} \in \bbR^{n \times n}$ at each iteration, posing a high computational cost for large-scale problems.
-
-In contrast, RSN focuses on a subspace of dimension $s$ randomly selected from the solution space by a projection matrix $S \in \bbR^{n \times s}$ and utilizes the exact Hessian matrix of size $s \times s$ defined on this subspace: $S^\top \nabla^2 f(x) S$.
-At each iteration, RSN updates the solution by
-\begin{equation*}
-  x \gets x - S (S^\top \nabla^2 f(x) S)^{-1} S^\top \nabla f(x)
-\end{equation*}
-if $S^\top \nabla^2 f(x) S$ is non-singular.
-Since $s \ll n$, the computational cost per iteration is significantly reduced when we disregard the cost of selecting the subspace.
-
-The RSN method resembles the stochastic coordinate descent method, which updates only a subset of the variables at each iteration using gradient information.
-The difference is that RSN uses the Hessian matrix to determine the update direction, bringing the method closer to the Newton method.
-
-Moreover, recent studies have explored its application not only to convex optimization problems but also to non-convex optimization problems~\cite{fujiRandomizedSubspaceRegularized2022}, using a regularization term to ensure the convergence of the method.
-
-In particular, our problem~\eqref{eq:fr} exhibits a natural affinity with the RSN method, as it inherently defines a subspace of the solution space $X$ for the FR layout: $x_i \in \bbR^2$ for all $v_i \in V$.
-Although its direct application to the FR layout is ineffective, as we depicted in Sec.~\ref{sec:problemOfSubspace}, we exploit this idea in the proposed algorithm, as discussed in the next section.
-
-\begin{figure}[t]
-  \centering
-  \includegraphics[width=\columnwidth]{randomSubspace/randomSubspace.pdf}
-  \caption{
-    Visual explanation of Random Subspace Newton
-    \orange{TODO}
-  }
-  \label{fig:randomSubspace}
-\end{figure}
+\red{
+  そのままでは難しい。\ref{sec:problemOfSubspace}などでその困難さは述べた。
+}
 
 \section{Proposed Algorithm}\label{sec:algorithm}
 
-To answer the research question above, we propose a new algorithm for the FR layout that utilizes the subspace method.
+To answer the research question above, we propose a new algorithm for the FR layout that utilizes the subspace Newton direction.
 We describe our proposed method in three stages.
 Firstly, in Section \ref{ssec:reduction}, we reformulate the optimization problem \eqref{eq:fr} into a simplified discrete optimization problem using a hexagonal lattice.
 Secondly, in Section \ref{ssec:newtonDirection}, we present a method to solve the discrete optimization problem through continuous relaxation, using the Newton direction for vertices selected randomly, which is the core of our proposed algorithm.
@@ -453,38 +429,36 @@ Finally, in Section \ref{ssec:pseudoCode}, we show the complete framework of the
 \subsection{reduction to the discrete optimization problem}\label{ssec:reduction}
 
 First, we transform the optimization problem \eqref{eq:fr} into a constrained continuous optimization problem.
-As written in Sec.~\ref{ssec:sgd}, the energy function $E_{i,j}$ is $-k^2\log{d_{i,j}}$ for all $(i,j) \notin E$.
-Considering the sparsity of many practical graphs ($\abs{E} \ll \abs{V}^2$), simplifying as follow is a reasonable approach:
+As written in Sec.~\ref{ssec:sgd}, the energy function $E_{i,j}$ is $-k^2\log{d}$ for all $(i,j) \notin E$.
+Considering the sparsity of many practical graphs $(\abs{E} \ll \abs{V}^2)$, simplifying as follow is a reasonable approach:
 \begin{mini}
   {X \in \bbR^{2 \times n}}
-  {f(X) = \sum_{(i,j)\in E} \frac{w_{i,j}d_{i,j}^3}{3k} - \sum_{i<j} k^2\log{d_{i,j}}.}
+  {\sum_{(i,j)\in E} \frac{w_{i,j}\norm{x_i - x_j}^3}{3k}- \sum_{i<j} k^2\log{\norm{x_i - x_j}}.}
   {\label{eq:frApprox}}
   {}
 \end{mini}
 Further, by converting the second term into a constraint, the problem \eqref{eq:frApprox} can be approximated such that the objective function can be computed with a complexity dependent on $\abs{E}$ rather than $\abs{V}^2$:
 \begin{mini}
   {X \in \bbR^{2 \times n}}
-  {f^a(X) \defeq \sum_{(i,j)\in E} \frac{w_{i,j}d_{i,j}^3}{3k}}
+  {f^{\mathrm{a}}(X) \defeq \sum_{(i,j)\in E} \frac{w_{i,j}\norm{x_i - x_j}^3}{3k}}
   {\label{eq:frApprox2}}
   {}
-  \addConstraint{d_{i,j}}{\geq \epsilon,\quad}{\forall (i,j)\,(i<j)}
+  \addConstraint{d_{i,j}=\norm{x_i - x_j}}{\geq \epsilon,\quad}{\forall (i,j)\,(i<j)}
 \end{mini}
-where $\epsilon$ is a suitably chosen positive constant. This conversion is reasonable because $-k^2\log{d_{i,j}}$ is a convex function such that it decreases monotonically concerning $d_{i,j}$. Thus, for sufficiently large $d_{i,j}$, the value of $-k^2\log{d_{i,j}}$ does not grow excessively, ensuring the validity of the approximation.
+where $\epsilon$ is a suitably chosen positive constant. This conversion is reasonable because $E^\mathrm{r}(d)=-k^2\log{d}$ is a convex function such that it decreases monotonically concerning $d$. Thus, for sufficiently large $d$, the value of $-k^2\log{d}$ does not grow excessively, ensuring the validity of the approximation.
 
 However, problem \eqref{eq:frApprox2} still involves $\order{\abs{V}^2}$ constraints, which negates the advantage of computing the objective function with $\order{\abs{E}}$ complexity.
 To further simplify, we incorporate the concept of fixed initial configurations for the FR layout~\cite{ghassemitoosiSimulatedAnnealingPreProcessing2016}.
 This study reports that a cycle initial placement obtained by Simulated Annealing (SA) brings a rapid convergence to a better solution in the FR layout.
-Similarly, by simplifying problem \eqref{eq:frApprox2}, we obtain the following discrete optimization problem:
+Similarly, by simplifying problem \eqref{eq:frApprox2} with a fixed initial configuration $Q$ whose points are separated by at least $\epsilon$, we obtain the following discrete optimization problem:
 \begin{mini}
   {\pi: V \to Q}
-  {f^a(X) = \sum_{(i,j)\in E} \frac{w_{i,j}d_{i,j}^3}{3k}}
+  {\red{\sum_{(i,j)\in E} \frac{w_{i,j}\norm{\pi(v_i) - \pi(v_j)}^3}{3k}}}
   {\label{eq:frApprox3}}
   {}
-  \addConstraint{\norm{q_i - q_j}}{\geq \epsilon,\quad}{\forall q_i, q_j \in Q\,(q_i \neq q_j)}
-  \addConstraint{x_i}{= \pi(v_i),\quad}{\forall v_i \in V}
-  \addConstraint{\pi(v_i)}{\neq \pi(v_j),\quad}{\forall v_i, v_j \in V\,(v_i \neq v_j).}
+  \addConstraint{\pi(v_i)}{\neq \pi(v_j),\quad}{\forall (i,j)\,(i<j)}
 \end{mini}
-It means that with a discrete set of points $Q$ such that the points are separated by at least $\epsilon$, we seek the best injection $\pi :V \to Q$ that minimizes the objective function $f^a$.
+It means that with a discrete set of points $Q$ such that the points are separated by at least $\epsilon$, we seek the best injection $\pi :V \to Q$ that minimizes the objective function $f^{\mathrm{a}}$.
 By fixing the possible point configuration in advance, we can skip the check of the $\order{\abs{V}^2}$ constraints, reducing the computational complexity to $\order{\abs{E}}$ and thus offering significant speedup.
 
 \begin{figure}[t]
@@ -508,16 +482,18 @@ Although not directly related to this study, prior research~\cite{s22145179} has
 
 Next, using the Newton direction of a randomly selected vertex, we solve the discrete optimization problem through continuous relaxation. The computation of the Newton direction in this part is essentially identical to the RSN method described in Sec.~\ref{ssec:introRSN}.
 
-Let the objective function $f^a_i(x_i)$ corresponding to a vertex $v_i$ be
+Let the objective function $f^{\mathrm{a}}_i(x_i)$ corresponding to a vertex $v_i$ be
 \begin{equation*}
-  f^a_i(x_i) \defeq \sum_{j \neq i} \frac{w_{i,j}\norm{x_i - x_j}_2^3}{3k}.
+  f^{\mathrm{a}}_i(x_i) \defeq \sum_{j \neq i} \frac{w_{i,j}\norm{x_i - x_j}^3}{3k}.
 \end{equation*}
-Using the Newton direction, we can solve the discrete optimization problem through continuous relaxation, i.e., by updating the position of a vertex $v_i$ as
+Using the Newton direction, we can update the position of a vertex $v_i$ as
 \begin{equation*}
-  x_i^\mathrm{new} \gets x_i - \nabla^2 f^a_i(x_i)^{-1} \nabla f^a_i(x_i).
+  x_i^\mathrm{new} \gets \mathrm{round}\qty(x_i - \nabla^2 f^{\mathrm{a}}_i(x_i)^{-1} \nabla f^{\mathrm{a}}_i(x_i)),
 \end{equation*}
-Specifically, we update the position $x_i$ of the vertex $v_i$ according to the Newton direction and project this new position onto the nearest point on a hexagonal lattice, the new position of the vertex $x_i^\mathrm{new}$.
-Additionally, by sequentially moving vertices from their original positions to the new ones, we can satisfy the constraints of the discrete optimization problem. We illustrated the overall process in Fig.~\ref{fig:hex}.
+where $\mathrm{round}$ denotes the rounding operation to the nearest point in the hexagonal lattice $Q$.
+
+\red{todo:Additionally, by sequentially moving vertices from their original positions to the new ones, we can satisfy the constraints of the discrete optimization problem.}
+We illustrated the overall process in Fig.~\ref{fig:hex}.
 
 This approach can obtain a high-quality initial solution for the optimization problem~\eqref{eq:fr}.
 
@@ -586,138 +562,52 @@ Secondly, we conducted a detailed experiment to investigate the behavior of the 
 
 提案手法に基づく初期配置を用いた方が、高速に良質な解へと収束していることが確認できる。
 
-\section{Discussion} \label{sec:discussion}
+\section{Challenges of the Subspace Methods}\label{sec:challenges}
 
-In this section, we assess the potential of the proposed algorithm and discuss the future directions of this research.
-Firstly, the proposed method would be better to combine with the some conventional techniques such as Multilevel approach. We explain this in Sec.~\ref{sec:combination}.
-Secondly, we explain some rationale of our approach in Sec.~\ref{sec:whyDiscrete}.
-Thirdly, we explore the applications beyond the scope of graph drawing in Sec.~\ref{ssec:application}.
-Finally, we conclude this paper in Sec.~\ref{sec:conclusion}.
+Here, we explain the rationale for why we took such a roundabout approach to solve the optimization problem~\eqref{eq:fr}.
+As we have explained, we first transformed it into a discrete optimization problem~\eqref{eq:frApprox3} and then solved it using the subspace Newton direction.
 
-\subsection{Combination with Other Techniques}\label{sec:combination}
+Initially, we attempted a direct application of the subspace method, one of the general optimization methods, to the FR layout as described in Section~\ref{ssec:introNewton}.
+However, we encountered several issues that made this approach challenging: the inaccuracy of the quadratic approximation and the ignorance of other vertex movements. We state these issues in Sec.~\ref{ssec:inaccuracy} and Sec.~\ref{ssec:ignorance}
+Based on these challenges, we explain the rationale for our approach in Sec.~\ref{ssec:rationale}.
 
-This paper has demonstrated the effectiveness of the proposed method on relatively small-scale graphs, but it is believed that it can also be applied to larger-scale problems.
-For instance, the Scalable Force-Directed Placement (sfdp) of Graphviz~\cite{ellsonGraphvizOpenSource2002}, based on \cite{Hu2006EfficientHF}, employs a multilevel approach to accelerate processing for larger graphs by progressively coarsening vertices.
-The result of sfdp shown in Fig.~\ref{fig:cycle} validate the utility of this technique.
+The important point is that these issues do not necessarily preclude the possibility of achieving global optimization with the subspace method.
+Rather, we hope that an accurate understanding of these challenges will lead us to develop better optimization methods in the future.
 
-The coarsening operation does not conflict with the proposed method, making it feasible to combine both approaches.
-Specifically, by iteratively applying the proposed method to the entire coarsened graph or to groups of vertices consolidated through coarsening, it is possible to extend its applicability to larger-scale problems.
-This approach is expected to yield faster and higher-quality solutions.
-Addressing this integration is one of the challenges for future research.
+\subsection{Introduction of Random Subspace Newton}\label{ssec:introRSN}
 
-\subsection{Why We Proceed Through Discrete Optimization Problems}\label{sec:whyDiscrete}
+In this subsection, we introduce the Random Subspace Newton (RSN), which is NOT a proposed method but a concept that heavily inspired our proposed algorithm.
+The RSN method is one of the subspace methods, and RSN and its variant have been proposed in the context of optimization problems~\cite{NEURIPS2019_bc6dc48b,
+  fujiRandomizedSubspaceRegularized2022,
+  cartisRandomisedSubspaceMethods2022,
+  nozawaRandomizedSubspaceGradient2023,
+  higuchiFastConvergenceSecondOrder2024}.
 
-As we have explained, to solve the optimization problem~\eqref{eq:fr}, we first transformed it into a discrete optimization problem~\eqref{eq:frApprox3} and then solved it using the subspace method.
-Here, we explain the rationale for why we took such an approach.
+RSN focuses on a subspace of dimension $s$ randomly selected from the solution space by a projection matrix $S \in \bbR^{n \times s}$ and utilizes the exact Hessian matrix of size $s \times s$ defined on this subspace: $S^\top \nabla^2 f(x) S$.
+At each iteration, RSN updates the solution by
+\begin{equation*}
+  x \gets x - S (S^\top \nabla^2 f(x) S)^{-1} S^\top \nabla f(x)
+\end{equation*}
+if $S^\top \nabla^2 f(x) S$ is non-singular.
+Since $s \ll n$, the computational cost per iteration is significantly reduced when we disregard the cost of selecting the subspace.
 
-First of all, we consider that directly applying the subspace method to the problem~\eqref{eq:fr} is quite challenging.
-Initially, we attempted such a direct application, but encountered several issues and found the optimization process to be inefficient.
-While these reasons are elaborated in Appendix \ref{sec:problemOfSubspace}, we will summarize the key points here as well.
+The RSN method resembles the stochastic coordinate descent method, which updates only a subset of the variables at each iteration using gradient information.
+The difference is that RSN uses the Hessian matrix to determine the update direction, bringing the method closer to the Newton method.
 
-We believe that, while the subspace method is effective for reducing the ``twist'' in a rough sense, it is not suitable for optimizing the overall placement.
-In the subspace method, optimization is performed by focusing on a single vertex $v_i$, ignoring forces acting on other vertices $v_j$ and $v_k$.
-This ignorance of interactions between other vertices can lead to suboptimal improvements, or negative effects on the overall placement.
-This is a significant drawback of the subspace method, and thus applying the subspace method directly did not efficiently yield a global optimal solution.
+Moreover, recent studies have explored its application not only to convex optimization problems but also to non-convex optimization problems~\cite{fujiRandomizedSubspaceRegularized2022}, using a regularization term to ensure the convergence of the method.
 
-However, by converting the problem as stated in Section~\ref{ssec:reduction}, we can take this ignored interaction into account to some extent.
-The advantage of problem~\eqref{eq:frApprox3} is that not only reduction of the computational complexity from $\order{\abs{V}^2}$ to $\order{\abs{E}}$, but also allowing us to more easily take account for vertex interactions and prevent them from becoming too close to each other, since the mapping $\pi$ is injection.
-Thus, making the problem discrete brings the acceleration of each iteration as well as the high quality of the updated solution.
+In particular, our problem~\eqref{eq:fr} exhibits a natural affinity with the RSN method, as it inherently defines a subspace of the solution space $X$ for the FR layout: $x_i \in \bbR^2$ for all $v_i \in V$.
+If take $S$ as a projection matrix that selects a random vertex $v_i$ from $V$, we can consider to apply the RSN method or its variant to the FR layout.
 
-It is important to note that these considerations do not necessarily preclude the possibility of achieving global optimization with the subspace method.
-Focusing on optimizing each vertex individually is a natural and valid approach, and we believe that with further refinements, the subspace method holds the potential to efficiently yield global optimal solutions.
-
-\subsection{Application to Other Problems}\label{ssec:application}
-
-Although we proposed a subspace-based algorithm only for the optimization problem~\eqref{eq:fr}, we can see that the application of the subspace method is not necessarily limited to the FR layout alone.
-In this section, we briefly discuss and explore the potential applicability of the subspace method to a wider range of problems.
-
-In general, the optimization problem~\eqref{eq:fr} is more broadly treated as ``objective functions arising from graphs''~\cite{recht-wright}:
-\begin{mini*}
-  {X \in \bbR^{2 \times n}}
-  {f(X) = \sum_{(i,j)\in E} f_{i,j}(x_i, x_j)+\lambda \sum_{i=1}^{n} \Omega_i(x_i),}
-  {}
-  {}
-\end{mini*}
-where $\Omega_i$ is a regularization term for the $i$-th vertex, and $\lambda$ is a regularization parameter.
-The FR layout problem~\eqref{eq:fr} is obviously a special case of this problem class.
-
-We can expect the subspace method to be effective for such problems, as shown in this study.
-The authors of~\cite{recht-wright} claim that coordinate descent is an effective method for solving such problems. Given the similarity between the subspace method and coordinate descent as depicted in Sec.~\ref{ssec:introRSN}, this claim supports the potential of the subspace method for a wider range of problems.
-
-For instance, we suspect that the subspace method can also be applied to the graph isomorphism problem.
-The graph isomorphism problem is a well-known combinatorial optimization problem to determine whether two graphs $G_1,G_2$ are isomorphic, i.e., $G_1 \cong G_2$.
-In fact, the graph isomorphism problem is closely related to the graph drawing. Drawing a graph in a way that reveals its symmetry is at least as difficult as the graph isomorphism problem~\cite{eades1984heuristic}. Indeed, if two graphs $G_1$ and $G_2$ can be drawn in the same way, it becomes evident that $G_1 \cong G_2$. See Fig.~\ref{fig:iso} for reference.
-When we relax it to a continuous optimization problem on Riemannian manifolds as in~\cite{klusContinuousOptimizationMethods2023, klusContinuousOptimizationMethods2023}, we might be able to apply the subspace method to this problem as well.
-Investigating the applicability of the subspace method to these problems constitutes one of the future research directions.
-
-\begin{figure}[t]
-  \centering
-  \includegraphics[width=\columnwidth]{iso/iso.pdf}
-  \caption{
-    Illustration of the relationship between graph drawing and graph isomorphism.
-    If we can draw graphs $G_1$ and $G_2$ symmetrically, then it is clear that $G_1 \cong G_2$.
-  }
-  \label{fig:iso}
-\end{figure}
-
-\subsection{Conclusion} \label{sec:conclusion}
-
-In this study, we proposed a new algorithm for the FR Layout that utilizes the subspace method.
-To demonstrate its effectiveness, we conducted numerical experiments, which revealed that the proposed method is effective across a variety of graphs.
-
-We conclude this paper expecting that the proposed method may advance graph drawing with FR layout and highlight the potential of the subspace method for addressing a wider range of graph-related optimization problems.
-
-\section{Acknowledgment}
-
-The author would like to express our sincere gratitude to PL Poirion and Andi Han for their insightful discussions, which have greatly inspired and influenced this research.
-
-The author also thanks the developers of NetworkX and Graphviz. Their excellent work on the library has been a great help in conducting this research.
-
-This work was partially supported by JSPS KAKENHI (23H03351,24K23853) and JST ERATO (JPMJER1903).
-
-\ifthenelse{\boolean{isMain}}{
-  \bibliographystyle{IEEEtran}
-  \bibliography{FruchtermanReingoldByRandomSubspace}
-}{}
-
-\appendices
-
-\section{Optimal Scaling}\label{sec:scaling}
-
-When we optimize a placement for FR-layout with an initial placement obtained, scaling the initial placement at first can often yield better results than directly using the unmodified initial placement.
-In this section, we explain how to find the optimal scaling factor that minimizes the energy function for a given configuration.
-
-\subsection{Optimal Scaling Algorithm}\label{ssec:scalingAlgorithm}
-
-Let us formulate the optimization problem for the scaling factor $c \in \bbR_{> 0}$. For an initial placement $X = (x_1, \dots, x_n)$, we rescale it as $x_i \gets c x_i$ for all $i$.
-This problem is to minimize the energy function $\phi(c)$ defined as
-\begin{align*}
-  \phi(c) \defeq {} & \qty(\sum_{i < j} \frac{w_{ij} (cd_{ij})^3}{3k}) - k^2 \sum_{i < j} \log(c d_{ij}) \\
-  \begin{split}
-    = {} & c^3 \qty(\sum_{i < j} \frac{w_{ij} d_{ij}^3}{3k}) - k^2 n(n-1)\log(c) \\
-    & - k^2 \sum_{i < j} \log(d_{ij}),
-  \end{split}                                                                             \\
-  \phi'(c) = {}     & 3c^2 \qty(\sum_{i < j} \frac{w_{ij} d_{ij}^3}{3k}) - \frac{k^2 n(n-1)}{c},         \\
-  \phi''(c) = {}    & 6c \qty(\sum_{i < j} \frac{w_{ij} d_{ij}^3}{3k}) + \frac{k^2 n(n-1)}{c^2}.
-\end{align*}
-
-The function $\phi(c)$ is convex, and we can find the optimal scaling factor $c$ by using Newton's method.
-\orange{This algorithm achieves sufficient convergence within a few iterations}, and by pre-computing the coefficients of $\phi(c)$ with $w_{i,j} > 0$, the time complexity is just $\order{\abs{E}}$.
-
-\section{Challenges of the Subspace method for the FR Layout}\label{sec:problemOfSubspace}
-
-In this paper, we did NOT propose a direct application of the subspace method to the FR layout; instead, we proposed a initial placement algorithm based on the subspace method.
-
-This is because we consider that directly applying the subspace method to the FR layout is quite challenging.
-We take the following algorithm as a direct application of the subspace methods to the FR layout; Namely, we randomly select a vertex $v_i$, apply Newton's method or its regularized variant to $f_i$ using the gradient in Eq.~\ref{eq:gradientFi} and its Hessian:
+Despite of such high expectation for the subspace methods, we found that direct applying of the subspace method to the FR layout is quite challenging.
+We take the following algorithm as a direct application of the subspace methods to the FR layout; Namely, we randomly select a vertex $v_i$, apply Newton's method or its regularized variant to $f_i$ using the gradient in Eq.~\eqref{eq:gradientFi} and its Hessian:
 \begin{gather*}
-  \nabla^2 f_i(x_i) = \sum_{j \neq i} \left(\frac{w_{i,j}d_{i,j}}{k} - \frac{k^2}{d_{i,j}^2}\right) I_d + \\
-  \sum_{j \neq i} \left(\frac{w_{i,j}}{k d_{i,j}} + \frac{2k^2}{d_{i,j}^4}\right) (x_i - x_j)(x_i - x_j)^\top.
+  \nabla^2 f_i(x_i) = \sum_{j \neq i} \left(\frac{w_{i,j}\norm{x_i - x_j}}{k} - \frac{k^2}{\norm{x_i - x_j}^2}\right) I_d + \\
+  \sum_{j \neq i} \left(\frac{w_{i,j}}{k \norm{x_i - x_j}} + \frac{2k^2}{\norm{x_i - x_j}^4}\right) (x_i - x_j)(x_i - x_j)^\top.
 \end{gather*}
 Then, we update the position of vertex $v_i$, and repeat this process until convergence.
-However, this approach fails to work effectively in practice. In the following, we explain the reasons behind this difficulty.
-
-It is important to note that these challenges do not necessarily imply fundamental limitations of the subspace method. On the contrary, improvements based on these identified issues could potentially enhance the effectiveness of the subspace method.
+However, this approach fails to work effectively in practice.
+In the following, we explain the reasons behind this difficulty.
 
 \subsection{Inaccuracy of quadratic approximation}\label{ssec:inaccuracy}
 
@@ -763,8 +653,6 @@ which is positive definite and not ill-conditioned.
 Despite of such a good property of the Hessian, the Newton direction for $x_1$ (red arrow) is a bad direction, since the repulsive force between $x_1$ and $x_2,x_3$ are too strong to diverge from the global optimal solution.
 This kind of illness cannot be resolved by just modifying the Newton's method we use for $f_i$, and it is a inherent problem of the subspace method.
 
-In order to address this issue and enhance the effectiveness of the subspace method for the FR layout, we believe that it may be necessary to consider a fundamentally new approach.
-
 \subsection{Ignorance of other vertex movements}\label{ssec:ignorance}
 
 \begin{figure}[t]
@@ -788,20 +676,130 @@ The same problem occurs for other vertices.
 
 In this way, ignoring the direction of forces on other vertices, or more precisely, neglecting the values of $\pdv{f}{x_i}{x_j}$, is a major shortcoming of the subspace method.
 
-Addressing the issues mentioned in these subsections would be crucial for the direct application of the subspace method.
+\subsection{Rationale for the Proposed Method}\label{ssec:rationale}
+
+As explained, we suspect that, while the subspace method is effective for reducing the ``twist'' in a rough sense, it is not suitable for optimizing the overall placement.
+
+However, by converting the problem as stated in Section~\ref{ssec:reduction}, we can take this ignored interaction into account to some extent.
+The advantage of problem~\eqref{eq:frApprox3} is that not only reduction of the computational complexity from $\order{\abs{V}^2}$ to $\order{\abs{E}}$, but also allowing us to more easily take account for vertex interactions and prevent them from becoming too close to each other, since the mapping $\pi$ is injection.
+Thus, making the problem discrete brings the acceleration of each iteration as well as the high quality of the updated solution.
+
+The important point is that, combined with some appropriate ideas, the subspace method can be very effective for the FR layout.
+Focusing on optimizing each vertex individually is a natural and valid approach, and with further refinements, the subspace method holds the potential to efficiently yield global optimal solutions.
+
+\section{Discussion} \label{sec:discussion}
+
+In this section, we discuss the future directions of this research.
+Firstly, the proposed method would be better to combine with the some conventional techniques such as Multilevel approach. We explain this in Sec.~\ref{sec:combination}.
+Secondly, we explore the applications beyond the scope of graph drawing in Sec.~\ref{ssec:application}.
+Finally, we conclude this paper in Sec.~\ref{sec:conclusion}.
+
+\subsection{Combination with Other Techniques}\label{sec:combination}
+
+This paper has demonstrated the effectiveness of the proposed method on relatively small-scale graphs, but it is believed that it can also be applied to more larger-scale problems.
+For instance, the Scalable Force-Directed Placement (sfdp) of Graphviz~\cite{ellsonGraphvizOpenSource2002}, based on \cite{Hu2006EfficientHF}, employs a multilevel approach to accelerate processing for larger graphs by progressively coarsening vertices.
+The result of sfdp shown in Fig.~\ref{fig:cycle} validate the utility of this technique.
+
+The coarsening operation does not conflict with the proposed method, making it feasible to combine both approaches.
+Specifically, by iteratively applying the proposed method to the entire coarsened graph or to groups of vertices consolidated through coarsening, it is possible to extend its applicability to larger-scale problems.
+This approach is expected to yield faster and higher-quality solutions.
+Addressing this integration is one of the challenges for future research.
+
+In addition, the FR layout sometimes used not only in 2d but also in 3d~\cite{14738716211060306}. Although we have to modify some parts of the proposed algorithm to apply to 3d FR layout, such as the hexagonal lattice, its application would be not so difficult.
+
+\subsection{Application to Other Problems}\label{ssec:application}
+
+Although we proposed a subspace-based algorithm only for the optimization problem~\eqref{eq:fr}, we can see that the application of it is not necessarily limited to the FR layout alone.
+In this section, we briefly discuss and explore the potential applicability of the subspace-based method to a wider range of problems.
+
+In general, the optimization problem~\eqref{eq:fr} is more broadly treated as ``objective functions arising from graphs''~\cite{recht-wright}:
+\begin{mini*}
+  {X \in \bbR^{2 \times n}}
+  {f(X) = \sum_{(i,j)\in E} f_{i,j}(x_i, x_j)+\lambda \sum_{i=1}^{n} \Omega_i(x_i),}
+  {}
+  {}
+\end{mini*}
+where $\Omega_i$ is a regularization term for the $i$-th vertex, and $\lambda$ is a regularization parameter.
+The FR layout problem~\eqref{eq:fr} is obviously a special case of this problem class.
+
+We can expect the subspace-based method to be effective for such problems, as shown in this study.
+The authors of~\cite{recht-wright} claim that coordinate descent is an effective method for solving such problems. Given the similarity between the subspace-based method and coordinate descent as depicted in Sec.~\ref{ssec:introRSN}, this claim supports the potential of the subspace-based method for a wider range of problems.
+
+For instance, we suspect that the subspace-based method can also be applied to the graph isomorphism problem.
+The graph isomorphism problem is a well-known combinatorial optimization problem to determine whether two graphs $G_1,G_2$ are isomorphic, i.e., $G_1 \cong G_2$.
+In fact, the graph isomorphism problem is closely related to the graph drawing. Drawing a graph in a way that reveals its symmetry is at least as difficult as the graph isomorphism problem~\cite{eades1984heuristic}. Indeed, if two graphs $G_1$ and $G_2$ can be drawn in the same way, it becomes evident that $G_1 \cong G_2$. See Fig.~\ref{fig:iso} for reference.
+When we relax it to a continuous optimization problem on Riemannian manifolds as in~\cite{klusContinuousOptimizationMethods2023, klusContinuousOptimizationMethods2023}, we might be able to apply the subspace-based method to this problem as well.
+Investigating the applicability of the subspace-based method to these problems constitutes one of the future research directions.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\columnwidth]{iso/iso.pdf}
+  \caption{
+    Illustration of the relationship between graph drawing and graph isomorphism.
+    If we can draw graphs $G_1$ and $G_2$ symmetrically, then it is clear that $G_1 \cong G_2$.
+  }
+  \label{fig:iso}
+\end{figure}
+
+\subsection{Conclusion} \label{sec:conclusion}
+
+In this study, we proposed a new algorithm for the FR Layout that utilizes the subspace-based method.
+To demonstrate its effectiveness, we conducted numerical experiments, which revealed that the proposed method is effective across a variety of graphs.
+
+We conclude this paper expecting that the proposed method may advance graph drawing with FR layout and highlight the potential of the subspace-based method for addressing a wider range of graph-related optimization problems.
+
+\section{Acknowledgment}
+
+The author would like to express our sincere gratitude to PL Poirion and Andi Han for their insightful discussions, which have greatly inspired and influenced this research.
+
+The author also thanks the developers of NetworkX and Graphviz. Their excellent work on the library has been a great help in conducting this research.
+
+This work was partially supported by JSPS KAKENHI (23H03351,24K23853) and JST ERATO (JPMJER1903).
+
+\ifthenelse{\boolean{isMain}}{
+  \bibliographystyle{IEEEtran}
+  \bibliography{FruchtermanReingoldByRandomSubspace}
+}{}
+
+\appendices
+
+\section{Optimal Scaling}\label{sec:scaling}
+
+When we optimize a placement for FR-layout with an initial placement obtained, scaling the initial placement at first can often yield better results than directly using the unmodified initial placement.
+In this section, we explain how to find the optimal scaling factor that minimizes the energy function for a given configuration.
+
+Let us formulate the optimization problem for the scaling factor $c \in \bbR_{> 0}$. For an initial placement $X = (x_1, \dots, x_n)$, we rescale it as $x_i \gets c x_i$ for all $i$.
+This problem is to minimize the energy function $\phi(c)$ defined as
+\begin{align*}
+  \phi(c) \defeq {} & \qty(\sum_{i < j} \frac{w_{ij} (cd_{ij})^3}{3k}) - k^2 \sum_{i < j} \log(c d_{ij})                                   \\
+  \begin{split}
+    = {} & c^3 \qty(\sum_{i < j} \frac{w_{ij} d_{ij}^3}{3k}) - k^2 n(n-1)\log(c) \\
+         & - k^2 \sum_{i < j} \log(d_{ij}),
+  \end{split} \\
+  \phi'(c) = {}     & 3c^2 \qty(\sum_{i < j} \frac{w_{ij} d_{ij}^3}{3k}) - \frac{k^2 n(n-1)}{c},                                           \\
+  \phi''(c) = {}    & 6c \qty(\sum_{i < j} \frac{w_{ij} d_{ij}^3}{3k}) + \frac{k^2 n(n-1)}{c^2}.
+\end{align*}
+
+The function $\phi(c)$ is convex, and we can find the optimal scaling factor $c$ by using Newton's method.
+\orange{This algorithm achieves sufficient convergence within a few iterations}, and by pre-computing the coefficients of $\phi(c)$ with $w_{i,j} > 0$, the time complexity is just $\order{\abs{E}}$.
 
 \section{Another approach based on the Proposed Method}\label{sec:anotherApproach}
 
-本論文では六方格子に基づいたSubspace Methodを提案したが、六方格子だけのアイデアを活用した方が、実装上早いという場合がある。(Pythonのnumpy配列にindexでアクセスするのが遅い)
+In this section, we discuss alternative approaches to the problem~\eqref{eq:frApprox3} other than the proposed method.
 
-その内の一つは、各頂点毎に最適化する際に、ランダムに頂点を選んで最適化していくのではなく、$\abs{V}$点全てを同時に最適化する方法である。
+First, within the framework of the subspace-based method, one might consider using only gradient descent, not the Newton direction.
+However, we were unable to achieve satisfactory results with this approach in our preliminary experiments.
+Given that the subspace dimension is as small as 2, employing the Newton direction seems considerably more efficient.
 
-こうすることによって、六方格子という制約をよりラフに扱うことが出来る。
+Secondly, we can also consider an approach without the subspace-based method.
+This involves updating all $\abs{V}$ vertices simultaneously like the FR algorithm.
+The idea is to iteratively move the points $\{x_i\}_{1 \leq i \leq \abs{V}} \subseteq Q$ on the hexagonal grid to arbitrary points $\{x_i^\mathrm{new}\}_{1 \leq i \leq \abs{V}} \subseteq \bbR^2$, and then assign all these $\abs{V}$ points to the nearest points in $Q$.
+The assignment problem from the $\bbR^2$ to $Q$ can be formalized as finding the optimal mapping $\pi: V \to Q$ that minimizes the distance between the new positions $x_i^\mathrm{new}$ and the assigned points in $Q$, which can be formulated as:
+\begin{mini*} {\pi: V \to Q} {\sum_{i=1}^{\abs{V}} \norm{x_i^\mathrm{new} - \pi(v_i)}2^2} {} {} \addConstraint{\pi(v_i)}{\neq \pi(v_j),\quad}{\forall v_i, v_j \in V,(v_i \neq v_j)} \end{mini*}
+This problem can be solved in $\order{\abs{V}^3}$ using methods such as the minimum-cost flow or Hungarian algorithm.
+Additionally, we can obtain a heuristic solution in $\order{\abs{V} \log \abs{V}}$ by appropriately sorting ${x_i^\mathrm{new}}{1 \leq i \leq \abs{V}}$.
 
-六方格子への射影は、MinCostFlowなどで$\order{\abs{V}^3}$で厳密解が出せる。
-ソートによる擬似的な射影で、$\order{\abs{V} \log \abs{V}}$で近似解が出せる。
-
-基本的に性能は落ちると考えているが、実装が簡略化するなどの利点や、イテレーション毎の計算コストが多少減るという利点があり、検討の余地が残されている。
+While we are not expecting as good performances as the proposed method from the approaches above, they offer certain advantages, such as simplifying implementation or avoiding random access to arrays.
 
 \begin{IEEEbiography}[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{fig1}}]{Hiroki Hamaguchi}
   Graduate School of Information Science and Technology, The University of Tokyo, Tokyo, Japan.
