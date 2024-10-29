@@ -123,36 +123,36 @@
 \bstctlcite{IEEEexample:BSTcontrol}
 
 \title{
-  An Initial Placement
-  for Fruchterman--Reingold Layout
-  by Subspace Newton Direction
+    An Initial Placement
+    for Fruchterman--Reingold Layout
+    by Subspace Newton Direction
 }
 \author{
-  \orcidlinki{Hiroki Hamaguchi}{0009-0005-7348-1356} % TODO: fix
-  \orcidlinki{Naoki Marumo}{0000-0002-7372-4275} % ? maybe dvipdfmx problem
-  Akiko Takeda
-  % <-this % stops a space
+    \orcidlinki{Hiroki Hamaguchi}{0009-0005-7348-1356} % TODO: fix
+    \orcidlinki{Naoki Marumo}{0000-0002-7372-4275} % ? maybe dvipdfmx problem
+    Akiko Takeda
+    % <-this % stops a space
 }
 \maketitle
 
 \begin{abstract}
-  Graph drawing is a fundamental task for visualizing graph structures, with the Fruchterman--Reingold (FR) layout being one of the most widely used layouts.
-  This layout can be interpreted as a solution to a continuous optimization problem.
-  Typically, this problem is solved using the FR algorithm, a gradient descent-like method, or the L-BFGS, quasi-Newton method.
-  However, these methods are computationally expensive per iteration, which makes achieving high-quality visualizations for large-scale graphs challenging.
+    Graph drawing is a fundamental task for visualizing graph structures, with the Fruchterman--Reingold (FR) layout being one of the most widely used layouts.
+    This layout can be interpreted as a solution to a continuous optimization problem.
+    Typically, this problem is solved using the FR algorithm, a gradient descent-like method, or the L-BFGS, quasi-Newton method.
+    However, these methods are computationally expensive per iteration, which makes achieving high-quality visualizations for large-scale graphs challenging.
 
-  In this paper, to accelerate the optimization process, we propose a new initial placement obtained by subspace newton direction.
-  We first reformulate the problem as a discrete optimization problem using a hexagonal lattice
-  and then iteratively move a randomly selected vertex along the Newton direction defined in the subspace.
-  We can use the FR algorithm or L-BFGS method to obtain the final configuration.
+    In this paper, to accelerate the optimization process, we propose a new initial placement obtained by subspace newton direction.
+    We first reformulate the problem as a discrete optimization problem using a hexagonal lattice
+    and then iteratively move a randomly selected vertex along the Newton direction defined in the subspace.
+    We can use the FR algorithm or L-BFGS method to obtain the final configuration.
 
-  We demonstrate the effectiveness of our proposed approach through experiments, highlighting the potential of subspace-based methods for graph drawing tasks.
-  Additionally, we suggest combining our method with other graph drawing techniques for further improvement.
-  We hope that this work will inspire future research of subspace-based methods not only in graph drawing but also in broader graph-related applications.
+    We demonstrate the effectiveness of our proposed approach through experiments, highlighting the potential of subspace-based methods for graph drawing tasks.
+    Additionally, we suggest combining our method with other graph drawing techniques for further improvement.
+    We hope that this work will inspire future research of subspace-based methods not only in graph drawing but also in broader graph-related applications.
 \end{abstract}
 
 \begin{IEEEkeywords}
-  Graph Drawing, Optimization, Fruchterman--Reingold Layout, subspace-based method, Random Subspace Newton.
+    Graph Drawing, Optimization, Fruchterman--Reingold Layout, subspace-based method, Random Subspace Newton.
 \end{IEEEkeywords}
 
 \section{Introduction}\label{sec:introduction}
@@ -177,43 +177,43 @@ Another approach is to directly accelerate the optimization process, which align
 Recent research has accelerated the algorithms through various methods, including adaptation to GPU parallel architectures~\cite{gajdosParallelFruchtermanReingold2016}, utilizing numerical optimization techniques such as L-BFGS~\cite{6183577}, and Stochastic Gradient Descent (SGD)~\cite{8419285}.
 
 \begin{figure}[t]
-  \centering
-  \begin{tabular}{cc}
-    \large{\textbf{FR}}                                    & \large{\textbf{L-BFGS}}   \\
-    \begin{minipage}{0.45\columnwidth}
-      \centering
-      \includegraphics[scale=0.05]{jagmesh1/jagmesh1_FR.png}
-    \end{minipage} &
-    \begin{minipage}{0.45\columnwidth}
-      \centering
-      \includegraphics[scale=0.05]{jagmesh1/jagmesh1_L_BFGS.png}
-    \end{minipage}                          \\
-    \large{\textbf{proposed}}                              & \large{\textbf{+ L-BFGS}} \\
-    \begin{minipage}{0.45\columnwidth}
-      \centering
-      \includegraphics[scale=0.05]{jagmesh1/jagmesh1_RS.png}
-    \end{minipage}
-                                                           &
-    \begin{minipage}{0.45\columnwidth}
-      \centering
-      \includegraphics[scale=0.05]{jagmesh1/jagmesh1_RS_L_BFGS.png}
-    \end{minipage}
-  \end{tabular}
-  \begin{tikzpicture}[overlay, remember picture]
-    \draw[-{Stealth[length=2mm]}, thick] (-0.3,1.4) -- (+0.3,1.4);
-  \end{tikzpicture}
-  \caption{
-    Comparison of the FR algorithm, L-BFGS, and the proposed method
-    for the \texttt{jagmesh1} dataset.}
-  \label{table:four_images}
+    \centering
+    \begin{tabular}{cc}
+        \large{\textbf{FR}}                                    & \large{\textbf{L-BFGS}}   \\
+        \begin{minipage}{0.45\columnwidth}
+            \centering
+            \includegraphics[scale=0.05]{jagmesh1/jagmesh1_FR.png}
+        \end{minipage} &
+        \begin{minipage}{0.45\columnwidth}
+            \centering
+            \includegraphics[scale=0.05]{jagmesh1/jagmesh1_L_BFGS.png}
+        \end{minipage}                          \\
+        \large{\textbf{proposed}}                              & \large{\textbf{+ L-BFGS}} \\
+        \begin{minipage}{0.45\columnwidth}
+            \centering
+            \includegraphics[scale=0.05]{jagmesh1/jagmesh1_RS.png}
+        \end{minipage}
+                                                               &
+        \begin{minipage}{0.45\columnwidth}
+            \centering
+            \includegraphics[scale=0.05]{jagmesh1/jagmesh1_RS_L_BFGS.png}
+        \end{minipage}
+    \end{tabular}
+    \begin{tikzpicture}[overlay, remember picture]
+        \draw[-{Stealth[length=2mm]}, thick] (-0.3,1.4) -- (+0.3,1.4);
+    \end{tikzpicture}
+    \caption{
+        Comparison of the FR algorithm, L-BFGS, and the proposed method
+        for the \texttt{jagmesh1} dataset.}
+    \label{table:four_images}
 \end{figure}
 
 \red{
-  Based on such advances, in this paper, we propose a new initial placement for the FR layout.
-  Our goal is to accelerate the optimization process by leveraging the inherent structure of the problem.
-  To achieve this, we optimize the position of $n$ vertices one by one with the Newton direction, which is defined in the subspace $\bbR^2$ of the entire variable space $\bbR^{2 \times n}$.
-  In this way, we provide a high-quality initial configuration in advance, improving the overall optimization process.
-  We also demonstrate its effectiveness through experiments.
+    Based on such advances, in this paper, we propose a new initial placement for the FR layout.
+    Our goal is to accelerate the optimization process by leveraging the inherent structure of the problem.
+    To achieve this, we optimize the position of $n$ vertices one by one with the Newton direction, which is defined in the subspace $\bbR^2$ of the entire variable space $\bbR^{2 \times n}$.
+    In this way, we provide a high-quality initial configuration in advance, improving the overall optimization process.
+    We also demonstrate its effectiveness through experiments.
 }
 
 The rest is as follows.
@@ -227,13 +227,13 @@ Finally, we discuss future work and conclude the paper in Sec.~\ref{sec:discussi
 \section{Preliminary}\label{sec:preliminary}
 
 \begin{figure}[t]
-  \centering
-  \includegraphics[height=5.5cm]{fr_layout/fr_layout.pdf}
-  \caption{
-    (Top) Fruchterman--Reingold layout. It models $\order{n^2}$ forces between all pairs of vertices.
-    (Bottom) Forces $F_{i,j}^\mathrm{a}(d)$ and $F^\mathrm{r}(d)$ work between $v_i$ and $v_j$. The equilibrium of them is achieved at $d = k/\sqrt[3]{w_{i,j}}$, which equals $k$ when $w_{i,j} = 1$.
-  }
-  \label{fig:frLayout}
+    \centering
+    \includegraphics[height=5.5cm]{fr_layout/fr_layout.pdf}
+    \caption{
+        (Top) Fruchterman--Reingold layout. It models $\order{n^2}$ forces between all pairs of vertices.
+        (Bottom) Forces $F_{i,j}^\mathrm{a}(d)$ and $F^\mathrm{r}(d)$ work between $v_i$ and $v_j$. The equilibrium of them is achieved at $d = k/\sqrt[3]{w_{i,j}}$, which equals $k$ when $w_{i,j} = 1$.
+    }
+    \label{fig:frLayout}
 \end{figure}
 
 In this section, we formulate the FR layout as a continuous optimization problem and introduce the conventional approaches to this problem, namely the FR algorithm and the L-BFGS method.
@@ -249,39 +249,39 @@ For unconnected graphs, algorithms can be applied to each connected component in
 When negative weights are present, the optimization problem~\eqref{eq:fr} defined below can be unbounded, but with non-negative weights and the connectivity of $G$, the problem is always bounded and solvable.
 In summary, the conditions for $W$ is formulated as follows:
 \begin{equation}\label{eq:WCondition}
-  W \in \bbR_{\geq 0}^{n \times n}, \quad W = W^\top \quad \text{and $G_W$ is connected}.
+    W \in \bbR_{\geq 0}^{n \times n}, \quad W = W^\top \quad \text{and $G_W$ is connected}.
 \end{equation}
 
 Fruchterman and Reingold~\cite{fruchtermanGraphDrawingForcedirected1991} proposed a force-directed layout called the Fruchterman--Reingold (FR) layout, as known as a spring layout~\cite{hagberg2008exploring} or spring-electrical model~\cite{Hu2006EfficientHF}.
 Let $x_i \in \bbR^2$ be the position of the vertex $v_i \in V$, and $X = (x_1, \dots, x_n) \in \bbR^{2 \times n}$ be the configuration of the graph.
 Let $\norm{\cdot}$ denote the Euclidean distance in $\bbR^2$. For a parameter $k$ and a distance $d_{i,j} \defeq \norm{x_i - x_j}$ between two vertices $v_i$ and $v_j$, the attraction force $F_{i,j}^\mathrm{a}\colon \bbR_{> 0} \to \bbR$ and the repulsion force $F^\mathrm{r}\colon \bbR_{> 0} \to \bbR$ is defined as
 \begin{equation*}
-  F_{i,j}^\mathrm{a}(d) \defeq \frac{w_{i,j} d^2}{k}, \quad F^\mathrm{r}(d) \defeq -\frac{k^2}{d}.
+    F_{i,j}^\mathrm{a}(d) \defeq \frac{w_{i,j} d^2}{k}, \quad F^\mathrm{r}(d) \defeq -\frac{k^2}{d}.
 \end{equation*}
 FR layout seeks the equilibrium of the forces between all pairs of vertices, as shown in Fig.~\ref{fig:frLayout}.
 
 We can also interrupt forces by its scalar potential~\cite{6183577}, in other words, energy $E_{i,j}: \bbR_{> 0} \to \bbR$, which is defined by
 \begin{align}
-  E_{i,j}^\mathrm{a}(d) & \defeq \int_{0}^{d} F_{i,j}^\mathrm{a}(r) \dd{r} = \frac{w_{i,j} d^3}{3k},\notag \\
-  E^\mathrm{r}(d)       & \defeq \int_{\infty}^{d} F^\mathrm{r}(r) \dd{r} = -k^2\log{d}, \notag            \\
-  E_{i,j}(d)            & \defeq E_{i,j}^\mathrm{a}(d) + E^\mathrm{r}(d). \label{eq:Eijr}
+    E_{i,j}^\mathrm{a}(d) & \defeq \int_{0}^{d} F_{i,j}^\mathrm{a}(r) \dd{r} = \frac{w_{i,j} d^3}{3k},\notag \\
+    E^\mathrm{r}(d)       & \defeq \int_{\infty}^{d} F^\mathrm{r}(r) \dd{r} = -k^2\log{d}, \notag            \\
+    E_{i,j}(d)            & \defeq E_{i,j}^\mathrm{a}(d) + E^\mathrm{r}(d). \label{eq:Eijr}
 \end{align}
 As a remark, this energy function $E_{i,j}$ is convex and minimized when $d = k/\sqrt[3]{w_{i,j}}$, but $E_{i,j}$ is not Lipschitz continuous.
 Plus, a function $x_i \mapsto E_{i,j}(\norm{x_i - x_j})$ is not convex for a fixed $x_j$. Refer to Fig.~\ref{fig:energy3d}.
 
 \begin{figure}[t]
-  \centering
-  \includegraphics[height=5.5cm]{energy_3d/energy_3d.png}
-  \caption{Energy function $E_{i,j}(\norm{x_i - x_j})$ for $x_j=(0,0)$, $w_{i,j} = 1$ and $k = 1$. Although $E_{i,j}$ is convex as a function of $d$, it is not convex as a function of $x_i$. As $x_i$ approaches $x_j$, the energy function diverges.}
-  \label{fig:energy3d}
+    \centering
+    \includegraphics[height=5.5cm]{energy_3d/energy_3d.png}
+    \caption{Energy function $E_{i,j}(\norm{x_i - x_j})$ for $x_j=(0,0)$, $w_{i,j} = 1$ and $k = 1$. Although $E_{i,j}$ is convex as a function of $d$, it is not convex as a function of $x_i$. As $x_i$ approaches $x_j$, the energy function diverges.}
+    \label{fig:energy3d}
 \end{figure}
 
 Now, the optimization problem for FR layout can be formulated as the minimization of the energy function $f: \bbR^{2 \times n} \to \bbR$, as known as the stress of the graph:
 \begin{mini}
-  {X \in \bbR^{2 \times n}}
-  {f(X) \defeq \sum_{i<j} E_{i,j}(\norm{x_i - x_j}).}
-  {\label{eq:fr}}
-  {}
+    {X \in \bbR^{2 \times n}}
+    {f(X) \defeq \sum_{i<j} E_{i,j}(\norm{x_i - x_j}).}
+    {\label{eq:fr}}
+    {}
 \end{mini}
 Seeking an equilibrium of the forces is equivalent to seeking a local minimum of the energy function $E_{i,j}$ for all pairs of vertices.
 In the following, we will discuss this optimization problem~\eqref{eq:fr}.
@@ -293,34 +293,34 @@ As mentioned in Ref.~\cite{tunkelang1999numerical}, the FR algorithm can be rega
 
 Let denote $f_i: \bbR^2 \to \bbR$ as the energy function for the vertex $v_i$ at $x_i$:
 \begin{equation*}
-  \red{f_i(x_i) \defeq \sum_{j \neq i} E_{i,j}(\norm{x_i - x_j}).}
+    \red{f_i(x_i) \defeq \sum_{j \neq i} E_{i,j}(\norm{x_i - x_j}).}
 \end{equation*}
 The gradient of $f_i$ is
 \begin{equation}\label{eq:gradientFi}
-  \nabla f_i(x_i) = \sum_{j \neq i} \qty(\frac{w_{i,j}\norm{x_i - x_j}}{k} - \frac{k^2}{\norm{x_i - x_j}^2}) (x_i-x_j),
+    \nabla f_i(x_i) = \sum_{j \neq i} \qty(\frac{w_{i,j}\norm{x_i - x_j}}{k} - \frac{k^2}{\norm{x_i - x_j}^2}) (x_i-x_j),
 \end{equation}
 which is the sum of forces acting on the vertex $v_i$.
 
 We show the pseudo-code of the FR algorithm in Algorithm~\ref{alg:fr}. It is based on the original pseudo-code~\cite{fruchtermanGraphDrawingForcedirected1991} and implementation in NetworkX~\cite{hagberg2008exploring} with some omitted details.
 
 \begin{algorithm}[ht]
-  \caption{Fruchterman--Reingold algorithm}
-  \label{alg:fr}
-  \KwIn{Graph $G_W = (V, E)$}
-  \KwOut{Point configuration $X = (x_1, \dots, x_n)$}
+    \caption{Fruchterman--Reingold algorithm}
+    \label{alg:fr}
+    \KwIn{Graph $G_W = (V, E)$}
+    \KwOut{Point configuration $X = (x_1, \dots, x_n)$}
 
-  $\text{Define parameters } \red{k, t, \Delta_t, N_\mathrm{iter}}$\;
-  Define initial placement of $v_i \in V$ randomly\;
-  \For{\red{$n_\mathrm{iter} \gets 0$ \KwTo $N_\mathrm{iter}$}}{
-    $\text{compute gradient } \nabla f_i(x_i)$ for all $v_i \in V$\;
-    $x_i \gets x_i - t \frac{\nabla f_i(x_i)}{
-        \norm{\nabla f_i(x_i)}}$ for all $v_i \in V$\;
-    $t \gets t - \Delta_t$\;
-    \If{\text{convergence condition is satisfied}}{
-      \textbf{break}\;
+    $\text{Define parameters } \red{k, t, \Delta_t, N_\mathrm{iter}}$\;
+    Define initial placement of $v_i \in V$ randomly\;
+    \For{\red{$n_\mathrm{iter} \gets 0$ \KwTo $N_\mathrm{iter}$}}{
+        $\text{compute gradient } \nabla f_i(x_i)$ for all $v_i \in V$\;
+        $x_i \gets x_i - t \frac{\nabla f_i(x_i)}{
+                \norm{\nabla f_i(x_i)}}$ for all $v_i \in V$\;
+        $t \gets t - \Delta_t$\;
+        \If{\text{convergence condition is satisfied}}{
+            \textbf{break}\;
+        }
     }
-  }
-  \Return $X$\;
+    \Return $X$\;
 \end{algorithm}
 
 In Algorithm~\ref{alg:fr}, the initial placement of points is determined randomly. Under proper input normalization, each point is uniformly distributed within a unit square in general.
@@ -330,13 +330,13 @@ The parameter $t$ denotes the temperature, which governs the step size along the
 \subsection{L-BFGS method}\label{ssec:lbfgs}
 
 \begin{figure}[t]
-  \centering
-  \includegraphics[width=0.713\columnwidth]{comparison/comparison_FRandLBFGS.pdf}
-  \caption{
-    Comparison of the FR algorithm and the L-BFGS method.
-    Although the FR algorithm moves vertices in a descent direction with a fixed step size (blue arrows), the L-BFGS method adjusts them differently since it utilizes approximated inverse Hessian of $f$ (red arrows).
-  }
-  \label{fig:comparisonFRandLBFGS}
+    \centering
+    \includegraphics[width=0.713\columnwidth]{comparison/comparison_FRandLBFGS.pdf}
+    \caption{
+        Comparison of the FR algorithm and the L-BFGS method.
+        Although the FR algorithm moves vertices in a descent direction with a fixed step size (blue arrows), the L-BFGS method adjusts them differently since it utilizes approximated inverse Hessian of $f$ (red arrows).
+    }
+    \label{fig:comparisonFRandLBFGS}
 \end{figure}
 
 Another approach to solve the optimization problem~\eqref{eq:fr} is to use the Limited-memory Broyden--Fletcher--Goldfarb--Shanno (L-BFGS) algorithm~\cite{6183577}.
@@ -359,18 +359,18 @@ Addressing these challenges forms a part of our research question, and we aim to
 \subsection{``twist'' in the optimization process}\label{ssec:twist}
 
 \begin{figure}[t]
-  \centering
-  \begin{tabular}{ccc}
-    \texttt{sfdp}                                                   & \texttt{fdp} & \texttt{spring\_layout} \\
-    \includegraphics[width=0.273\columnwidth]{cycle/cycle_sfdp.png} &
-    \includegraphics[width=0.273\columnwidth]{cycle/cycle_fdp.png}  &
-    \includegraphics[width=0.273\columnwidth]{cycle/cycle_fr.png}                                            \\
-  \end{tabular}
-  \caption{
-    Comparison of \texttt{sfdp} in Graphviz, \texttt{fdp} in Graphviz, and \texttt{spring\_layout} in NetworkX for the cycle graph with $\abs{V} = 300$.
-    We run every algorithm with the default parameters, but both \texttt{fdp} and \texttt{spring\_layout} fail to visualize the cycle beautifully.
-  }
-  \label{fig:cycle}
+    \centering
+    \begin{tabular}{ccc}
+        \texttt{sfdp}                                                   & \texttt{fdp} & \texttt{spring\_layout} \\
+        \includegraphics[width=0.273\columnwidth]{cycle/cycle_sfdp.png} &
+        \includegraphics[width=0.273\columnwidth]{cycle/cycle_fdp.png}  &
+        \includegraphics[width=0.273\columnwidth]{cycle/cycle_fr.png}                                            \\
+    \end{tabular}
+    \caption{
+        Comparison of \texttt{sfdp} in Graphviz, \texttt{fdp} in Graphviz, and \texttt{spring\_layout} in NetworkX for the cycle graph with $\abs{V} = 300$.
+        We run every algorithm with the default parameters, but both \texttt{fdp} and \texttt{spring\_layout} fail to visualize the cycle beautifully.
+    }
+    \label{fig:cycle}
 \end{figure}
 
 First, we observe the challenges that appeared in existing methods.
@@ -390,8 +390,8 @@ Moreover, the effectiveness of Stochastic Gradient Descent (SGD) for Kama--Kawai
 
 The KK layout is an energy-based layout, which minimizes the energy function $f^{\mathrm{KK}}$ defined as
 \begin{equation*}
-  f^{\mathrm{KK}}_{i,j}(d) \defeq w_{i,j} (d-l_{i,j})^2, \;
-  f^{\mathrm{KK}}(X) \defeq \sum_{i<j} f^{\mathrm{KK}}_{i,j}(\norm{x_i - x_j}),
+    f^{\mathrm{KK}}_{i,j}(d) \defeq w_{i,j} (d-l_{i,j})^2, \;
+    f^{\mathrm{KK}}(X) \defeq \sum_{i<j} f^{\mathrm{KK}}_{i,j}(\norm{x_i - x_j}),
 \end{equation*}
 where $l_{i,j}$ is the optimal distance between $v_i$ and $v_j$ calculated from the shortest path distance in the graph $G_W$.
 
@@ -405,17 +405,17 @@ This observation motivates us to propose a new algorithm combined with the next 
 \subsection{Newton's method}\label{ssec:introNewton}
 
 \red{
-  First, we briefly explain the Newton's method.
-  This method updates variable $x \in \bbR^n$ of a convex function $f: \bbR^n \to \bbR$ by
-  \begin{equation*}
-    x \gets x - \nabla^2 f(x)^{-1} \nabla f(x).
-  \end{equation*}
-  Since $f$ is convex, the Hessian matrix $\nabla^2 f(x) \in \bbR^{n \times n}$ is positive semi-definite, and the update direction (Newton direction) is a descent direction. Plus, the updated $x$ is an optimal solution of the quadratic approximation of $f$ at $x$, ensuring Newton's method's fast convergence.
-  Newton's method requires the computation of the inverse Hessian matrix $\nabla^2 f(x)^{-1} \in \bbR^{n \times n}$ at each iteration, posing a high computational cost for large-scale problems.
+    First, we briefly explain the Newton's method.
+    This method updates variable $x \in \bbR^n$ of a convex function $f: \bbR^n \to \bbR$ by
+    \begin{equation*}
+        x \gets x - \nabla^2 f(x)^{-1} \nabla f(x).
+    \end{equation*}
+    Since $f$ is convex, the Hessian matrix $\nabla^2 f(x) \in \bbR^{n \times n}$ is positive semi-definite, and the update direction (Newton direction) is a descent direction. Plus, the updated $x$ is an optimal solution of the quadratic approximation of $f$ at $x$, ensuring Newton's method's fast convergence.
+    Newton's method requires the computation of the inverse Hessian matrix $\nabla^2 f(x)^{-1} \in \bbR^{n \times n}$ at each iteration, posing a high computational cost for large-scale problems.
 }
 
 \red{
-  そのままでは難しい。\ref{sec:problemOfSubspace}などでその困難さは述べた。
+    そのままでは難しい。\ref{sec:problemOfSubspace}などでその困難さは述べた。
 }
 
 \section{Proposed Algorithm}\label{sec:algorithm}
@@ -432,18 +432,18 @@ First, we transform the optimization problem \eqref{eq:fr} into a constrained co
 As written in Sec.~\ref{ssec:sgd}, the energy function $E_{i,j}$ is $-k^2\log{d}$ for all $(i,j) \notin E$.
 Considering the sparsity of many practical graphs $(\abs{E} \ll \abs{V}^2)$, simplifying as follow is a reasonable approach:
 \begin{mini}
-  {X \in \bbR^{2 \times n}}
-  {\sum_{(i,j)\in E} \frac{w_{i,j}\norm{x_i - x_j}^3}{3k}- \sum_{i<j} k^2\log{\norm{x_i - x_j}}.}
-  {\label{eq:frApprox}}
-  {}
+    {X \in \bbR^{2 \times n}}
+    {\sum_{(i,j)\in E} \frac{w_{i,j}\norm{x_i - x_j}^3}{3k}- \sum_{i<j} k^2\log{\norm{x_i - x_j}}.}
+    {\label{eq:frApprox}}
+    {}
 \end{mini}
 Further, by converting the second term into a constraint, the problem \eqref{eq:frApprox} can be approximated such that the objective function can be computed with a complexity dependent on $\abs{E}$ rather than $\abs{V}^2$:
 \begin{mini}
-  {X \in \bbR^{2 \times n}}
-  {f^{\mathrm{a}}(X) \defeq \sum_{(i,j)\in E} \frac{w_{i,j}\norm{x_i - x_j}^3}{3k}}
-  {\label{eq:frApprox2}}
-  {}
-  \addConstraint{d_{i,j}=\norm{x_i - x_j}}{\geq \epsilon,\quad}{\forall (i,j)\,(i<j)}
+    {X \in \bbR^{2 \times n}}
+    {f^{\mathrm{a}}(X) \defeq \sum_{(i,j)\in E} \frac{w_{i,j}\norm{x_i - x_j}^3}{3k}}
+    {\label{eq:frApprox2}}
+    {}
+    \addConstraint{d_{i,j}=\norm{x_i - x_j}}{\geq \epsilon,\quad}{\forall (i,j)\,(i<j)}
 \end{mini}
 where $\epsilon$ is a suitably chosen positive constant. This conversion is reasonable because $E^\mathrm{r}(d)=-k^2\log{d}$ is a convex function such that it decreases monotonically concerning $d$. Thus, for sufficiently large $d$, the value of $-k^2\log{d}$ does not grow excessively, ensuring the validity of the approximation.
 
@@ -452,24 +452,24 @@ To further simplify, we incorporate the concept of fixed initial configurations 
 This study reports that a cycle initial placement obtained by Simulated Annealing (SA) brings a rapid convergence to a better solution in the FR layout.
 Similarly, by simplifying problem \eqref{eq:frApprox2} with a fixed initial configuration $Q$ whose points are separated by at least $\epsilon$, we obtain the following discrete optimization problem:
 \begin{mini}
-  {\pi: V \to Q}
-  {\red{\sum_{(i,j)\in E} \frac{w_{i,j}\norm{\pi(v_i) - \pi(v_j)}^3}{3k}}}
-  {\label{eq:frApprox3}}
-  {}
-  \addConstraint{\pi(v_i)}{\neq \pi(v_j),\quad}{\forall (i,j)\,(i<j)}
+    {\pi: V \to Q}
+    {\red{\sum_{(i,j)\in E} \frac{w_{i,j}\norm{\pi(v_i) - \pi(v_j)}^3}{3k}}}
+    {\label{eq:frApprox3}}
+    {}
+    \addConstraint{\pi(v_i)}{\neq \pi(v_j),\quad}{\forall (i,j)\,(i<j)}
 \end{mini}
 It means that with a discrete set of points $Q$ such that the points are separated by at least $\epsilon$, we seek the best injection $\pi :V \to Q$ that minimizes the objective function $f^{\mathrm{a}}$.
 By fixing the possible point configuration in advance, we can skip the check of the $\order{\abs{V}^2}$ constraints, reducing the computational complexity to $\order{\abs{E}}$ and thus offering significant speedup.
 
 \begin{figure}[t]
-  \centering
-  \includegraphics[width=\columnwidth]{pi/pi.pdf}
-  \caption{
-    concept of $\pi$.
-    The injection $\pi$ maps vertices $V$ to a discrete point configuration $Q$.
-    Apparently, among $\pi_1, \pi_2, \pi_3$, $\pi_3$ on the right one is the best mapping for the Problem~\eqref{eq:frApprox3}.
-  }
-  \label{fig:pi}
+    \centering
+    \includegraphics[width=\columnwidth]{pi/pi.pdf}
+    \caption{
+        concept of $\pi$.
+        The injection $\pi$ maps vertices $V$ to a discrete point configuration $Q$.
+        Apparently, among $\pi_1, \pi_2, \pi_3$, $\pi_3$ on the right one is the best mapping for the Problem~\eqref{eq:frApprox3}.
+    }
+    \label{fig:pi}
 \end{figure}
 
 As an example of such a discrete point configuration $Q$, one could consider $n$ circles of radius $\epsilon$ packed in $\bbR^2$.
@@ -484,11 +484,11 @@ Next, using the Newton direction of a randomly selected vertex, we solve the dis
 
 Let the objective function $f^{\mathrm{a}}_i(x_i)$ corresponding to a vertex $v_i$ be
 \begin{equation*}
-  f^{\mathrm{a}}_i(x_i) \defeq \sum_{j \neq i} \frac{w_{i,j}\norm{x_i - x_j}^3}{3k}.
+    f^{\mathrm{a}}_i(x_i) \defeq \sum_{j \neq i} \frac{w_{i,j}\norm{x_i - x_j}^3}{3k}.
 \end{equation*}
 Using the Newton direction, we can update the position of a vertex $v_i$ as
 \begin{equation*}
-  x_i^\mathrm{new} \gets \mathrm{round}\qty(x_i - \nabla^2 f^{\mathrm{a}}_i(x_i)^{-1} \nabla f^{\mathrm{a}}_i(x_i)),
+    x_i^\mathrm{new} \gets \mathrm{round}\qty(x_i - \nabla^2 f^{\mathrm{a}}_i(x_i)^{-1} \nabla f^{\mathrm{a}}_i(x_i)),
 \end{equation*}
 where $\mathrm{round}$ denotes the rounding operation to the nearest point in the hexagonal lattice $Q$.
 
@@ -498,10 +498,10 @@ We illustrated the overall process in Fig.~\ref{fig:hex}.
 This approach can obtain a high-quality initial solution for the optimization problem~\eqref{eq:fr}.
 
 \begin{figure}[t]
-  \centering
-  \includegraphics[width=\columnwidth]{hex/hex.pdf}
-  \caption{Visual explanation of the one iteration of the proposed algorithm. Step1. Compute the Newton direction for a randomly selected vertex. Step2. decide the path from the original position to the new position. Step3. move the vertex along the path.}
-  \label{fig:hex}
+    \centering
+    \includegraphics[width=\columnwidth]{hex/hex.pdf}
+    \caption{Visual explanation of the one iteration of the proposed algorithm. Step1. Compute the Newton direction for a randomly selected vertex. Step2. decide the path from the original position to the new position. Step3. move the vertex along the path.}
+    \label{fig:hex}
 \end{figure}
 
 \subsection{pseudo code}\label{ssec:pseudoCode}
@@ -511,26 +511,26 @@ The output of this algorithm is not a solution to Problem~\eqref{eq:fr}, but rat
 To obtain the solution to Problem~\eqref{eq:fr}, the output must be further refined using the FR algorithm or the L-BFGS method.
 
 \begin{algorithm}[ht]
-  \caption{Proposed algorithm as initial placement for the FR layout}
-  \label{alg:proposed}
-  \KwIn{Graph $G_W = (V, E)$, subspace dimension $s$}
-  \KwOut{Point configuration $X = (x_1, \dots, x_n)$}
+    \caption{Proposed algorithm as initial placement for the FR layout}
+    \label{alg:proposed}
+    \KwIn{Graph $G_W = (V, E)$, subspace dimension $s$}
+    \KwOut{Point configuration $X = (x_1, \dots, x_n)$}
 
-  define parameters $k, \textit{iterations}$ and hexagonal lattice $Q$\;
-  set $\pi$ as a injection from $V$ to $Q$ randomly\;
-  \For{$j \gets 0$ \KwTo \textit{iterations}}{
-    $v_i \gets \text{randomly selected vertex from } V$\;
-    $q_i \gets \pi(v_i)$\;
-    $x_i^\mathrm{new} \gets x_i - \nabla^2 f_i(x_i)^{-1} \nabla f_i(x_i)$\;
-    $q_i' \gets \text{nearest point of } x_i^\mathrm{new} \text{ in } Q$\;
-    $\textit{path} \gets \text{path from } q_i \text{ to } q_i'$\;
-    update $\pi$ by moving $q_i$ along the path\;
-    \If{\text{convergence condition}}{
-      \textbf{break}\;
+    define parameters $k, \textit{iterations}$ and hexagonal lattice $Q$\;
+    set $\pi$ as a injection from $V$ to $Q$ randomly\;
+    \For{$j \gets 0$ \KwTo \textit{iterations}}{
+        $v_i \gets \text{randomly selected vertex from } V$\;
+        $q_i \gets \pi(v_i)$\;
+        $x_i^\mathrm{new} \gets x_i - \nabla^2 f_i(x_i)^{-1} \nabla f_i(x_i)$\;
+        $q_i' \gets \text{nearest point of } x_i^\mathrm{new} \text{ in } Q$\;
+        $\textit{path} \gets \text{path from } q_i \text{ to } q_i'$\;
+        update $\pi$ by moving $q_i$ along the path\;
+        \If{\text{convergence condition}}{
+            \textbf{break}\;
+        }
     }
-  }
-  $x_i \gets q_i$ for all $v_i \in V$\;
-  \Return $X$
+    $x_i \gets q_i$ for all $v_i \in V$\;
+    \Return $X$
 \end{algorithm}
 
 \section{Numerical Experiment} \label{sec:experiment}
@@ -556,7 +556,63 @@ As a dataset, we used matrices from Sparse Matrix Collection~\cite{davis2011univ
 
 \subsection{detailed Experiment}\label{ssec:exprDetail}
 
-Secondly, we conducted a detailed experiment to investigate the behavior of the proposed algorithm in detail.
+Secondly, we conducted a detailed experiment to investigate the behavior of the proposed algorithm in detail. The result is shown in Fig.~\ref{fig:detail}.
+
+We tested our algorithm, as well as other conventional methods such as FR algorithm and L-BFGS method, on the following seven graphs:
+
+
+\if0
+    \begin{figure*}[t]
+        \centering
+        \addtolength{\tabcolsep}{-0.5em}
+        \begin{tabular}{ccccc}
+            \multicolumn{4}{c}{\textbf{btree9}}                                                             \\
+            \raisebox{-.5\height}{\includegraphics[width=0.58\columnwidth]{individual/plot/btree9.pdf}}   &
+            \makecell{\small{FR}                                                                            \\[-0.2em]\includegraphics[width=0.29\columnwidth]{individual/viz/btree9_FR.png}} &
+            \makecell{\small{L\_BFGS}                                                                       \\[-0.2em]\includegraphics[width=0.29\columnwidth]{individual/viz/btree9_L_BFGS.png}} &
+            \makecell{\small{RS\_FR}                                                                        \\[-0.2em]\includegraphics[width=0.29\columnwidth]{individual/viz/btree9_RS_FR.png}} &
+            \makecell{\small{RS\_L\_BFGS}                                                                   \\[-0.2em]\includegraphics[width=0.29\columnwidth]{individual/viz/btree9_RS_L_BFGS.png}} \\
+            \multicolumn{4}{c}{\textbf{dwt\_1005}}                                                          \\
+            \raisebox{-.5\height}{\includegraphics[width=0.58\columnwidth]{individual/plot/dwt_1005.pdf}} &
+            \makecell{\small{FR}                                                                            \\[-0.2em]\includegraphics[width=0.29\columnwidth]{individual/viz/dwt_1005_FR.png}} &
+            \makecell{\small{L\_BFGS}                                                                       \\[-0.2em]\includegraphics[width=0.29\columnwidth]{individual/viz/dwt_1005_L_BFGS.png}} &
+            \makecell{\small{RS\_FR}                                                                        \\[-0.2em]\includegraphics[width=0.29\columnwidth]{individual/viz/dwt_1005_RS_FR.png}} &
+            \makecell{\small{RS\_L\_BFGS}                                                                   \\[-0.2em]\includegraphics[width=0.29\columnwidth]{individual/viz/dwt_1005_RS_L_BFGS.png}} \\
+            \multicolumn{4}{c}{\textbf{cycle300}}                                                           \\
+            \raisebox{-.5\height}{\includegraphics[width=0.58\columnwidth]{individual/plot/cycle300.pdf}} &
+            \makecell{\small{FR}                                                                            \\[-0.2em]\includegraphics[width=0.29\columnwidth]{individual/viz/cycle300_FR.png}} &
+            \makecell{\small{L\_BFGS}                                                                       \\[-0.2em]\includegraphics[width=0.29\columnwidth]{individual/viz/cycle300_L_BFGS.png}} &
+            \makecell{\small{RS\_FR}                                                                        \\[-0.2em]\includegraphics[width=0.29\columnwidth]{individual/viz/cycle300_RS_FR.png}} &
+            \makecell{\small{RS\_L\_BFGS}                                                                   \\[-0.2em]\includegraphics[width=0.29\columnwidth]{individual/viz/cycle300_RS_L_BFGS.png}} \\
+            \multicolumn{4}{c}{\textbf{3elt}}                                                               \\
+            \raisebox{-.5\height}{\includegraphics[width=0.58\columnwidth]{individual/plot/3elt.pdf}}     &
+            \makecell{\small{FR}                                                                            \\[-0.2em]\includegraphics[width=0.29\columnwidth]{individual/viz/3elt_FR.png}} &
+            \makecell{\small{L\_BFGS}                                                                       \\[-0.2em]\includegraphics[width=0.29\columnwidth]{individual/viz/3elt_L_BFGS.png}} &
+            \makecell{\small{RS\_FR}                                                                        \\[-0.2em]\includegraphics[width=0.29\columnwidth]{individual/viz/3elt_RS_FR.png}} &
+            \makecell{\small{RS\_L\_BFGS}                                                                   \\[-0.2em]\includegraphics[width=0.29\columnwidth]{individual/viz/3elt_RS_L_BFGS.png}} \\
+            \multicolumn{4}{c}{\textbf{jagmesh1}}                                                           \\
+            \raisebox{-.5\height}{\includegraphics[width=0.58\columnwidth]{individual/plot/jagmesh1.pdf}} &
+            \makecell{\small{FR}                                                                            \\[-0.2em]\includegraphics[width=0.29\columnwidth]{individual/viz/jagmesh1_FR.png}} &
+            \makecell{\small{L\_BFGS}                                                                       \\[-0.2em]\includegraphics[width=0.29\columnwidth]{individual/viz/jagmesh1_L_BFGS.png}} &
+            \makecell{\small{RS\_FR}                                                                        \\[-0.2em]\includegraphics[width=0.29\columnwidth]{individual/viz/jagmesh1_RS_FR.png}} &
+            \makecell{\small{RS\_L\_BFGS}                                                                   \\[-0.2em]\includegraphics[width=0.29\columnwidth]{individual/viz/jagmesh1_RS_L_BFGS.png}} \\
+            \multicolumn{4}{c}{\textbf{dwt\_2680}}                                                          \\
+            \raisebox{-.5\height}{\includegraphics[width=0.58\columnwidth]{individual/plot/dwt_2680.pdf}} &
+            \makecell{\small{FR}                                                                            \\[-0.2em]\includegraphics[width=0.29\columnwidth]{individual/viz/dwt_2680_FR.png}} &
+            \makecell{\small{L\_BFGS}                                                                       \\[-0.2em]\includegraphics[width=0.29\columnwidth]{individual/viz/dwt_2680_L_BFGS.png}} &
+            \makecell{\small{RS\_FR}                                                                        \\[-0.2em]\includegraphics[width=0.29\columnwidth]{individual/viz/dwt_2680_RS_FR.png}} &
+            \makecell{\small{RS\_L\_BFGS}                                                                   \\[-0.2em]\includegraphics[width=0.29\columnwidth]{individual/viz/dwt_2680_RS_L_BFGS.png}} \\
+            \multicolumn{4}{c}{\textbf{1138\_bus}}                                                          \\
+            \raisebox{-.5\height}{\includegraphics[width=0.58\columnwidth]{individual/plot/1138_bus.pdf}} &
+            \makecell{\small{FR}                                                                            \\[-0.2em]\includegraphics[width=0.29\columnwidth]{individual/viz/1138_bus_FR.png}} &
+            \makecell{\small{L\_BFGS}                                                                       \\[-0.2em]\includegraphics[width=0.29\columnwidth]{individual/viz/1138_bus_L_BFGS.png}} &
+            \makecell{\small{RS\_FR}                                                                        \\[-0.2em]\includegraphics[width=0.29\columnwidth]{individual/viz/1138_bus_RS_FR.png}} &
+            \makecell{\small{RS\_L\_BFGS}                                                                   \\[-0.2em]\includegraphics[width=0.29\columnwidth]{individual/viz/1138_bus_RS_L_BFGS.png}} \\
+        \end{tabular}
+        \caption{Numerical experiment results for various graphs. Please refer Sec.~\ref{ssec:exprDetail} for details.}
+        \label{fig:individual}
+    \end{figure*}
+\fi
 
 \orange{TODO}
 
@@ -578,15 +634,15 @@ Rather, we hope that an accurate understanding of these challenges will lead us 
 
 In this subsection, we introduce the Random Subspace Newton (RSN), which is NOT a proposed method but a concept that heavily inspired our proposed algorithm.
 The RSN method is one of the subspace methods, and RSN and its variant have been proposed in the context of optimization problems~\cite{NEURIPS2019_bc6dc48b,
-  fujiRandomizedSubspaceRegularized2022,
-  cartisRandomisedSubspaceMethods2022,
-  nozawaRandomizedSubspaceGradient2023,
-  higuchiFastConvergenceSecondOrder2024}.
+    fujiRandomizedSubspaceRegularized2022,
+    cartisRandomisedSubspaceMethods2022,
+    nozawaRandomizedSubspaceGradient2023,
+    higuchiFastConvergenceSecondOrder2024}.
 
 RSN focuses on a subspace of dimension $s$ randomly selected from the solution space by a projection matrix $S \in \bbR^{n \times s}$ and utilizes the exact Hessian matrix of size $s \times s$ defined on this subspace: $S^\top \nabla^2 f(x) S$.
 At each iteration, RSN updates the solution by
 \begin{equation*}
-  x \gets x - S (S^\top \nabla^2 f(x) S)^{-1} S^\top \nabla f(x)
+    x \gets x - S (S^\top \nabla^2 f(x) S)^{-1} S^\top \nabla f(x)
 \end{equation*}
 if $S^\top \nabla^2 f(x) S$ is non-singular.
 Since $s \ll n$, the computational cost per iteration is significantly reduced when we disregard the cost of selecting the subspace.
@@ -602,8 +658,8 @@ If take $S$ as a projection matrix that selects a random vertex $v_i$ from $V$, 
 Despite of such high expectation for the subspace methods, we found that direct applying of the subspace method to the FR layout is quite challenging.
 We take the following algorithm as a direct application of the subspace methods to the FR layout; Namely, we randomly select a vertex $v_i$, apply Newton's method or its regularized variant to $f_i$ using the gradient in Eq.~\eqref{eq:gradientFi} and its Hessian:
 \begin{gather*}
-  \nabla^2 f_i(x_i) = \sum_{j \neq i} \left(\frac{w_{i,j}\norm{x_i - x_j}}{k} - \frac{k^2}{\norm{x_i - x_j}^2}\right) I_d + \\
-  \sum_{j \neq i} \left(\frac{w_{i,j}}{k \norm{x_i - x_j}} + \frac{2k^2}{\norm{x_i - x_j}^4}\right) (x_i - x_j)(x_i - x_j)^\top.
+    \nabla^2 f_i(x_i) = \sum_{j \neq i} \left(\frac{w_{i,j}\norm{x_i - x_j}}{k} - \frac{k^2}{\norm{x_i - x_j}^2}\right) I_d + \\
+    \sum_{j \neq i} \left(\frac{w_{i,j}}{k \norm{x_i - x_j}} + \frac{2k^2}{\norm{x_i - x_j}^4}\right) (x_i - x_j)(x_i - x_j)^\top.
 \end{gather*}
 Then, we update the position of vertex $v_i$, and repeat this process until convergence.
 However, this approach fails to work effectively in practice.
@@ -612,14 +668,14 @@ In the following, we explain the reasons behind this difficulty.
 \subsection{Inaccuracy of quadratic approximation}\label{ssec:inaccuracy}
 
 \begin{figure}[t]
-  \centering
-  \includegraphics[height=2.2cm]{whyRSNfail/whyRSNfail.pdf}
-  \caption{
-    The inaccurate quadratic approximation.
-    Assume that the optimal placement of the graph is as shown on the left.
-    For the red vertex on the right graph, its Newton direction is the red arrow, which is apparently a bad direction.
-  }
-  \label{fig:whyRSNfail}
+    \centering
+    \includegraphics[height=2.2cm]{whyRSNfail/whyRSNfail.pdf}
+    \caption{
+        The inaccurate quadratic approximation.
+        Assume that the optimal placement of the graph is as shown on the left.
+        For the red vertex on the right graph, its Newton direction is the red arrow, which is apparently a bad direction.
+    }
+    \label{fig:whyRSNfail}
 \end{figure}
 
 This subsection discusses the inaccuracy of quadratic approximation used in the Newton's method, particularly a specific issue arises when restricting the optimization to a subspace.
@@ -637,17 +693,17 @@ In a successful case such as in the middle (success), the subspace method works 
 However, in the situation depicted on the right (failure), the Newton direction for $x_1$ (red arrow) is apparently a bad direction, leading to a significant deviation from the global optimal solution as it is.
 The points of $G$ are set as
 \begin{equation*}
-  X = \begin{pmatrix}
-    0 & -1 & -0.85  & -0.85  & 1 \\
-    0 & 0  & +0.155 & -0.155 & 0
-  \end{pmatrix},
+    X = \begin{pmatrix}
+        0 & -1 & -0.85  & -0.85  & 1 \\
+        0 & 0  & +0.155 & -0.155 & 0
+    \end{pmatrix},
 \end{equation*}
 and the Hessian $\nabla^2 f_1(x_1)$ is approximately
 \begin{equation*}
-  \begin{pmatrix}
-    1.841 & 0     \\
-    0     & 1.159
-  \end{pmatrix},
+    \begin{pmatrix}
+        1.841 & 0     \\
+        0     & 1.159
+    \end{pmatrix},
 \end{equation*}
 which is positive definite and not ill-conditioned.
 Despite of such a good property of the Hessian, the Newton direction for $x_1$ (red arrow) is a bad direction, since the repulsive force between $x_1$ and $x_2,x_3$ are too strong to diverge from the global optimal solution.
@@ -656,12 +712,12 @@ This kind of illness cannot be resolved by just modifying the Newton's method we
 \subsection{Ignorance of other vertex movements}\label{ssec:ignorance}
 
 \begin{figure}[t]
-  \centering
-  \includegraphics[height=2.2cm]{whyRSNfail2/whyRSNfail2.pdf}
-  \caption{
-    The ignorance of other vertex movements. Assume that the blue arrows show the forces to the vertices and the optimal movements in this situation. Nevertheless, the red vertex will only move a little by the subspace method.
-  }
-  \label{fig:whyRSNfail2}
+    \centering
+    \includegraphics[height=2.2cm]{whyRSNfail2/whyRSNfail2.pdf}
+    \caption{
+        The ignorance of other vertex movements. Assume that the blue arrows show the forces to the vertices and the optimal movements in this situation. Nevertheless, the red vertex will only move a little by the subspace method.
+    }
+    \label{fig:whyRSNfail2}
 \end{figure}
 
 This subsection discusses another issue of the subspace method, which is the ignorance of other vertex movements when optimizing each vertex individually.
@@ -714,10 +770,10 @@ In this section, we briefly discuss and explore the potential applicability of t
 
 In general, the optimization problem~\eqref{eq:fr} is more broadly treated as ``objective functions arising from graphs''~\cite{recht-wright}:
 \begin{mini*}
-  {X \in \bbR^{2 \times n}}
-  {f(X) = \sum_{(i,j)\in E} f_{i,j}(x_i, x_j)+\lambda \sum_{i=1}^{n} \Omega_i(x_i),}
-  {}
-  {}
+    {X \in \bbR^{2 \times n}}
+    {f(X) = \sum_{(i,j)\in E} f_{i,j}(x_i, x_j)+\lambda \sum_{i=1}^{n} \Omega_i(x_i),}
+    {}
+    {}
 \end{mini*}
 where $\Omega_i$ is a regularization term for the $i$-th vertex, and $\lambda$ is a regularization parameter.
 The FR layout problem~\eqref{eq:fr} is obviously a special case of this problem class.
@@ -732,13 +788,13 @@ When we relax it to a continuous optimization problem on Riemannian manifolds as
 Investigating the applicability of the subspace-based method to these problems constitutes one of the future research directions.
 
 \begin{figure}[t]
-  \centering
-  \includegraphics[width=\columnwidth]{iso/iso.pdf}
-  \caption{
-    Illustration of the relationship between graph drawing and graph isomorphism.
-    If we can draw graphs $G_1$ and $G_2$ symmetrically, then it is clear that $G_1 \cong G_2$.
-  }
-  \label{fig:iso}
+    \centering
+    \includegraphics[width=\columnwidth]{iso/iso.pdf}
+    \caption{
+        Illustration of the relationship between graph drawing and graph isomorphism.
+        If we can draw graphs $G_1$ and $G_2$ symmetrically, then it is clear that $G_1 \cong G_2$.
+    }
+    \label{fig:iso}
 \end{figure}
 
 \subsection{Conclusion} \label{sec:conclusion}
@@ -757,8 +813,8 @@ The author also thanks the developers of NetworkX and Graphviz. Their excellent 
 This work was partially supported by JSPS KAKENHI (23H03351,24K23853) and JST ERATO (JPMJER1903).
 
 \ifthenelse{\boolean{isMain}}{
-  \bibliographystyle{IEEEtran}
-  \bibliography{FruchtermanReingoldByRandomSubspace}
+    \bibliographystyle{IEEEtran}
+    \bibliography{FruchtermanReingoldByRandomSubspace}
 }{}
 
 \appendices
@@ -771,13 +827,13 @@ In this section, we explain how to find the optimal scaling factor that minimize
 Let us formulate the optimization problem for the scaling factor $c \in \bbR_{> 0}$. For an initial placement $X = (x_1, \dots, x_n)$, we rescale it as $x_i \gets c x_i$ for all $i$.
 This problem is to minimize the energy function $\phi(c)$ defined as
 \begin{align*}
-  \phi(c) \defeq {} & \qty(\sum_{i < j} \frac{w_{ij} (cd_{ij})^3}{3k}) - k^2 \sum_{i < j} \log(c d_{ij})                                   \\
-  \begin{split}
-    = {} & c^3 \qty(\sum_{i < j} \frac{w_{ij} d_{ij}^3}{3k}) - k^2 n(n-1)\log(c) \\
-         & - k^2 \sum_{i < j} \log(d_{ij}),
-  \end{split} \\
-  \phi'(c) = {}     & 3c^2 \qty(\sum_{i < j} \frac{w_{ij} d_{ij}^3}{3k}) - \frac{k^2 n(n-1)}{c},                                           \\
-  \phi''(c) = {}    & 6c \qty(\sum_{i < j} \frac{w_{ij} d_{ij}^3}{3k}) + \frac{k^2 n(n-1)}{c^2}.
+    \phi(c) \defeq {} & \qty(\sum_{i < j} \frac{w_{ij} (cd_{ij})^3}{3k}) - k^2 \sum_{i < j} \log(c d_{ij})                                   \\
+    \begin{split}
+        = {} & c^3 \qty(\sum_{i < j} \frac{w_{ij} d_{ij}^3}{3k}) - k^2 n(n-1)\log(c) \\
+             & - k^2 \sum_{i < j} \log(d_{ij}),
+    \end{split} \\
+    \phi'(c) = {}     & 3c^2 \qty(\sum_{i < j} \frac{w_{ij} d_{ij}^3}{3k}) - \frac{k^2 n(n-1)}{c},                                           \\
+    \phi''(c) = {}    & 6c \qty(\sum_{i < j} \frac{w_{ij} d_{ij}^3}{3k}) + \frac{k^2 n(n-1)}{c^2}.
 \end{align*}
 
 The function $\phi(c)$ is convex, and we can find the optimal scaling factor $c$ by using Newton's method.
@@ -802,14 +858,14 @@ Additionally, we can obtain a heuristic solution in $\order{\abs{V} \log \abs{V}
 While we are not expecting as good performances as the proposed method from the approaches above, they offer certain advantages, such as simplifying implementation or avoiding random access to arrays.
 
 \begin{IEEEbiography}[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{fig1}}]{Hiroki Hamaguchi}
-  Graduate School of Information Science and Technology, The University of Tokyo, Tokyo, Japan.
+    Graduate School of Information Science and Technology, The University of Tokyo, Tokyo, Japan.
 \end{IEEEbiography}
 \begin{IEEEbiography}[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{fig1}}]{Naoki Marumo}
-  Graduate School of Information Science and Technology, The University of Tokyo, Tokyo, Japan.
+    Graduate School of Information Science and Technology, The University of Tokyo, Tokyo, Japan.
 \end{IEEEbiography}
 \begin{IEEEbiography}[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{fig1}}]{Akiko Takeda}
-  Graduate School of Information Science and Technology, The University of Tokyo, Tokyo, Japan.
-  Center for Advanced Intelligence Project, RIKEN, Tokyo, Japan.
+    Graduate School of Information Science and Technology, The University of Tokyo, Tokyo, Japan.
+    Center for Advanced Intelligence Project, RIKEN, Tokyo, Japan.
 \end{IEEEbiography}
 
 \end{document}
