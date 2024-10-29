@@ -37,8 +37,10 @@ def visGraph(
     if title:
         plt.title(title)
     if savePath:
-        plt.tight_layout()
-        plt.savefig(savePath, bbox_inches="tight", pad_inches=0.0, dpi=300)
+        plt.gca().set_axis_off()
+        plt.subplots_adjust(top=1, bottom=0, right=1, left=0, hspace=0, wspace=0)
+        plt.margins(0, 0)
+        plt.savefig(savePath, dpi=300)
         plt.close()
     else:
         plt.show()
