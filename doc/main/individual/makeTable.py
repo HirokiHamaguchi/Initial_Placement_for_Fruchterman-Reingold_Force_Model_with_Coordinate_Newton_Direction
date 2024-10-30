@@ -28,12 +28,12 @@ def generate_latex_code(matrixNames):
             else "pdf"
         )
         latex_code += f"""
-    \\multicolumn{{5}}{{c}}{{\\textbf{{{matrixNameRep} ($\\abs{{V}}={n}, \\abs{{E}}={m}, \\text{{sparsity}}={density:.3f}$\\%)}}}} \\\\
+    \\multicolumn{{5}}{{c}}{{\\textbf{{\\texttt{{{matrixNameRep}}} ($\\abs{{V}}={n}, \\abs{{E}}={m}, \\text{{sparsity}}={density:.3f}$\\%)}}}} \\\\
     \\raisebox{{-.5\\height}}{{\\includegraphics[width=0.55\\columnwidth]{{individual/plot/{matrixName}.pdf}}}} &
-    \\makecell{{\\small{{FR}}\\\\[-0.2em]\\includegraphics[width=0.27\\columnwidth]{{individual/viz/{matrixName}_FR.{extension}}}}} &
-    \\makecell{{\\small{{L\\_BFGS}}\\\\[-0.2em]\\includegraphics[width=0.27\\columnwidth]{{individual/viz/{matrixName}_L_BFGS.{extension}}}}} &
-    \\makecell{{\\small{{SN\\_FR}}\\\\[-0.2em]\\includegraphics[width=0.27\\columnwidth]{{individual/viz/{matrixName}_SN_FR.{extension}}}}} &
-    \\makecell{{\\small{{SN\\_L\\_BFGS}}\\\\[-0.2em]\\includegraphics[width=0.27\\columnwidth]{{individual/viz/{matrixName}_SN_L_BFGS.{extension}}}}} \\\\"""
+    \\makecell{{\\small{{\\textsf{{FR}}}}\\\\[-0.2em]\\includegraphics[width=0.27\\columnwidth]{{individual/viz/{matrixName}_FR.{extension}}}}} &
+    \\makecell{{\\small{{\\textsf{{L-BFGS}}}}\\\\[-0.2em]\\includegraphics[width=0.27\\columnwidth]{{individual/viz/{matrixName}_L_BFGS.{extension}}}}} &
+    \\makecell{{\\small{{\\textsf{{SN-FR}}}}\\\\[-0.2em]\\includegraphics[width=0.27\\columnwidth]{{individual/viz/{matrixName}_SN_FR.{extension}}}}} &
+    \\makecell{{\\small{{\\textsf{{SN-L-BFGS}}}}\\\\[-0.2em]\\includegraphics[width=0.27\\columnwidth]{{individual/viz/{matrixName}_SN_L_BFGS.{extension}}}}} \\\\"""
 
     latex_code += f"""
   \\end{{tabular}}

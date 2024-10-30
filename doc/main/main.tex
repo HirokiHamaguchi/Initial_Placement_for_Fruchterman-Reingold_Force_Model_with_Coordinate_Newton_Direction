@@ -179,32 +179,31 @@ Recent research has accelerated the algorithms through various methods, includin
 \begin{figure}[t]
     \centering
     \begin{tabular}{cc}
-        \large{\textbf{FR}}                                    & \large{\textbf{L-BFGS}}   \\
+        \large{\textbf{\textsf{FR}}}                                       & \large{\textbf{\textsf{L-BFGS}}}   \\
         \begin{minipage}{0.45\columnwidth}
             \centering
-            \includegraphics[scale=0.05]{jagmesh1/jagmesh1_FR.png}
+            \includegraphics[width=0.85\columnwidth]{jagmesh1/jagmesh1_FR.png}
         \end{minipage} &
         \begin{minipage}{0.45\columnwidth}
             \centering
-            \includegraphics[scale=0.05]{jagmesh1/jagmesh1_L_BFGS.png}
-        \end{minipage}                          \\
-        \large{\textbf{proposed}}                              & \large{\textbf{+ L-BFGS}} \\
+            \includegraphics[width=0.85\columnwidth]{jagmesh1/jagmesh1_L_BFGS.png}
+        \end{minipage}                                   \\
+        \large{\textbf{\textsf{proposed}}}                                 & \large{\textbf{\textsf{+ L-BFGS}}} \\
         \begin{minipage}{0.45\columnwidth}
             \centering
-            \includegraphics[scale=0.05]{jagmesh1/jagmesh1_RS.png}
+            \includegraphics[width=0.85\columnwidth]{jagmesh1/jagmesh1_SN.png}
         \end{minipage}
-                                                               &
+                                                                           &
         \begin{minipage}{0.45\columnwidth}
             \centering
-            \includegraphics[scale=0.05]{jagmesh1/jagmesh1_RS_L_BFGS.png}
+            \includegraphics[width=0.85\columnwidth]{jagmesh1/jagmesh1_SN_L_BFGS.png}
         \end{minipage}
     \end{tabular}
     \begin{tikzpicture}[overlay, remember picture]
-        \draw[-{Stealth[length=2mm]}, thick] (-0.3,1.4) -- (+0.3,1.4);
+        \draw[-{Stealth[length=2mm,width=3mm]}, line width=1mm] (-0.3,1.5) -- (+0.3,1.5);
     \end{tikzpicture}
     \caption{
-        Comparison of the FR algorithm, L-BFGS, and the proposed method
-        for the \texttt{jagmesh1} dataset.}
+        Comparison of the FR algorithm, L-BFGS method, and the proposed initial placement for the \texttt{jagmesh1} dataset.}
     \label{table:four_images}
 \end{figure}
 
@@ -361,14 +360,14 @@ Addressing these challenges forms a part of our research question, and we aim to
 \begin{figure}[t]
     \centering
     \begin{tabular}{ccc}
-        \texttt{sfdp}                                                   & \texttt{fdp} & \texttt{spring\_layout} \\
+        \textsf{sfdp}                                                   & \textsf{fdp} & \textsf{spring\_layout} \\
         \includegraphics[width=0.273\columnwidth]{cycle/cycle_sfdp.png} &
         \includegraphics[width=0.273\columnwidth]{cycle/cycle_fdp.png}  &
         \includegraphics[width=0.273\columnwidth]{cycle/cycle_fr.png}                                            \\
     \end{tabular}
     \caption{
-        Comparison of \texttt{sfdp} in Graphviz, \texttt{fdp} in Graphviz, and \texttt{spring\_layout} in NetworkX for the cycle graph with $\abs{V} = 300$.
-        We run every algorithm with the default parameters, but both \texttt{fdp} and \texttt{spring\_layout} fail to visualize the cycle beautifully.
+        Comparison of \textsf{sfdp} in Graphviz, \textsf{fdp} in Graphviz, and \textsf{spring\_layout} in NetworkX for the cycle graph with $\abs{V} = 300$, \texttt{cycle300}.
+        We run every algorithm with the default parameters, but both \textsf{fdp} and \textsf{spring\_layout} fail to visualize the cycle beautifully.
     }
     \label{fig:cycle}
 \end{figure}
@@ -542,9 +541,9 @@ We conducted two types of experiments, based on Ref.~\cite{8419285}: exhaustive 
 
 All numerical experiments in this section were conducted using \Cpp17 compiled by GCC 10.5.0 on a laptop computer powered by Intel(R) Core(TM) i7-10510U CPU with 16 GB RAM.
 
-We used Graphviz version 2.43.0~\cite{ellsonGraphvizOpenSource2002} and NetworkX version 3.3~\cite{hagberg2008exploring} during the experiments, including Fig.~\ref{fig:cycle}.
-To implement FR-algorithm and L-BFGS method, we referenced NetworkX and C++ L-BFGS~\cite{qiuYixuanLBFGSpp2024,okazakiChokkanLiblbfgs2024}, respectively.
+To implement FR algorithm and L-BFGS method, we referenced NetworkX version 3.3~\cite{hagberg2008exploring} and C++ L-BFGS~\cite{qiuYixuanLBFGSpp2024,okazakiChokkanLiblbfgs2024}, respectively. In particular, we used almost the same parameters as NetworkX's \textsf{spring\_layout} for the FR algorithm.
 We also referenced the open-source code of the hexagonal grid from~\cite{patelHexagonalGrids2013}.
+As a side note, we also used Graphviz version 2.43.0~\cite{ellsonGraphvizOpenSource2002} to draw Fig.~\ref{fig:cycle}.
 
 All the codes are available at our GitHub~\cite{ThisPaperGitHub}.
 
@@ -558,65 +557,79 @@ As a dataset, we used matrices from Sparse Matrix Collection~\cite{davis2011univ
 
 Secondly, we conducted a detailed experiment to investigate the behavior of the proposed algorithm in detail. The result is shown in Fig.~\ref{fig:detail}.
 
-We tested our algorithm, as well as other conventional methods such as FR algorithm and L-BFGS method, on the following seven graphs:
+The experiment details are as follows.
+We used the 4 algorithms: FR algorithm (\textsf{FR}), the proposed initialization plus FR algorithm (\textsf{SN-FR}), L-BFGS method (\textsf{L-BFGS}), and the proposed initialization plus L-BFGS method (\textsf{SN-L-BFGS}). \textsf{SN} represents the Subspace Newton, which is the proposed algorithm.
+We set the maximum number of iterations $N_\mathrm{iter}$ to 200.
 
+We tested with 7 graphs: \texttt{cycle300}, \texttt{jagmesh1}, \texttt{dwt\_1005}, \texttt{btree9}, \texttt{1138\_bus}, \texttt{dwt\_2680}, and \texttt{3elt}. \texttt{cycle300} is a cycle graph with 300 vertices, and btree9 is a perfect binary tree with $2^{9+1}-1=1023$ vertices. Other graphs are from Sparse Matrix Collection~\cite{davis2011university}, and these choice is based on the experiments conducted in Ref.~\cite{8419285}. Thus, although all the graphs are quite sparse so that $\abs{E} / (\abs{V}(V-1)/2)$ is less than 1\%, this is not an arbitrary choice. The important graphs often have such a sparsity.
 
-\if0
-    \begin{figure*}[t]
-        \centering
-        \addtolength{\tabcolsep}{-0.5em}
-        \begin{tabular}{ccccc}
-            \multicolumn{4}{c}{\textbf{btree9}}                                                             \\
-            \raisebox{-.5\height}{\includegraphics[width=0.58\columnwidth]{individual/plot/btree9.pdf}}   &
-            \makecell{\small{FR}                                                                            \\[-0.2em]\includegraphics[width=0.29\columnwidth]{individual/viz/btree9_FR.png}} &
-            \makecell{\small{L\_BFGS}                                                                       \\[-0.2em]\includegraphics[width=0.29\columnwidth]{individual/viz/btree9_L_BFGS.png}} &
-            \makecell{\small{RS\_FR}                                                                        \\[-0.2em]\includegraphics[width=0.29\columnwidth]{individual/viz/btree9_RS_FR.png}} &
-            \makecell{\small{RS\_L\_BFGS}                                                                   \\[-0.2em]\includegraphics[width=0.29\columnwidth]{individual/viz/btree9_RS_L_BFGS.png}} \\
-            \multicolumn{4}{c}{\textbf{dwt\_1005}}                                                          \\
-            \raisebox{-.5\height}{\includegraphics[width=0.58\columnwidth]{individual/plot/dwt_1005.pdf}} &
-            \makecell{\small{FR}                                                                            \\[-0.2em]\includegraphics[width=0.29\columnwidth]{individual/viz/dwt_1005_FR.png}} &
-            \makecell{\small{L\_BFGS}                                                                       \\[-0.2em]\includegraphics[width=0.29\columnwidth]{individual/viz/dwt_1005_L_BFGS.png}} &
-            \makecell{\small{RS\_FR}                                                                        \\[-0.2em]\includegraphics[width=0.29\columnwidth]{individual/viz/dwt_1005_RS_FR.png}} &
-            \makecell{\small{RS\_L\_BFGS}                                                                   \\[-0.2em]\includegraphics[width=0.29\columnwidth]{individual/viz/dwt_1005_RS_L_BFGS.png}} \\
-            \multicolumn{4}{c}{\textbf{cycle300}}                                                           \\
-            \raisebox{-.5\height}{\includegraphics[width=0.58\columnwidth]{individual/plot/cycle300.pdf}} &
-            \makecell{\small{FR}                                                                            \\[-0.2em]\includegraphics[width=0.29\columnwidth]{individual/viz/cycle300_FR.png}} &
-            \makecell{\small{L\_BFGS}                                                                       \\[-0.2em]\includegraphics[width=0.29\columnwidth]{individual/viz/cycle300_L_BFGS.png}} &
-            \makecell{\small{RS\_FR}                                                                        \\[-0.2em]\includegraphics[width=0.29\columnwidth]{individual/viz/cycle300_RS_FR.png}} &
-            \makecell{\small{RS\_L\_BFGS}                                                                   \\[-0.2em]\includegraphics[width=0.29\columnwidth]{individual/viz/cycle300_RS_L_BFGS.png}} \\
-            \multicolumn{4}{c}{\textbf{3elt}}                                                               \\
-            \raisebox{-.5\height}{\includegraphics[width=0.58\columnwidth]{individual/plot/3elt.pdf}}     &
-            \makecell{\small{FR}                                                                            \\[-0.2em]\includegraphics[width=0.29\columnwidth]{individual/viz/3elt_FR.png}} &
-            \makecell{\small{L\_BFGS}                                                                       \\[-0.2em]\includegraphics[width=0.29\columnwidth]{individual/viz/3elt_L_BFGS.png}} &
-            \makecell{\small{RS\_FR}                                                                        \\[-0.2em]\includegraphics[width=0.29\columnwidth]{individual/viz/3elt_RS_FR.png}} &
-            \makecell{\small{RS\_L\_BFGS}                                                                   \\[-0.2em]\includegraphics[width=0.29\columnwidth]{individual/viz/3elt_RS_L_BFGS.png}} \\
-            \multicolumn{4}{c}{\textbf{jagmesh1}}                                                           \\
-            \raisebox{-.5\height}{\includegraphics[width=0.58\columnwidth]{individual/plot/jagmesh1.pdf}} &
-            \makecell{\small{FR}                                                                            \\[-0.2em]\includegraphics[width=0.29\columnwidth]{individual/viz/jagmesh1_FR.png}} &
-            \makecell{\small{L\_BFGS}                                                                       \\[-0.2em]\includegraphics[width=0.29\columnwidth]{individual/viz/jagmesh1_L_BFGS.png}} &
-            \makecell{\small{RS\_FR}                                                                        \\[-0.2em]\includegraphics[width=0.29\columnwidth]{individual/viz/jagmesh1_RS_FR.png}} &
-            \makecell{\small{RS\_L\_BFGS}                                                                   \\[-0.2em]\includegraphics[width=0.29\columnwidth]{individual/viz/jagmesh1_RS_L_BFGS.png}} \\
-            \multicolumn{4}{c}{\textbf{dwt\_2680}}                                                          \\
-            \raisebox{-.5\height}{\includegraphics[width=0.58\columnwidth]{individual/plot/dwt_2680.pdf}} &
-            \makecell{\small{FR}                                                                            \\[-0.2em]\includegraphics[width=0.29\columnwidth]{individual/viz/dwt_2680_FR.png}} &
-            \makecell{\small{L\_BFGS}                                                                       \\[-0.2em]\includegraphics[width=0.29\columnwidth]{individual/viz/dwt_2680_L_BFGS.png}} &
-            \makecell{\small{RS\_FR}                                                                        \\[-0.2em]\includegraphics[width=0.29\columnwidth]{individual/viz/dwt_2680_RS_FR.png}} &
-            \makecell{\small{RS\_L\_BFGS}                                                                   \\[-0.2em]\includegraphics[width=0.29\columnwidth]{individual/viz/dwt_2680_RS_L_BFGS.png}} \\
-            \multicolumn{4}{c}{\textbf{1138\_bus}}                                                          \\
-            \raisebox{-.5\height}{\includegraphics[width=0.58\columnwidth]{individual/plot/1138_bus.pdf}} &
-            \makecell{\small{FR}                                                                            \\[-0.2em]\includegraphics[width=0.29\columnwidth]{individual/viz/1138_bus_FR.png}} &
-            \makecell{\small{L\_BFGS}                                                                       \\[-0.2em]\includegraphics[width=0.29\columnwidth]{individual/viz/1138_bus_L_BFGS.png}} &
-            \makecell{\small{RS\_FR}                                                                        \\[-0.2em]\includegraphics[width=0.29\columnwidth]{individual/viz/1138_bus_RS_FR.png}} &
-            \makecell{\small{RS\_L\_BFGS}                                                                   \\[-0.2em]\includegraphics[width=0.29\columnwidth]{individual/viz/1138_bus_RS_L_BFGS.png}} \\
-        \end{tabular}
-        \caption{Numerical experiment results for various graphs. Please refer Sec.~\ref{ssec:exprDetail} for details.}
-        \label{fig:individual}
-    \end{figure*}
-\fi
+We first explain the meaning of the figure.
+The left plot illustrates the objective function values on the vertical axis versus execution time on the horizontal axis, showcasing the outcomes across 10 trials.
+Faint crosses represent the results obtained without initial configuration, while faint circles denote those with initial configuration, plotted every 10 iterations for each trial.
+The solid lines correspond to the average of these values across the 10 trials for each approach.
+If a trial terminated before reaching 200 iterations, the data was plotted up to the minimum trial count achieved across all trials.
+Each trial was conducted with a different seed, meaning that even optimization algorithms that do not incorporate randomness in their process, such as \textsf{FR} or \textsf{L-BFGS}, converged to different local optima due to variations in the initial configuration.
+The graph on the right side illustrates the configuration at the 150th iteration (or the final iteration if it concluded before then) for each approach, specifically for the case where the seed is set to zero.
 
-\orange{TODO}
+The observations derived from the figure are as follows.
+First, the solid plot containing \textsf{SN}, which incorporates the proposed initial configuration method, generally demonstrates superior performance compared to the approach without it, validating the efficacy of the proposed method. A notable exception arises with the \textsf{FR} algorithm, which exhibits pronounced oscillations in the solution, likely due to excessive step sizes leading to overshooting. Although we refrained from altering widely recognized algorithms for fairness, adjusting the step size could enable the proposed method to achieve its intended performance. In fact, even under these conditions, the initial value of $f(X)$—the starting point of the experimental plot—is clearly lower than the objective function values produced by traditional methods.
 
-提案手法に基づく初期配置を用いた方が、高速に良質な解へと収束していることが確認できる。
+Additionally, the visualization results support the effectiveness of the proposed initial configuration. In most cases, configurations obtained with \textsf{SN} that include the proposed method better represent the intended geometric arrangement compared to those generated by other methods.
+
+As an overarching trend, regardless of the presence or absence of the proposed initial configuration, the approach utilizing \textsf{L-BFGS} consistently outperforms that employing \textsf{FR}. This finding is consistent with prior research~\cite{6183577}, though, regrettably, this technique remains relatively underutilized. One of the objectives of this paper is to further underscore the efficacy of mathematical optimization approaches, such as \textsf{L-BFGS}, and these results substantiate this assertion.
+
+% \if0
+\begin{figure*}[btp]
+    \centering
+    \addtolength{\tabcolsep}{-0.5em}
+    \begin{tabular}{ccccc}
+        \multicolumn{5}{c}{\textbf{\texttt{cycle300} ($\abs{V}=300, \abs{E}=300, \text{sparsity}=0.669$\%)}}     \\
+        \raisebox{-.5\height}{\includegraphics[width=0.55\columnwidth]{individual/plot/cycle300.pdf}} &
+        \makecell{\small{\textsf{FR}}                                                                            \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/cycle300_FR.pdf}} &
+        \makecell{\small{\textsf{L-BFGS}}                                                                        \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/cycle300_L_BFGS.pdf}} &
+        \makecell{\small{\textsf{SN-FR}}                                                                         \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/cycle300_SN_FR.pdf}} &
+        \makecell{\small{\textsf{SN-L-BFGS}}                                                                     \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/cycle300_SN_L_BFGS.pdf}} \\
+        \multicolumn{5}{c}{\textbf{\texttt{jagmesh1} ($\abs{V}=936, \abs{E}=2664, \text{sparsity}=0.609$\%)}}    \\
+        \raisebox{-.5\height}{\includegraphics[width=0.55\columnwidth]{individual/plot/jagmesh1.pdf}} &
+        \makecell{\small{\textsf{FR}}                                                                            \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/jagmesh1_FR.png}} &
+        \makecell{\small{\textsf{L-BFGS}}                                                                        \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/jagmesh1_L_BFGS.png}} &
+        \makecell{\small{\textsf{SN-FR}}                                                                         \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/jagmesh1_SN_FR.png}} &
+        \makecell{\small{\textsf{SN-L-BFGS}}                                                                     \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/jagmesh1_SN_L_BFGS.png}} \\
+        \multicolumn{5}{c}{\textbf{\texttt{dwt\_1005} ($\abs{V}=1005, \abs{E}=3808, \text{sparsity}=0.755$\%)}}  \\
+        \raisebox{-.5\height}{\includegraphics[width=0.55\columnwidth]{individual/plot/dwt_1005.pdf}} &
+        \makecell{\small{\textsf{FR}}                                                                            \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/dwt_1005_FR.png}} &
+        \makecell{\small{\textsf{L-BFGS}}                                                                        \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/dwt_1005_L_BFGS.png}} &
+        \makecell{\small{\textsf{SN-FR}}                                                                         \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/dwt_1005_SN_FR.png}} &
+        \makecell{\small{\textsf{SN-L-BFGS}}                                                                     \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/dwt_1005_SN_L_BFGS.png}} \\
+        \multicolumn{5}{c}{\textbf{\texttt{btree9} ($\abs{V}=1023, \abs{E}=1022, \text{sparsity}=0.196$\%)}}     \\
+        \raisebox{-.5\height}{\includegraphics[width=0.55\columnwidth]{individual/plot/btree9.pdf}}   &
+        \makecell{\small{\textsf{FR}}                                                                            \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/btree9_FR.png}} &
+        \makecell{\small{\textsf{L-BFGS}}                                                                        \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/btree9_L_BFGS.png}} &
+        \makecell{\small{\textsf{SN-FR}}                                                                         \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/btree9_SN_FR.png}} &
+        \makecell{\small{\textsf{SN-L-BFGS}}                                                                     \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/btree9_SN_L_BFGS.png}} \\
+        \multicolumn{5}{c}{\textbf{\texttt{1138\_bus} ($\abs{V}=1138, \abs{E}=1458, \text{sparsity}=0.225$\%)}}  \\
+        \raisebox{-.5\height}{\includegraphics[width=0.55\columnwidth]{individual/plot/1138_bus.pdf}} &
+        \makecell{\small{\textsf{FR}}                                                                            \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/1138_bus_FR.pdf}} &
+        \makecell{\small{\textsf{L-BFGS}}                                                                        \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/1138_bus_L_BFGS.pdf}} &
+        \makecell{\small{\textsf{SN-FR}}                                                                         \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/1138_bus_SN_FR.pdf}} &
+        \makecell{\small{\textsf{SN-L-BFGS}}                                                                     \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/1138_bus_SN_L_BFGS.pdf}} \\
+        \multicolumn{5}{c}{\textbf{\texttt{dwt\_2680} ($\abs{V}=2680, \abs{E}=11173, \text{sparsity}=0.311$\%)}} \\
+        \raisebox{-.5\height}{\includegraphics[width=0.55\columnwidth]{individual/plot/dwt_2680.pdf}} &
+        \makecell{\small{\textsf{FR}}                                                                            \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/dwt_2680_FR.pdf}} &
+        \makecell{\small{\textsf{L-BFGS}}                                                                        \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/dwt_2680_L_BFGS.pdf}} &
+        \makecell{\small{\textsf{SN-FR}}                                                                         \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/dwt_2680_SN_FR.pdf}} &
+        \makecell{\small{\textsf{SN-L-BFGS}}                                                                     \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/dwt_2680_SN_L_BFGS.pdf}} \\
+        \multicolumn{5}{c}{\textbf{\texttt{3elt} ($\abs{V}=4720, \abs{E}=13722, \text{sparsity}=0.123$\%)}}      \\
+        \raisebox{-.5\height}{\includegraphics[width=0.55\columnwidth]{individual/plot/3elt.pdf}}     &
+        \makecell{\small{\textsf{FR}}                                                                            \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/3elt_FR.pdf}} &
+        \makecell{\small{\textsf{L-BFGS}}                                                                        \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/3elt_L_BFGS.pdf}} &
+        \makecell{\small{\textsf{SN-FR}}                                                                         \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/3elt_SN_FR.pdf}} &
+        \makecell{\small{\textsf{SN-L-BFGS}}                                                                     \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/3elt_SN_L_BFGS.pdf}} \\
+    \end{tabular}
+    \caption{Numerical experiment results for various graphs.  Please refer Sec.~\ref{ssec:exprDetail} for details.}
+    \label{fig:individual}
+\end{figure*}
+% \fi
 
 \section{Challenges of the Subspace Methods}\label{sec:challenges}
 
