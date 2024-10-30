@@ -1,4 +1,4 @@
-#include "../../src/cpp/solve/solve.cpp"
+#include "../../../src/cpp/solve/solve.cpp"
 
 int main() {
   // define a problem
@@ -30,21 +30,21 @@ int main() {
   dbg(problem.calcScore(positions.back()));
   finalOutputs.push_back(positions.back());
 
-  // RS
+  // SN
   positions = {};
   _hist.clear();
   solve_init(problem, false, seed, positions, _hist, _timer);
   dbg(problem.calcScore(positions.back()));
   finalOutputs.push_back(positions.back());
 
-  // RS_L_BFGS
+  // SN_L_BFGS
   positions = {positions.back()};
   _hist.clear();
   solve_LBFGS<FunctionFR>(problem, positions, _hist, _timer, MAX_ITER);
   dbg(problem.calcScore(positions.back()));
   finalOutputs.push_back(positions.back());
 
-  problem.printOutput(finalOutputs, "doc/main/jagmesh1.txt");
+  problem.printOutput(finalOutputs, "jagmesh1.txt");
 
   return 0;
 }
