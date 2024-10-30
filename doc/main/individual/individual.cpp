@@ -8,7 +8,7 @@ int main() {
       "3elt",  // SGD
   };
 
-  std::vector<Method> methods = {FR, RS_FR, L_BFGS, RS_L_BFGS};
+  std::vector<Method> methods = {FR, SN_FR, L_BFGS, SN_L_BFGS};
 
   std::string histStr =
       std::to_string(matrixNames.size()) + " " + std::to_string(methods.size()) + "\n";
@@ -23,7 +23,7 @@ int main() {
       histStr += MethodStr[method] + "\n";
       std::cout << MethodStr[method] << std::endl;
       // Solve by each method
-      for (int seed = 0; seed < 3; seed++) {
+      for (int seed = 0; seed < 10; seed++) {
         auto [hist, positions] = solve(method, problem, true, seed, MAX_ITER);
         // Output
         histStr += std::to_string(hist.size()) + "\n";
