@@ -41,7 +41,7 @@ bool isFinished(const Problem& problem, const Grid& grid,
     if (int(sz) >= 3 && localHist[sz - 3].first <= localHist[sz - 2].first &&
         localHist[sz - 3].first <= localHist[sz - 1].first) {
       std::cerr << "Early stop (score = " << nowScore << ")" << std::endl;
-      positions.push_back(localHist[sz - 3].second);
+      if (!measureTime) positions.push_back(localHist[sz - 3].second);
       return true;
     }
   }
@@ -58,7 +58,7 @@ std::vector<Eigen::VectorXf> solve_init(const Problem& problem, const bool measu
 
   Grid grid(problem.n, problem.k);
   assert(positions.empty());
-  positions.emplace_back(grid.toPosition());
+  if (!measureTime) positions.emplace_back(grid.toPosition());
 
   std::mt19937 gen(seed);
   std::uniform_int_distribution<int> dist(0, problem.n - 1);
@@ -104,6 +104,7 @@ std::vector<Eigen::VectorXf> solve_init(const Problem& problem, const bool measu
   auto finalPos = grid.toPosition();
   problem.optimalScaling(finalPos);
   positions.push_back(finalPos);
+  assert(!measureTime || positions.size() == 1);
 
   timer.stop();
   hist.emplace_back(problem.calcScore(finalPos, true), timer.sec());

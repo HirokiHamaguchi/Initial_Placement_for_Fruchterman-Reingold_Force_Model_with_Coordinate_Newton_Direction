@@ -140,7 +140,10 @@ struct Problem {
       for (size_t u = 0; u < n; ++u) {
         for (size_t v = u + 1; v < n; ++v) {
           double d = (position.segment<2>(2 * u) - position.segment<2>(2 * v)).norm();
-          assert(d > 1e-9);
+          if (d < 1e-9) {
+            std::cerr << "Error: distance is too small. Score could be inaccurate.\n";
+            d = 1e-9;
+          }
           score -= k2 * std::log(d);
         }
       }

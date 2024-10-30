@@ -23,7 +23,7 @@ std::vector<Eigen::VectorXf> solve_FR(const Problem& problem,
   size_t nnodes = problem.n;
   size_t dim = 2;
   int iterations = MAX_ITER;
-  double threshold = 1e-3;
+  double threshold = 1e-4;  // changed from 1e-3
   assert(!positions.empty());
 
   Eigen::MatrixXf pos =
