@@ -1,21 +1,21 @@
 {
     "latex-workshop.latex.recipes": [
-        // {
-        //     "name": "ptex2pdf*2",
-        //     "tools": [
-        //         "ptex2pdf",
-        //         "ptex2pdf",
-        //     ]
-        // },
-        // {
-        //     "name": "ptex2pdf&pbibtex",
-        //     "tools": [
-        //         "ptex2pdf",
-        //         "pbibtex",
-        //         "ptex2pdf",
-        //         "ptex2pdf"
-        //     ]
-        // },
+        {
+            "name": "ptex2pdf*2",
+            "tools": [
+                "ptex2pdf",
+                "ptex2pdf",
+            ]
+        },
+        {
+            "name": "ptex2pdf&pbibtex",
+            "tools": [
+                "ptex2pdf",
+                "pbibtex",
+                "ptex2pdf",
+                "ptex2pdf"
+            ]
+        },
         {
             "name": "uplatex",
             "tools": [
@@ -85,6 +85,7 @@
         "Andi",
         "arange",
         "argmax",
+        "argmin",
         "Armijo",
         "arrowprops",
         "arrowstyle",

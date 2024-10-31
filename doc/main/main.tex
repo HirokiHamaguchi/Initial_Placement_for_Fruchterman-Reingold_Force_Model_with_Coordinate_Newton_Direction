@@ -8,7 +8,7 @@
 \usepackage{booktabs}       % \toprule, \midrule, \bottomrule
 \usepackage{subcaption}        % \captionsetup
 \usepackage{enumitem}       % \begin{enumerate}[label=(\alph*)]
-\usepackage[dvipdfmx]{hyperref}       % \href{URL}{text}
+\usepackage{hyperref}       % \href{URL}{text}
 \usepackage{ifthen}         % \ifthenelse
 \usepackage{lipsum}         % \lipsum
 \usepackage{mathrsfs}       % \mathscr{A}
@@ -125,11 +125,11 @@
 \title{
     An Initial Placement
     for Fruchterman--Reingold Layout
-    by Subspace Newton Direction
+    by \red{Subspace Newton Direction}
 }
 \author{
-    \orcidlinki{Hiroki Hamaguchi}{0009-0005-7348-1356} % TODO: fix
-    \orcidlinki{Naoki Marumo}{0000-0002-7372-4275} % ? maybe dvipdfmx problem
+    Hiroki Hamaguchi\,\orcidlink{0009-0005-7348-1356}
+    Naoki Marumo\,\orcidlink{0000-0002-7372-4275}
     Akiko Takeda
     % <-this % stops a space
 }
@@ -144,7 +144,7 @@
     In this paper, to accelerate the optimization process, we propose a new initial placement obtained by subspace newton direction.
     We first reformulate the problem as a discrete optimization problem using a hexagonal lattice
     and then iteratively move a randomly selected vertex along the Newton direction defined in the subspace.
-    We can use the FR algorithm or L-BFGS method to obtain the final configuration.
+    We can use the FR algorithm or L-BFGS method to obtain the final placement.
 
     We demonstrate the effectiveness of our proposed approach through experiments, highlighting the potential of subspace-based methods for graph drawing tasks.
     Additionally, we suggest combining our method with other graph drawing techniques for further improvement.
@@ -152,7 +152,11 @@
 \end{abstract}
 
 \begin{IEEEkeywords}
-    Graph Drawing, Optimization, Fruchterman--Reingold Layout, subspace-based method, Random Subspace Newton.
+    Graph Drawing,
+    Optimization,
+    Fruchterman--Reingold Layout,
+    L-BFGS method,
+    subspace method
 \end{IEEEkeywords}
 
 \section{Introduction}\label{sec:introduction}
@@ -200,7 +204,7 @@ Recent research has accelerated the algorithms through various methods, includin
         \end{minipage}
     \end{tabular}
     \begin{tikzpicture}[overlay, remember picture]
-        \draw[-{Stealth[length=2mm,width=3mm]}, line width=1mm] (-0.3,1.5) -- (+0.3,1.5);
+        \draw[-{Stealth[length=2mm,width=3mm]}, line width=1mm] (-0.3,1.55) -- (+0.3,1.55);
     \end{tikzpicture}
     \caption{
         Comparison of the FR algorithm, L-BFGS method, and the proposed initial placement for the \texttt{jagmesh1} dataset.}
@@ -211,7 +215,7 @@ Recent research has accelerated the algorithms through various methods, includin
     Based on such advances, in this paper, we propose a new initial placement for the FR layout.
     Our goal is to accelerate the optimization process by leveraging the inherent structure of the problem.
     To achieve this, we optimize the position of $n$ vertices one by one with the Newton direction, which is defined in the subspace $\bbR^2$ of the entire variable space $\bbR^{2 \times n}$.
-    In this way, we provide a high-quality initial configuration in advance, improving the overall optimization process.
+    In this way, we provide a high-quality initial placement in advance, improving the overall optimization process.
     We also demonstrate its effectiveness through experiments.
 }
 
@@ -252,7 +256,7 @@ In summary, the conditions for $W$ is formulated as follows:
 \end{equation}
 
 Fruchterman and Reingold~\cite{fruchtermanGraphDrawingForcedirected1991} proposed a force-directed layout called the Fruchterman--Reingold (FR) layout, as known as a spring layout~\cite{hagberg2008exploring} or spring-electrical model~\cite{Hu2006EfficientHF}.
-Let $x_i \in \bbR^2$ be the position of the vertex $v_i \in V$, and $X = (x_1, \dots, x_n) \in \bbR^{2 \times n}$ be the configuration of the graph.
+Let $x_i \in \bbR^2$ be the position of the vertex $v_i \in V$, and $X = (x_1, \dots, x_n) \in \bbR^{2 \times n}$ be the placement of the graph.
 Let $\norm{\cdot}$ denote the Euclidean distance in $\bbR^2$. For a parameter $k$ and a distance $d_{i,j} \defeq \norm{x_i - x_j}$ between two vertices $v_i$ and $v_j$, the attraction force $F_{i,j}^\mathrm{a}\colon \bbR_{> 0} \to \bbR$ and the repulsion force $F^\mathrm{r}\colon \bbR_{> 0} \to \bbR$ is defined as
 \begin{equation*}
     F_{i,j}^\mathrm{a}(d) \defeq \frac{w_{i,j} d^2}{k}, \quad F^\mathrm{r}(d) \defeq -\frac{k^2}{d}.
@@ -306,11 +310,11 @@ We show the pseudo-code of the FR algorithm in Algorithm~\ref{alg:fr}. It is bas
     \caption{Fruchterman--Reingold algorithm}
     \label{alg:fr}
     \KwIn{Graph $G_W = (V, E)$}
-    \KwOut{Point configuration $X = (x_1, \dots, x_n)$}
+    \KwOut{Point placement $X = (x_1, \dots, x_n)$}
 
-    $\text{Define parameters } \red{k, t, \Delta_t, N_\mathrm{iter}}$\;
+    $\text{Define parameters } \red{k, t, N_\mathrm{iter}^\mathsf{FR}, \Delta_t \defeq t/N_\mathrm{iter}^\mathsf{FR}}$\;
     Define initial placement of $v_i \in V$ randomly\;
-    \For{\red{$n_\mathrm{iter} \gets 0$ \KwTo $N_\mathrm{iter}$}}{
+    \For{\red{$n_\mathrm{iter} \gets 1$ \KwTo $N_\mathrm{iter}^\mathsf{FR}$}}{
         $\text{compute gradient } \nabla f_i(x_i)$ for all $v_i \in V$\;
         $x_i \gets x_i - t \frac{\nabla f_i(x_i)}{
                 \norm{\nabla f_i(x_i)}}$ for all $v_i \in V$\;
@@ -324,7 +328,7 @@ We show the pseudo-code of the FR algorithm in Algorithm~\ref{alg:fr}. It is bas
 
 In Algorithm~\ref{alg:fr}, the initial placement of points is determined randomly. Under proper input normalization, each point is uniformly distributed within a unit square in general.
 
-The parameter $t$ denotes the temperature, which governs the step size along the steepest descent. As the temperature gradually decreases, the algorithm converges to a particular configuration, though this configuration is not necessarily the optimal solution.
+The parameter $t$ denotes the temperature, which governs the step size along the steepest descent. As the temperature gradually decreases, the algorithm converges to a particular placement, though this placement is not necessarily the optimal solution.
 
 \subsection{L-BFGS method}\label{ssec:lbfgs}
 
@@ -338,13 +342,14 @@ The parameter $t$ denotes the temperature, which governs the step size along the
     \label{fig:comparisonFRandLBFGS}
 \end{figure}
 
-Another approach to solve the optimization problem~\eqref{eq:fr} is to use the Limited-memory Broyden--Fletcher--Goldfarb--Shanno (L-BFGS) algorithm~\cite{6183577}.
-The L-BFGS method is an optimization technique used for large-scale problems, which approximates the inverse Hessian matrix using only a few recent gradient vectors, making it more memory-efficient than the standard BFGS method (quasi-Newton method)~\cite{liuLimitedMemoryBFGS1989}.
-Thus, L-BFGS is particularly suitable for high-dimensional optimization tasks. L-BFGS is more sophisticated than the gradient descent method, and the superior performance of the L-BFGS method to the FR algorithm reported in Ref.\cite{6183577} also indicates this fact. Refer to Fig.~\ref{fig:comparisonFRandLBFGS} for a comparison.
+Another approach to solve the optimization problem~\eqref{eq:fr} is to use the Limited-memory Broyden--Fletcher--Goldfarb--Shanno (L-BFGS) method~\cite{6183577}.
+The L-BFGS method is in a family of quasi-Newton methods, and iterates procedures at most $N_\mathrm{iter}^{\mathrm{L-BFGS}}$ times.
+Using only a few recent gradient vector, L-BFGS method approximates the inverse Hessian of the objective function, which is necessary to determine a descent direction~\cite{liuLimitedMemoryBFGS1989}.
+L-BFGS is known to be very efficient for large-scale optimization problems, and the superior performance of the L-BFGS method to the FR algorithm reported in Ref.\cite{6183577} also indicates this fact. Refer to Fig.~\ref{fig:comparisonFRandLBFGS} for a comparison.
 
-There are many implementations of L-BFGS available, such as SciPy~\cite{2020SciPy-NMeth} and C++ L-BFGS~\cite{qiuYixuanLBFGSpp2024,okazakiChokkanLiblbfgs2024}, which we used in our experiments.
+There are many available implementations of L-BFGS method, such as SciPy~\cite{2020SciPy-NMeth} and C++ L-BFGS~\cite{qiuYixuanLBFGSpp2024,okazakiChokkanLiblbfgs2024}, which we used in our experiments.
 
-For the optimization problem~\eqref{eq:fr}, we can apply the L-BFGS method via flattening the configuration $X \in \bbR^{2 \times n}$ to a vector $\overline{X} \in \bbR^{2n}$.
+For the optimization problem~\eqref{eq:fr}, we can apply the L-BFGS method via flattening the matrix $X \in \bbR^{2 \times n}$ to a vector $\overline{X} \in \bbR^{2n}$.
 However, it is worth noting that this method ignores the structure of $X$ and treats it just as a general optimization problem.
 Thus, we can expect room for improvement by leveraging what we have ignored in this L-BFGS method.
 
@@ -379,7 +384,7 @@ The term ``twist'' does not refer to a mathematically rigorous concept; rather, 
 Although the term ``twist'' is uncommon, works such as Ref.~\cite{cheongSnapshotVisualizationComplex2018} also mentioned this ``twist'' phenomenon. Fig.~\ref{fig:cycle} illustrates cycle graph examples of this situation.
 
 The presence or absence of ``twists'' can impact optimization efficiency.
-For example, when we draw a cycle graph, even if the current graph configuration is far from optimal, the optimization method proceeds relatively smoothly if there are no ``twists'' in the graph.
+For example, when we draw a cycle graph, even if the current point placement is far from optimal, the optimization method proceeds relatively smoothly if there are no ``twists'' in the graph.
 However, when ``twist'' exists like in Fig~\ref{fig:cycle}, mutual interactions may diminish the gradient, causing the optimization to stagnate.
 Therefore, we can predict that providing an initial placement of the graph that resolves ``twist'' as much as possible in advance can significantly influence the efficiency of the optimization process.
 
@@ -398,24 +403,46 @@ The SGD method is an optimization method often used in machine learning to minim
 It randomly selects pairs of vertices $(i,j)$ and adjusts their positions to minimize $f^{\mathrm{KK}}_{i,j}$ along the gradient direction with a learning rate $\eta$.
 
 However, in contrast to the KK layout, the FR layout assigns the function $E_{i,j}(d)=-k^2\log{d}$ to all $(i,j) \notin E (\iff w_{i,j}=0)$, making SGD less effective for the FR layout.
-Nevertheless, the superiority of SGD in the KK layout, which focuses on ``randomly selected edge,'' suggests that an optimization method focusing on ``randomly selected vertex'' may also be effective in the FR layout.
-This observation motivates us to propose a new algorithm combined with the next subsection.
+Nevertheless, the superiority of SGD in the KK layout, which focuses on ``randomly selected edge,'' suggests that an optimization method focusing on ``randomly selected vertex'' may also be effective in the FR layout, especially when we reduce the ``twist'' in advance.
+This observation motivates us to propose a new approach combined with idea in the next subsection.
 
-\subsection{Newton's method}\label{ssec:introNewton}
+\subsection{Newton Direction and Subspace Newton Direction}\label{ssec:introNewton}
 
 \red{
-    First, we briefly explain the Newton's method.
-    This method updates variable $x \in \bbR^n$ of a convex function $f: \bbR^n \to \bbR$ by
+    In this subsection, we will explain Newton direction and subspace Newton direction, which are the key concepts of our research.
+    Let $f: \bbR^n \to \bbR$ be a convex function.
+    The second order approximation of $f$ at $x \in \bbR^n$ is
     \begin{equation*}
-        x \gets x - \nabla^2 f(x)^{-1} \nabla f(x).
+        f(y) \approx f(x) + \nabla f(x)^\top (y - x) + \frac{1}{2} (y - x)^\top \nabla^2 f(x) (y - x).
     \end{equation*}
-    Since $f$ is convex, the Hessian matrix $\nabla^2 f(x) \in \bbR^{n \times n}$ is positive semi-definite, and the update direction (Newton direction) is a descent direction. Plus, the updated $x$ is an optimal solution of the quadratic approximation of $f$ at $x$, ensuring Newton's method's fast convergence.
-    Newton's method requires the computation of the inverse Hessian matrix $\nabla^2 f(x)^{-1} \in \bbR^{n \times n}$ at each iteration, posing a high computational cost for large-scale problems.
+    Since $f$ is convex, the Hessian matrix $\nabla^2 f(x)$ is positive semi-definite.
+    The argmin of this approximation $x^*$ satisfies
+    \begin{align*}
+             & \nabla f(x) + \nabla^2 f(x) (x^* - x) = 0 \\
+        \iff & x^* = x - \nabla^2 f(x)^{-1} \nabla f(x).
+    \end{align*}
+    We call the direction $d = -\nabla^2 f(x)^{-1} \nabla f(x)$ as the Newton direction.
+    Although Newton direction is the optimal direction for the approximation, it requires the computation of the inverse Hessian $\nabla^2 f(x)^{-1} \in \bbR^{n \times n}$, posing a high computational cost for large-scale problems. Actually, the reason why L-BFGS method approximates the inverse Hessian is to avoid this computational cost.
 }
 
 \red{
-    そのままでは難しい。\ref{sec:problemOfSubspace}などでその困難さは述べた。
+    However, by combining this idea with the concept of subspace, the computational cost issue can be addressed in other ways.
+    The computational cost of computing the inverse Hessian $\nabla^2 f(x)^{-1}$ increase with respect to the dimension $n$. Thus, by limiting the variable space to its subspaces, we can reduce the computational cost as well.
+    We call the Newton direction defined in the subspace as the subspace Newton direction.
+    This idea is well known as the subspace method or Randomized Subspace Newton (RSN)~\cite{NEURIPS2019_bc6dc48b}.
+    Refer to Fig.~\ref{fig:subspace} for an illustration of the subspace method.
 }
+
+\red{
+    Although directly applying this idea to the FR layout is challenging as we will discuss in Sec.~\ref{sec:challenges}, we leverage this subspace Newton direction to propose a new algorithm for the FR layout in the next section.
+}
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=\columnwidth]{subspace/subspace.pdf}
+    \caption{\orange{TODO}}
+    \label{fig:subspace}
+\end{figure}
 
 \section{Proposed Algorithm}\label{sec:algorithm}
 
@@ -485,13 +512,15 @@ Let the objective function $f^{\mathrm{a}}_i(x_i)$ corresponding to a vertex $v_
 \begin{equation*}
     f^{\mathrm{a}}_i(x_i) \defeq \sum_{j \neq i} \frac{w_{i,j}\norm{x_i - x_j}^3}{3k}.
 \end{equation*}
-Using the Newton direction, we can update the position of a vertex $v_i$ as
+Using the Newton direction, we can take a candidate position of a vertex $v_i$ as
 \begin{equation*}
     x_i^\mathrm{new} \gets \mathrm{round}\qty(x_i - \nabla^2 f^{\mathrm{a}}_i(x_i)^{-1} \nabla f^{\mathrm{a}}_i(x_i)),
 \end{equation*}
-where $\mathrm{round}$ denotes the rounding operation to the nearest point in the hexagonal lattice $Q$.
+where $\mathrm{round}(\hat{x})$ denotes the operation assigning $\hat{x}$ to the nearest point in the hexagonal lattice $Q$.
 
-\red{todo:Additionally, by sequentially moving vertices from their original positions to the new ones, we can satisfy the constraints of the discrete optimization problem.}
+\red{
+    Simply changing the assignment $\pi(v_i)$ from vertex $v_i$ to $Q$, updating from $x_i$ to $x_i^\mathrm{new}$, may not preserve the injectivity of $\pi$. To address this, consider the path from $x_i$ to $x_i^\mathrm{new}$, which can be determined using linear interpolation for line drawing~\cite{patelHexagonalGrids2013}. If each point on this path within $Q$ is assigned to vertices such as $v_i, v_j, \text{NaN}, v_k$, then by a cyclic shift, we reassign in the sequence $v_j, \text{NaN}, v_k, v_i$. This approach ensures that vertex $v_i$ can be reassigned to its new position $x_i^\mathrm{new}$ while maintaining the injectivity of $\pi$.
+}
 We illustrated the overall process in Fig.~\ref{fig:hex}.
 
 This approach can obtain a high-quality initial solution for the optimization problem~\eqref{eq:fr}.
@@ -549,87 +578,90 @@ All the codes are available at our GitHub~\cite{ThisPaperGitHub}.
 
 \subsection{Exhaustive Experiment}\label{ssec:exprAll}
 
-First, we conducted an exhaustive experiment to evaluate the performance of the proposed algorithm with various graphs.
+To begin with, we conducted an exhaustive experiment to evaluate the performance of the proposed algorithm with various graphs.
 
 As a dataset, we used matrices from Sparse Matrix Collection~\cite{davis2011university} satisfying the condition~\eqref{eq:WCondition} with $\abs{V} \leq 1000$.
 
 \subsection{detailed Experiment}\label{ssec:exprDetail}
 
-Secondly, we conducted a detailed experiment to investigate the behavior of the proposed algorithm in detail. The result is shown in Fig.~\ref{fig:detail}.
+We also conducted a detailed experiment to investigate the behavior of the proposed algorithm in detail. The result is shown in Fig.~\ref{fig:individual}.
 
 The experiment details are as follows.
-We used the 4 algorithms: FR algorithm (\textsf{FR}), the proposed initialization plus FR algorithm (\textsf{SN-FR}), L-BFGS method (\textsf{L-BFGS}), and the proposed initialization plus L-BFGS method (\textsf{SN-L-BFGS}). \textsf{SN} represents the Subspace Newton, which is the proposed algorithm.
-We set the maximum number of iterations $N_\mathrm{iter}$ to 200.
+We used the 4 algorithms: FR algorithm (\textsf{FR}), the proposed initialization plus FR algorithm (\textsf{SN-FR}), L-BFGS method (\textsf{L-BFGS}), and the proposed initialization plus L-BFGS method (\textsf{SN-L-BFGS}). \textsf{SN} represents the Subspace Newton, which is the proposed algorithm, and we refer both \textsf{SN-FR} and \textsf{SN-L-BFGS} as \textsf{SN} in the following. We set the maximum number of iterations $N_\mathrm{iter}$ to 200.
+We tested with 7 graphs: \texttt{cycle300}, \texttt{jagmesh1}, \texttt{dwt\_1005}, \texttt{btree9}, \texttt{1138\_bus}, \texttt{dwt\_2680}, and \texttt{3elt}. \texttt{cycle300} is a cycle graph with 300 vertices, and btree9 is a perfect binary tree with $2^{9+1}-1=1023$ vertices. Other graphs are from Sparse Matrix Collection~\cite{davis2011university}, and these choices are based on the experiments conducted in Ref.~\cite{8419285}. Thus, although all the graphs are quite sparse so that $\abs{E} / (\abs{V}(V-1)/2)$ is less than 1\%, this is not an arbitrary choice. The important graphs often have such a sparsity.
 
-We tested with 7 graphs: \texttt{cycle300}, \texttt{jagmesh1}, \texttt{dwt\_1005}, \texttt{btree9}, \texttt{1138\_bus}, \texttt{dwt\_2680}, and \texttt{3elt}. \texttt{cycle300} is a cycle graph with 300 vertices, and btree9 is a perfect binary tree with $2^{9+1}-1=1023$ vertices. Other graphs are from Sparse Matrix Collection~\cite{davis2011university}, and these choice is based on the experiments conducted in Ref.~\cite{8419285}. Thus, although all the graphs are quite sparse so that $\abs{E} / (\abs{V}(V-1)/2)$ is less than 1\%, this is not an arbitrary choice. The important graphs often have such a sparsity.
+We first explain what Fig.~\ref{fig:individual} represents.
+The plots on the left illustrate the objective function values $f(X)$ on the vertical axis versus execution time on the horizontal axis, using 10 trials for each algorithm.
+Faint crosses represent the results of non-\textsf{SN} algorithms, while faint circles represent the results of \textsf{SN} algorithms, plotted every 10 iterations for each trial.
+The solid and dashed lines represent the average of these values across the 10 trials for each algorithm.
+If one of the trials terminated before reaching 200 iterations, the line was plotted up to the minimum trial count achieved across all trials.
+Each trial was conducted with a different seed, meaning that even deterministic algorithms, such as
+\textsf{FR} or \textsf{L-BFGS}, converged to different local optima due to variations in the initial random configuration.
+The graphs on the right illustrates the configuration at the 150th iteration (or the final iteration if it concluded before then) for each algorithm with the seed 0.
 
-We first explain the meaning of the figure.
-The left plot illustrates the objective function values on the vertical axis versus execution time on the horizontal axis, showcasing the outcomes across 10 trials.
-Faint crosses represent the results obtained without initial configuration, while faint circles denote those with initial configuration, plotted every 10 iterations for each trial.
-The solid lines correspond to the average of these values across the 10 trials for each approach.
-If a trial terminated before reaching 200 iterations, the data was plotted up to the minimum trial count achieved across all trials.
-Each trial was conducted with a different seed, meaning that even optimization algorithms that do not incorporate randomness in their process, such as \textsf{FR} or \textsf{L-BFGS}, converged to different local optima due to variations in the initial configuration.
-The graph on the right side illustrates the configuration at the 150th iteration (or the final iteration if it concluded before then) for each approach, specifically for the case where the seed is set to zero.
+The observations and implications of Fig.~\ref{fig:individual} are as follows.
+First, the solid plots for \textsf{SN} generally demonstrates superior performance compared to non-\textsf{SN}, validating the efficacy of the proposed method.
+Some exception of the superiority arise with \textsf{FR}, which exhibits oscillations in the plot, likely due to excessive step sizes leading to overshooting.
+Although we refrained from altering \textsf{FR} for fairness, adjusting the step size could enable the proposed method to achieve its intended performance.
+In fact, the initial $f(X)$ of \textsf{SN-FR} is clearly small enough compared to the objective function values produced by \textsf{FR} alone, suggesting that the proposed method is yielding a good initial configuration.
+Additionally, the visualization results support the effectiveness of the proposed initial configuration. In most cases, configurations obtained with \textsf{SN} better represent the intended geometric arrangement compared to non-\textsf{SN} configurations.
 
-The observations derived from the figure are as follows.
-First, the solid plot containing \textsf{SN}, which incorporates the proposed initial configuration method, generally demonstrates superior performance compared to the approach without it, validating the efficacy of the proposed method. A notable exception arises with the \textsf{FR} algorithm, which exhibits pronounced oscillations in the solution, likely due to excessive step sizes leading to overshooting. Although we refrained from altering widely recognized algorithms for fairness, adjusting the step size could enable the proposed method to achieve its intended performance. In fact, even under these conditions, the initial value of $f(X)$—the starting point of the experimental plot—is clearly lower than the objective function values produced by traditional methods.
+As a side note, regardless of \textsf{SN} or non-\textsf{SN}, the algorithms using \textsf{L-BFGS} consistently outperforms those using \textsf{FR}.
+This finding is consistent with prior research~\cite{6183577}, though, regrettably, this technique remains relatively unknown in the field of graph drawing.
+One of the aims of our paper is to further emphasize and popularize the use of \textsf{L-BFGS} in graph drawing, and these results provide a strong basis for this argument.
 
-Additionally, the visualization results support the effectiveness of the proposed initial configuration. In most cases, configurations obtained with \textsf{SN} that include the proposed method better represent the intended geometric arrangement compared to those generated by other methods.
-
-As an overarching trend, regardless of the presence or absence of the proposed initial configuration, the approach utilizing \textsf{L-BFGS} consistently outperforms that employing \textsf{FR}. This finding is consistent with prior research~\cite{6183577}, though, regrettably, this technique remains relatively underutilized. One of the objectives of this paper is to further underscore the efficacy of mathematical optimization approaches, such as \textsf{L-BFGS}, and these results substantiate this assertion.
-
-% \if0
 \begin{figure*}[btp]
     \centering
     \addtolength{\tabcolsep}{-0.5em}
     \begin{tabular}{ccccc}
-        \multicolumn{5}{c}{\textbf{\texttt{cycle300} ($\abs{V}=300, \abs{E}=300, \text{sparsity}=0.669$\%)}}     \\
+        \if0
+        \multicolumn{5}{c}{\textbf{\texttt{cycle300} $(\abs{V}=300, \abs{E}=300, \text{sparsity}=0.669\text{\%})$}}     \\
         \raisebox{-.5\height}{\includegraphics[width=0.55\columnwidth]{individual/plot/cycle300.pdf}} &
-        \makecell{\small{\textsf{FR}}                                                                            \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/cycle300_FR.pdf}} &
-        \makecell{\small{\textsf{L-BFGS}}                                                                        \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/cycle300_L_BFGS.pdf}} &
-        \makecell{\small{\textsf{SN-FR}}                                                                         \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/cycle300_SN_FR.pdf}} &
-        \makecell{\small{\textsf{SN-L-BFGS}}                                                                     \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/cycle300_SN_L_BFGS.pdf}} \\
-        \multicolumn{5}{c}{\textbf{\texttt{jagmesh1} ($\abs{V}=936, \abs{E}=2664, \text{sparsity}=0.609$\%)}}    \\
+        \makecell{\small{\textsf{FR}}                                                                                   \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/cycle300_FR.pdf}} &
+        \makecell{\small{\textsf{L-BFGS}}                                                                               \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/cycle300_L_BFGS.pdf}} &
+        \makecell{\small{\textsf{SN-FR}}                                                                                \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/cycle300_SN_FR.pdf}} &
+        \makecell{\small{\textsf{SN-L-BFGS}}                                                                            \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/cycle300_SN_L_BFGS.pdf}} \\
+        \multicolumn{5}{c}{\textbf{\texttt{jagmesh1} $(\abs{V}=936, \abs{E}=2664, \text{sparsity}=0.609\text{\%})$}}    \\
         \raisebox{-.5\height}{\includegraphics[width=0.55\columnwidth]{individual/plot/jagmesh1.pdf}} &
-        \makecell{\small{\textsf{FR}}                                                                            \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/jagmesh1_FR.png}} &
-        \makecell{\small{\textsf{L-BFGS}}                                                                        \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/jagmesh1_L_BFGS.png}} &
-        \makecell{\small{\textsf{SN-FR}}                                                                         \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/jagmesh1_SN_FR.png}} &
-        \makecell{\small{\textsf{SN-L-BFGS}}                                                                     \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/jagmesh1_SN_L_BFGS.png}} \\
-        \multicolumn{5}{c}{\textbf{\texttt{dwt\_1005} ($\abs{V}=1005, \abs{E}=3808, \text{sparsity}=0.755$\%)}}  \\
+        \makecell{\small{\textsf{FR}}                                                                                   \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/jagmesh1_FR.png}} &
+        \makecell{\small{\textsf{L-BFGS}}                                                                               \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/jagmesh1_L_BFGS.png}} &
+        \makecell{\small{\textsf{SN-FR}}                                                                                \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/jagmesh1_SN_FR.png}} &
+        \makecell{\small{\textsf{SN-L-BFGS}}                                                                            \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/jagmesh1_SN_L_BFGS.png}} \\
+        \multicolumn{5}{c}{\textbf{\texttt{dwt\_1005} $(\abs{V}=1005, \abs{E}=3808, \text{sparsity}=0.755\text{\%})$}}  \\
         \raisebox{-.5\height}{\includegraphics[width=0.55\columnwidth]{individual/plot/dwt_1005.pdf}} &
-        \makecell{\small{\textsf{FR}}                                                                            \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/dwt_1005_FR.png}} &
-        \makecell{\small{\textsf{L-BFGS}}                                                                        \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/dwt_1005_L_BFGS.png}} &
-        \makecell{\small{\textsf{SN-FR}}                                                                         \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/dwt_1005_SN_FR.png}} &
-        \makecell{\small{\textsf{SN-L-BFGS}}                                                                     \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/dwt_1005_SN_L_BFGS.png}} \\
-        \multicolumn{5}{c}{\textbf{\texttt{btree9} ($\abs{V}=1023, \abs{E}=1022, \text{sparsity}=0.196$\%)}}     \\
+        \makecell{\small{\textsf{FR}}                                                                                   \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/dwt_1005_FR.png}} &
+        \makecell{\small{\textsf{L-BFGS}}                                                                               \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/dwt_1005_L_BFGS.png}} &
+        \makecell{\small{\textsf{SN-FR}}                                                                                \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/dwt_1005_SN_FR.png}} &
+        \makecell{\small{\textsf{SN-L-BFGS}}                                                                            \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/dwt_1005_SN_L_BFGS.png}} \\
+        \multicolumn{5}{c}{\textbf{\texttt{btree9} $(\abs{V}=1023, \abs{E}=1022, \text{sparsity}=0.196\text{\%})$}}     \\
         \raisebox{-.5\height}{\includegraphics[width=0.55\columnwidth]{individual/plot/btree9.pdf}}   &
-        \makecell{\small{\textsf{FR}}                                                                            \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/btree9_FR.png}} &
-        \makecell{\small{\textsf{L-BFGS}}                                                                        \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/btree9_L_BFGS.png}} &
-        \makecell{\small{\textsf{SN-FR}}                                                                         \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/btree9_SN_FR.png}} &
-        \makecell{\small{\textsf{SN-L-BFGS}}                                                                     \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/btree9_SN_L_BFGS.png}} \\
-        \multicolumn{5}{c}{\textbf{\texttt{1138\_bus} ($\abs{V}=1138, \abs{E}=1458, \text{sparsity}=0.225$\%)}}  \\
+        \makecell{\small{\textsf{FR}}                                                                                   \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/btree9_FR.png}} &
+        \makecell{\small{\textsf{L-BFGS}}                                                                               \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/btree9_L_BFGS.png}} &
+        \makecell{\small{\textsf{SN-FR}}                                                                                \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/btree9_SN_FR.png}} &
+        \makecell{\small{\textsf{SN-L-BFGS}}                                                                            \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/btree9_SN_L_BFGS.png}} \\
+        \multicolumn{5}{c}{\textbf{\texttt{1138\_bus} $(\abs{V}=1138, \abs{E}=1458, \text{sparsity}=0.225\text{\%})$}}  \\
         \raisebox{-.5\height}{\includegraphics[width=0.55\columnwidth]{individual/plot/1138_bus.pdf}} &
-        \makecell{\small{\textsf{FR}}                                                                            \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/1138_bus_FR.pdf}} &
-        \makecell{\small{\textsf{L-BFGS}}                                                                        \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/1138_bus_L_BFGS.pdf}} &
-        \makecell{\small{\textsf{SN-FR}}                                                                         \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/1138_bus_SN_FR.pdf}} &
-        \makecell{\small{\textsf{SN-L-BFGS}}                                                                     \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/1138_bus_SN_L_BFGS.pdf}} \\
-        \multicolumn{5}{c}{\textbf{\texttt{dwt\_2680} ($\abs{V}=2680, \abs{E}=11173, \text{sparsity}=0.311$\%)}} \\
+        \makecell{\small{\textsf{FR}}                                                                                   \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/1138_bus_FR.pdf}} &
+        \makecell{\small{\textsf{L-BFGS}}                                                                               \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/1138_bus_L_BFGS.pdf}} &
+        \makecell{\small{\textsf{SN-FR}}                                                                                \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/1138_bus_SN_FR.pdf}} &
+        \makecell{\small{\textsf{SN-L-BFGS}}                                                                            \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/1138_bus_SN_L_BFGS.pdf}} \\
+        \multicolumn{5}{c}{\textbf{\texttt{dwt\_2680} $(\abs{V}=2680, \abs{E}=11173, \text{sparsity}=0.311\text{\%})$}} \\
         \raisebox{-.5\height}{\includegraphics[width=0.55\columnwidth]{individual/plot/dwt_2680.pdf}} &
-        \makecell{\small{\textsf{FR}}                                                                            \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/dwt_2680_FR.pdf}} &
-        \makecell{\small{\textsf{L-BFGS}}                                                                        \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/dwt_2680_L_BFGS.pdf}} &
-        \makecell{\small{\textsf{SN-FR}}                                                                         \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/dwt_2680_SN_FR.pdf}} &
-        \makecell{\small{\textsf{SN-L-BFGS}}                                                                     \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/dwt_2680_SN_L_BFGS.pdf}} \\
-        \multicolumn{5}{c}{\textbf{\texttt{3elt} ($\abs{V}=4720, \abs{E}=13722, \text{sparsity}=0.123$\%)}}      \\
+        \makecell{\small{\textsf{FR}}                                                                                   \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/dwt_2680_FR.pdf}} &
+        \makecell{\small{\textsf{L-BFGS}}                                                                               \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/dwt_2680_L_BFGS.pdf}} &
+        \makecell{\small{\textsf{SN-FR}}                                                                                \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/dwt_2680_SN_FR.pdf}} &
+        \makecell{\small{\textsf{SN-L-BFGS}}                                                                            \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/dwt_2680_SN_L_BFGS.pdf}} \\
+        \multicolumn{5}{c}{\textbf{\texttt{3elt} $(\abs{V}=4720, \abs{E}=13722, \text{sparsity}=0.123\text{\%})$}}      \\
         \raisebox{-.5\height}{\includegraphics[width=0.55\columnwidth]{individual/plot/3elt.pdf}}     &
-        \makecell{\small{\textsf{FR}}                                                                            \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/3elt_FR.pdf}} &
-        \makecell{\small{\textsf{L-BFGS}}                                                                        \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/3elt_L_BFGS.pdf}} &
-        \makecell{\small{\textsf{SN-FR}}                                                                         \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/3elt_SN_FR.pdf}} &
-        \makecell{\small{\textsf{SN-L-BFGS}}                                                                     \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/3elt_SN_L_BFGS.pdf}} \\
+        \makecell{\small{\textsf{FR}}                                                                                   \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/3elt_FR.pdf}} &
+        \makecell{\small{\textsf{L-BFGS}}                                                                               \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/3elt_L_BFGS.pdf}} &
+        \makecell{\small{\textsf{SN-FR}}                                                                                \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/3elt_SN_FR.pdf}} &
+        \makecell{\small{\textsf{SN-L-BFGS}}                                                                            \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/3elt_SN_L_BFGS.pdf}} \\
+        \fi
     \end{tabular}
     \caption{Numerical experiment results for various graphs.  Please refer Sec.~\ref{ssec:exprDetail} for details.}
     \label{fig:individual}
 \end{figure*}
-% \fi
 
 \section{Challenges of the Subspace Methods}\label{sec:challenges}
 
@@ -643,9 +675,9 @@ Based on these challenges, we explain the rationale for our approach in Sec.~\re
 The important point is that these issues do not necessarily preclude the possibility of achieving global optimization with the subspace method.
 Rather, we hope that an accurate understanding of these challenges will lead us to develop better optimization methods in the future.
 
-\subsection{Introduction of Random Subspace Newton}\label{ssec:introRSN}
+\subsection{Introduction of Randomized Subspace Newton}\label{ssec:introRSN}
 
-In this subsection, we introduce the Random Subspace Newton (RSN), which is NOT a proposed method but a concept that heavily inspired our proposed algorithm.
+In this subsection, we introduce the Randomized Subspace Newton (RSN), which is NOT a proposed method but a concept that heavily inspired our proposed algorithm.
 The RSN method is one of the subspace methods, and RSN and its variant have been proposed in the context of optimization problems~\cite{NEURIPS2019_bc6dc48b,
     fujiRandomizedSubspaceRegularized2022,
     cartisRandomisedSubspaceMethods2022,
@@ -813,7 +845,7 @@ Investigating the applicability of the subspace-based method to these problems c
 \subsection{Conclusion} \label{sec:conclusion}
 
 In this study, we proposed a new algorithm for the FR Layout that utilizes the subspace-based method.
-To demonstrate its effectiveness, we conducted numerical experiments, which revealed that the proposed method is effective across a variety of graphs.
+To demonstrate its effectiveness, we conducted numerical experiments, which revealed that the proposed method is effective across a variety of graphs. For the research question posed in Sec.~\ref{sec:RQ}, we can answer that ``We can accelerate the optimization process for the FR layout by leveraging the inherent structure of the problem, especially with the subspace Newton direction''.
 
 We conclude this paper expecting that the proposed method may advance graph drawing with FR layout and highlight the potential of the subspace-based method for addressing a wider range of graph-related optimization problems.
 
@@ -864,7 +896,7 @@ Secondly, we can also consider an approach without the subspace-based method.
 This involves updating all $\abs{V}$ vertices simultaneously like the FR algorithm.
 The idea is to iteratively move the points $\{x_i\}_{1 \leq i \leq \abs{V}} \subseteq Q$ on the hexagonal grid to arbitrary points $\{x_i^\mathrm{new}\}_{1 \leq i \leq \abs{V}} \subseteq \bbR^2$, and then assign all these $\abs{V}$ points to the nearest points in $Q$.
 The assignment problem from the $\bbR^2$ to $Q$ can be formalized as finding the optimal mapping $\pi: V \to Q$ that minimizes the distance between the new positions $x_i^\mathrm{new}$ and the assigned points in $Q$, which can be formulated as:
-\begin{mini*} {\pi: V \to Q} {\sum_{i=1}^{\abs{V}} \norm{x_i^\mathrm{new} - \pi(v_i)}2^2} {} {} \addConstraint{\pi(v_i)}{\neq \pi(v_j),\quad}{\forall v_i, v_j \in V,(v_i \neq v_j)} \end{mini*}
+\begin{mini*} {\pi: V \to Q} {\sum_{i=1}^{\abs{V}} \norm{x_i^\mathrm{new} - \pi(v_i)}^2} {} {} \addConstraint{\pi(v_i)}{\neq \pi(v_j),\quad}{\forall v_i, v_j \in V,(v_i \neq v_j)} \end{mini*}
 This problem can be solved in $\order{\abs{V}^3}$ using methods such as the minimum-cost flow or Hungarian algorithm.
 Additionally, we can obtain a heuristic solution in $\order{\abs{V} \log \abs{V}}$ by appropriately sorting ${x_i^\mathrm{new}}{1 \leq i \leq \abs{V}}$.
 
