@@ -613,9 +613,11 @@ We can observe that the reasons why it was worse though these figures. \orange{t
         \includegraphics[width=\columnwidth]{overall/plot/diff_L-BFGS_50.pdf}
     \end{minipage}
     \caption{
-        Comparison of the proposed algorithm with the FR algorithm.
-        The left plot shows the difference in the objective function value $f(X)$ between the proposed algorithm and the FR algorithm at the 15th iteration.
-        The right plot shows the difference in the objective function value $f(X)$ between the proposed algorithm and the FR algorithm at the 50th iteration.
+        Comparison of the proposed initialization with random initialization.
+        Since $N_\mathrm{iter}^\mathsf{SN} = 3 \frac{\abs{V}^3}{\abs{E}}$, we set $N_\mathrm{iter}^\mathsf{FR}$ and $N_\mathrm{iter}^\mathsf{L-BFGS}$ as 12(=15-3), 47(=50-3), respectively for the \textsf{SN} algorithms. For non-\textsf{SN} algorithms, we set them as 15 and 50, respectively.
+        The y axis is symlog scale.
+        Almost all of the cases,
+        the difference are negative, meaning that the proposed algorithm performed better than random initialization.
     }
     \label{fig:diff_L_BFGS}
 \end{figure*}
