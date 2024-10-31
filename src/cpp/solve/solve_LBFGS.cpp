@@ -16,7 +16,8 @@ void solve_LBFGS(const Problem& problem, std::vector<Eigen::VectorXf>& positions
   LBFGSpp::LBFGSParam<float> param;
   param.m = 10;
   param.max_iterations = MAX_ITER;
-  param.epsilon_rel = 1e-3;
+  param.epsilon = 1e-4;      // to avoid line search failure
+  param.epsilon_rel = 1e-4;  // to avoid line search failure
   LBFGSpp::LBFGSSolver<float> solver(param);
 
   MyFunction fun(problem);
@@ -24,8 +25,11 @@ void solve_LBFGS(const Problem& problem, std::vector<Eigen::VectorXf>& positions
   Eigen::VectorXf x = positions.back();
   float fx;
 
-  int niter = solver.minimize(fun, x, fx, hist, positions, timer);
-  timer.stop();
+  try {
+    solver.minimize(fun, x, fx, hist, positions, timer);
+  } catch (const std::exception& e) {
+    std::cerr << "\033[1;31mException: " << e.what() << "\033[0m" << std::endl;
+  }
 
-  dbg(niter, fx, solver.final_grad_norm());
+  timer.stop();
 }

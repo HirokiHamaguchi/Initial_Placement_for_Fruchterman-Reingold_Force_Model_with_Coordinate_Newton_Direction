@@ -23,7 +23,8 @@ int main() {
       histStr += MethodStr[method] + "\n";
       std::cout << MethodStr[method] << std::endl;
       // Solve by each method
-      for (int seed = 0; seed < 10; seed++) {
+      // https://stackoverflow.com/questions/8049556/what-s-the-difference-between-srand1-and-srand0
+      for (int seed = 1; seed <= 10; seed++) {
         auto [hist, positions] = solve(method, problem, true, seed, MAX_ITER);
         // Output
         histStr += std::to_string(hist.size()) + "\n";

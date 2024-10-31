@@ -62,7 +62,7 @@ std::vector<Eigen::VectorXf> solve_init(const Problem& problem, const bool measu
 
   std::mt19937 gen(seed);
   std::uniform_int_distribution<int> dist(0, problem.n - 1);
-  const int ITERATIONS = problem.n * 500;
+  const int ITERATIONS = 3 * problem.n * (problem.n * problem.n / problem.m);
   size_t fail = 0;
   std::vector<std::pair<double, Eigen::VectorXf>> localHist;
   for (int it = 0; it < ITERATIONS; it++) {
