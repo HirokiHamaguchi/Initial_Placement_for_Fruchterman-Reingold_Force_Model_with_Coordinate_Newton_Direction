@@ -11,7 +11,7 @@ def visGraph(
     title: str = None,
     savePath: str = None,
     node_size: int = 50,
-    width: float = 0.5,
+    width: float = 1,
 ) -> None:
     plt.figure(figsize=(8, 8))
     plt.axis("equal")
