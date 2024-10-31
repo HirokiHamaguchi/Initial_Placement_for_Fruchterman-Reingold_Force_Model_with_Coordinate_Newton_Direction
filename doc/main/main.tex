@@ -343,7 +343,7 @@ The parameter $t$ denotes the temperature, which governs the step size along the
 \end{figure}
 
 Another approach to solve the optimization problem~\eqref{eq:fr} is to use the Limited-memory Broyden--Fletcher--Goldfarb--Shanno (L-BFGS) method~\cite{6183577}.
-The L-BFGS method is in a family of quasi-Newton methods, and iterates procedures at most $N_\mathrm{iter}^{\mathrm{L-BFGS}}$ times.
+The L-BFGS method is in a family of quasi-Newton methods, and iterates procedures at most $N_\mathrm{iter}^{\mathsf{L-BFGS}}$ times.
 Using only a few recent gradient vector, L-BFGS method approximates the inverse Hessian of the objective function, which is necessary to determine a descent direction~\cite{liuLimitedMemoryBFGS1989}.
 L-BFGS is known to be very efficient for large-scale optimization problems, and the superior performance of the L-BFGS method to the FR algorithm reported in Ref.\cite{6183577} also indicates this fact. Refer to Fig.~\ref{fig:comparisonFRandLBFGS} for a comparison.
 
@@ -474,9 +474,9 @@ Further, by converting the second term into a constraint, the problem \eqref{eq:
 where $\epsilon$ is a suitably chosen positive constant. This conversion is reasonable because $E^\mathrm{r}(d)=-k^2\log{d}$ is a convex function such that it decreases monotonically concerning $d$. Thus, for sufficiently large $d$, the value of $-k^2\log{d}$ does not grow excessively, ensuring the validity of the approximation.
 
 However, problem \eqref{eq:frApprox2} still involves $\order{\abs{V}^2}$ constraints, which negates the advantage of computing the objective function with $\order{\abs{E}}$ complexity.
-To further simplify, we incorporate the concept of fixed initial configurations for the FR layout~\cite{ghassemitoosiSimulatedAnnealingPreProcessing2016}.
+To further simplify, we incorporate the concept of fixed initial placements for the FR layout~\cite{ghassemitoosiSimulatedAnnealingPreProcessing2016}.
 This study reports that a cycle initial placement obtained by Simulated Annealing (SA) brings a rapid convergence to a better solution in the FR layout.
-Similarly, by simplifying problem \eqref{eq:frApprox2} with a fixed initial configuration $Q$ whose points are separated by at least $\epsilon$, we obtain the following discrete optimization problem:
+Similarly, by simplifying problem \eqref{eq:frApprox2} with a fixed initial placement $Q$ whose points are separated by at least $\epsilon$, we obtain the following discrete optimization problem:
 \begin{mini}
     {\pi: V \to Q}
     {\red{\sum_{(i,j)\in E} \frac{w_{i,j}\norm{\pi(v_i) - \pi(v_j)}^3}{3k}}}
@@ -485,20 +485,20 @@ Similarly, by simplifying problem \eqref{eq:frApprox2} with a fixed initial conf
     \addConstraint{\pi(v_i)}{\neq \pi(v_j),\quad}{\forall (i,j)\,(i<j)}
 \end{mini}
 It means that with a discrete set of points $Q$ such that the points are separated by at least $\epsilon$, we seek the best injection $\pi :V \to Q$ that minimizes the objective function $f^{\mathrm{a}}$.
-By fixing the possible point configuration in advance, we can skip the check of the $\order{\abs{V}^2}$ constraints, reducing the computational complexity to $\order{\abs{E}}$ and thus offering significant speedup.
+By fixing the possible point placement in advance, we can skip the check of the $\order{\abs{V}^2}$ constraints, reducing the computational complexity to $\order{\abs{E}}$ and thus offering significant speedup.
 
 \begin{figure}[t]
     \centering
     \includegraphics[width=\columnwidth]{pi/pi.pdf}
     \caption{
         concept of $\pi$.
-        The injection $\pi$ maps vertices $V$ to a discrete point configuration $Q$.
+        The injection $\pi$ maps vertices $V$ to a discrete point placement $Q$.
         Apparently, among $\pi_1, \pi_2, \pi_3$, $\pi_3$ on the right one is the best mapping for the Problem~\eqref{eq:frApprox3}.
     }
     \label{fig:pi}
 \end{figure}
 
-As an example of such a discrete point configuration $Q$, one could consider $n$ circles of radius $\epsilon$ packed in $\bbR^2$.
+As an example of such a discrete point placement $Q$, one could consider $n$ circles of radius $\epsilon$ packed in $\bbR^2$.
 In this study, however, we adopt a hexagonal lattice.
 The hexagonal lattice is known for its densest packing structure in space and offers computational simplicity.
 See Figure \ref{fig:pi} for reference.
@@ -542,29 +542,30 @@ To obtain the solution to Problem~\eqref{eq:fr}, the output must be further refi
     \caption{Proposed algorithm as initial placement for the FR layout}
     \label{alg:proposed}
     \KwIn{Graph $G_W = (V, E)$, subspace dimension $s$}
-    \KwOut{Point configuration $X = (x_1, \dots, x_n)$}
+    \KwOut{Point placement $X = (x_1, \dots, x_n)$}
 
-    define parameters $k, \textit{iterations}$ and hexagonal lattice $Q$\;
+    define parameters $k, N_\mathrm{iter}^\mathsf{SN}$ and hexagonal lattice $Q$\;
     set $\pi$ as a injection from $V$ to $Q$ randomly\;
-    \For{$j \gets 0$ \KwTo \textit{iterations}}{
-        $v_i \gets \text{randomly selected vertex from } V$\;
-        $q_i \gets \pi(v_i)$\;
-        $x_i^\mathrm{new} \gets x_i - \nabla^2 f_i(x_i)^{-1} \nabla f_i(x_i)$\;
-        $q_i' \gets \text{nearest point of } x_i^\mathrm{new} \text{ in } Q$\;
-        $\textit{path} \gets \text{path from } q_i \text{ to } q_i'$\;
-        update $\pi$ by moving $q_i$ along the path\;
+    \For{$j \gets 0$ \KwTo $N_\mathrm{iter}^\mathsf{SN}$}{
+    $v_i \gets \text{randomly selected vertex from } V$\;
+    $x_i \gets \pi(v_i)$\;
+    $x_i^\mathrm{new} \gets \mathrm{round}(x_i - \nabla^2 f_i(x_i)^{-1} \nabla f_i(x_i))$\;
+        $\textit{path} \gets \text{path from } x_i \text{ to } x_i^\mathrm{new}$\;
+        update $\pi$ by cyclic shifting along the path\;
         \If{\text{convergence condition}}{
             \textbf{break}\;
         }
-    }
-    $x_i \gets q_i$ for all $v_i \in V$\;
-    \Return $X$
+        }
+    $x_i \gets \pi(v_i)$ for all $v_i \in V$\;
+        \Return $X$
 \end{algorithm}
 
 \section{Numerical Experiment} \label{sec:experiment}
 
 In this section, we evaluate the proposed algorithm by various numerical experiments based on the setup described in Sec.~\ref{ssec:setup}.
-We conducted two types of experiments, based on Ref.~\cite{8419285}: exhaustive experiments to evaluate the performance of the proposed algorithm in various situations in Sec.~\ref{ssec:exprAll}, and detailed experiments to investigate the behavior of the proposed algorithm in detail in Sec.~\ref{ssec:exprDetail}.
+We conducted two types of experiments, based on Ref.~\cite{8419285}:
+exhaustive experiments to evaluate the performance of the proposed algorithm in various situations in Sec.~\ref{ssec:exprAll},
+and detailed experiments to investigate the behavior of the proposed algorithm in detail in Sec.~\ref{ssec:exprDetail}.
 
 \subsection{Experimental Setup}\label{ssec:setup}
 
@@ -596,15 +597,15 @@ Faint crosses represent the results of non-\textsf{SN} algorithms, while faint c
 The solid and dashed lines represent the average of these values across the 10 trials for each algorithm.
 If one of the trials terminated before reaching 200 iterations, the line was plotted up to the minimum trial count achieved across all trials.
 Each trial was conducted with a different seed, meaning that even deterministic algorithms, such as
-\textsf{FR} or \textsf{L-BFGS}, converged to different local optima due to variations in the initial random configuration.
-The graphs on the right illustrates the configuration at the 150th iteration (or the final iteration if it concluded before then) for each algorithm with the seed 0.
+\textsf{FR} or \textsf{L-BFGS}, converged to different local optima due to variations in the initial random placement.
+The graphs on the right illustrates the placement at the 150th iteration (or the final iteration if it concluded before then) for each algorithm with the seed 0.
 
 The observations and implications of Fig.~\ref{fig:individual} are as follows.
 First, the solid plots for \textsf{SN} generally demonstrates superior performance compared to non-\textsf{SN}, validating the efficacy of the proposed method.
 Some exception of the superiority arise with \textsf{FR}, which exhibits oscillations in the plot, likely due to excessive step sizes leading to overshooting.
 Although we refrained from altering \textsf{FR} for fairness, adjusting the step size could enable the proposed method to achieve its intended performance.
-In fact, the initial $f(X)$ of \textsf{SN-FR} is clearly small enough compared to the objective function values produced by \textsf{FR} alone, suggesting that the proposed method is yielding a good initial configuration.
-Additionally, the visualization results support the effectiveness of the proposed initial configuration. In most cases, configurations obtained with \textsf{SN} better represent the intended geometric arrangement compared to non-\textsf{SN} configurations.
+In fact, the initial $f(X)$ of \textsf{SN-FR} is clearly small enough compared to the objective function values produced by \textsf{FR} alone, suggesting that the proposed method is yielding a good initial placement.
+Additionally, the visualization results support the effectiveness of the proposed initial placement. In most cases, placements obtained with \textsf{SN} better represent the intended geometric arrangement compared to non-\textsf{SN} placements.
 
 As a side note, regardless of \textsf{SN} or non-\textsf{SN}, the algorithms using \textsf{L-BFGS} consistently outperforms those using \textsf{FR}.
 This finding is consistent with prior research~\cite{6183577}, though, regrettably, this technique remains relatively unknown in the field of graph drawing.
@@ -614,7 +615,7 @@ One of the aims of our paper is to further emphasize and popularize the use of \
     \centering
     \addtolength{\tabcolsep}{-0.5em}
     \begin{tabular}{ccccc}
-        \if0
+        % \if0
         \multicolumn{5}{c}{\textbf{\texttt{cycle300} $(\abs{V}=300, \abs{E}=300, \text{sparsity}=0.669\text{\%})$}}     \\
         \raisebox{-.5\height}{\includegraphics[width=0.55\columnwidth]{individual/plot/cycle300.pdf}} &
         \makecell{\small{\textsf{FR}}                                                                                   \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/cycle300_FR.pdf}} &
@@ -657,7 +658,7 @@ One of the aims of our paper is to further emphasize and popularize the use of \
         \makecell{\small{\textsf{L-BFGS}}                                                                               \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/3elt_L_BFGS.pdf}} &
         \makecell{\small{\textsf{SN-FR}}                                                                                \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/3elt_SN_FR.pdf}} &
         \makecell{\small{\textsf{SN-L-BFGS}}                                                                            \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/3elt_SN_L_BFGS.pdf}} \\
-        \fi
+        % \fi
     \end{tabular}
     \caption{Numerical experiment results for various graphs.  Please refer Sec.~\ref{ssec:exprDetail} for details.}
     \label{fig:individual}
@@ -867,7 +868,7 @@ This work was partially supported by JSPS KAKENHI (23H03351,24K23853) and JST ER
 \section{Optimal Scaling}\label{sec:scaling}
 
 When we optimize a placement for FR-layout with an initial placement obtained, scaling the initial placement at first can often yield better results than directly using the unmodified initial placement.
-In this section, we explain how to find the optimal scaling factor that minimizes the energy function for a given configuration.
+In this section, we explain how to find the optimal scaling factor that minimizes the energy function for a given placement.
 
 Let us formulate the optimization problem for the scaling factor $c \in \bbR_{> 0}$. For an initial placement $X = (x_1, \dots, x_n)$, we rescale it as $x_i \gets c x_i$ for all $i$.
 This problem is to minimize the energy function $\phi(c)$ defined as
