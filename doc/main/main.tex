@@ -1,4 +1,4 @@
-\documentclass[dvipdfmx,journal]{IEEEtran}
+\documentclass[dvipdfmx,10pt,journal,compsoc]{IEEEtran}
 
 \usepackage[ruled, vlined]{algorithm2e}    % \begin{algorithm2e}
 \usepackage{amsmath}        % \begin{align*}
@@ -130,33 +130,35 @@
 \author{
     Hiroki Hamaguchi\,\orcidlink{0009-0005-7348-1356}
     Naoki Marumo\,\orcidlink{0000-0002-7372-4275}
-    Akiko Takeda\,\orcidlink{0000-0002-8846-4496}\red{$\rightarrow$???}
+    Akiko Takeda\,\orcidlink{0000-0002-8846-4496}
     % <-this % stops a space
 }
+
+\IEEEtitleabstractindextext{%
+    \begin{abstract}
+        Graph drawing is a fundamental task for visualizing graph structures, with the Fruchterman--Reingold (FR) layout being one of the most widely used layouts.
+        This layout can be interpreted as a solution of a continuous optimization problem.
+        Typically, this problem is solved using the FR algorithm, a gradient descent-like method, or the L-BFGS algorithm, quasi-Newton method.
+        However, these methods are computationally expensive per iteration, which makes achieving high-quality visualizations for large-scale graphs challenging.
+
+        In this paper, to accelerate the optimization process, we propose a new initial placement obtained with subspace newton direction.
+        We first reformulate the problem as a discrete optimization problem using a hexagonal lattice, and then iteratively move a randomly selected vertex along the Newton direction defined in the subspace.
+        We can use the FR algorithm or L-BFGS algorithm to obtain the final placement.
+
+        We demonstrate the effectiveness of our proposed approach through experiments, highlighting the potential of subspace methods for graph drawing tasks.
+        Additionally, we suggest combining our method with other graph drawing techniques for further improvement.
+        We hope that this work will inspire future research of subspace methods not only in graph drawing but also in broader graph-related applications.
+    \end{abstract}
+    \begin{IEEEkeywords}
+        Graph Drawing,
+        Optimization,
+        Fruchterman--Reingold Layout,
+        L-BFGS algorithm,
+        subspace method
+    \end{IEEEkeywords}}
+
 \maketitle
 
-\begin{abstract}
-    Graph drawing is a fundamental task for visualizing graph structures, with the Fruchterman--Reingold (FR) layout being one of the most widely used layouts.
-    This layout can be interpreted as a solution of a continuous optimization problem.
-    Typically, this problem is solved using the FR algorithm, a gradient descent-like method, or the L-BFGS algorithm, quasi-Newton method.
-    However, these methods are computationally expensive per iteration, which makes achieving high-quality visualizations for large-scale graphs challenging.
-
-    In this paper, to accelerate the optimization process, we propose a new initial placement obtained with subspace newton direction.
-    We first reformulate the problem as a discrete optimization problem using a hexagonal lattice, and then iteratively move a randomly selected vertex along the Newton direction defined in the subspace.
-    We can use the FR algorithm or L-BFGS algorithm to obtain the final placement.
-
-    We demonstrate the effectiveness of our proposed approach through experiments, highlighting the potential of subspace methods for graph drawing tasks.
-    Additionally, we suggest combining our method with other graph drawing techniques for further improvement.
-    We hope that this work will inspire future research of subspace methods not only in graph drawing but also in broader graph-related applications.
-\end{abstract}
-
-\begin{IEEEkeywords}
-    Graph Drawing,
-    Optimization,
-    Fruchterman--Reingold Layout,
-    L-BFGS algorithm,
-    subspace method
-\end{IEEEkeywords}
 
 \section{Introduction}\label{sec:introduction}
 
@@ -555,6 +557,27 @@ To obtain the solution to Prob.~\eqref{eq:fr}, the output must be further refine
         \Return $X$
 \end{algorithm}
 
+\subsection{Optimal Scaling}\label{ssec:scaling}
+
+When we optimize a placement for FR-layout with an initial placement obtained, scaling the initial placement at first can often yield better results than directly using the unmodified initial placement.
+In this subsection, we explain how to find the optimal scaling factor that minimizes the energy function for a given placement.
+
+Let us formulate the optimization problem for the scaling factor $c \in \bbR_{> 0}$. For an initial placement $X = (x_1, \dots, x_n)$, we rescale it as $x_i \gets c x_i$ for all $i$.
+This problem is to minimize the energy function $\phi(c)$ defined as
+\begin{align*}
+    \phi(c) \defeq {} & \qty(\sum_{i < j} \frac{w_{ij} (cd_{ij})^3}{3k}) - k^2 \sum_{i < j} \log(c d_{ij})                                   \\
+    \begin{split}
+        = {} & c^3 \qty(\sum_{i < j} \frac{w_{ij} d_{ij}^3}{3k}) - k^2 n(n-1)\log(c) \\
+             & - k^2 \sum_{i < j} \log(d_{ij}),
+    \end{split} \\
+    \phi'(c) = {}     & 3c^2 \qty(\sum_{i < j} \frac{w_{ij} d_{ij}^3}{3k}) - \frac{k^2 n(n-1)}{c}.
+\end{align*}
+
+The function $\phi(c)$ is convex, and we can find the optimal scaling factor $c^*$ by solving $\phi'(c^*) = 0$, which yields
+\begin{equation*}
+    c^* = \qty(\frac{k^2 n(n-1)}{3 \sum_{i < j} \frac{w_{ij} d_{ij}^3}{k}})^{1/3}.
+\end{equation*}
+
 \section{Numerical Experiment} \label{sec:experiment}
 
 \begin{figure*}[t]
@@ -949,26 +972,6 @@ This work was partially supported by JSPS KAKENHI (23H03351,24K23853) and JST ER
 }{}
 
 \appendices
-
-\section{Optimal Scaling}\label{sec:scaling}
-
-When we optimize a placement for FR-layout with an initial placement obtained, scaling the initial placement at first can often yield better results than directly using the unmodified initial placement.
-In this section, we explain how to find the optimal scaling factor that minimizes the energy function for a given placement.
-
-Let us formulate the optimization problem for the scaling factor $c \in \bbR_{> 0}$. For an initial placement $X = (x_1, \dots, x_n)$, we rescale it as $x_i \gets c x_i$ for all $i$.
-This problem is to minimize the energy function $\phi(c)$ defined as
-\begin{align*}
-    \phi(c) \defeq {} & \qty(\sum_{i < j} \frac{w_{ij} (cd_{ij})^3}{3k}) - k^2 \sum_{i < j} \log(c d_{ij})                                   \\
-    \begin{split}
-        = {} & c^3 \qty(\sum_{i < j} \frac{w_{ij} d_{ij}^3}{3k}) - k^2 n(n-1)\log(c) \\
-             & - k^2 \sum_{i < j} \log(d_{ij}),
-    \end{split} \\
-    \phi'(c) = {}     & 3c^2 \qty(\sum_{i < j} \frac{w_{ij} d_{ij}^3}{3k}) - \frac{k^2 n(n-1)}{c},                                           \\
-    \phi''(c) = {}    & 6c \qty(\sum_{i < j} \frac{w_{ij} d_{ij}^3}{3k}) + \frac{k^2 n(n-1)}{c^2}.
-\end{align*}
-
-The function $\phi(c)$ is convex, and we can find the optimal scaling factor $c$ by using Newton's method.
-\orange{This algorithm achieves sufficient convergence within a few iterations}, and by pre-computing the coefficients of $\phi(c)$ with $w_{i,j} > 0$, the time complexity is just $\order{\abs{E}}$.
 
 \section{Another approach based on the Proposed Method}\label{sec:anotherApproach}
 
