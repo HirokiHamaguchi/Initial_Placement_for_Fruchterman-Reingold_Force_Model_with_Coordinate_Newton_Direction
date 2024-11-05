@@ -14,8 +14,9 @@
 #include "../util/timer.hpp"
 
 // Minimize
-// \sum_{e \in adj1} (||x_{e.u} - x_{e.v}||) +  \sum_{e \in adj2} (||x_{e.u} -
-// x_{e.v}||) using Simulated Annealing
+// \sum_{e \in adj1} (||x_{e.u} - x_{e.v}||)
+// + \sum_{e \in adj2} (||x_{e.u} - x_{e.v}||)
+// using Simulated Annealing (SA)
 
 struct Circle {
   Circle(size_t n, int seed, std::vector<std::vector<int>>& adj) : adj1(adj), adj2(n) {
@@ -51,13 +52,13 @@ struct Circle {
   }
 
   // change edge(u, v) to edge(u2, v)
-  void calcDiff(int u, int u2, int v, double& delta) {
+  void calcDiff(int u, int u2, int v, double& diffScore) {
     assert(u != v);
     if (u2 == v) return;
-    delta -= std::hypot(positions[u].first - positions[u2].first,
-                        positions[u].second - positions[u2].second);
-    delta += std::hypot(positions[v].first - positions[u2].first,
-                        positions[v].second - positions[u2].second);
+    diffScore -= std::hypot(positions[u].first - positions[u2].first,
+                            positions[u].second - positions[u2].second);
+    diffScore += std::hypot(positions[v].first - positions[u2].first,
+                            positions[v].second - positions[u2].second);
   }
 
   std::vector<std::pair<double, double>> positions;
@@ -80,37 +81,33 @@ std::vector<Eigen::VectorXf> solve_circle(const Problem& problem,
   }
   Circle circle(problem.n, seed, adj);
 
-  double TIME_LIMIT = 1.0;
-  double TEMP_MAX = +3;
-  double TEMP_MIN = -3;
+  const int ITERATIONS = 0.5 * problem.n * (problem.n * problem.n / problem.m);
+  double T0 = +1;
+  double T1 = -2;
 
   double score = circle.calcScoreForCircle();
   double bestScore = score;
   std::vector<std::pair<double, double>> bestPositions = circle.positions;
 
   std::mt19937 g(seed);
-  std::uniform_int_distribution<int> distN(0, circle.positions.size() - 1);
-  std::uniform_real_distribution<double> distProb(0, 1);
+  std::uniform_int_distribution<int> distVertex(0, problem.n - 1);
+  std::uniform_real_distribution<double> distSA(0, 1);
 
-  Timer localTimer;
-  localTimer.start();
-  while (true) {
-    double sec = localTimer.sec();
-    if (sec > TIME_LIMIT) break;
-    double temp = std::pow(10, TEMP_MAX - (TEMP_MAX - TEMP_MIN) * sec / TIME_LIMIT);
+  for (int it = 0; it < ITERATIONS; it++) {
+    double T = std::pow(10, T0 + (T1 - T0) * it / ITERATIONS);
 
-    int u = distN(g), v = distN(g);
+    int u = distVertex(g), v = distVertex(g);
     if (u == v) continue;
 
-    double delta = 0;
-    for (auto& u2 : circle.adj1[u]) circle.calcDiff(u, u2, v, delta);
-    for (auto& v2 : circle.adj1[v]) circle.calcDiff(v, v2, u, delta);
-    for (auto& u2 : circle.adj2[u]) circle.calcDiff(u, u2, v, delta);
-    for (auto& v2 : circle.adj2[v]) circle.calcDiff(v, v2, u, delta);
+    double diffScore = 0;
+    for (auto& u2 : circle.adj1[u]) circle.calcDiff(u, u2, v, diffScore);
+    for (auto& v2 : circle.adj1[v]) circle.calcDiff(v, v2, u, diffScore);
+    for (auto& u2 : circle.adj2[u]) circle.calcDiff(u, u2, v, diffScore);
+    for (auto& v2 : circle.adj2[v]) circle.calcDiff(v, v2, u, diffScore);
 
-    if (delta <= 0 || distProb(g) < std::exp(-delta / temp)) {
+    if (diffScore <= 0 || distSA(g) < std::exp(-diffScore / T)) {
       std::swap(circle.positions[u], circle.positions[v]);
-      score += delta;
+      score += diffScore;
     }
 
     if (score < bestScore) {

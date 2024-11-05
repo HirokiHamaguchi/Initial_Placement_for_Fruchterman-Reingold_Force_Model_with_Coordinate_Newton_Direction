@@ -21,7 +21,7 @@ struct Grid {
   std::vector<int> array;
 
  public:
-  Grid(int n, double k, int seed) : n(n), n2(0), k(k), k2(std::pow(k, 2)) {
+  Grid(int n, double k, int seed) : n(n), n2(0), k(k) {
     size_t hexSize = 2 * n;
     while (3 * n2 * n2 + 3 * n2 + 1 < hexSize) n2++;
     arraySz = 2 * n2 + 1;
@@ -60,44 +60,15 @@ struct Grid {
     double dist = std::hypot(delta.first, delta.second);
     assert(dist > 1e-9);
 
-    // * Only use attractive force
+    // Only use attractive force
     double coeff1 = w * dist / k;
     double coeff2 = w / (dist * k);
-
-    // // Method 2: use both attractive and repulsive forces (deprecated)
-    // // double d2 = std::pow(dist, 2);
-    // // double d4 = std::pow(d2, 2);
-    // // double coeff1 = w * dist / k - k2 / d2;
-    // // double coeff2 = w / (dist * k) + 2 * k2 / d4;
 
     gx += coeff1 * delta.first;
     gy += coeff1 * delta.second;
     hxx += coeff1 + coeff2 * delta.first * delta.first;
     hxy += coeff2 * delta.first * delta.second;
     hyy += coeff1 + coeff2 * delta.second * delta.second;
-  }
-
-  void updateAlongPath(int i, const Hex& new_v) {
-    std::vector<Hex> path = linedraw(points[i], new_v);
-    if (std::any_of(path.begin(), path.end(),
-                    [&](const Hex& hex) { return !isInside(hex); })) {
-      std::vector<Hex> newPath;
-      for (auto& hex : path)
-        if (isInside(hex)) newPath.push_back(hex);
-      std::swap(path, newPath);
-    }
-    assert(path.size() >= 2);
-
-    // move vertex along path
-    for (int j = 0; j < int(path.size()) - 1; ++j) {
-      int& curr = array[to1DIndex(path[j].q, path[j].r)];
-      int& next = array[to1DIndex(path[j + 1].q, path[j + 1].r)];
-      if (next != -1)
-        std::swap(points[curr], points[next]);
-      else
-        points[i] = path[j + 1];
-      std::swap(curr, next);
-    }
   }
 
   Eigen::VectorXf toPosition() const {
@@ -112,37 +83,53 @@ struct Grid {
     return problem.calcScore(toPosition(), includeRepulsive);
   }
 
- private:
-  double k2;
-
-  // * Only For updateAlongPath
-  std::vector<Hex> linedraw(const Hex& a, const Hex& b) const {
-    int N = a.distance(b);
-    assert(N >= 1);
-    if (N == 1) return {a, b};
-    int a_s = -a.q - a.r, b_s = -b.q - b.r;
-    float a_nudge_q = a.q + 1e-06, a_nudge_r = a.r + 1e-06, a_nudge_s = a_s - 2e-06;
-    float b_nudge_q = b.q + 1e-06, b_nudge_r = b.r + 1e-06, b_nudge_s = b_s - 2e-06;
-    std::vector<Hex> results;
-    float step = 1.0 / std::max(N, 1);
-    for (int i = 0; i <= N; ++i)
-      results.push_back(Hex::lerp(a_nudge_q, a_nudge_r, a_nudge_s, b_nudge_q, b_nudge_r,
-                                  b_nudge_s, step * i));
-    return results;
+  double calcScoreV(const Problem& problem, const Hex& hexI, const Hex& hexJ) const {
+    // calculate score difference. The score is defined by \sum_j \norm{xi-xj}_2^3/3k
+    auto i = array[to1DIndex(hexI.q, hexI.r)];
+    if (i == -1) return 0.0;
+    double score = 0.0;
+    auto [xi, yi] = hex2xy(hexI.q, hexI.r);
+    auto [xj, yj] = hex2xy(hexJ.q, hexJ.r);
+    for (auto& [k, w] : problem.adj[i]) {
+      auto [xk, yk] = hex2xy(k);
+      double dxi = xi - xk, dyi = yi - yk;
+      score -= w * std::pow(dxi * dxi + dyi * dyi, 1.5);
+      double dxj = xj - xk, dyj = yj - yk;
+      score += w * std::pow(dxj * dxj + dyj * dyj, 1.5);
+    }
+    return score / (3.0 * k);
   }
 
-  // * For Util
+  double calcScoreDiff(const Problem& problem, const Hex& hexI, const Hex& hexJ) const {
+    // (post score) - (pre score) where post means after swapping hexI and hexJ
+    return calcScoreV(problem, hexI, hexJ) + calcScoreV(problem, hexJ, hexI);
+  }
+
+  void swap(int i, const Hex& hexI, const Hex& hexJ) {
+    int j = array[to1DIndex(hexJ.q, hexJ.r)];
+    if (j == -1) {
+      points[i] = hexJ;
+      array[to1DIndex(hexI.q, hexI.r)] = -1;
+      array[to1DIndex(hexJ.q, hexJ.r)] = i;
+    } else {
+      std::swap(points[i], points[j]);
+      std::swap(array[to1DIndex(hexI.q, hexI.r)], array[to1DIndex(hexJ.q, hexJ.r)]);
+    }
+  }
+
   inline bool isInside(const Hex& hex) const {
     return 0 <= hex.q && hex.q < int(arraySz) && 0 <= hex.r && hex.r < int(arraySz);
   }
 
-  // * For debugging
+  // For debugging
   bool isCorrectState() const {
     for (size_t i = 0; i < points.size(); ++i)
       if (array[to1DIndex(points[i].q, points[i].r)] != int(i)) return false;
-    return true;
+    int cnt = std::count_if(array.begin(), array.end(), [](int x) { return x != -1; });
+    return cnt == int(points.size());
   }
 
-  // * Utility function to convert 2D indices to 1D index
+ private:
+  // Utility function to convert 2D indices to 1D index
   inline size_t to1DIndex(int q, int r) const { return q * arraySz + r; }
 };

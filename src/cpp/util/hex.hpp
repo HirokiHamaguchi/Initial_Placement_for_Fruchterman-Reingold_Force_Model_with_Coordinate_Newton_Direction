@@ -54,12 +54,6 @@ class Hex {
     return Hex(qi, ri);
   }
 
-  static Hex lerp(float a_q, float a_r, float a_s, float b_q, float b_r, float b_s,
-                  float t) {
-    return Hex::round(a_q * (1.0 - t) + b_q * t, a_r * (1.0 - t) + b_r * t,
-                      a_s * (1.0 - t) + b_s * t);
-  }
-
   static bool equal_hex_array(const std::vector<Hex>& a, const std::vector<Hex>& b) {
     if (a.size() != b.size()) return false;
     for (size_t i = 0; i < a.size(); ++i)
