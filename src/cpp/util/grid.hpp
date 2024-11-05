@@ -21,7 +21,7 @@ struct Grid {
   std::vector<int> array;
 
  public:
-  Grid(int n, double k) : n(n), n2(0), k(k), k2(std::pow(k, 2)) {
+  Grid(int n, double k, int seed) : n(n), n2(0), k(k), k2(std::pow(k, 2)) {
     size_t hexSize = 2 * n;
     while (3 * n2 * n2 + 3 * n2 + 1 < hexSize) n2++;
     arraySz = 2 * n2 + 1;
@@ -33,7 +33,7 @@ struct Grid {
     }
     assert(points.size() >= hexSize);
 
-    std::mt19937 g(0);
+    std::mt19937 g(seed);
     std::shuffle(points.begin(), points.end(), g);
     points.resize(n);
 

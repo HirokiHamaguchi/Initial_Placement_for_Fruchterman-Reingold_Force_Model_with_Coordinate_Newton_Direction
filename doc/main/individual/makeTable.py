@@ -32,8 +32,8 @@ def generate_latex_code(matrixNames):
     \\raisebox{{-.5\\height}}{{\\includegraphics[width=0.55\\columnwidth]{{individual/plot/{matrixName}.pdf}}}} &
     \\makecell{{\\small{{\\textsf{{FR}}}}\\\\[-0.2em]\\includegraphics[width=0.27\\columnwidth]{{individual/viz/{matrixName}_FR.{extension}}}}} &
     \\makecell{{\\small{{\\textsf{{L-BFGS}}}}\\\\[-0.2em]\\includegraphics[width=0.27\\columnwidth]{{individual/viz/{matrixName}_L_BFGS.{extension}}}}} &
-    \\makecell{{\\small{{\\textsf{{SN-FR}}}}\\\\[-0.2em]\\includegraphics[width=0.27\\columnwidth]{{individual/viz/{matrixName}_SN_FR.{extension}}}}} &
-    \\makecell{{\\small{{\\textsf{{SN-L-BFGS}}}}\\\\[-0.2em]\\includegraphics[width=0.27\\columnwidth]{{individual/viz/{matrixName}_SN_L_BFGS.{extension}}}}} \\\\"""
+    \\makecell{{\\small{{\\textsf{{CN-FR}}}}\\\\[-0.2em]\\includegraphics[width=0.27\\columnwidth]{{individual/viz/{matrixName}_CN_FR.{extension}}}}} &
+    \\makecell{{\\small{{\\textsf{{CN-L-BFGS}}}}\\\\[-0.2em]\\includegraphics[width=0.27\\columnwidth]{{individual/viz/{matrixName}_CN_L_BFGS.{extension}}}}} \\\\"""
 
     latex_code += f"""
   \\end{{tabular}}

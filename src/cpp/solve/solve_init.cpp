@@ -56,7 +56,7 @@ std::vector<Eigen::VectorXf> solve_init(const Problem& problem, const bool measu
                                         Timer& timer) {
   timer.start();
 
-  Grid grid(problem.n, problem.k);
+  Grid grid(problem.n, problem.k, seed);
   assert(positions.empty());
   if (!measureTime) positions.emplace_back(grid.toPosition());
 

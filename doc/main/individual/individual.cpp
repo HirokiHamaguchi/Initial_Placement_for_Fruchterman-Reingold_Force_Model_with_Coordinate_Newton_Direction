@@ -8,7 +8,7 @@ int main() {
       "3elt",  // SGD
   };
 
-  std::vector<Method> methods = {FR, SN_FR, L_BFGS, SN_L_BFGS};
+  std::vector<Method> methods = {FR, CN_FR, L_BFGS, CN_L_BFGS};
 
   std::string histStr =
       std::to_string(matrixNames.size()) + " " + std::to_string(methods.size()) + "\n";
@@ -37,7 +37,7 @@ int main() {
         histStr += "Score: " + std::to_string(score) + "\n";
         std::cout << "Elapsed time: " << time << " seconds" << std::endl;
         std::cout << "Score: " << score << std::endl;
-        if (seed == 0)
+        if (seed == 1)
           problem.printOutput(positions, "out/" + problem.matrixName + "_" +
                                              MethodStr[method] + ".out");
       }

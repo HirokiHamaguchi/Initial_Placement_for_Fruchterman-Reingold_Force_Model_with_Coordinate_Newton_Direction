@@ -125,7 +125,7 @@
 \title{
     An Initial Placement
     for Fruchterman--Reingold Layout
-    \red{with Subspace Newton Direction}
+    \red{with Coordinate Newton Direction}
 }
 \author{
     Hiroki Hamaguchi\,\orcidlink{0009-0005-7348-1356}
@@ -153,10 +153,8 @@
         Graph Drawing,
         Optimization,
         Fruchterman--Reingold Layout,
-        L-BFGS algorithm,
-        subspace method
+        L-BFGS algorithm
     \end{IEEEkeywords}}
-
 \maketitle
 
 
@@ -196,12 +194,12 @@ Recent research has accelerated the algorithms through various methods, includin
         \large{\textbf{\textsf{proposed}}}                                 & \large{\textbf{\textsf{+ L-BFGS}}} \\
         \begin{minipage}{0.45\columnwidth}
             \centering
-            \includegraphics[width=0.85\columnwidth]{jagmesh1/jagmesh1_SN.png}
+            \includegraphics[width=0.85\columnwidth]{jagmesh1/jagmesh1_CN.png}
         \end{minipage}
                                                                            &
         \begin{minipage}{0.45\columnwidth}
             \centering
-            \includegraphics[width=0.85\columnwidth]{jagmesh1/jagmesh1_SN_L_BFGS.png}
+            \includegraphics[width=0.85\columnwidth]{jagmesh1/jagmesh1_CN_L_BFGS.png}
         \end{minipage}
     \end{tabular}
     \begin{tikzpicture}[overlay, remember picture]
@@ -541,9 +539,9 @@ To obtain the solution to Prob.~\eqref{eq:fr}, the output must be further refine
     \KwIn{Graph $G_W = (V, E)$, subspace dimension $s$}
     \KwOut{Point placement $X = (x_1, \dots, x_n)$}
 
-    define parameters $k, N_\mathrm{iter}^\mathsf{SN}$ and hexagonal lattice $Q$\;
+    define parameters $k, N_\mathrm{iter}^\mathsf{CN}$ and hexagonal lattice $Q$\;
     set $\pi$ as a injection from $V$ to $Q$ randomly\;
-    \For{$j \gets 0$ \KwTo $N_\mathrm{iter}^\mathsf{SN}$}{
+    \For{$j \gets 0$ \KwTo $N_\mathrm{iter}^\mathsf{CN}$}{
     $v_i \gets \text{randomly selected vertex from } V$\;
     $x_i \gets \pi(v_i)$\;
     $x_i^\mathrm{new} \gets \mathrm{round}(x_i - \nabla^2 f_i(x_i)^{-1} \nabla f_i(x_i))$\;
@@ -600,7 +598,7 @@ The function $\phi(c)$ is convex, and we can find the optimal scaling factor $c^
     \end{minipage}
     \caption{
         Comparison of the proposed initialization with random initialization.
-        Since $N_\mathrm{iter}^\mathsf{SN} = 3 \frac{\abs{V}^3}{\abs{E}}$, we set $N_\mathrm{iter}^\mathsf{FR}$ and $N_\mathrm{iter}^\mathsf{L-BFGS}$ as 12(=15-3), 47(=50-3), respectively for the \textsf{SN} algorithms. For non-\textsf{SN} algorithms, we set them as 15 and 50, respectively.
+        Since $N_\mathrm{iter}^\mathsf{CN} = 3 \frac{\abs{V}^3}{\abs{E}}$, we set $N_\mathrm{iter}^\mathsf{FR}$ and $N_\mathrm{iter}^\mathsf{L-BFGS}$ as 12(=15-3), 47(=50-3), respectively for the \textsf{CN} algorithms. For non-\textsf{CN} algorithms, we set them as 15 and 50, respectively.
         The y axis is symlog scale.
         Almost all of the cases,
         the difference are negative, meaning that the proposed algorithm performed better than random initialization.
@@ -612,11 +610,11 @@ The function $\phi(c)$ is convex, and we can find the optimal scaling factor $c^
     \centering
     \begin{minipage}{0.49\columnwidth}
         \centering
-        \includegraphics[width=0.5\columnwidth]{overall/viz/can_187_SN_FR_first.png}
+        \includegraphics[width=0.5\columnwidth]{overall/viz/can_187_CN_FR_first.png}
     \end{minipage}
     \begin{minipage}{0.49\columnwidth}
         \centering
-        \includegraphics[width=0.5\columnwidth]{overall/viz/can_187_SN_FR_last.png}
+        \includegraphics[width=0.5\columnwidth]{overall/viz/can_187_CN_FR_last.png}
     \end{minipage}
     \caption{\texttt{can\_187}}
     \label{fig:can_187}
@@ -625,11 +623,11 @@ The function $\phi(c)$ is convex, and we can find the optimal scaling factor $c^
     \centering
     \begin{minipage}{0.49\columnwidth}
         \centering
-        \includegraphics[width=0.5\columnwidth]{overall/viz/can_73_SN_L_BFGS_first.png}
+        \includegraphics[width=0.5\columnwidth]{overall/viz/can_73_CN_L_BFGS_first.png}
     \end{minipage}
     \begin{minipage}{0.49\columnwidth}
         \centering
-        \includegraphics[width=0.5\columnwidth]{overall/viz/can_73_SN_L_BFGS_last.png}
+        \includegraphics[width=0.5\columnwidth]{overall/viz/can_73_CN_L_BFGS_last.png}
     \end{minipage}
     \caption{\texttt{can\_73}}
     \label{fig:can_73}
@@ -638,11 +636,11 @@ The function $\phi(c)$ is convex, and we can find the optimal scaling factor $c^
     \centering
     \begin{minipage}{0.49\columnwidth}
         \centering
-        \includegraphics[width=0.5\columnwidth]{overall/viz/iris_dataset_30NN_SN_L_BFGS_first.png}
+        \includegraphics[width=0.5\columnwidth]{overall/viz/iris_dataset_30NN_CN_L_BFGS_first.png}
     \end{minipage}
     \begin{minipage}{0.49\columnwidth}
         \centering
-        \includegraphics[width=0.5\columnwidth]{overall/viz/iris_dataset_30NN_SN_L_BFGS_last.png}
+        \includegraphics[width=0.5\columnwidth]{overall/viz/iris_dataset_30NN_CN_L_BFGS_last.png}
     \end{minipage}
     \caption{\texttt{iris\_dataset\_30NN}}
     \label{fig:iris_dataset_30NN}
@@ -651,11 +649,11 @@ The function $\phi(c)$ is convex, and we can find the optimal scaling factor $c^
     \centering
     \begin{minipage}{0.49\columnwidth}
         \centering
-        \includegraphics[width=0.5\columnwidth]{overall/viz/dwt_592_SN_L_BFGS_first.png}
+        \includegraphics[width=0.5\columnwidth]{overall/viz/dwt_592_CN_L_BFGS_first.png}
     \end{minipage}
     \begin{minipage}{0.49\columnwidth}
         \centering
-        \includegraphics[width=0.5\columnwidth]{overall/viz/dwt_592_SN_L_BFGS_last.png}
+        \includegraphics[width=0.5\columnwidth]{overall/viz/dwt_592_CN_L_BFGS_last.png}
     \end{minipage}
     \caption{\texttt{dwt\_592}}
     \label{fig:dwt_592}
@@ -674,9 +672,9 @@ To implement FR algorithm and L-BFGS algorithm, we referenced NetworkX version 3
 We also referenced the open-source code of the hexagonal grid from~\cite{patelHexagonalGrids2013}.
 As a side note, we also used Graphviz version 2.43.0~\cite{ellsonGraphvizOpenSource2002} to draw Fig.~\ref{fig:cycle}.
 
-We used the 4 algorithms: FR algorithm (\textsf{FR}), the proposed initialization plus FR algorithm (\textsf{SN-FR}), L-BFGS algorithm (\textsf{L-BFGS}), and the proposed initialization plus L-BFGS algorithm (\textsf{SN-L-BFGS}). \textsf{SN} represents the Subspace Newton, and we refer \textsf{SN-FR} and \textsf{SN-L-BFGS} as \textsf{SN}, and \textsf{FR} and \textsf{L-BFGS} as non-\textsf{SN}.
+We used the 4 algorithms: FR algorithm (\textsf{FR}), the proposed initialization plus FR algorithm (\textsf{CN-FR}), L-BFGS algorithm (\textsf{L-BFGS}), and the proposed initialization plus L-BFGS algorithm (\textsf{CN-L-BFGS}). \textsf{CN} represents the Subspace Newton, and we refer \textsf{CN-FR} and \textsf{CN-L-BFGS} as \textsf{CN}, and \textsf{FR} and \textsf{L-BFGS} as non-\textsf{CN}.
 
-As a parameter, we used $N_\mathrm{iter}^\mathsf{SN} = 3 \frac{\abs{V}^3}{\abs{E}}$ for the FR algorithm. Since the amortized time complexity per iteration of
+As a parameter, we used $N_\mathrm{iter}^\mathsf{CN} = 3 \frac{\abs{V}^3}{\abs{E}}$ for the FR algorithm. Since the amortized time complexity per iteration of
 Algorithm~\ref{alg:proposed} is $\order{\frac{\abs{E}}{\abs{V}}}$, we can roughly expect that the computational time of the proposed algorithm is equivalent to 3 iterations of the FR algorithm.
 
 All the codes are available at our GitHub~\cite{ThisPaperGitHub}.
@@ -703,44 +701,44 @@ We can observe that the reasons why it was worse though these figures. \orange{t
         \raisebox{-.5\height}{\includegraphics[width=0.55\columnwidth]{individual/plot/cycle300.pdf}} &
         \makecell{\small{\textsf{FR}}                                                                                   \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/cycle300_FR.pdf}} &
         \makecell{\small{\textsf{L-BFGS}}                                                                               \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/cycle300_L_BFGS.pdf}} &
-        \makecell{\small{\textsf{SN-FR}}                                                                                \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/cycle300_SN_FR.pdf}} &
-        \makecell{\small{\textsf{SN-L-BFGS}}                                                                            \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/cycle300_SN_L_BFGS.pdf}} \\
+        \makecell{\small{\textsf{CN-FR}}                                                                                \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/cycle300_CN_FR.pdf}} &
+        \makecell{\small{\textsf{CN-L-BFGS}}                                                                            \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/cycle300_CN_L_BFGS.pdf}} \\
         \multicolumn{5}{c}{\textbf{\texttt{jagmesh1}} $(\abs{V}=936, \abs{E}=2664, \text{sparsity}=0.609\text{\%})$}    \\
         \raisebox{-.5\height}{\includegraphics[width=0.55\columnwidth]{individual/plot/jagmesh1.pdf}} &
         \makecell{\small{\textsf{FR}}                                                                                   \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/jagmesh1_FR.png}} &
         \makecell{\small{\textsf{L-BFGS}}                                                                               \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/jagmesh1_L_BFGS.png}} &
-        \makecell{\small{\textsf{SN-FR}}                                                                                \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/jagmesh1_SN_FR.png}} &
-        \makecell{\small{\textsf{SN-L-BFGS}}                                                                            \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/jagmesh1_SN_L_BFGS.png}} \\
+        \makecell{\small{\textsf{CN-FR}}                                                                                \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/jagmesh1_CN_FR.png}} &
+        \makecell{\small{\textsf{CN-L-BFGS}}                                                                            \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/jagmesh1_CN_L_BFGS.png}} \\
         \multicolumn{5}{c}{\textbf{\texttt{dwt\_1005}} $(\abs{V}=1005, \abs{E}=3808, \text{sparsity}=0.755\text{\%})$}  \\
         \raisebox{-.5\height}{\includegraphics[width=0.55\columnwidth]{individual/plot/dwt_1005.pdf}} &
         \makecell{\small{\textsf{FR}}                                                                                   \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/dwt_1005_FR.png}} &
         \makecell{\small{\textsf{L-BFGS}}                                                                               \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/dwt_1005_L_BFGS.png}} &
-        \makecell{\small{\textsf{SN-FR}}                                                                                \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/dwt_1005_SN_FR.png}} &
-        \makecell{\small{\textsf{SN-L-BFGS}}                                                                            \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/dwt_1005_SN_L_BFGS.png}} \\
+        \makecell{\small{\textsf{CN-FR}}                                                                                \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/dwt_1005_CN_FR.png}} &
+        \makecell{\small{\textsf{CN-L-BFGS}}                                                                            \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/dwt_1005_CN_L_BFGS.png}} \\
         \multicolumn{5}{c}{\textbf{\texttt{btree9}} $(\abs{V}=1023, \abs{E}=1022, \text{sparsity}=0.196\text{\%})$}     \\
         \raisebox{-.5\height}{\includegraphics[width=0.55\columnwidth]{individual/plot/btree9.pdf}}   &
         \makecell{\small{\textsf{FR}}                                                                                   \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/btree9_FR.png}} &
         \makecell{\small{\textsf{L-BFGS}}                                                                               \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/btree9_L_BFGS.png}} &
-        \makecell{\small{\textsf{SN-FR}}                                                                                \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/btree9_SN_FR.png}} &
-        \makecell{\small{\textsf{SN-L-BFGS}}                                                                            \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/btree9_SN_L_BFGS.png}} \\
+        \makecell{\small{\textsf{CN-FR}}                                                                                \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/btree9_CN_FR.png}} &
+        \makecell{\small{\textsf{CN-L-BFGS}}                                                                            \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/btree9_CN_L_BFGS.png}} \\
         \multicolumn{5}{c}{\textbf{\texttt{1138\_bus}} $(\abs{V}=1138, \abs{E}=1458, \text{sparsity}=0.225\text{\%})$}  \\
         \raisebox{-.5\height}{\includegraphics[width=0.55\columnwidth]{individual/plot/1138_bus.pdf}} &
         \makecell{\small{\textsf{FR}}                                                                                   \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/1138_bus_FR.pdf}} &
         \makecell{\small{\textsf{L-BFGS}}                                                                               \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/1138_bus_L_BFGS.pdf}} &
-        \makecell{\small{\textsf{SN-FR}}                                                                                \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/1138_bus_SN_FR.pdf}} &
-        \makecell{\small{\textsf{SN-L-BFGS}}                                                                            \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/1138_bus_SN_L_BFGS.pdf}} \\
+        \makecell{\small{\textsf{CN-FR}}                                                                                \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/1138_bus_CN_FR.pdf}} &
+        \makecell{\small{\textsf{CN-L-BFGS}}                                                                            \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/1138_bus_CN_L_BFGS.pdf}} \\
         \multicolumn{5}{c}{\textbf{\texttt{dwt\_2680}} $(\abs{V}=2680, \abs{E}=11173, \text{sparsity}=0.311\text{\%})$} \\
         \raisebox{-.5\height}{\includegraphics[width=0.55\columnwidth]{individual/plot/dwt_2680.pdf}} &
         \makecell{\small{\textsf{FR}}                                                                                   \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/dwt_2680_FR.pdf}} &
         \makecell{\small{\textsf{L-BFGS}}                                                                               \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/dwt_2680_L_BFGS.pdf}} &
-        \makecell{\small{\textsf{SN-FR}}                                                                                \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/dwt_2680_SN_FR.pdf}} &
-        \makecell{\small{\textsf{SN-L-BFGS}}                                                                            \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/dwt_2680_SN_L_BFGS.pdf}} \\
+        \makecell{\small{\textsf{CN-FR}}                                                                                \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/dwt_2680_CN_FR.pdf}} &
+        \makecell{\small{\textsf{CN-L-BFGS}}                                                                            \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/dwt_2680_CN_L_BFGS.pdf}} \\
         \multicolumn{5}{c}{\textbf{\texttt{3elt}} $(\abs{V}=4720, \abs{E}=13722, \text{sparsity}=0.123\text{\%})$}      \\
         \raisebox{-.5\height}{\includegraphics[width=0.55\columnwidth]{individual/plot/3elt.pdf}}     &
         \makecell{\small{\textsf{FR}}                                                                                   \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/3elt_FR.pdf}} &
         \makecell{\small{\textsf{L-BFGS}}                                                                               \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/3elt_L_BFGS.pdf}} &
-        \makecell{\small{\textsf{SN-FR}}                                                                                \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/3elt_SN_FR.pdf}} &
-        \makecell{\small{\textsf{SN-L-BFGS}}                                                                            \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/3elt_SN_L_BFGS.pdf}} \\
+        \makecell{\small{\textsf{CN-FR}}                                                                                \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/3elt_CN_FR.pdf}} &
+        \makecell{\small{\textsf{CN-L-BFGS}}                                                                            \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/viz/3elt_CN_L_BFGS.pdf}} \\
     \end{tabular}
     \caption{Numerical experiment results for various graphs.  Please refer Sec.~\ref{ssec:exprDetail} for details.}
     \label{fig:individual}
@@ -754,7 +752,7 @@ We tested with 7 graphs: \texttt{cycle300}, \texttt{jagmesh1}, \texttt{dwt\_1005
 
 We first explain what Fig.~\ref{fig:individual} represents.
 The plots on the left illustrate the objective function values $f(X)$ on the vertical axis versus execution time on the horizontal axis, using 10 trials for each algorithm.
-Faint crosses represent the results of non-\textsf{SN} algorithms, while faint circles represent the results of \textsf{SN} algorithms, plotted every 10 iterations for each trial.
+Faint crosses represent the results of non-\textsf{CN} algorithms, while faint circles represent the results of \textsf{CN} algorithms, plotted every 10 iterations for each trial.
 The solid and dashed lines represent the average of these values across the 10 trials for each algorithm.
 If one of the trials terminated before reaching $N_\mathrm{iter}^\mathsf{FR}$ or $N_\mathrm{iter}^\mathsf{L-BFGS}$ iterations, the line was plotted up to the minimum trial count achieved across all trials.
 Each trial was conducted with a different seed, meaning that even deterministic algorithms, such as
@@ -762,13 +760,13 @@ Each trial was conducted with a different seed, meaning that even deterministic 
 The graphs on the right illustrates the placement at the 150th iteration (or the final iteration if it concluded before then) for each algorithm with the seed 0.
 
 The observations and implications of Fig.~\ref{fig:individual} are as follows.
-First, the solid plots for \textsf{SN} generally demonstrates superior performance compared to non-\textsf{SN}, validating the efficacy of the proposed method.
+First, the solid plots for \textsf{CN} generally demonstrates superior performance compared to non-\textsf{CN}, validating the efficacy of the proposed method.
 Some exception of the superiority arise with \textsf{FR}, which exhibits oscillations in the plot, likely due to excessive step sizes leading to overshooting.
 Although we refrained from altering \textsf{FR} for fairness, adjusting the step size could enable the proposed method to achieve its intended performance.
-In fact, the initial $f(X)$ of \textsf{SN-FR} is clearly small enough compared to the objective function values produced by \textsf{FR} alone, suggesting that the proposed method is yielding a good initial placement.
-Additionally, the visualization results support the effectiveness of the proposed initial placement. In most cases, placements obtained with \textsf{SN} better represent the intended geometric arrangement compared to non-\textsf{SN} placements.
+In fact, the initial $f(X)$ of \textsf{CN-FR} is clearly small enough compared to the objective function values produced by \textsf{FR} alone, suggesting that the proposed method is yielding a good initial placement.
+Additionally, the visualization results support the effectiveness of the proposed initial placement. In most cases, placements obtained with \textsf{CN} better represent the intended geometric arrangement compared to non-\textsf{CN} placements.
 
-As a side note, regardless of \textsf{SN} or non-\textsf{SN}, the algorithms using \textsf{L-BFGS} consistently outperforms those using \textsf{FR}.
+As a side note, regardless of \textsf{CN} or non-\textsf{CN}, the algorithms using \textsf{L-BFGS} consistently outperforms those using \textsf{FR}.
 This finding is consistent with prior research~\cite{6183577}, though, regrettably, this technique remains relatively unknown in the field of graph drawing.
 One of the aims of our paper is to further emphasize and popularize the use of \textsf{L-BFGS} in graph drawing, and these results provide a strong basis for this argument.
 

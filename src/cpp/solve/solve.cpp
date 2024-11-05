@@ -4,16 +4,19 @@
 #include "../util/timer.hpp"
 #include "solve_FR.cpp"
 #include "solve_LBFGS.cpp"
+#include "solve_circle.cpp"
 #include "solve_init.cpp"
 
 enum Method {
   FR,         // Fruchterman-Reingold method
   L_BFGS,     // Limited-memory Broyden-Fletcher-Goldfarb-Shanno method
-  SN_FR,      // Init:SN / Optimize:FR
-  SN_L_BFGS,  // Init:SN / Optimize:L_BFGS
+  CN_FR,      // Init:CoordinateNewton / Optimize:FR
+  CN_L_BFGS,  // Init:CoordinateNewton / Optimize:L_BFGS
+  CI_FR,      // Init:CircleInitialization / Optimize:FR
+  CI_L_BFGS   // Init:CircleInitialization / Optimize:L_BFGS
 };
 
-std::string MethodStr[4] = {"FR", "L_BFGS", "SN_FR", "SN_L_BFGS"};
+std::string MethodStr[6] = {"FR", "L-BFGS", "CN-FR", "CN-L-BFGS", "CI-FR", "CI-L-BFGS"};
 
 std::pair<std::vector<std::pair<double, double>>, std::vector<Eigen::VectorXf>> solve(
     const Method method, const Problem& problem, const bool measureTime, const int seed,
@@ -23,8 +26,10 @@ std::pair<std::vector<std::pair<double, double>>, std::vector<Eigen::VectorXf>> 
 
   Timer timer;
 
-  if (method == SN_FR || method == SN_L_BFGS) {
+  if (method == CN_FR || method == CN_L_BFGS) {
     solve_init(problem, measureTime, seed, positions, hist, timer);
+  } else if (method == CI_FR || method == CI_L_BFGS) {
+    solve_circle(problem, measureTime, seed, positions, hist, timer);
   } else {
     timer.start();
     std::srand(seed);
@@ -35,9 +40,9 @@ std::pair<std::vector<std::pair<double, double>>, std::vector<Eigen::VectorXf>> 
   }
 
   std::vector<Eigen::VectorXf> positions2;
-  if (method == L_BFGS || method == SN_L_BFGS) {
+  if (method == L_BFGS || method == CN_L_BFGS || method == CI_L_BFGS) {
     solve_LBFGS<FunctionFR>(problem, positions, hist, timer, MAX_ITER);
-  } else if (method == FR || method == SN_FR) {
+  } else {
     solve_FR(problem, positions, hist, timer, MAX_ITER);
   }
   assert(!timer.isMeasuring);
