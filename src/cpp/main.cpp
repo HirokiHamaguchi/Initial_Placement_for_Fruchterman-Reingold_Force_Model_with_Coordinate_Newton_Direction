@@ -2,7 +2,7 @@
 
 int main() {
   Method method = CN_L_BFGS;
-  Problem problem("can_96");
+  Problem problem("jagmesh1");
   bool measureTime = false;
 
   auto [hist, positions] = solve(method, problem, measureTime, 1, 50);

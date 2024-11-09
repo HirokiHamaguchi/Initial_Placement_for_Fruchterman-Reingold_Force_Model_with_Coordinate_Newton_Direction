@@ -34,7 +34,9 @@ struct Problem {
     makeAdj();
   }
 
-  Problem(const std::string matrixName) : matrixName(matrixName) {
+  Problem(const std::string matrixName, bool is1 = false) : matrixName(matrixName) {
+    // if is1, then all edge weights are set to 1
+
     std::string curPath = std::filesystem::current_path().string();
     size_t folderPathSize = curPath.find("FruchtermanReingoldByRandomSubspace");
     assert(folderPathSize != std::string::npos);
@@ -92,6 +94,9 @@ struct Problem {
         edges[std::minmax(r, c)] += std::abs(w);
       }
     }
+    // set all edge weights to 1
+    if (is1)
+      for (auto& [_, w] : edges) w = 1;
 
     m = edges.size();
     row.reserve(m);

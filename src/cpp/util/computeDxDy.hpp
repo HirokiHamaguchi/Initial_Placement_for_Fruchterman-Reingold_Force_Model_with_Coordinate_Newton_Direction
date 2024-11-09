@@ -4,21 +4,21 @@
 #include <iostream>
 #include <utility>
 
-std::pair<double, double> computeDxDy(double gx, double gy, double hxx, double hxy,
-                                      double hyy, [[maybe_unused]] double k) {
+std::pair<float, float> computeDxDy(float gx, float gy, float hxx, float hxy, float hyy,
+                                    [[maybe_unused]] float k) {
   // constant step size
   // if (false) {
-  //   double stepSizeCoeff = k / std::hypot(gx, gy);
+  //   float stepSizeCoeff = k / std::hypot(gx, gy);
   //   gx *= stepSizeCoeff;
   //   gy *= stepSizeCoeff;
   //   return {-gx, -gy};
   // }
 
   // positive definite (convex)
-  double det = hxx * hyy - hxy * hxy;
+  float det = hxx * hyy - hxy * hxy;
   assert(det >= -1e-9);
-  double inv_det = 1.0 / det;
-  double newton_x = inv_det * (-hyy * gx + hxy * gy);
-  double newton_y = inv_det * (-hxx * gy + hxy * gx);
+  float inv_det = 1.0 / det;
+  float newton_x = inv_det * (-hyy * gx + hxy * gy);
+  float newton_y = inv_det * (-hxx * gy + hxy * gx);
   return {newton_x, newton_y};
 }

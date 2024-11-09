@@ -5,7 +5,7 @@
       "label": "g++ build active file",
       "command": "/usr/bin/g++-10",
       "args": [
-        "-g",
+        // "-g",
         "${fileBasename}",
         "-o",
         "${fileBasenameNoExtension}.out",
@@ -15,11 +15,11 @@
         "-Wextra",
         "-Wfatal-errors",
         "-fdiagnostics-color=always",
-        // "-D_GLIBCXX_DEBUG",
         "-I/usr/include/eigen3",
         "-I${workspaceFolder}/src/cpp/include",
-        // "-O2",
-        "-O3",
+        "-O2",
+        "-march=native",
+        "-mtune=native",
         "-DDBG_MACRO_NO_WARNING"
       ],
       "options": {

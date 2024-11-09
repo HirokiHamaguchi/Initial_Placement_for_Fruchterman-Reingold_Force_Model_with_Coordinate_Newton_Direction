@@ -54,15 +54,15 @@ struct Grid {
     return Hex::round(q, r, -q - r);
   }
 
-  void calc_grad_hess(int dq, int dr, double w, double& gx, double& gy, double& hxx,
-                      double& hxy, double& hyy) const {
+  void calc_grad_hess(int dq, int dr, float w, float& gx, float& gy, float& hxx,
+                      float& hxy, float& hyy) const {
     auto delta = hex2xy(dq, dr);
-    double dist = std::hypot(delta.first, delta.second);
+    float dist = std::hypot(delta.first, delta.second);
     assert(dist > 1e-9);
 
     // Only use attractive force
-    double coeff1 = w * dist / k;
-    double coeff2 = w / (dist * k);
+    float coeff1 = w * dist / k;
+    float coeff2 = w / (dist * k);
 
     gx += coeff1 * delta.first;
     gy += coeff1 * delta.second;

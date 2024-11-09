@@ -2,10 +2,11 @@
 
 int main() {
   std::vector<std::string> matrixNames = {
-      "cycle300", "jagmesh1",  // my selection
-      "btree9",                // from networkx
+      "cycle300",
+      "jagmesh1",  // my selection
+      "btree9",    // from networkx
       "1138_bus", "dwt_1005", "dwt_2680",
-      "3elt",  // SGD
+      // "3elt",  // SGD
   };
 
   std::vector<Method> methods = {FR, CN_FR, L_BFGS, CN_L_BFGS};
@@ -13,7 +14,7 @@ int main() {
   std::string histStr =
       std::to_string(matrixNames.size()) + " " + std::to_string(methods.size()) + "\n";
 
-  const int MAX_ITER = 200;
+  const int MAX_ITER = 50;
 
   for (std::string matrixName : matrixNames) {
     Problem problem(matrixName);
@@ -24,7 +25,7 @@ int main() {
       std::cout << MethodStr[method] << std::endl;
       // Solve by each method
       // https://stackoverflow.com/questions/8049556/what-s-the-difference-between-srand1-and-srand0
-      for (int seed = 1; seed <= 10; seed++) {
+      for (int seed = 1; seed <= 1; seed++) {
         auto [hist, positions] = solve(method, problem, true, seed, MAX_ITER);
         // Output
         histStr += std::to_string(hist.size()) + "\n";
