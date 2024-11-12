@@ -26,7 +26,7 @@ int main() {
         std::cout << MethodStr[method] << std::endl;
         // Solve by each method
         // https://stackoverflow.com/questions/8049556/what-s-the-difference-between-srand1-and-srand0
-        for (int seed = 1; seed <= 2; seed++) {
+        for (int seed = 1; seed <= 10; seed++) {
           auto [hist, positions] = solve(method, problem, false, seed, MAX_ITER);
           // Output
           assert(!hist.empty());

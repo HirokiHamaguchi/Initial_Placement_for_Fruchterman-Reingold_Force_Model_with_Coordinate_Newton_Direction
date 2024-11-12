@@ -6,6 +6,9 @@ import matplotlib
 
 matplotlib.use("agg")
 
+plt.rc("text", usetex=True)
+plt.rc("font", family="serif")
+
 
 def f(x, y):
     r = np.sqrt(x**2 + y**2)
@@ -38,10 +41,15 @@ ax.plot_surface(
 
 
 # Set plot labels and title
-ax.set_xlabel("1st component of $x_i$", fontsize=12)
-ax.set_ylabel("2nd component of $x_i$", fontsize=12)
-ax.set_zlabel("$E_{i,j}(d_{i,j})$", fontsize=20)
+ax.set_xlabel("$x_{i,1}$", fontsize=20)
+ax.set_ylabel("$x_{i,2}$", fontsize=20)
+ax.set_zlabel("$E_{i,j}(\\| x_i - x_j \\|)$", fontsize=20)
+ax.set_zlim(0, 4)
+ax.set_zticks([1, 2, 3, 4])
 
 # plt.show()
 plt.tight_layout()
+plt.subplots_adjust(left=-0.1, right=1.05, top=1.07, bottom=0.02)
+
+# モアレが出るので、pdfではなくpngで保存
 plt.savefig("doc/main/energy_3d/energy_3d.png", dpi=300)

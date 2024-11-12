@@ -1,23 +1,12 @@
-\documentclass[dvipdfmx]{standalone}
-\usepackage{tikz}
+\documentclass[tikz,dvipdfmx]{standalone}
+\usepackage{graphicx}
 
 \usetikzlibrary{
   arrows.meta,
-  positioning,
-  shapes.geometric,
-  calc,
-  fit,
-  backgrounds,
-  decorations.pathreplacing,
-  decorations.pathmorphing,
-  decorations.markings,
-  patterns,
-  matrix,
-  shapes.multipart
+  positioning
 }
 
 \begin{document}
-
 \begin{tikzpicture}
   \def\y{3}
 
@@ -40,7 +29,5 @@
   \draw[-{Stealth[length=3mm,width=4mm]},line width=0.1cm, red] (A) -- (D) node[midway, right, red,scale=1.2] {\LARGE{\textbf{\textsf{proposed}}}};
   \draw[-{Stealth[length=2mm,width=3mm]},line width=0.07cm] (D) -- (E) node[midway, above=0.4cm,scale=1.2] {\Large{\textsf{FR}}};
   \draw[-{Stealth[length=2mm,width=3mm]},line width=0.07cm] (D) -- (F) node[midway, below=0.4cm,scale=1.2] {\Large{\textsf{L-BFGS}}};
-
 \end{tikzpicture}
-
 \end{document}

@@ -11,7 +11,7 @@ int main() {
 
   std::vector<Method> methods = {FR, CN_FR, L_BFGS, CN_L_BFGS};
 
-  for (auto& default_ITER : {15, 50}) {
+  for (auto& default_ITER : {50}) {
     std::string histStr = std::to_string(matrixNames.size()) + " " +
                           std::to_string(methods.size()) + "\n";
 
@@ -21,7 +21,7 @@ int main() {
       std::cout << matrixName << std::endl;
       for (auto& method : methods) {
         int MAX_ITER =
-            (method == CN_FR || method == CN_L_BFGS) ? default_ITER - 3 : default_ITER;
+            (method == CN_FR || method == CN_L_BFGS) ? default_ITER - 5 : default_ITER;
 
         histStr += MethodStr[method] + "\n";
         std::cout << MethodStr[method] << std::endl;

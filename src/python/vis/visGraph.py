@@ -34,13 +34,23 @@ def visGraph(
                 fc="k",
                 ec="k",
             )
+    posNp = np.array(list(pos.values()))
+    minX = np.min(posNp[:, 0])
+    maxX = np.max(posNp[:, 0])
+    minY = np.min(posNp[:, 1])
+    maxY = np.max(posNp[:, 1])
+    centerX = (minX + maxX) / 2
+    centerY = (minY + maxY) / 2
+    maxDiff = max(maxX - minX, maxY - minY) / 2
+    plt.gca().set_xlim(centerX - maxDiff * 1.03, centerX + maxDiff * 1.03)
+    plt.gca().set_ylim(centerY - maxDiff * 1.03, centerY + maxDiff * 1.03)
     if title:
         plt.title(title)
     if savePath:
         plt.gca().set_axis_off()
         plt.subplots_adjust(top=1, bottom=0, right=1, left=0, hspace=0, wspace=0)
         plt.margins(0, 0)
-        plt.savefig(savePath, dpi=75)
+        plt.savefig(savePath)
         plt.close()
     else:
         plt.show()

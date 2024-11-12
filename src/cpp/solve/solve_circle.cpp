@@ -81,7 +81,7 @@ std::vector<Eigen::VectorXf> solve_circle(const Problem& problem,
   }
   Circle circle(problem.n, seed, adj);
 
-  const int ITERATIONS = 0.5 * problem.n * (problem.n * problem.n / problem.m);
+  const int ITERATIONS = 2 * problem.n * (problem.n * problem.n / problem.m);
   double T0 = +1;
   double T1 = -2;
 
