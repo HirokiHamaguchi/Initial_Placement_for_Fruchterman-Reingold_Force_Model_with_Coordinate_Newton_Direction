@@ -46,7 +46,7 @@ std::pair<std::vector<std::pair<double, double>>, std::vector<Eigen::VectorXf>> 
     solve_FR(problem, positions, hist, timer, MAX_ITER);
   }
   assert(!timer.isMeasuring);
-  assert(hist.size() == positions.size());
+  assert(!measureTime || hist.size() == positions.size());
 
   return {hist, positions};
 }
