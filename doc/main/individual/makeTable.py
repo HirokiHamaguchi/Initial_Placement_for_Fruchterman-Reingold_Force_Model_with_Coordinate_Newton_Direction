@@ -24,12 +24,12 @@ def generate_latex_code(matrixNames):
         matrixNameRep = matrixName.replace("_", "\\_")
         extension = "png"
         latex_code += f"""
-    \\multicolumn{{6}}{{c}}{{\\textbf{{\\texttt{{{matrixNameRep}}}}} $(\\abs{{V}}={n}, \\abs{{E}}={m}, \\text{{sparsity}}={density:.3f}\\text{{\\%}}) \quad Figures are at {it} iterations.$}} \\\\
+    \\multicolumn{{6}}{{c}}{{\\textbf{{\\texttt{{{matrixNameRep}}}}} $(\\abs{{V}}={n}, \\abs{{E}}={m}, \\text{{sparsity}}={density:.3f}\\text{{\\%}})$ \\quad Figures are at {it} iterations.}} \\\\
     \\raisebox{{-.5\\height}}{{\\includegraphics[width=0.55\\columnwidth]{{individual/plot/{matrixName}.pdf}}}} &
     \\makecell{{\\small{{\\textsf{{FR}}}}\\\\[-0.2em]\\includegraphics[width=0.27\\columnwidth]{{individual/vis/{matrixName}_FR.{extension}}}}} &
     \\makecell{{\\small{{\\textsf{{L-BFGS}}}}\\\\[-0.2em]\\includegraphics[width=0.27\\columnwidth]{{individual/vis/{matrixName}_L-BFGS.{extension}}}}} &
-    \\makecell{{\\small{{\\textsf{{CN-FR}}}}\\\\[-0.2em]\\includegraphics[width=0.27\\columnwidth]{{individual/vis/{matrixName}_CN-FR.{extension}}}}} &
-    \\makecell{{\\small{{\\textsf{{CN-L-BFGS}}}}\\\\[-0.2em]\\includegraphics[width=0.27\\columnwidth]{{individual/vis/{matrixName}_CN-L-BFGS.{extension}}}}} &
+    \\makecell{{\\small{{\\textsf{{\\textbf{{CN}}-FR}}}}\\\\[-0.2em]\\includegraphics[width=0.27\\columnwidth]{{individual/vis/{matrixName}_CN-FR.{extension}}}}} &
+    \\makecell{{\\small{{\\textsf{{\\textbf{{CN}}-L-BFGS}}}}\\\\[-0.2em]\\includegraphics[width=0.27\\columnwidth]{{individual/vis/{matrixName}_CN-L-BFGS.{extension}}}}} &
     \\makecell{{\\small{{\\textsf{{BEST}}}}\\\\[-0.2em]\\includegraphics[width=0.27\\columnwidth]{{individual/vis/opt_{matrixName}.{extension}}}}} \\\\
 """
 

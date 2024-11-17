@@ -12,18 +12,18 @@ int main() {
 
   const int MAX_ITER = 200;
 
-  for (std::string matrixName : matrixNames) {
+  for (auto matrixName : matrixNames) {
     Problem problem(matrixName);
     histStr += matrixName + "\n";
     std::cout << matrixName << std::endl;
     for (auto& method : methods) {
       histStr += MethodStr[method] + "\n";
       std::cout << MethodStr[method] << std::endl;
+
       // Solve by each method
       // https://stackoverflow.com/questions/8049556/what-s-the-difference-between-srand1-and-srand0
-      for (int seed = 1; seed <= 1; seed++) {
+      for (int seed = 1; seed <= 10; seed++) {
         auto [hist, positions] = solve(method, problem, true, seed, MAX_ITER);
-        // Output
         histStr += std::to_string(hist.size()) + "\n";
         for (auto [score, _] : hist) histStr += std::to_string(score) + " ";
         histStr += "\n";
@@ -34,10 +34,18 @@ int main() {
         histStr += "Score: " + std::to_string(score) + "\n";
         std::cout << "Elapsed time: " << time << " seconds" << std::endl;
         std::cout << "Score: " << score << std::endl;
+        // Output the result
         if (seed == 1)
           problem.printOutput(positions, "out/" + problem.matrixName + "_" +
                                              MethodStr[method] + ".out");
       }
+
+      if (method != CN_L_BFGS) continue;
+
+      // Compute the optimal solution with the seed 1
+      const int MAX_ITER_2 = 500;
+      auto [_, medPos] = solve(method, problem, true, 1, MAX_ITER_2);
+      problem.printOutput(medPos, "out/opt_" + problem.matrixName + ".out");
     }
   }
 
@@ -46,15 +54,6 @@ int main() {
   fileForHist << histStr;
   fileForHist.close();
   std::cout << "Hist path: " << histPath << std::endl;
-
-  // const int MAX_ITER_2 = 500;
-  // for (std::string matrixName : matrixNames) {
-  //   Problem problem(matrixName);
-  //   Method method = CN_L_BFGS;
-  //   int seed = 1;
-  //   auto [_, positions] = solve(method, problem, true, seed, MAX_ITER_2);
-  //   problem.printOutput(positions, "out/opt_" + problem.matrixName + ".out");
-  // }
 
   return 0;
 }

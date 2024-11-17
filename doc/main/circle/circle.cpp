@@ -9,7 +9,7 @@ int main() {
   while (std::getline(matrixNamesFile, matrixName)) matrixNames.push_back(matrixName);
   matrixNamesFile.close();
 
-  std::vector<Method> methods = {CI_FR, CN_FR, CI_L_BFGS, CN_L_BFGS};
+  std::vector<Method> methods = {SA_FR, CN_FR, SA_L_BFGS, CN_L_BFGS};
 
   for (auto default_ITER : {50}) {
     std::string histStr = std::to_string(matrixNames.size()) + " " +

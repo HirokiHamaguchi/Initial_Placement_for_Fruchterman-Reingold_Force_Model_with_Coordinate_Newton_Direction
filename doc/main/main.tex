@@ -1,18 +1,21 @@
 \documentclass[dvipdfmx,10pt,journal,compsoc]{IEEEtran}
 
+\usepackage{adjustbox}      % \begin{adjustbox}
 \usepackage[ruled, vlined]{algorithm2e}    % \begin{algorithm2e}
 \usepackage{amsmath}        % \begin{align*}
 \usepackage{amssymb}        % \mathbb{A}
 \usepackage{amsthm}         % \newtheorem
 \usepackage{bm,bbm}         % \bm{A}, \bbm{1}
 \usepackage{booktabs}       % \toprule, \midrule, \bottomrule
-\usepackage{subcaption}        % \captionsetup
+\usepackage{subcaption}     % \captionsetup
 \usepackage{enumitem}       % \begin{enumerate}[label=(\alph*)]
 \usepackage{hyperref}       % \href{URL}{text}
 \usepackage{ifthen}         % \ifthenelse
 \usepackage{lipsum}         % \lipsum
+\usepackage{makecell}       % \makecell{L1\L2}
 \usepackage{mathrsfs}       % \mathscr{A}
 \usepackage{mathtools}      % \mathrlap
+\usepackage{multirow}       % \multirow
 \usepackage{optidef}        % \begin{mini*}{x}{f(x)}{}{}
 \usepackage{orcidlink}      % \orcidlink
 \usepackage{physics}        % \qty, \norm, \abs
@@ -31,9 +34,7 @@
 % \usepackage{float}        % \begin{figure}[H]
 % \usepackage{lipsum}       % \lipsum
 % \usepackage{listings}     % \begin{lstlisting}
-\usepackage{makecell}     % \makecell{L1\L2}
 % \usepackage{multicol}     % \begin{multicols}{2}
-% \usepackage{multirow}     % \multirow
 % \usepackage{nicematrix}   % \begin{NiceMatrix}
 % \usepackage{qcircuit}     % \Qcircuit
 % \usepackage{siunitx}      % \SI{1}{\second}
@@ -190,14 +191,14 @@ Another strategy is to directly accelerate the simulation process with the force
 This aligns with the aim of our work.
 Recent researches have accelerated the process through various ways, such as adapting to GPU parallel architectures~\cite{gajdosParallelFruchtermanReingold2016}, or utilizing numerical optimization methods.
 L-BFGS, a family of quasi-Newton methods, is one of the such methods, and is reported to be effective for graph drawing~\cite{6183577}.
-However, since this method just treats the problem as a general optimization problem, there is room for improvement.
-Simulated Annealing (SA) is also effective when used as a pre-processing step~\cite{ghassemitoosiSimulatedAnnealingPreProcessing2016}, since SA can deal ``twist'' issues and leads a better visualization combined with the FR algorithm.
-However, this work only uses a circle initial placement for unweighted graphs, and the effectiveness of large-scale graphs is unclear since it just repeats to try swapping the positions of two randomly selected vertices.
+However, since this method just treats the problem as a general optimization problem, adding some pre-processing based on the inherent graph structure of the problem could be effective.
+Indeed, Simulated Annealing (SA) is also known to be effective when used as a pre-processing step~\cite{ghassemitoosiSimulatedAnnealingPreProcessing2016}, since SA can deal ``twist'' issues and leads a better visualization combined with the FR algorithm.
+However, this work only uses a circle initial placement for unweighted graphs with a simple method, leaving large room to improve the effectiveness and to extend the applicability. Refer Sec.~\ref{ssec:preprocessing} for more details.
 
 Based on such advances, in this paper, we propose a new initial placement for the FR force model as depicted in Fig.~\ref{fig:fig1}.
 Our goal is to accelerate the optimization process by leveraging the inherent structure of the problem, which has ignored in the L-BFGS algorithm.
 To achieve this, we optimize the position of vertices one by one with the Newton direction, which is defined in the coordinate block $\bbR^2$ in the entire variable space $\bbR^{2 \times n}$.
-The result provides an initial placement with fewer ``twists'', accelerating the overall optimization process. Our work extends the applicability of initial placement idea to wider range of graphs.
+The result provides an initial placement with fewer ``twists'', accelerating the overall optimization process, and extending the applicability of initial placement idea to wider range of graphs.
 We also demonstrate its effectiveness through various experiments.
 
 The rest of this paper is organized as follows.
@@ -333,16 +334,17 @@ Thus, we can expect room for improvement by leveraging what we have ignored in t
 
 As a related work, we briefly introduce and discuss the pre-processing step proposed by Ref.~\cite{ghassemitoosiSimulatedAnnealingPreProcessing2016}.
 Let $Q^\mathrm{circle} \defeq \qty{(\cos(2\pi i/n), \sin(2\pi i/n)) \mid 1 \leq i \leq n}$ be the points on a unit circle in $\bbR^2$.
-For an unweighted graph $G_W$, let $E_2 \defeq \qty{\{v_i,v_j\} \mid \exists v_k \in V \st \{v_i,v_k\} \in E \land \{v_k,v_j\} \in E}~\setminus~E$ be a set of vertex pairs with a theoretical distance equal to 2.
-This study defines the problem for pre-processing as
+For an unweighted graph $G_W$, let $E_2$ be a set of vertex pairs with a theoretical distance equal to 2.
+Let $\angle(a,b)$ be the angle between two points $a$ and $b$ in $[-\pi, \pi]$.
+This study defines the problem for pre-processing as follows (we change some notations for consistency):
 \begin{mini}
   {\pi\colon V \to Q^\mathrm{circle}}
-  {\sum_{(i,j)\in E \cup E_2} \norm{\pi(v_i) - \pi(v_j)}^2,}
+  {\sum_{(i,j)\in E \cup E_2} \abs{\angle(\pi(i), \pi(j))}.}
   {\label{eq:sa}}
   {}
-  \addConstraint{\pi(v_i)}{\neq \pi(v_j),\quad}{\forall (i,j)~(i<j).}
+  \addConstraint{\pi \text{ is injective}.}
 \end{mini}
-Prob.~\eqref{eq:sa} is a discrete optimization problem to find the best assignment $\pi$ from vertices $V$ to the points on the circle $Q^\mathrm{circle}$ just using Euclidean distances, not the energy functions.
+The Prob.~\eqref{eq:sa} is a discrete optimization problem to find the best assignment $\pi$ just using angles, not the energy function.
 By setting the result of Simulated Annealing (SA) for Prob.~\eqref{eq:sa} as the initial placement for the FR algorithm,  we can obtain a faster and better visualization.
 
 However, the following limitations remain:
@@ -430,7 +432,7 @@ By simplifying problem \eqref{eq:frApprox2} with a fixed initial placement $Q$ w
   {\sum_{(i,j)\in E} \frac{w_{i,j}\norm{\pi(v_i) - \pi(v_j)}^3}{3k},}
   {\label{eq:frApprox3}}
   {}
-  \addConstraint{\pi(v_i)}{\neq \pi(v_j),\quad}{\forall (i,j)~(i<j).}
+  \addConstraint{\pi \text{ is injective}.}
 \end{mini}
 It means that with a discrete set of points $Q$ such that the points are separated by at least $\epsilon$, we seek the best injection $\pi :V \to Q$ that minimizes the objective function $f^{\mathrm{a}}$.
 By fixing the possible point placement in advance, we can skip the check of the $\order{\abs{V}^2}$ constraints, reducing the computational complexity to $\order{\abs{E}}$ and thus offering significant speedup.
@@ -553,6 +555,38 @@ While we are not expecting as good performances as the proposed algorithm, they 
 
 \section{Numerical Experiment} \label{sec:experiment}
 
+In this section, we evaluate the proposed algorithm by various numerical experiments.
+We also confirm that the proposed algorithm is actually the extension of the pre-processing step in Ref.~\cite{ghassemitoosiSimulatedAnnealingPreProcessing2016}.
+
+\subsection{Experimental Setup}\label{ssec:setup}
+
+All numerical experiments in this section were conducted using \Cpp17 compiled by GCC 10.5.0 on a laptop computer powered by Intel(R) Core(TM) i7-10510U CPU with 16 GB RAM.
+
+To implement FR algorithm and L-BFGS algorithm, we referenced NetworkX version 3.3~\cite{hagberg2008exploring}, SciPy 1.14.1 ~\cite{2020SciPy-NMeth}, and C++ L-BFGS~\cite{qiuYixuanLBFGSpp2024,okazakiChokkanLiblbfgs2024}. In particular, we used almost the same parameters as NetworkX's \textsf{spring\_layout} for the FR algorithm.
+We also referenced the open-source code of the hexagonal grid from~\cite{patelHexagonalGrids2013}, and Graphviz version 2.43.0~\cite{ellsonGraphvizOpenSource2002}.
+
+We used the $3 \times 2$ algorithms.
+As a initial placement, we used
+\begin{itemize}
+  \item Random initialization (no prefix),
+  \item the proposed initialization (\textsf{CN-}),
+  \item the pre-processing step in Ref.~\cite{ghassemitoosiSimulatedAnnealingPreProcessing2016} (\textsf{SA-}).
+\end{itemize}
+As an optimization algorithm, we used
+\begin{itemize}
+  \item FR algorithm (\textsf{FR}),
+  \item L-BFGS algorithm (\textsf{L-BFGS}).
+\end{itemize}
+
+As parameters, we used $N_\mathrm{iter}^\mathsf{CN} = 2 \abs{V}^3 / \abs{E}$ for initial placement, and we also set the total number of iterations of Simulated Annealing (\textsf{SA}) to the same value.
+Since the amortized time complexity per iteration of Algorithm~\ref{alg:proposed} is $\order{\abs{E} / \abs{V}}$, we can roughly expect that the computational time of the proposed algorithm is equivalent to a few iterations of the FR algorithm.
+
+All the codes are available at our GitHub~\cite{ThisPaperGitHub}.
+
+\subsection{
+  Comparison with Random Initialization and Circle Initialization
+}\label{ssec:exprAll}
+
 \begin{figure*}[t]
   \centering
   \begin{minipage}{\columnwidth}
@@ -564,164 +598,191 @@ While we are not expecting as good performances as the proposed algorithm, they 
     \includegraphics[width=\columnwidth]{overall/plot/diff_L-BFGS_50.pdf}
   \end{minipage}
   \caption{
-    Comparison of the proposed initialization with random initialization.
-    For non-\textsf{CN} algorithms, $N_\mathrm{iter}^\mathsf{FR}$ and $N_\mathrm{iter}^\mathsf{L-BFGS}$ as 50, the default parameter of NetworkX~\cite{hagberg2008exploring}.
-    For \textsf{CN} algorithms, we set them as 45, since it contains pre-processing step.
-    Almost all of the cases, the difference are negative, meaning that the proposed algorithm performed faster and better than random initialization.
+    Comparison of the proposed initialization (\textsf{CN}) with random initialization (no prefix).
+    Almost all of the cases, the difference are negative, meaning the proposed algorithm performed faster and better than random initialization.
   }
-  \label{fig:diff_L_BFGS}
+  \label{fig:overall}
 \end{figure*}
-
-\begin{figure}[t]
+\begin{figure*}[!t]
   \centering
-  \begin{minipage}{0.49\columnwidth}
+  \begin{minipage}{\columnwidth}
     \centering
-    \includegraphics[width=\columnwidth]{circle/vis/can_715_CI-L-BFGS_50_first.png}
+    \includegraphics[width=\columnwidth]{circle/plot/diff_FR_50.pdf}
   \end{minipage}
-  \begin{minipage}{0.49\columnwidth}
+  \begin{minipage}{\columnwidth}
     \centering
-    \includegraphics[width=\columnwidth]{circle/vis/can_715_CI-L-BFGS_50_last.png}
+    \includegraphics[width=\columnwidth]{circle/plot/diff_L-BFGS_50.pdf}
   \end{minipage}
-  \caption{\texttt{can\_715} with \textsf{CI-L-BFGS}}
-  \label{fig:can_715_CI}
-\end{figure}
-\begin{figure}[t]
+  \caption{
+    Comparison of the proposed initialization (\textsf{CN}) with circle initialization (\textsf{SA}) in Ref.~\cite{ghassemitoosiSimulatedAnnealingPreProcessing2016}.
+    In most cases, the proposed algorithm performed better than the circle initialization.
+  }
+  \label{fig:diff}
+\end{figure*}
+\begin{figure*}[!t]
   \centering
-  \begin{minipage}{0.49\columnwidth}
+  \begin{minipage}{\columnwidth}
     \centering
-    \includegraphics[width=\columnwidth]{circle/vis/can_715_CN-L-BFGS_50_first.png}
+    \begin{minipage}{0.32\columnwidth}
+      \includegraphics[height=2.8cm]{overall/vis/Spectro_10NN_CN-L-BFGS_50_first.png}
+    \end{minipage}
+    \begin{minipage}{0.32\columnwidth}
+      \includegraphics[height=2.8cm]{overall/vis/Spectro_10NN_CN-L-BFGS_50_last.png}
+    \end{minipage}
+    \begin{minipage}{0.32\columnwidth}
+      \includegraphics[height=2.8cm]{overall/vis/Spectro_10NN_CN-L-BFGS_50_final.png}
+    \end{minipage}
+    \caption{
+      An example of a case where the proposed algorithm performed worse than random initialization.
+      Left: Initial placement by \textsf{CN}.
+      Middle and Right: 50th and 200th iteration of \textsf{CN-L-BFGS}.
+    }
+    \label{fig:proposeIsBad}
   \end{minipage}
-  \begin{minipage}{0.49\columnwidth}
+  \begin{minipage}{\columnwidth}
     \centering
-    \includegraphics[width=\columnwidth]{circle/vis/can_715_CN-L-BFGS_50_last.png}
+    \begin{minipage}{0.4\columnwidth}
+      \centering
+      \includegraphics[height=2.8cm]{circle/vis/dense_CN-L-BFGS_10.png}
+    \end{minipage}
+    \begin{minipage}{0.4\columnwidth}
+      \centering
+      \includegraphics[height=2.8cm]{circle/vis/dense_SA-L-BFGS_10.png}
+    \end{minipage}
+    \caption{
+      An example of a case where $w_{i,j} \notin \qty{0,1}$.
+      This result shows the proposed algorithm is actually extending the applicability of the pre-processing step.
+      Left: result of \textsf{CN}. separated by colors.
+      Right: result of \textsf{SA}. No separation.
+    }
+    \label{fig:weightedDense}
   \end{minipage}
-  \caption{\texttt{can\_715} with \textsf{CN-L-BFGS}}
-  \label{fig:can_715_CN}
-\end{figure}
-\begin{figure}[t]
+\end{figure*}
+\begin{figure*}[!t]
   \centering
-  \begin{minipage}{0.49\columnwidth}
-    \centering
-    \includegraphics[width=\columnwidth]{circle/vis/collins_15NN_CI-L-BFGS_50_first.png}
-  \end{minipage}
-  \begin{minipage}{0.49\columnwidth}
-    \centering
-    \includegraphics[width=\columnwidth]{circle/vis/collins_15NN_CI-L-BFGS_50_last.png}
-  \end{minipage}
-  \caption{\texttt{collins\_15NN} with \textsf{CI-L-BFGS}}
-  \label{fig:collins_15NN_CI}
-\end{figure}
-\begin{figure}[t]
-  \centering
-  \begin{minipage}{0.49\columnwidth}
-    \centering
-    \includegraphics[width=\columnwidth]{circle/vis/collins_15NN_CN-L-BFGS_50_first.png}
-  \end{minipage}
-  \begin{minipage}{0.49\columnwidth}
-    \centering
-    \includegraphics[width=\columnwidth]{circle/vis/collins_15NN_CN-L-BFGS_50_last.png}
-  \end{minipage}
-  \caption{\texttt{collins\_15NN} with \textsf{CN-L-BFGS}}
-  \label{fig:collins_15NN_CN}
-\end{figure}
-
-In this section, we evaluate the proposed algorithm by various numerical experiments based on the setup described in Sec.~\ref{ssec:setup}.
-We conducted two types of experiments, based on Ref.~\cite{8419285}:
-exhaustive experiments to evaluate the performance of the proposed algorithm in various situations in Sec.~\ref{ssec:exprAll},
-and detailed experiments to investigate the behavior of the proposed algorithm in detail in Sec.~\ref{ssec:exprDetail}.
-
-\subsection{Experimental Setup}\label{ssec:setup}
-
-All numerical experiments in this section were conducted using \Cpp17 compiled by GCC 10.5.0 on a laptop computer powered by Intel(R) Core(TM) i7-10510U CPU with 16 GB RAM.
-
-To implement FR algorithm and L-BFGS algorithm, we referenced NetworkX version 3.3~\cite{hagberg2008exploring}, SciPy 1.14.1 ~\cite{2020SciPy-NMeth}, and C++ L-BFGS~\cite{qiuYixuanLBFGSpp2024,okazakiChokkanLiblbfgs2024}. In particular, we used almost the same parameters as NetworkX's \textsf{spring\_layout} for the FR algorithm.
-We also referenced the open-source code of the hexagonal grid from~\cite{patelHexagonalGrids2013}.
-As a side note, we also used Graphviz version 2.43.0~\cite{ellsonGraphvizOpenSource2002} to draw Fig.~\ref{fig:cycle}.
-
-We used the 4 algorithms: FR algorithm (\textsf{FR}), the proposed initialization plus FR algorithm (\textsf{CN-FR}), L-BFGS algorithm (\textsf{L-BFGS}), and the proposed initialization plus L-BFGS algorithm (\textsf{CN-L-BFGS}). \textsf{CN} represents the Subspace Newton, and we refer \textsf{CN-FR} and \textsf{CN-L-BFGS} as \textsf{CN}, and \textsf{FR} and \textsf{L-BFGS} as non-\textsf{CN}.
-
-As a parameter, we used $N_\mathrm{iter}^\mathsf{CN} = 3 \frac{\abs{V}^3}{\abs{E}}$ for the FR algorithm. Since the amortized time complexity per iteration of
-Algorithm~\ref{alg:proposed} is $\order{\frac{\abs{E}}{\abs{V}}}$, we can roughly expect that the computational time of the proposed algorithm is equivalent to 3 iterations of the FR algorithm.
-
-All the codes are available at our GitHub~\cite{ThisPaperGitHub}.
-
-\subsection{Exhaustive Experiment}\label{ssec:exprAll}
-
-To begin with, we conducted an exhaustive experiment to evaluate the performance of the proposed algorithm with various graphs.
-
-As a dataset, we used matrices from Sparse Matrix Collection~\cite{davis2011university} satisfying the condition~\eqref{eq:WCondition} with $\abs{V} \leq 1000$, in total 124 graphs.
-
-The result is shown in Fig.~\ref{fig:individual}.
-Almost all of the cases, the proposed algorithm performed better than random initialization.
-
-There are a few cases where the proposed algorithm performed worse than random initialization, and we visualized such cases in Fig.~\ref{fig:can_187}, Fig.~\ref{fig:can_73}, Fig.~\ref{fig:iris_dataset_30NN}, and Fig.~\ref{fig:dwt_592}.
-We can observe that the reasons why it was worse though these figures. \orange{todo}
-
-\subsection{detailed Experiment}\label{ssec:exprDetail}
+  \begin{tabular}{cccccc}
+    \toprule
+     & \multicolumn{2}{c}{\texttt{collins\_15NN} (\textsf{CN} better)}
+     & \multicolumn{2}{c}{\texttt{dwt\_992} (\textsf{SA} better)}                                                                                      \\
+     & initial placement                                                                       & 50th iteration & initial placement & 50th iteration & \\
+    \cmidrule(lr){2-3} \cmidrule(lr){4-5}
+    \rotatebox{90}{\textsf{CN} (proposed)}
+     & \includegraphics[width=0.3\columnwidth]{circle/vis/collins_15NN_CN-L-BFGS_50_first.png}
+     & \includegraphics[width=0.3\columnwidth]{circle/vis/collins_15NN_CN-L-BFGS_50_last.png}
+     & \includegraphics[width=0.3\columnwidth]{circle/vis/dwt_992_CN-L-BFGS_50_first.png}
+     & \includegraphics[width=0.3\columnwidth]{circle/vis/dwt_992_CN-L-BFGS_50_last.png}       &                                                       \\
+    \addlinespace
+    \rotatebox{90}{\textsf{SA} (Ref.~\cite{ghassemitoosiSimulatedAnnealingPreProcessing2016})}
+     & \includegraphics[width=0.3\columnwidth]{circle/vis/collins_15NN_SA-L-BFGS_50_first.png}
+     & \includegraphics[width=0.3\columnwidth]{circle/vis/collins_15NN_SA-L-BFGS_50_last.png}
+     & \includegraphics[width=0.3\columnwidth]{circle/vis/dwt_992_SA-L-BFGS_50_first.png}
+     & \includegraphics[width=0.3\columnwidth]{circle/vis/dwt_992_SA-L-BFGS_50_last.png}       &                                                       \\
+    \bottomrule
+  \end{tabular}
+  \caption{Table showing images for initial and 50th iteration placements for Collin15NN and DWT992 datasets.}
+  \label{tab:results}
+  \label{fig:CN_vs_SA}
+\end{figure*}
 
 \begin{figure*}[btp]
   \centering
   \addtolength{\tabcolsep}{-0.5em}
   \begin{tabular}{cccccc}
-    \multicolumn{6}{c}{\textbf{\texttt{cycle300}} $(\abs{V}=300, \abs{E}=300, \text{sparsity}=0.669\text{\%}) \quad Figures are at 150 iterations.$}     \\
+    \multicolumn{6}{c}{\textbf{\texttt{cycle300}} $(\abs{V}=300, \abs{E}=300, \text{sparsity}=0.669\text{\%})$ \quad Figures are at 150 iterations.}     \\
     \raisebox{-.5\height}{\includegraphics[width=0.55\columnwidth]{individual/plot/cycle300.pdf}} &
     \makecell{\small{\textsf{FR}}                                                                                                                        \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/vis/cycle300_FR.png}} &
     \makecell{\small{\textsf{L-BFGS}}                                                                                                                    \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/vis/cycle300_L-BFGS.png}} &
-    \makecell{\small{\textsf{CN-FR}}                                                                                                                     \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/vis/cycle300_CN-FR.png}} &
-    \makecell{\small{\textsf{CN-L-BFGS}}                                                                                                                 \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/vis/cycle300_CN-L-BFGS.png}} &
+    \makecell{\small{\textsf{\textbf{CN}-FR}}                                                                                                            \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/vis/cycle300_CN-FR.png}} &
+    \makecell{\small{\textsf{\textbf{CN}-L-BFGS}}                                                                                                        \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/vis/cycle300_CN-L-BFGS.png}} &
     \makecell{\small{\textsf{BEST}}                                                                                                                      \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/vis/opt_cycle300.png}} \\
 
-    \multicolumn{6}{c}{\textbf{\texttt{jagmesh1}} $(\abs{V}=936, \abs{E}=2664, \text{sparsity}=0.609\text{\%}) \quad Figures are at 50 iterations.$}     \\
+    \multicolumn{6}{c}{\textbf{\texttt{jagmesh1}} $(\abs{V}=936, \abs{E}=2664, \text{sparsity}=0.609\text{\%})$ \quad Figures are at 50 iterations.}     \\
     \raisebox{-.5\height}{\includegraphics[width=0.55\columnwidth]{individual/plot/jagmesh1.pdf}} &
     \makecell{\small{\textsf{FR}}                                                                                                                        \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/vis/jagmesh1_FR.png}} &
     \makecell{\small{\textsf{L-BFGS}}                                                                                                                    \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/vis/jagmesh1_L-BFGS.png}} &
-    \makecell{\small{\textsf{CN-FR}}                                                                                                                     \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/vis/jagmesh1_CN-FR.png}} &
-    \makecell{\small{\textsf{CN-L-BFGS}}                                                                                                                 \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/vis/jagmesh1_CN-L-BFGS.png}} &
+    \makecell{\small{\textsf{\textbf{CN}-FR}}                                                                                                            \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/vis/jagmesh1_CN-FR.png}} &
+    \makecell{\small{\textsf{\textbf{CN}-L-BFGS}}                                                                                                        \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/vis/jagmesh1_CN-L-BFGS.png}} &
     \makecell{\small{\textsf{BEST}}                                                                                                                      \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/vis/opt_jagmesh1.png}} \\
 
-    \multicolumn{6}{c}{\textbf{\texttt{dwt\_1005}} $(\abs{V}=1005, \abs{E}=3808, \text{sparsity}=0.755\text{\%}) \quad Figures are at 100 iterations.$}  \\
+    \multicolumn{6}{c}{\textbf{\texttt{dwt\_1005}} $(\abs{V}=1005, \abs{E}=3808, \text{sparsity}=0.755\text{\%})$ \quad Figures are at 100 iterations.}  \\
     \raisebox{-.5\height}{\includegraphics[width=0.55\columnwidth]{individual/plot/dwt_1005.pdf}} &
     \makecell{\small{\textsf{FR}}                                                                                                                        \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/vis/dwt_1005_FR.png}} &
     \makecell{\small{\textsf{L-BFGS}}                                                                                                                    \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/vis/dwt_1005_L-BFGS.png}} &
-    \makecell{\small{\textsf{CN-FR}}                                                                                                                     \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/vis/dwt_1005_CN-FR.png}} &
-    \makecell{\small{\textsf{CN-L-BFGS}}                                                                                                                 \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/vis/dwt_1005_CN-L-BFGS.png}} &
+    \makecell{\small{\textsf{\textbf{CN}-FR}}                                                                                                            \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/vis/dwt_1005_CN-FR.png}} &
+    \makecell{\small{\textsf{\textbf{CN}-L-BFGS}}                                                                                                        \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/vis/dwt_1005_CN-L-BFGS.png}} &
     \makecell{\small{\textsf{BEST}}                                                                                                                      \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/vis/opt_dwt_1005.png}} \\
 
-    \multicolumn{6}{c}{\textbf{\texttt{btree9}} $(\abs{V}=1023, \abs{E}=1022, \text{sparsity}=0.196\text{\%}) \quad Figures are at 150 iterations.$}     \\
+    \multicolumn{6}{c}{\textbf{\texttt{btree9}} $(\abs{V}=1023, \abs{E}=1022, \text{sparsity}=0.196\text{\%})$ \quad Figures are at 150 iterations.}     \\
     \raisebox{-.5\height}{\includegraphics[width=0.55\columnwidth]{individual/plot/btree9.pdf}}   &
     \makecell{\small{\textsf{FR}}                                                                                                                        \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/vis/btree9_FR.png}} &
     \makecell{\small{\textsf{L-BFGS}}                                                                                                                    \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/vis/btree9_L-BFGS.png}} &
-    \makecell{\small{\textsf{CN-FR}}                                                                                                                     \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/vis/btree9_CN-FR.png}} &
-    \makecell{\small{\textsf{CN-L-BFGS}}                                                                                                                 \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/vis/btree9_CN-L-BFGS.png}} &
+    \makecell{\small{\textsf{\textbf{CN}-FR}}                                                                                                            \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/vis/btree9_CN-FR.png}} &
+    \makecell{\small{\textsf{\textbf{CN}-L-BFGS}}                                                                                                        \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/vis/btree9_CN-L-BFGS.png}} &
     \makecell{\small{\textsf{BEST}}                                                                                                                      \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/vis/opt_btree9.png}} \\
 
-    \multicolumn{6}{c}{\textbf{\texttt{1138\_bus}} $(\abs{V}=1138, \abs{E}=1458, \text{sparsity}=0.225\text{\%}) \quad Figures are at 150 iterations.$}  \\
+    \multicolumn{6}{c}{\textbf{\texttt{1138\_bus}} $(\abs{V}=1138, \abs{E}=1458, \text{sparsity}=0.225\text{\%})$ \quad Figures are at 150 iterations.}  \\
     \raisebox{-.5\height}{\includegraphics[width=0.55\columnwidth]{individual/plot/1138_bus.pdf}} &
     \makecell{\small{\textsf{FR}}                                                                                                                        \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/vis/1138_bus_FR.png}} &
     \makecell{\small{\textsf{L-BFGS}}                                                                                                                    \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/vis/1138_bus_L-BFGS.png}} &
-    \makecell{\small{\textsf{CN-FR}}                                                                                                                     \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/vis/1138_bus_CN-FR.png}} &
-    \makecell{\small{\textsf{CN-L-BFGS}}                                                                                                                 \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/vis/1138_bus_CN-L-BFGS.png}} &
+    \makecell{\small{\textsf{\textbf{CN}-FR}}                                                                                                            \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/vis/1138_bus_CN-FR.png}} &
+    \makecell{\small{\textsf{\textbf{CN}-L-BFGS}}                                                                                                        \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/vis/1138_bus_CN-L-BFGS.png}} &
     \makecell{\small{\textsf{BEST}}                                                                                                                      \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/vis/opt_1138_bus.png}} \\
 
-    \multicolumn{6}{c}{\textbf{\texttt{dwt\_2680}} $(\abs{V}=2680, \abs{E}=11173, \text{sparsity}=0.311\text{\%}) \quad Figures are at 150 iterations.$} \\
+    \multicolumn{6}{c}{\textbf{\texttt{dwt\_2680}} $(\abs{V}=2680, \abs{E}=11173, \text{sparsity}=0.311\text{\%})$ \quad Figures are at 150 iterations.} \\
     \raisebox{-.5\height}{\includegraphics[width=0.55\columnwidth]{individual/plot/dwt_2680.pdf}} &
     \makecell{\small{\textsf{FR}}                                                                                                                        \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/vis/dwt_2680_FR.png}} &
     \makecell{\small{\textsf{L-BFGS}}                                                                                                                    \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/vis/dwt_2680_L-BFGS.png}} &
-    \makecell{\small{\textsf{CN-FR}}                                                                                                                     \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/vis/dwt_2680_CN-FR.png}} &
-    \makecell{\small{\textsf{CN-L-BFGS}}                                                                                                                 \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/vis/dwt_2680_CN-L-BFGS.png}} &
+    \makecell{\small{\textsf{\textbf{CN}-FR}}                                                                                                            \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/vis/dwt_2680_CN-FR.png}} &
+    \makecell{\small{\textsf{\textbf{CN}-L-BFGS}}                                                                                                        \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/vis/dwt_2680_CN-L-BFGS.png}} &
     \makecell{\small{\textsf{BEST}}                                                                                                                      \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/vis/opt_dwt_2680.png}} \\
 
-    \multicolumn{6}{c}{\textbf{\texttt{3elt}} $(\abs{V}=4720, \abs{E}=13722, \text{sparsity}=0.123\text{\%}) \quad Figures are at 150 iterations.$}      \\
+    \multicolumn{6}{c}{\textbf{\texttt{3elt}} $(\abs{V}=4720, \abs{E}=13722, \text{sparsity}=0.123\text{\%})$ \quad Figures are at 150 iterations.}      \\
     \raisebox{-.5\height}{\includegraphics[width=0.55\columnwidth]{individual/plot/3elt.pdf}}     &
     \makecell{\small{\textsf{FR}}                                                                                                                        \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/vis/3elt_FR.png}} &
     \makecell{\small{\textsf{L-BFGS}}                                                                                                                    \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/vis/3elt_L-BFGS.png}} &
-    \makecell{\small{\textsf{CN-FR}}                                                                                                                     \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/vis/3elt_CN-FR.png}} &
-    \makecell{\small{\textsf{CN-L-BFGS}}                                                                                                                 \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/vis/3elt_CN-L-BFGS.png}} &
+    \makecell{\small{\textsf{\textbf{CN}-FR}}                                                                                                            \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/vis/3elt_CN-FR.png}} &
+    \makecell{\small{\textsf{\textbf{CN}-L-BFGS}}                                                                                                        \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/vis/3elt_CN-L-BFGS.png}} &
     \makecell{\small{\textsf{BEST}}                                                                                                                      \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/vis/opt_3elt.png}} \\
   \end{tabular}
   \caption{Numerical experiment results for various graphs.  Please refer Sec.~\ref{ssec:exprDetail} for details.}
   \label{fig:individual}
 \end{figure*}
+
+To begin with, we conducted exhaustive experiments to evaluate the performance of the proposed algorithm (\textsf{CN}) compared to random initialization (no prefix) and circle initialization (\textsf{SA}) with various graphs.
+
+As a dataset, we used matrices from Sparse Matrix Collection~\cite{davis2011university} satisfying the condition~\eqref{eq:WCondition} with $\abs{V} \leq 1000$, in total 124 graphs.
+For fairness, when we compare with \textsf{SA}, the experiments were conducted under the same conditions as those assumed in Ref.~\cite{ghassemitoosiSimulatedAnnealingPreProcessing2016}.
+Specifically, weights $w_{i,j}$ were set to 1 if the two vertices are connected; otherwise, they were set to 0.
+
+For non-\textsf{CN} algorithms, $N_\mathrm{iter}^\mathsf{FR}$ and $N_\mathrm{iter}^\mathsf{L-BFGS}$ as 50, the default parameter of NetworkX~\cite{hagberg2008exploring}.
+For \textsf{CN} algorithms, we set them as 45, since it contains pre-processing step. We can roughly expect that the computational time is equivalent to a few iterations of the FR algorithm, as mentioned in Sec.~\ref{ssec:setup}.
+
+The results are shown in Fig.~\ref{fig:overall} and Fig.~\ref{fig:diff}.
+Almost all of the cases, the proposed algorithm performed better than both random initialization and circle initialization.
+There are a few cases where the proposed algorithm performed worse than other methods.
+As for random initialization, one of such cases is \texttt{Spectro\_10NN
+} shown in Fig.~\ref{fig:proposeIsBad}. The proposed algorithm might fail to resolve the ``twist'' in the initial placement as shown in the figure, leading to the worse result. However, the average performance for this case was still almost the same with the random initialization.
+As for circle initialization, we showed examples in Fig.~\ref{fig:CN_vs_SA}.
+The proposed algorithm outperforms in \texttt{collins\_15NN}, while it underperforms in \texttt{dwt\_992}.
+The colors of the vertices in the graphs presented in this section are assigned according to vertex indices, using a color map that provides a gradient from blue to red.
+
+The interpretation of the results is as follows.
+First, this result strongly supports the effectiveness of the proposed algorithm. It successfully untangles the ``twists,'' leading to better outcomes with faster convergence. Even in the case where the proposed algorithm performed worse, the difference was not significant in almost all cases.
+Secondly, we can infer that the choice of initial placement can lead to advantages or disadvantages depending on the optimal placement.
+The advantage or disadvantage of the selected initial placement may vary depending on whether the optimal placement diverges or resembles the chosen initial shape.
+In particular, since the optimal shape of \texttt{collins\_15NN} is a linear shape, which differs from a circle.
+This difference likely contributed to the advantage of the proposed algorithm.
+Although the proposed method uses a hexagonal lattice $Q^\mathrm{hex}$, it can be adapted to other fixed placement $Q$.
+If the shape of the optimal solution is roughly known in advance, selecting a different $Q$, such as a $Q^\mathrm{circle}$, could further enhance the performance of the proposed algorithm.
+
+Additionally, although this is a case not originally considered in Ref.~\cite{ghassemitoosiSimulatedAnnealingPreProcessing2016}, we also conducted experiments with \textsf{CN} and \textsf{SA} for a case where the edge weight $w_{i,j}$ is not necessarily in $\qty{0,1}$.
+The weighted graph we made has 100 vertices and 1000 edges, with 3 groups of vertices.
+Every edge were generated randomly, and if the two vertices are in the same group, the edge weight was set to 1.0; otherwise, it was set to 0.1. It exhibits both strong and weak connections.
+The difference between the two is shown in Fig.~\ref{fig:weightedDense}.
+When we ignore the edge weights and just solve Prob.~\eqref{eq:sa}, the graph is just a Erdos--Renyi graph and thus \textsf{SA} cannot find any meaningful structure in the initial placement.
+On the other hand, the proposed algorithm can find the structure of the graph and we can observe that the left graph in Fig.~\ref{fig:weightedDense} is separated by the groups, i.e., the node color.
+
+\subsection{detailed Experiment}\label{ssec:exprDetail}
 
 We also conducted a detailed experiment to investigate the behavior of the proposed algorithm in detail. The result is shown in Fig.~\ref{fig:individual}.
 
@@ -734,9 +795,8 @@ The plots on the left illustrate the objective function values $f(X)$ on the ver
 Faint crosses represent the results of non-\textsf{CN} algorithms, while faint circles represent the results of \textsf{CN} algorithms, plotted every 10 iterations for each trial.
 The solid and dashed lines represent the average of these values across the 10 trials for each algorithm.
 If one of the trials terminated before reaching $N_\mathrm{iter}^\mathsf{FR}$ or $N_\mathrm{iter}^\mathsf{L-BFGS}$ iterations, the line was plotted up to the minimum trial count achieved across all trials.
-Each trial was conducted with a different seed, meaning that even deterministic algorithms, such as
-\textsf{FR} or \textsf{L-BFGS}, converged to different local optima due to variations in the initial random placement.
-The graphs on the right illustrates the placement at the 150th iteration (or the final iteration if it concluded before then) for each algorithm with the seed 0.
+Each trial was conducted with a different seed, meaning that even deterministic algorithms, such as \textsf{FR} or \textsf{L-BFGS}, converged to different local optima due to variations in the initial random placement.
+The right graphs are at the iteration in which the most significant difference appeared among \{50,100,150\} iterations (or at the last iteration if it ended earlier), using the median performance seed for each algorithm.
 
 The observations and implications of Fig.~\ref{fig:individual} are as follows.
 First, the solid plots for \textsf{CN} generally demonstrates superior performance compared to non-\textsf{CN}, validating the efficacy of the proposed method.
@@ -751,25 +811,45 @@ One of the aims of our paper is to further emphasize and popularize the use of \
 
 \section{Challenges of the Coordinate Newton Direction}\label{sec:challenges}
 
-Here, we explain the rationale for why we took a roundabout approach to optimize Prob.~\eqref{eq:fr}.
+In this section, we explain the rationale for why we took a roundabout approach to optimize Prob.~\eqref{eq:fr}.
 As we have explained, we first transformed it into a discrete optimization problem, Prob.~\eqref{eq:frApprox3}, and then optimized it using the coordinate Newton direction. However, is it possible to directly leverage the coordinate Newton direction to optimize Prob.~\eqref{eq:fr}?
 We think the answer is no, and in this section, we explain the reasons behind this conclusion.
 
-The important point is that these issues do not necessarily preclude the possibility of achieving global optimization with the coordinate Newton direction.
-Rather, we hope that an accurate understanding of these challenges will lead us to develop better optimization methods in the future.
-
 \subsection{Possible Approach with Coordinate Newton Direction}\label{ssec:possibleApproach}
 
-In this subsection, we explain a possible approach to optimize Prob.~\eqref{eq:fr} using the coordinate Newton direction.
+\begin{figure*}[t]
+  \centering
+  \begin{minipage}{\columnwidth}
+    \centering
+    \includegraphics[height=2.2cm]{whyRSNfail/whyRSNfail.pdf}
+    \caption{
+      The inaccurate quadratic approximation.
+      For the red vertex on the right graph, its coordinate Newton direction is the red arrow, which is apparently a bad direction.
+    }
+    \label{fig:whyRSNfail}
+  \end{minipage}
+  \begin{minipage}{\columnwidth}
+    \centering
+    \includegraphics[height=2.2cm]{whyRSNfail2/whyRSNfail2.pdf}
+    \caption{
+      The ignorance of other vertex movements.
+      Although the blue arrows show the forces in this situation, the red vertex barely moves by the coordinate Newton direction.
+    }
+    \label{fig:whyRSNfail2}
+  \end{minipage}
+\end{figure*}
+
+We explain a possible approach to optimize Prob.~\eqref{eq:fr} using the coordinate Newton direction.
 As mentioned, our approach resembles to the RSN method, one of the subspace methods, and RSN and its variant have been proposed in the context of continuous optimization~\cite{NEURIPS2019_bc6dc48b,
   fujiRandomizedSubspaceRegularized2022,
   cartisRandomisedSubspaceMethods2022,
   nozawaRandomizedSubspaceGradient2023,
   higuchiFastConvergenceSecondOrder2024}.
+The algorithm below is based on this method.
 
-We take the following algorithm as a direct application of the subspace methods to the FR layout; Namely, we randomly select a vertex $v_i$, apply Newton's method or its regularized variant to $f_i$ using the gradient in Eq.~\eqref{eq:gradientFi} and its Hessian:
+We take the following algorithm as a direct application of the subspace methods to Prob.~\eqref{eq:fr}; Namely, we randomly select a vertex $v_i$, apply Newton's method or its regularized variant to $f_i$ using the gradient in Eq.~\eqref{eq:gradientFi} and its Hessian:
 \begin{gather*}
-  \nabla^2 f_i(x_i) = \sum_{j \neq i} \left(\frac{w_{i,j}\norm{x_i - x_j}}{k} - \frac{k^2}{\norm{x_i - x_j}^2}\right) I_d + \\
+  \nabla^2 f_i(x_i) = \sum_{j \neq i} \left(\frac{w_{i,j}\norm{x_i - x_j}}{k} - \frac{k^2}{\norm{x_i - x_j}^2}\right) \mqty(1&0\\0&1)+ \\
   \sum_{j \neq i} \left(\frac{w_{i,j}}{k \norm{x_i - x_j}} + \frac{2k^2}{\norm{x_i - x_j}^4}\right) (x_i - x_j)(x_i - x_j)^\top.
 \end{gather*}
 Then, we update the position of vertex $v_i$, and repeat this process until convergence.
@@ -778,81 +858,44 @@ In the following, we explain the reasons behind this difficulty.
 
 \subsection{Inaccuracy of quadratic approximation}\label{ssec:inaccuracy}
 
-\begin{figure}[t]
-  \centering
-  \includegraphics[height=2.2cm]{whyRSNfail/whyRSNfail.pdf}
-  \caption{
-    The inaccurate quadratic approximation.
-    Assume that the optimal placement of the graph is as shown on the left.
-    For the red vertex on the right graph, its Newton direction is the red arrow, which is apparently a bad direction.
-  }
-  \label{fig:whyRSNfail}
-\end{figure}
-
-This subsection discusses the inaccuracy of quadratic approximation used in the Newton's method, particularly a specific issue arises when restricting the optimization to a subspace.
-
-When we apply the Newton's method to a randomly selected vertex $v_i$, we approximate the energy function $f_i$ as a quadratic function $\overline{f}_i$ at $x_i$.
-If this approximated function is convex, then the Newton's method update $v_i$ to the optimal solution of the approximated function.
-Otherwise, by adding regularization terms, such as the cubic regularization~\cite{nesterovCubicRegularizationNewton2006}, we can update $v_i$ to a descent direction of $\overline{f}_i$.
-
-Nevertheless, the update of $x_i$, which locally improves $\overline{f}_i$, does not necessarily improves the overall energy function $f$.
+One of the reasons why it fails is the inaccuracy of quadratic approximation, particularly a specific issue arises when restricting the optimization to a coordinate block.
 
 We show an example of this issue in Fig.~\ref{fig:whyRSNfail}.
-Let a graph $G$ be as shown in the left (optimal), where $k$ and all positive edge weights $w_{i,j}$ are set to 1.
-In a successful case such as in the middle (success), the subspace method works effectively, since the Newton direction defined on $f_i$ (blue arrow) leads to the improvement of the overall energy function $f$.
-
-However, in the situation depicted on the right (failure), the Newton direction for $x_1$ (red arrow) is apparently a bad direction, leading to a significant deviation from the global optimal solution as it is.
-The points of $G$ are set as
+Let a graph $G$ be as shown in the left, where $k$ and all positive edge weights $w_{i,j}$ are set to 1.
+In the situation depicted on the right, the points of $G$ are set as
 \begin{equation*}
   X = \begin{pmatrix}
     0 & -1 & -0.85  & -0.85  & 1 \\
     0 & 0  & +0.155 & -0.155 & 0
-  \end{pmatrix},
+  \end{pmatrix}.
 \end{equation*}
-and the Hessian $\nabla^2 f_1(x_1)$ is approximately
-\begin{equation*}
-  \begin{pmatrix}
-    1.841 & 0     \\
-    0     & 1.159
-  \end{pmatrix},
-\end{equation*}
-which is positive definite and not ill-conditioned.
-Despite of such a good property of the Hessian, the Newton direction for $x_1$ (red arrow) is a bad direction, since the repulsive force between $x_1$ and $x_2,x_3$ are too strong to diverge from the global optimal solution.
-This kind of illness cannot be resolved by just modifying the Newton's method we use for $f_i$, and it is a inherent problem of the subspace method.
+The key point of this example is that the Hessian $\nabla^2 f_1(x_2)$ is both positive definite and not ill-conditioned, which means that the Newton direction is a good direction in general. Indeed, we have $\nabla^2 f_1(x_2) \approx \mqty(1.841&0\\0&1.159)$.
+However, despite of such a good property of the Hessian, the Newton direction for $x_2$ (red arrow) is apparently a bad direction, leading to a significant deviation from the global optimal solution as it is. This is because the quadratic approximation in the restricted block coordinate $x_2$ is not accurate enough.
+This kind of illness cannot be resolved by just modifying the Newton's method we use for $f_i$, and it is an inherent and inevitable issue of the coordinate Newton direction.
 
 \subsection{Ignorance of other vertex movements}\label{ssec:ignorance}
 
-\begin{figure}[t]
-  \centering
-  \includegraphics[height=2.2cm]{whyRSNfail2/whyRSNfail2.pdf}
-  \caption{
-    The ignorance of other vertex movements. Assume that the blue arrows show the forces to the vertices and the optimal movements in this situation. Nevertheless, the red vertex will only move a little by the subspace method.
-  }
-  \label{fig:whyRSNfail2}
-\end{figure}
+Another issue is the ignorance of other vertex movements when optimizing each vertex individually.
+When optimizing for a vertex $v_i$, the coordinate Newton direction treat all other vertices $v_j (j \neq i)$ as fixed.
 
-This subsection discusses another issue of the subspace method, which is the ignorance of other vertex movements when optimizing each vertex individually.
-When optimizing for a vertex $v_i$, the subspace method treat all other vertices $v_j (j \neq i)$ as fixed. However, both the FR algorithm and the L-BFGS algorithm do not, which represents a significant difference.
-
-This is illustrated in Figure~\ref{fig:whyRSNfail2}.
-Consider a subset of vertices in a mesh-like structure $G$, all vertices receive forces to the blue arrow directions and can minimize $f$ by moving in that direction.
+This issue is illustrated in Figure~\ref{fig:whyRSNfail2}.
+Consider a subset of vertices in a mesh-like structure $G$, all vertices receive forces to the blue arrow directions.
 In this setting, both the FR algorithm and the L-BFGS algorithm progress the optimization without issue.
-On the other hand, if we attempt to optimize only for the red vertex in the right graph, heavily influenced by its directly connected neighbors, $v_0$ barely moves.
-As a result, the overall optimization barely advances, in contrast to the alignment of the blue arrows.
-The same problem occurs for other vertices.
+On the other hand, if we attempt to optimize only for the red vertex in the right graph, due to its fixed directly connected neighbors, $v_0$ barely moves.
+As a result, the overall optimization barely advances, in contrast to the alignment of the forces (blue arrows).
 
-In this way, ignoring the direction of forces on other vertices, or more precisely, neglecting the values of $\pdv{f}{x_i}{x_j}$, is a major shortcoming of the subspace method.
+In this way, ignoring the direction of forces on other vertices, can be a major shortcoming of the coordinate-based optimization method.
 
 \subsection{Rationale for the Proposed Method}\label{ssec:rationale}
 
-As explained, we suspect that, while the subspace method is effective for reducing the ``twist'' in a rough sense, it is not suitable for optimizing the overall placement.
+As explained, we suspect that, while the coordinate Newton direction is effective for reducing the ``twist'' in a rough sense, it is not suitable for optimizing the overall placement.
 
 However, by converting the problem as stated in Section~\ref{ssec:reduction}, we can take this ignored interaction into account to some extent.
-The advantage of Prob.~\eqref{eq:frApprox3} is that not only reduction of the computational complexity from $\order{\abs{V}^2}$ to $\order{\abs{E}}$, but also allowing us to more easily take account for vertex interactions and prevent them from becoming too close to each other, since the mapping $\pi$ is injection.
+The advantage of Prob.~\eqref{eq:frApprox3} is that not only reduction of the computational complexity from $\order{\abs{V}^2}$ to $\order{\abs{E}}$, but also allowing us to more easily take account for vertex interactions and prevent them from becoming too close to each other, since the points on $Q$ are far from each other at least by $\epsilon$.
 Thus, making the problem discrete brings the acceleration of each iteration as well as the high quality of the updated solution.
 
-The important point is that, combined with some appropriate ideas, the subspace method can be very effective for the FR layout.
-Focusing on optimizing each vertex individually is a natural and valid approach, and with further refinements, the subspace method holds the potential to efficiently yield global optimal solutions.
+The important point is that, combined with some appropriate ideas, the coordinate-based methods can be very effective for the Prob.~\eqref{eq:fr}.
+Focusing on optimizing each vertex individually is a natural and valid approach, and with further refinements, the coordinate-based method holds the potential to efficiently yield global optimal solutions for Prob.~\eqref{eq:fr}.
 
 \section{Discussion} \label{sec:discussion}
 
@@ -863,7 +906,7 @@ Finally, we conclude this paper in Sec.~\ref{sec:conclusion}.
 
 \subsection{Combination with Other Techniques}\label{sec:combination}
 
-This paper has demonstrated the effectiveness of the proposed method on relatively small-scale graphs, but it is believed that it can also be applied to more larger-scale problems.
+This paper has demonstrated the effectiveness of the proposed method on various graphs, but we believe that it can also be applied to more larger-scale problems.
 For instance, the Scalable Force-Directed Placement (sfdp) of Graphviz~\cite{ellsonGraphvizOpenSource2002}, based on \cite{Hu2006EfficientHF}, employs a multilevel approach to accelerate processing for larger graphs by progressively coarsening vertices.
 The result of sfdp shown in Fig.~\ref{fig:cycle} validate the utility of this technique.
 
@@ -928,15 +971,26 @@ This work was partially supported by JSPS KAKENHI (23H03351,24K23853) and JST ER
   \bibliography{FruchtermanReingoldByRandomSubspace}
 }{}
 
-\begin{IEEEbiography}[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{fig1}}]{Hiroki Hamaguchi}
+% \begin{IEEEbiography}[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{fig1}}]{Hiroki Hamaguchi}
+%   Graduate School of Information Science and Technology, The University of Tokyo, Tokyo, Japan.
+% \end{IEEEbiography}
+% \begin{IEEEbiography}[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{fig1}}]{Naoki Marumo}
+%   Graduate School of Information Science and Technology, The University of Tokyo, Tokyo, Japan.
+% \end{IEEEbiography}
+% \begin{IEEEbiography}[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{fig1}}]{Akiko Takeda}
+%   Graduate School of Information Science and Technology, The University of Tokyo, Tokyo, Japan.
+%   Center for Advanced Intelligence Project, RIKEN, Tokyo, Japan.
+% \end{IEEEbiography}
+
+\begin{IEEEbiographynophoto}{Hiroki Hamaguchi}
   Graduate School of Information Science and Technology, The University of Tokyo, Tokyo, Japan.
-\end{IEEEbiography}
-\begin{IEEEbiography}[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{fig1}}]{Naoki Marumo}
+\end{IEEEbiographynophoto}
+\begin{IEEEbiographynophoto}{Naoki Marumo}
   Graduate School of Information Science and Technology, The University of Tokyo, Tokyo, Japan.
-\end{IEEEbiography}
-\begin{IEEEbiography}[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{fig1}}]{Akiko Takeda}
+\end{IEEEbiographynophoto}
+\begin{IEEEbiographynophoto}{Akiko Takeda}
   Graduate School of Information Science and Technology, The University of Tokyo, Tokyo, Japan.
   Center for Advanced Intelligence Project, RIKEN, Tokyo, Japan.
-\end{IEEEbiography}
+\end{IEEEbiographynophoto}
 
 \end{document}

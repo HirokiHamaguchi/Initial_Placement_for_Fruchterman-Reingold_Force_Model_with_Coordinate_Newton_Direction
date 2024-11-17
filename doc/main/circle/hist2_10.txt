@@ -1,0 +1,6 @@
+1 2
+dense
+SA-L-BFGS
+Score: 83.520111
+CN-L-BFGS
+Score: 78.819130

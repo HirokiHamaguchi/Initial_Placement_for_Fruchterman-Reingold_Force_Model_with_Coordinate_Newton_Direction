@@ -95,10 +95,6 @@ class LBFGSSolver {
     // std::cout << "f(x0) = " << fx << ", ||grad|| = " << m_gnorm << std::endl <<
     // std::endl;
 
-    // update history
-    positions.push_back(x);
-    hist.emplace_back(fx, timer.sec());
-
     // Early exit if the initial x is already a minimizer
     if (m_gnorm <= m_param.epsilon || m_gnorm <= m_param.epsilon_rel * x.norm()) {
       return 1;

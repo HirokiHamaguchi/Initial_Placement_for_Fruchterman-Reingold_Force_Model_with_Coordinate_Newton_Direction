@@ -25,13 +25,14 @@ struct Problem {
   std::string matrixName = "test";                          // matrix name
 
   Problem() : n(0), m(0), k(0.0) {}
-  Problem(size_t n, size_t m, double k, std::vector<size_t> row,
-          std::vector<size_t> col, std::vector<double> data)
+  Problem(size_t n, size_t m, double k, std::vector<size_t>& row,
+          std::vector<size_t>& col, std::vector<double>& data)
       : n(n), m(m), k(k), row(row), col(col), data(data) {
     assert(row.size() == m);
     assert(col.size() == m);
     assert(data.size() == m);
     makeAdj();
+    assert(isConnected());
   }
 
   Problem(const std::string matrixName, bool is1 = false) : matrixName(matrixName) {
@@ -111,7 +112,7 @@ struct Problem {
 
     file.close();
 
-    k = 1 / std::sqrt(n);
+    k = 1.0 / std::sqrt(n);
     makeAdj();
     assert(isConnected());
   }

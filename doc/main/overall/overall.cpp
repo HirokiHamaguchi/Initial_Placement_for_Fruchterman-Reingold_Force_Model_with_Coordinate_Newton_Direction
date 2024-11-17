@@ -49,5 +49,18 @@ int main() {
     std::cout << "Hist path: " << histPath << std::endl;
   }
 
+  // Visualize a worst case
+  // {
+  //   Problem problem("Spectro_10NN");
+  //   Method method = CN_L_BFGS;
+  //   int MAX_ITER = 200;
+  //   int seed = 1;
+  //   auto [hist, positions] = solve(method, problem, false, seed, MAX_ITER);
+  //   assert(!hist.empty());
+  //   problem.printOutput(
+  //       positions, "out/" + problem.matrixName + "_" + MethodStr[method] +
+  //       "_200.out");
+  // }
+
   return 0;
 }

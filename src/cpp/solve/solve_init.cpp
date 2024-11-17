@@ -20,12 +20,8 @@ void addVis(const Grid& grid, std::vector<Eigen::VectorXf>& positions, int it,
   positions.push_back(grid.toPosition());
 }
 
-std::vector<Eigen::VectorXf> solve_init(const Problem& problem, const bool measureTime,
-                                        const int seed,
-                                        std::vector<Eigen::VectorXf>& positions,
-                                        std::vector<std::pair<double, double>>& hist,
-                                        Timer& timer) {
-  assert(positions.empty());
+void solve_init(const Problem& problem, const bool measureTime, const int seed,
+                std::vector<Eigen::VectorXf>& positions, Timer& timer) {
   timer.start();
 
   Grid grid(problem.n, problem.k, seed);
@@ -83,10 +79,6 @@ std::vector<Eigen::VectorXf> solve_init(const Problem& problem, const bool measu
   auto finalPos = grid.toPosition();
   problem.optimalScaling(finalPos);
   positions.push_back(finalPos);
-  assert(!measureTime || positions.size() == 1);
 
   timer.stop();
-  hist.emplace_back(problem.calcScore(finalPos, true), timer.sec());
-
-  return positions;
 }

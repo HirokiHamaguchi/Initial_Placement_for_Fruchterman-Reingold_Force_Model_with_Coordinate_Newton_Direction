@@ -14,10 +14,9 @@
 #include "../util/dbg.h"
 #include "../util/problem.hpp"
 
-std::vector<Eigen::VectorXf> solve_FR(const Problem& problem,
-                                      std::vector<Eigen::VectorXf>& positions,
-                                      std::vector<std::pair<double, double>>& hist,
-                                      Timer& timer, const int MAX_ITER) {
+void solve_FR(const Problem& problem, std::vector<Eigen::VectorXf>& positions,
+              std::vector<std::pair<double, double>>& hist, Timer& timer,
+              const int MAX_ITER) {
   timer.start();
 
   size_t nnodes = problem.n;
@@ -72,6 +71,4 @@ std::vector<Eigen::VectorXf> solve_FR(const Problem& problem,
   }
 
   timer.stop();
-
-  return positions;
 }
