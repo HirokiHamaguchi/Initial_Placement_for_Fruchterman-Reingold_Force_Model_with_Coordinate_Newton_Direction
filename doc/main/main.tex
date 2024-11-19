@@ -124,7 +124,7 @@
 \bstctlcite{IEEEexample:BSTcontrol}
 
 \title{
-  An Initial Placement
+  Initial Placement
   for Fruchterman--Reingold force model
   with Coordinate Newton Direction
 }
@@ -138,16 +138,16 @@
 \IEEEtitleabstractindextext{%
   \begin{abstract}
     Graph drawing is a fundamental task in information visualization, with the Fruchterman--Reingold (FR) force model being one of the most popular choices.
-    This layout can be interpreted as a solution of a continuous optimization problem, which can be solved using the FR algorithm, a gradient descent-like method, or the L-BFGS algorithm, quasi-Newton method.
+    We can interpret this visualization task as a continuous optimization problem, which can be solved using the FR algorithm, a gradient descent-like method, or the L-BFGS algorithm, a quasi-Newton method.
     However, these methods are computationally expensive per iteration, which makes achieving high-quality visualizations for large-scale graphs challenging.
 
-    In this paper, to accelerate the optimization process, we propose a new initial placement with coordinate Newton direction.
-    We first reformulate the problem as a discrete optimization problem using a hexagonal lattice, and then iteratively move a randomly selected vertex along the coordinate Newton direction.
-    We can use the FR algorithm or L-BFGS algorithm to obtain the final placement.
+    In this paper, we propose a new initial placement based on the stochastic coordinate descent to accelerate the optimization process.
+    We first reformulate the problem as a discrete optimization problem using a hexagonal lattice and then iteratively move a randomly selected vertex along the coordinate Newton direction.
+    We can use the FR or L-BFGS algorithms to obtain the final placement.
 
-    We demonstrate the effectiveness of our proposed approach through experiments, highlighting the potential of coordinate block based methods for graph drawing tasks.
+    We demonstrate the effectiveness of our proposed approach through experiments, highlighting the potential of coordinate descent methods for graph drawing tasks.
     Additionally, we suggest combining our method with other graph drawing techniques for further improvement.
-    We hope that this work will inspire future research of coordinate block based methods not only in graph drawing but also in broader graph-related applications.
+    We hope that this work will inspire future research of coordinate descent methods not only in graph drawing but also in broader graph-related applications.
   \end{abstract}
   \begin{IEEEkeywords}
     Graph Drawing,
@@ -160,19 +160,19 @@
 
 \section{Introduction}\label{sec:introduction}
 
-\IEEEPARstart{G}{raph} is a mathematical structure representing pairwise relationships between objects, and graph drawing is a fundamental tasks in information visualization.
+\IEEEPARstart{G}{raph} is a mathematical structure representing pairwise relationships between objects, and graph drawing is a fundamental task in information visualization.
 Indeed, numerous kinds of models and algorithms have been proposed~\cite{tutteHowDrawGraph1963,chrobakLineartimeAlgorithmDrawing1995,sugiyamaMethodsVisualUnderstanding1981}, and among these, one of the most popular choices is the force-directed graph drawing.
 
 In force-directed graph drawing, we model a graph as a system of particles with forces acting between them. By simulating the system and seeking the equilibrium of the forces, we can obtain a visualization of the graph.
 Among the various force models~\cite{eades1984heuristic,kamadaAlgorithmDrawingGeneral1989}, the Fruchterman--Reingold (FR) force model~\cite{fruchtermanGraphDrawingForcedirected1991,kobourovSpringEmbeddersForce2012} is the central focus of our study.
 
-FR algorithm is the original algorithm for this force model, and it can be regarded as a variant of gradient descent method for the energy function of the model.
-FR algorithm is implemented in many modern graph drawing libraries such as NetworkX~\cite{hagberg2008exploring}, Graphviz~\cite{ellsonGraphvizOpenSource2002}, and igraph~\cite{csardiIgraphSoftwarePackage2006}.
+FR algorithm is the original algorithm for this force model, and it can be regarded as a variant of the gradient descent method for a energy function of the model.
+FR algorithm is implemented in many graph drawing libraries such as NetworkX~\cite{hagberg2008exploring}, Graphviz~\cite{ellsonGraphvizOpenSource2002}, and igraph~\cite{csardiIgraphSoftwarePackage2006}.
 
-However, the FR algorithm has several issues that makes it challenging to achieve high-quality visualizations for large-scale graphs.
-First, it suffers from high computational complexity, $\order{n^2}$ per iteration as it is with $n$ being the number of vertices.
+However, the FR algorithm has several issues that make it challenging to achieve high-quality visualizations for large-scale graphs.
+First, it suffers from high computational complexity when directly applied, $\order{n^2}$ per iteration, with $n$ being the number of vertices.
 Secondly, the occurrence of ``twist''~\cite{cheongSnapshotVisualizationComplex2018} is crucial for the force model, as it can significantly impact the simulation efficiency.
-We refer to ``twist'' as unnecessary intersections of edges or tangled structures in visual representations, as shown in the upper half of Fig.~\ref{fig:fig1}.
+We refer to ``twist'' as unnecessary edge intersections or tangled structures, as shown in the upper half of Fig.~\ref{fig:fig1}.
 When ``twist'' exists, mutual interactions may weaken or diminish the forces, causing the simulation process to stagnate.
 
 \begin{figure}[t]
@@ -189,23 +189,23 @@ The $n$-body simulation using multipole expansions~\cite{greengardFastAlgorithmP
 
 Another strategy is to directly accelerate the simulation process with the forces, in other words, the optimization process of the energy function.
 This aligns with the aim of our work.
-Recent researches have accelerated the process through various ways, such as adapting to GPU parallel architectures~\cite{gajdosParallelFruchtermanReingold2016}, or utilizing numerical optimization methods.
-L-BFGS, a family of quasi-Newton methods, is one of the such methods, and is reported to be effective for graph drawing~\cite{6183577}.
-However, since this method just treats the problem as a general optimization problem, adding some pre-processing based on the inherent graph structure of the problem could be effective.
-Indeed, Simulated Annealing (SA) is also known to be effective when used as a pre-processing step~\cite{ghassemitoosiSimulatedAnnealingPreProcessing2016}, since SA can deal ``twist'' issues and leads a better visualization combined with the FR algorithm.
-However, this work only uses a circle initial placement for unweighted graphs with a simple method, leaving large room to improve the effectiveness and to extend the applicability. Refer Sec.~\ref{ssec:preprocessing} for more details.
+Recent research has accelerated the process in various ways, such as adapting to GPU parallel architectures~\cite{gajdosParallelFruchtermanReingold2016} or utilizing numerical optimization methods.
+L-BFGS algorithm, a family of quasi-Newton methods, is one such approach and is reported to be effective for graph drawing~\cite{6183577}.
+However, since this method treats the problem just as a general optimization problem, adding some pre-processing based on the inherent graph structure of the problem could be effective.
+Indeed, Simulated Annealing (SA) is also known to be effective when used as a pre-processing step~\cite{ghassemitoosiSimulatedAnnealingPreProcessing2016}, since SA can deal ``twist'' issues and leads to a better visualization combined with the FR algorithm.
+However, this work only uses a circle initial placement for unweighted graphs with a simple method, leaving significant room to improve the effectiveness and extend the applicability. Refer to Sec.~\ref{ssec:preprocessing} for more details.
 
 Based on such advances, in this paper, we propose a new initial placement for the FR force model as depicted in Fig.~\ref{fig:fig1}.
-Our goal is to accelerate the optimization process by leveraging the inherent structure of the problem, which has ignored in the L-BFGS algorithm.
-To achieve this, we optimize the position of vertices one by one with the Newton direction, which is defined in the coordinate block $\bbR^2$ in the entire variable space $\bbR^{2 \times n}$.
-The result provides an initial placement with fewer ``twists'', accelerating the overall optimization process, and extending the applicability of initial placement idea to wider range of graphs.
+Our goal is to accelerate the optimization process by leveraging the inherent structure of the problem, which has been ignored in the L-BFGS algorithm.
+To achieve this, we optimize the position of vertices one by one with the coordinate Newton direction, defined in the coordinate block $\bbR^2$ in the entire variable space $\bbR^{2 \times n}$.
+The result provides an initial placement with fewer ``twists'', accelerating the overall optimization process and extending the applicability of the initial placement idea to a broader range of graphs.
 We also demonstrate its effectiveness through various experiments.
 
 The rest of this paper is organized as follows.
 In Sec.~\ref{sec:preliminary}, we define the optimization problem we consider and introduce the conventional approaches.
 In Sec.~\ref{sec:algorithm}, we propose a new initial placement algorithm.
 In Sec.~\ref{sec:experiment}, we show the experimental results.
-In Sec.~\ref{sec:challenges}, we discuss the potential of the coordinate based methods, the key concept of our research.
+In Sec.~\ref{sec:challenges}, we discuss the potential of the coordinate descent methods, the fundamental concept of our research.
 Finally, we discuss future work and conclude the paper in Sec.~\ref{sec:discussion}.
 
 \section{Preliminary}\label{sec:preliminary}
@@ -215,12 +215,12 @@ In this section, we formulate the simulation process of the force model as a con
 \subsection{Formulation of the Force Model}\label{ssec:forceModel}
 
 Let $\bbR_{> 0} \defeq \qty{ x \in \bbR \mid x > 0 }, \quad \bbR_{\geq 0} \defeq \qty{ x \in \bbR \mid x \geq 0 }$, and let $W = (w_{i,j}) \in \bbR_{\geq 0}^{n \times n}$ be an adjacency matrix of a graph $G_W = (V, E)$, where $V = \qty{v_i \mid 1 \leq i \leq n}$ is a set of vertices and $E = \qty{\{v_i, v_j\} \mid w_{i,j} > 0}$ is a set of edges.
-For simplicity, we sometimes identify each vertex $v_i$ with its index $i$, and use notation such as $(i, j) \in E$.
+For simplicity, we sometimes identify each vertex $v_i$ with its index $i$ and use notation such as $(i, j) \in E$.
 We call $w_{i,j}$ as a weight of the edge $\{v_i,v_j\}$.
 
 We will only consider undirected connected graphs with non-negative weights.
-Although the FR algorithm in NetworkX, for example, can handle directed unconnected graphs with negative weights, this paper does not focus on such cases.
-For directed graphs, slight modifications of algorithms or converting graphs to undirected ones may be effective.
+Although some algorithms can handle directed unconnected graphs with negative weights, we do not focus on such cases.
+For directed graphs, slight modifications of algorithms or converting graphs to undirected ones can be effective.
 For unconnected graphs, algorithms can be applied to each connected component independently.
 When negative weights are present, the optimization Prob.~\eqref{eq:fr} defined below can be unbounded, but with non-negative weights and the connectivity of $G$, the problem is always bounded and solvable.
 In summary, the conditions for $W$ is formulated as follows:
@@ -228,7 +228,7 @@ In summary, the conditions for $W$ is formulated as follows:
   W \in \bbR_{\geq 0}^{n \times n}, \quad W = W^\top \quad \text{and $G_W$ is connected}.
 \end{equation}
 
-Fruchterman and Reingold proposed a force-directed model for graph drawing, which is based on the physical analogy of the system of particles~\cite{fruchtermanGraphDrawingForcedirected1991}.
+Fruchterman and Reingold proposed a force model for graph drawing, based on the physical analogy of the system of particles~\cite{fruchtermanGraphDrawingForcedirected1991}.
 Let $x_i \in \bbR^2$ be the position of the vertex $v_i \in V$, and $X = (x_1, \dots, x_n) \in \bbR^{2 \times n}$ be the placement of the graph.
 Let $\norm{\cdot}$ denote the Euclidean distance in $\bbR^2$. For a parameter $k$ and a distance $d$ between two vertices $v_i$ and $v_j$, the attraction force $F_{i,j}^\mathrm{a}\colon \bbR_{> 0} \to \bbR$ and the repulsion force $F^\mathrm{r}\colon \bbR_{> 0} \to \bbR$ is defined as
 \begin{equation*}
@@ -240,13 +240,13 @@ The FR algorithm explained in Sec.~\ref{ssec:frAlgorithm} seeks the equilibrium 
   \centering
   \includegraphics[height=5.5cm]{fr_layout/fr_layout.pdf}
   \caption{
-    (Top) The illustration of the force model. Forces acts on every pairs of vertices.
+    (Top) The illustration of the force model. Forces act on every pair of vertices.
     (Bottom) Forces $F_{i,j}^\mathrm{a}(d)$ and $F^\mathrm{r}(d)$ work between $v_i$ and $v_j$. The equilibrium of them is achieved at $d = k/\sqrt[3]{w_{i,j}}$, which equals $k$ when $w_{i,j} = 1$.
   }
   \label{fig:frLayout}
 \end{figure}
 
-We can also interrupt forces by its scalar potential~\cite{6183577}, in other words, energy $E_{i,j}: \bbR_{> 0} \to \bbR$, which is defined by
+We can also interrupt forces by its scalar potential~\cite{6183577}, in other words, energy $E_{i,j}\colon \bbR_{> 0} \to \bbR$, which is defined by
 \begin{align}
   E_{i,j}^\mathrm{a}(d) & \defeq \int_{0}^{d} F_{i,j}^\mathrm{a}(r) \dd{r} = \frac{w_{i,j} d^3}{3k},\notag \\
   E^\mathrm{r}(d)       & \defeq \int_{\infty}^{d} F^\mathrm{r}(r) \dd{r} = -k^2\log{d}, \notag            \\
@@ -258,25 +258,25 @@ Plus, a function $x_i \mapsto E_{i,j}(\norm{x_i - x_j})$ is not convex for a fix
 \begin{figure}[t]
   \centering
   \includegraphics[height=4cm]{energy_3d/energy_3d.png}
-  \caption{Energy function $E_{i,j}(\norm{x_i - x_j})$ for $x_i=(x_{i,1},x_{i,2})$, $x_j=(0,0), w_{i,j} = 1$ and $k = 1$. Although $E_{i,j}$ is convex as a function of $d = \norm{x_i - x_j}$, not convex as a function of $x_i$. As $x_i$ approaches $x_j$, the energy function diverges.}
+  \caption{Energy function $E_{i,j}(\norm{x_i - x_j})$ for $x_i=(x_{i,1},x_{i,2})$, $x_j=(0,0), w_{i,j} = 1$ and $k = 1$. Although $E_{i,j}$ is convex as a function of $d = \norm{x_i - x_j}$, it is not convex as a function of $x_i$. As $x_i$ approaches $x_j$, the energy function diverges.}
   \label{fig:energy3d}
 \end{figure}
 
-Now, the optimization problem for the FR layout can be formulated as the minimization of the energy function $f: \bbR^{2 \times n} \to \bbR$, as known as the stress of the graph $G$:
+Now, the optimization problem can be formulated as the minimization of the energy function $f\colon \bbR^{2 \times n} \to \bbR$, as known as the stress of the graph $G$:
 \begin{mini}
   {X \in \bbR^{2 \times n}}
   {f(X) \defeq \sum_{i<j} E_{i,j}(\norm{x_i - x_j}).}
   {\label{eq:fr}}
   {}
 \end{mini}
-Seeking an equilibrium of the forces is equivalent to seeking a local minimum of the energy function $E_{i,j}$ for all pairs of vertices.
-In the following, we will discuss how to optimize this minimization Prob.~\eqref{eq:fr}.
+Seeking an equilibrium of the forces is equivalent to seeking a local minimum of the stress $f$.
+In the following, we will discuss how to optimize this minimization problem, Prob.~\eqref{eq:fr}.
 
 \subsection{Fruchterman--Reingold Algorithm}\label{ssec:frAlgorithm}
 
-The Fruchterman--Reingold algorithm~\cite{fruchtermanGraphDrawingForcedirected1991} is the original force-directed algorithm and most standard approach for this force model.
+The Fruchterman--Reingold algorithm~\cite{fruchtermanGraphDrawingForcedirected1991} is the original force-directed algorithm and the most standard approach for this force model.
 
-Let denote $f_i: \bbR^2 \to \bbR$ as the energy function for the vertex $v_i$ at $x_i$. This is defined by
+Let denote $f_i\colon \bbR^2 \to \bbR$ as the energy function for the vertex $v_i$ at $x_i$. This is defined by
 \begin{equation}\label{eq:fi}
   f_i(x_i) \defeq \sum_{j \neq i} E_{i,j}(\norm{x_i - x_j}),
 \end{equation}
@@ -285,15 +285,14 @@ and its gradient, the sum of forces acting on the vertex $v_i$, is
   \nabla f_i(x_i) = \sum_{j \neq i} \qty(\frac{w_{i,j}\norm{x_i - x_j}}{k} - \frac{k^2}{\norm{x_i - x_j}^2}) (x_i-x_j),
 \end{equation}
 
-The pseudo-code of the FR algorithm is shown in Algorithm~\ref{alg:fr}, which can be regarded as a variant of gradient (steepest) descent method for the energy function $f$~\cite{tunkelang1999numerical}.
+The pseudo-code of the FR algorithm is shown in Algorithm~\ref{alg:fr}, which can be regarded as a variant of gradient (steepest) descent method for the function $f$~\cite{tunkelang1999numerical}.
 \begin{algorithm}[h]
   \caption{Fruchterman--Reingold algorithm}
   \label{alg:fr}
-  \KwIn{Graph $G_W = (V, E)$}
-  \KwOut{Point placement $X = (x_1, \dots, x_n)$}
+  \KwIn{Graph $G_W = (V, E)$, initial placement $X$}
+  \KwOut{final placement $X = (x_1, \dots, x_n)$}
 
-  Define parameters $N_\mathrm{iter}^\mathsf{FR}, k, t, \Delta_t \defeq t/N_\mathrm{iter}^\mathsf{FR}$\;
-  Define initial placement for all $v_i \in V$ randomly\;
+  Define parameters $N_\mathrm{iter}^\mathsf{FR}, t, \Delta_t \defeq t/N_\mathrm{iter}^\mathsf{FR}$\;
   \For{$n_\mathrm{iter} \gets 1$ \KwTo $N_\mathrm{iter}^\mathsf{FR}$}{
     $\text{compute gradient } \nabla f_i(x_i)$ for all $v_i \in V$\;
     $x_i \gets x_i - t \frac{\nabla f_i(x_i)}{
@@ -305,8 +304,9 @@ The pseudo-code of the FR algorithm is shown in Algorithm~\ref{alg:fr}, which ca
   }
   \Return $X$\;
 \end{algorithm}
-Alg.~\ref{alg:fr} is based on the original pseudo-code~\cite{fruchtermanGraphDrawingForcedirected1991} and implementation in NetworkX~\cite{hagberg2008exploring} with some omitted details.
-The initial placement of the $n$ points are sampled from a uniform distribution on a unit square in general.
+
+Alg.~\ref{alg:fr} is based on the original code~\cite{fruchtermanGraphDrawingForcedirected1991} and implementation in NetworkX~\cite{hagberg2008exploring} with some omitted details.
+The initial placement $X$ is sampled from a uniform distribution on a unit square in general.
 The parameter $t$ denotes the temperature, which governs the step size along the steepest descent. As the temperature gradually decreases, the algorithm converges to a particular placement, though this placement is not necessarily the optimal solution.
 
 \subsection{L-BFGS Algorithm}\label{ssec:lbfgs}
@@ -316,19 +316,19 @@ The parameter $t$ denotes the temperature, which governs the step size along the
   \includegraphics[height=3.59cm]{comparison/comparison_FRandLBFGS.pdf}
   \caption{
     Comparison of the FR algorithm and the L-BFGS algorithm.
-    The FR algorithm moves vertices in a descent direction with a fixed step size (blue arrows), whereas the L-BFGS algorithm adjusts them differently since it utilizes approximated inverse Hessian (orange arrows).
+    The FR algorithm moves vertices in a descent direction with a fixed step size (blue arrows). In contrast, the L-BFGS algorithm adjusts them differently since it utilizes approximated inverse Hessian (orange arrows).
   }
   \label{fig:comparisonFRandLBFGS}
 \end{figure}
 
-Another approach to solve the optimization Prob.~\eqref{eq:fr} is to use the Limited-memory Broyden--Fletcher--Goldfarb--Shanno (L-BFGS) algorithm~\cite{6183577}.
-Using only a few recent gradient vectors, L-BFGS algorithm approximates the inverse Hessian of the objective function $f$, which is necessary to determine a descent direction~\cite{liuLimitedMemoryBFGS1989}.
+Another approach to solving the optimization Prob.~\eqref{eq:fr} is to use the Limited-memory Broyden--Fletcher--Goldfarb--Shanno (L-BFGS) algorithm~\cite{6183577}.
+Using only a few recent gradient vectors, the L-BFGS algorithm approximates the inverse Hessian of the objective function $f$, which is necessary to determine a descent direction~\cite{liuLimitedMemoryBFGS1989}.
 We fix the maximum number of iterations to $N_\mathrm{iter}^{\mathsf{L-BFGS}}$.
 L-BFGS is known to be very efficient for large-scale optimization problems, and the superior performance of the L-BFGS algorithm to the FR algorithm reported in Ref.\cite{6183577} also indicates this fact. Refer to Fig.~\ref{fig:comparisonFRandLBFGS} for a comparison to the FR algorithm.
 
 For the optimization Prob.~\eqref{eq:fr}, we can apply the L-BFGS algorithm via flattening the matrix $X \in \bbR^{2 \times n}$ to a vector $\overline{X} \in \bbR^{2n}$.
 However, it is worth noting that this method ignores the structure of $X$ and treats it just as a general optimization problem.
-Thus, we can expect room for improvement by leveraging what we have ignored in this L-BFGS algorithm.
+Thus, we can expect an improvement by leveraging what we have ignored in this L-BFGS algorithm through the initial placement.
 
 \subsection{Pre-Processing by Simulated Annealing}\label{ssec:preprocessing}
 
@@ -344,8 +344,8 @@ This study defines the problem for pre-processing as follows (we change some not
   {}
   \addConstraint{\pi \text{ is injective}.}
 \end{mini}
-The Prob.~\eqref{eq:sa} is a discrete optimization problem to find the best assignment $\pi$ just using angles, not the energy function.
-By setting the result of Simulated Annealing (SA) for Prob.~\eqref{eq:sa} as the initial placement for the FR algorithm,  we can obtain a faster and better visualization.
+The Prob.~\eqref{eq:sa} is a discrete optimization problem to find the best assignment $\pi$ just using angles, not the function $f$.
+Ref.~\cite{ghassemitoosiSimulatedAnnealingPreProcessing2016} reports that we can obtain a faster and better visualization by setting the result of Simulated Annealing (SA) for Prob.~\eqref{eq:sa} as the initial placement for the FR algorithm.
 
 However, the following limitations remain:
 \begin{enumerate}
@@ -354,58 +354,58 @@ However, the following limitations remain:
   \item The only neighborhood in the SA is the random swapping of two vertices, making the optimization process inefficient for large-scale graphs.
   \item $\abs{E_2}$ could be $\Theta(n^2)$, unable to leverage the sparsity of graphs if it exists.
 \end{enumerate}
-Although our algorithm and motivation is different from this study's, we are dealing with these limitations and can regard our study as an extension of this prior work.
+Although our algorithm and motivation differ from this study's, we are dealing with these limitations and can regard our study as an extension of this prior work.
 
 \section{Proposed Algorithm}\label{sec:algorithm}
 
-In this section, we propose a new initial placement algorithm for the FR layout.
-We first introduce the graph drawing by Stochastic Gradient Descent (SGD)~\cite{8419285} and the concept of the coordinate Newton direction, the key concepts of our research.
-Then, we define the discrete optimization problem for initial placement and propose a new algorithm to optimize it.
+In this section, we propose a new initial placement algorithm for Prob.~\eqref{eq:fr}.
+We first introduce the graph drawing by stochastic gradient descent~\cite{zhengGraphDrawingStochastic2019} and the concept of the coordinate Newton direction, the key concept of our research.
+Then, we define the discrete optimization problem for initial placement and propose a new algorithm to optimize it, based on stochastic coordinate descent.
 
 \subsection{Related Work}\label{ssec:relatedWork}
 
-Firstly, we introduce two important previous works. Although these works are not completely same as our work, explaining them is quite helpful to understand the motivation of our work.
+Firstly, we introduce two important previous works. Although these works are not completely the same as our work, explaining them is quite helpful in understanding the motivation of our work.
 
 \subsubsection{Graph Drawing by Stochastic Gradient Descent}\label{ssec:sgd}
 
-When we regard graph drawing as an optimization problem, Stochastic Gradient Descent (SGD) for Kamada--Kawai (KK) layout~\cite{kamadaAlgorithmDrawingGeneral1989} is one of the most notable works.
-In KK layout, we regard $G$ as a complete graph and assign the energy function $E_{i,j}$ to all edges.
-SGD in this context means to repeat randomly selecting a edge $\{v_i,v_j\}$ and updating $x_i$ and $x_j$ with the gradient of $E_{i,j}$. This algorithm is known to be effective various optimization problems in general, and its effectiveness for graph drawing is shown in Ref.~\cite{8419285}.
+When we regard graph drawing as an optimization problem, Stochastic Gradient Descent (SGD) for Kamada--Kawai (KK) layout~\cite{kamadaAlgorithmDrawingGeneral1989} is one of the most notable works~\cite{zhengGraphDrawingStochastic2019}.
+In the KK layout, we regard $G$ as a complete graph and assign the energy function $E_{i,j}^{\mathrm{KK}}$ to all edges.
+SGD in this context means to repeat randomly selecting an edge $\{v_i,v_j\}$ and updating $x_i$ and $x_j$ with the gradient of $E_{i,j}^{\mathrm{KK}}$. This algorithm is known to be effective in various optimization problems in general.
 
-Although applying SGD to our problem Prob.~\eqref{eq:fr} is straightforward, it is not effective for this problem.
+Although applying SGD to our problem Prob.~\eqref{eq:fr} is straightforward, it is ineffective for this problem.
 This is because the force model we consider assigns exactly the same function $E_{i,j}(d)=-k^2\log{d}$ to all $(i,j)$ such that $w_{i,j}=0$. Optimizing $E_{i,j}$ only increases the distance between vertices $v_i$ and $v_j$, no matter how close they are in the optimal solution. Thus, the gradient of $E_{i,j}$ is not informative enough to find the optimal solution, and we need to develop a new optimization method for Prob.~\eqref{eq:fr}.
 
-Still, the idea to randomly select a edge and update its position is quite suggestive. Based on this idea, we propose to randomly select a vertex and update its position.
+Still, the idea of randomly selecting an edge and updating its position is quite suggestive. Based on this idea, we propose to randomly select a vertex and update its position.
 
-\subsubsection{Newton Direction and Subspace Newton Direction}\label{ssec:introNewton}
+\subsubsection{Newton Direction and Coordinate Newton Direction}\label{ssec:introNewton}
 
 We also introduce the Newton direction.
-Let $f: \bbR^n \to \bbR$ be a convex function.
+Let $f\colon \bbR^n \to \bbR$ be a convex function.
 The second order approximation at $x_0$ is
 \begin{equation*}
   f(x_0) + \nabla f(x_0)^\top (x - x_0) + \frac{1}{2} (x - x_0)^\top \nabla^2 f(x_0) (x - x_0).
 \end{equation*}
 Since $f$ is convex, the Hessian matrix $\nabla^2 f(x_0)$ is positive semi-definite.
-The argmin $x^*$ of this approximation satisfies
+The argmin of this approximation $x^*$ satisfies
 \begin{align*}
        & \nabla f(x_0) + \nabla^2 f(x_0) (x^* - x_0) = 0 \\
   \iff & x^* = x_0 - \nabla^2 f(x_0)^{-1} \nabla f(x_0).
 \end{align*}
 We call the direction $d = -\nabla^2 f(x_0)^{-1} \nabla f(x_0)$ as the Newton direction.
-Although Newton direction is the optimal direction for the approximated $f$, it requires the computation of the inverse Hessian $\nabla^2 f(x_0)^{-1} \in \bbR^{n \times n}$, posing a high computational cost for large-scale problems. Actually, the reason why L-BFGS algorithm approximates the inverse Hessian is to avoid this computational cost.
+Although Newton direction is the optimal direction for the approximated $f$, it requires the computation of the inverse Hessian $\nabla^2 f(x_0)^{-1} \in \bbR^{n \times n}$, posing a high computational cost for large-scale problems. Actually, the reason why the L-BFGS algorithm approximates the inverse Hessian is to avoid this computational cost.
 
-Still, we can leverage the concept of the Newton direction in a different way, the coordinate Newton direction.
+Still, we can leverage the concept of the Newton direction in a different manner, the coordinate Newton direction.
 Instead of computing the inverse Hessian $\nabla^2 f(x_0)^{-1}$ in the entire variable space $\bbR^n$, we limit the variable $x$ to its coordinate block $x_i$ with fewer dimensions, and compute $\nabla^2 f_i(x_i)^{-1} \nabla f_i(x_i)$ where $f_i$ is a restricted function of $f$ to $x_i$.
 Since the computation of the coordinate Newton direction is much cheaper than that of the Newton direction, we can repeat this procedure many times.
-In general, this idea is also known as Randomized Subspace Newton (RSN)~\cite{NEURIPS2019_bc6dc48b} in a broader context.
+In general, this idea is known as stochastic coordinate descent~\cite{recht-wright} or Randomized Subspace Newton (RSN)~\cite{NEURIPS2019_bc6dc48b} in a broader context.
 
-In particular, this coordinate Newton direction has obvious natural affinity to the Prob.~\eqref{eq:fr} in Sec.~\ref{ssec:preprocessing}.
+In particular, this coordinate Newton direction has an apparent natural affinity to the Prob.~\eqref{eq:fr} in Sec.~\ref{ssec:preprocessing}.
 By taking $x_i$, the position of the vertex $v_i$, as the coordinate block, we can compute the Newton direction of $f_i$ in~Eq.~\eqref{eq:fi}.
-Although directly applying this idea to Prob.~\eqref{eq:fr} is challenging as we will discuss in Sec.~\ref{sec:challenges}, we leverage this coordinate Newton direction to propose our algorithm.
+Although directly applying this idea to Prob.~\eqref{eq:fr} is challenging, as we will discuss in Sec.~\ref{sec:challenges}, we leverage this coordinate Newton direction to propose our algorithm.
 
-\subsection{Reduction To The Discrete Optimization Problem}\label{ssec:reduction}
+\subsection{Reduction to Discrete Optimization Problem}\label{ssec:reduction}
 
-Now, to define a problem for our initial placement, we transform the optimization problem \eqref{eq:fr} into a constrained discrete optimization problem.
+To define a problem for our initial placement, we transform the optimization problem \eqref{eq:fr} into a constrained discrete optimization problem.
 As written in Sec.~\ref{ssec:sgd}, the energy function $E_{i,j}$ is $-k^2\log{d}$ for all $(i,j) \notin E$.
 Considering the sparsity of many practical graphs $(\abs{E} \ll \abs{V}^2)$, simplifying as follow is reasonable:
 \begin{mini}
@@ -414,7 +414,7 @@ Considering the sparsity of many practical graphs $(\abs{E} \ll \abs{V}^2)$, sim
   {\label{eq:frApprox}}
   {}
 \end{mini}
-Further, by converting the second term into a constraint, the problem \eqref{eq:frApprox} can be approximated so that the objective function can be computed with a complexity dependent on $\abs{E}$ rather than $\abs{V}^2$:
+Further, by converting the second term into a constraint, the problem \eqref{eq:frApprox} can be approximated so that we can compute the objective function with a complexity dependent on $\abs{E}$ rather than $\abs{V}^2$:
 \begin{mini}
   {X \in \bbR^{2 \times n}}
   {f^{\mathrm{a}}(X) \defeq \sum_{(i,j)\in E} \frac{w_{i,j}\norm{x_i - x_j}^3}{3k}}
@@ -428,15 +428,15 @@ However, problem \eqref{eq:frApprox2} still involves $\order{\abs{V}^2}$ constra
 To further simplify, we incorporate the concept of initial placements as mentioned in Sec.~\ref{ssec:preprocessing}.
 By simplifying problem \eqref{eq:frApprox2} with a fixed initial placement $Q$ whose points are separated by at least $\epsilon$, we obtain the following discrete optimization problem:
 \begin{mini}
-  {\pi: V \to Q}
+  {\pi\colon V \to Q}
   {\sum_{(i,j)\in E} \frac{w_{i,j}\norm{\pi(v_i) - \pi(v_j)}^3}{3k},}
   {\label{eq:frApprox3}}
   {}
   \addConstraint{\pi \text{ is injective}.}
 \end{mini}
-It means that with a discrete set of points $Q$ such that the points are separated by at least $\epsilon$, we seek the best injection $\pi :V \to Q$ that minimizes the objective function $f^{\mathrm{a}}$.
+It means that with a discrete set of points $Q$ such that the points are separated by at least $\epsilon$, we seek the best injection $\pi\colon V \to Q$ that minimizes the objective function $f^{\mathrm{a}}$.
 By fixing the possible point placement in advance, we can skip the check of the $\order{\abs{V}^2}$ constraints, reducing the computational complexity to $\order{\abs{E}}$ and thus offering significant speedup.
-See Fig.~\ref{fig:pi} as a visual explanation.
+See Fig.~\ref{fig:pi} for a visual explanation.
 
 \begin{figure}[t]
   \centering
@@ -449,13 +449,13 @@ See Fig.~\ref{fig:pi} as a visual explanation.
   \label{fig:pi}
 \end{figure}
 
-As an instance of such a discrete point placement $Q$, we can consider various types of placements, including $Q^\mathrm{circle}$~\cite{ghassemitoosiSimulatedAnnealingPreProcessing2016}.
+For such a discrete point placement $Q$, we can consider various placements, including $Q^\mathrm{circle}$~\cite{ghassemitoosiSimulatedAnnealingPreProcessing2016}.
 However, in this study, we adopt a hexagonal lattice $Q^\mathrm{hex}$~\cite{patelHexagonalGrids2013,s22145179}.
 When minimizing the attraction energy $f^\mathrm{a}$, it is advantageous for the points to cluster as closely as possible. In this context, the hexagonal lattice is known for its densest packing structure in space with the least distance $\epsilon$ between points and offers computational simplicity. Thus, $Q^\mathrm{hex}$ is a suitable choice for our purpose.
 
 \subsection{Newton Direction for Discrete Optimization}\label{ssec:newtonDirection}
 
-Next, using the coordinate Newton direction of a randomly selected vertex, as mentioned in Sec.~\ref{ssec:relatedWork}, we optimize the discrete optimization problem.
+Next, using the coordinate Newton direction of a randomly selected vertex, as mentioned in Sec.~\ref{ssec:relatedWork}, we optimize the discrete optimization problem, Prob.~\eqref{eq:frApprox3}.
 
 Let the objective function $f^{\mathrm{a}}_i(x_i)$ corresponding to a vertex $v_i$ be
 \begin{equation*}
@@ -473,8 +473,8 @@ The ordinary updated rule with the coordinate Newton direction is
 \begin{equation*}
   x_i - \nabla^2 f^{\mathrm{a}}_i(x_i)^{-1} \nabla f^{\mathrm{a}}_i(x_i).
 \end{equation*}
-However, $x_i^\mathrm{new}$ may not be in the hexagonal lattice $Q^\mathrm{hex}$, which is a constraint of Prob.~\eqref{eq:frApprox3}.
-Thus, we need to round to the nearest point in $Q^\mathrm{hex}$. Plus, we empirically found that adding a random vector to the Newton direction is effective for the optimization process, which is a similar strategy to the SA in Sec.~\ref{ssec:preprocessing}. This randomness can help to escape from local minima and to explore the solution space more effectively.
+However, $x_i^\mathrm{new}$ may not be in the hexagonal lattice $Q^\mathrm{hex}$, a constraint of Prob.~\eqref{eq:frApprox3}.
+Thus, we must round to the nearest point in $Q^\mathrm{hex}$. Plus, we empirically found that adding a random vector to the Newton direction is effective for the optimization process, which is a similar strategy to the SA in Sec.~\ref{ssec:preprocessing}. This randomness can help to escape from local minima and to explore the solution space more effectively.
 In conclusion, the updated rule for the vertex $v_i$ is
 \begin{equation*}
   x_i^\mathrm{new} \gets \mathrm{round}\qty(x_i - \nabla^2 f^{\mathrm{a}}_i(x_i)^{-1} \nabla f^{\mathrm{a}}_i(x_i) + t \cdot \text{rand}),
@@ -486,17 +486,17 @@ If there is a vertex $v_j$ such that $\pi(v_j) = x_i^\mathrm{new}$, we swap the 
 \begin{figure}[t]
   \centering
   \includegraphics[width=\columnwidth]{hex/hex.pdf}
-  \caption{Visual explanation of the one iteration of the proposed algorithm. Step1. Compute the coordinate Newton direction for a randomly selected vertex (blue). Step2. Decide $x_i^\mathrm{new}$ by rounding the direction and adding a random vector. Step3. Swap the vertices if there is a collision. In this case, swap blue and green vertices.}
+  \caption{Visual explanation of the one iteration of the proposed algorithm. Step1. Compute the coordinate Newton direction for a randomly selected vertex (blue). Step2. Decide $x_i^\mathrm{new}$ by rounding the direction and adding a random vector. Step3. Move the vertex and swap the vertices if there is a collision. In this case, swap blue and green vertices.}
   \label{fig:hex}
 \end{figure}
 
 \subsection{Optimal Scaling}\label{ssec:optimalScaling}
 
-When we optimize a placement for FR-layout with an initial placement obtained, scaling the initial placement at first can often yield better results than directly using the unmodified initial placement.
-In this subsection, we explain how to find the optimal scaling factor that minimizes the energy function for a given placement.
+When we optimize the initial placement for the original continuous optimization problem Prob.~\eqref{eq:fr}, scaling the placement at first can often yield better results than directly using the unmodified one.
+This subsection explains how to find the optimal scaling factor that minimizes $f$ for a given placement.
 
 Let us formulate the optimization problem for the scaling factor $c \in \bbR_{> 0}$.
-For an initial placement $X = (x_1, \dots, x_n)$, we rescale it as $x_i \gets c x_i$ for all $i$.
+For an initial placement $X = (x_1, \dots, x_n)$, we scale it as $x_i \gets c x_i$ for all $i$.
 This problem is to minimize the energy function $\phi(c)$ defined by
 \begin{align*}
   \phi(c) \defeq {} & \qty(\sum_{(i,j) \in E} \frac{w_{i,j} (c \norm{x_i - x_j})^3}{3k}) - k^2 \sum_{i < j} \log(c \norm{x_i - x_j})     \\
@@ -511,22 +511,22 @@ The function $\phi(c)$ is convex, and we can find the optimal scaling factor $c^
   c^* = \qty(\frac{k^2 n(n-1)}{3 \sum_{(i,j) \in E} \frac{w_{i,j} \norm{x_i - x_j}^3}{k}})^{1/3}.
 \end{equation}
 This value can be computed in $\order{\abs{E}}$ complexity.
-Using this scaling factor, we can obtain a further better initial placement for the FR layout.
+We can obtain a better initial placement for Prob.~\eqref{eq:fr} using this scaling factor.
 
-It is notable that the optimal solution to Prob.~\eqref{eq:frApprox3} is invariant under scaling, thus we can select any $\epsilon$ to define the hexagonal lattice $Q^\mathrm{hex}$ as far as we scale the placement by $c^*$ as post-processing.
+Notably, the optimal solution to Prob.~\eqref{eq:frApprox3} is invariant under scaling. Thus, we can select any $\epsilon$ to define the hexagonal lattice $Q^\mathrm{hex}$ as far as we scale the placement by $c^*$ as post-processing.
 
 \subsection{Pseudo Code}\label{ssec:pseudoCode}
 
 We presented the overall framework of the proposed method in Algorithm~\ref{alg:proposed}.
-Be aware that the proposed algorithm is not a complete solution to Prob.~\eqref{eq:fr}, this only provides an initial placement for the algorithms such as the FR algorithm or the L-BFGS algorithm.
+Be aware that the proposed algorithm is not a complete solution to Prob.~\eqref{eq:fr}; this only provides an initial placement for algorithms such as the FR or L-BFGS algorithms.
 
 \begin{algorithm}[h]
-  \caption{Proposed algorithm as initial placement for the FR layout}
+  \caption{Proposed algorithm as initial placement}
   \label{alg:proposed}
-  \KwIn{Graph $G_W = (V, E)$, subspace dimension $s$}
-  \KwOut{Point placement $X = (x_1, \dots, x_n)$}
+  \KwIn{Graph $G_W = (V, E)$}
+  \KwOut{Initial placement $X = (x_1, \dots, x_n)$}
 
-  Define parameters $N_\mathrm{iter}^\mathsf{CN}, k, t, \Delta t$ and hexagonal lattice $Q^\mathrm{hex}$\;
+  Define parameters $N_\mathrm{iter}^\mathsf{CN}, t, \Delta t$ and hexagonal lattice $Q^\mathrm{hex}$\;
   Set $\pi$ as a injection from $V$ to $Q^\mathrm{hex}$ randomly\;
   \For{$j \gets 0$ \KwTo $N_\mathrm{iter}^\mathsf{CN}$}{
   $v_i \gets \text{randomly selected vertex from } V$\;
@@ -546,46 +546,43 @@ Be aware that the proposed algorithm is not a complete solution to Prob.~\eqref{
 
 \subsection{Alternative Approach}\label{ssec:alternative}
 
-As the end of this section, we explain an alternative approach of this algorithm. We can also consider to update all vertices simultaneously, not one by one.
-It means that moving all the points $\{x_i\}_{1 \leq i \leq \abs{V}} \subseteq Q^\mathrm{hex}$ on the hexagonal grid to arbitrary points $\{\hat{x}_i \defeq x_i - \nabla^2 f_i(x_i)^{-1} \nabla f_i(x_i) \}_{1 \leq i \leq \abs{V}} \subseteq \bbR^2$, and then assign all these $\abs{V}$ points to the nearest points in $Q^\mathrm{hex}$.
-If we define the assignment problem as the minimization of the sum of the squared distances between $\{x_i\}_{1 \leq i \leq \abs{V}}$ and $\{\hat{x}_i\}_{1 \leq i \leq \abs{V}}$, we can solve this problem by minimum-cost flow or Hungarian algorithm with $\order{\abs{V}^3}$ complexity.
-Additionally, we can obtain a heuristic solution in $\order{\abs{V} \log \abs{V}}$ by appropriately sorting $\{\hat{x}_i^\mathrm{new}\}_{1 \leq i \leq \abs{V}}$.
+To end this section, we explain an alternative approach to this algorithm. We can also optimize by updating all vertices simultaneously, not one by one.
+It means that moving all the points $\{x_i\}_{1 \leq i \leq \abs{V}} \subseteq Q^\mathrm{hex}$ to arbitrary points $\{\hat{x}_i \defeq x_i - \nabla^2 f_i(x_i)^{-1} \nabla f_i(x_i) \}_{1 \leq i \leq \abs{V}} \subseteq \bbR^2$, and then assign all these $\abs{V}$ points to the nearest points $\{ x_i^\mathrm{new} \}_{1 \leq i \leq \abs{V}} \subseteq Q^\mathrm{hex}$.
+When we define the assignment problem as the minimization of the sum of the squared distances between $\hat{x}_i$ and $x_i^\mathrm{new}$, we can solve this problem by minimum-cost flow or Hungarian algorithm with $\order{\abs{V}^3}$ complexity.
+Additionally, we can obtain a heuristic solution in $\order{\abs{V} \log \abs{V}}$ by appropriately sorting $\{\hat{x}_i\}_{1 \leq i \leq \abs{V}}$.
 
-While we are not expecting as good performances as the proposed algorithm, they offer certain advantages, such as simplified implementation or avoiding random access to arrays.
+While we are not expecting as good performances as the proposed algorithm, they offer advantages such as simplified implementation or avoiding random access to arrays.
 
 \section{Numerical Experiment} \label{sec:experiment}
 
-In this section, we evaluate the proposed algorithm by various numerical experiments.
-We also confirm that the proposed algorithm is actually the extension of the pre-processing step in Ref.~\cite{ghassemitoosiSimulatedAnnealingPreProcessing2016}.
+In this section, we evaluate the proposed algorithm using various numerical experiments.
+We also confirm that the proposed algorithm extends the applicability of the pre-processing step in Ref.~\cite{ghassemitoosiSimulatedAnnealingPreProcessing2016}, as mentioned in Sec.~\ref{sec:introduction}.
 
 \subsection{Experimental Setup}\label{ssec:setup}
 
-All numerical experiments in this section were conducted using \Cpp17 compiled by GCC 10.5.0 on a laptop computer powered by Intel(R) Core(TM) i7-10510U CPU with 16 GB RAM.
+We conducted all numerical experiments in this section using \Cpp17 compiled by GCC 10.5.0 on a laptop computer powered by Intel(R) Core(TM) i7-10510U CPU with 16 GB RAM.
 
-To implement FR algorithm and L-BFGS algorithm, we referenced NetworkX version 3.3~\cite{hagberg2008exploring}, SciPy 1.14.1 ~\cite{2020SciPy-NMeth}, and C++ L-BFGS~\cite{qiuYixuanLBFGSpp2024,okazakiChokkanLiblbfgs2024}. In particular, we used almost the same parameters as NetworkX's \textsf{spring\_layout} for the FR algorithm.
-We also referenced the open-source code of the hexagonal grid from~\cite{patelHexagonalGrids2013}, and Graphviz version 2.43.0~\cite{ellsonGraphvizOpenSource2002}.
+To implement the FR and L-BFGS algorithm, we referenced NetworkX version 3.3~\cite{hagberg2008exploring}, SciPy 1.14.1 ~\cite{2020SciPy-NMeth}, and C++ L-BFGS~\cite{qiuYixuanLBFGSpp2024,okazakiChokkanLiblbfgs2024}. In particular, we used almost the same parameters as NetworkX's \textsf{spring\_layout} for the FR algorithm.
+We also referenced the open-source code of the hexagonal grid from~\cite{patelHexagonalGrids2013} and Graphviz version 2.43.0~\cite{ellsonGraphvizOpenSource2002}.
 
 We used the $3 \times 2$ algorithms.
-As a initial placement, we used
+As an initial placement, we used
 \begin{itemize}
   \item Random initialization (no prefix),
-  \item the proposed initialization (\textsf{CN-}),
-  \item the pre-processing step in Ref.~\cite{ghassemitoosiSimulatedAnnealingPreProcessing2016} (\textsf{SA-}).
+  \item The circle initialization obtained by Simulated Annealing (\textsf{SA-})~\cite{ghassemitoosiSimulatedAnnealingPreProcessing2016},
+  \item The proposed initialization obtained with coordinate Newton direction (\textsf{CN-}).
 \end{itemize}
-As an optimization algorithm, we used
+As an algorithm to solve Prob.~\eqref{eq:fr}, we used
 \begin{itemize}
   \item FR algorithm (\textsf{FR}),
   \item L-BFGS algorithm (\textsf{L-BFGS}).
 \end{itemize}
 
 As parameters, we used $N_\mathrm{iter}^\mathsf{CN} = 2 \abs{V}^3 / \abs{E}$ for initial placement, and we also set the total number of iterations of Simulated Annealing (\textsf{SA}) to the same value.
-Since the amortized time complexity per iteration of Algorithm~\ref{alg:proposed} is $\order{\abs{E} / \abs{V}}$, we can roughly expect that the computational time of the proposed algorithm is equivalent to a few iterations of the FR algorithm.
+Since the amortized time complexity per iteration of Algorithm~\ref{alg:proposed} is $\order{\abs{E} / \abs{V}}$, we can roughly expect that the computational time of the proposed algorithm is $\order{2\abs{V}^2}$, equivalent to a few iterations of the FR or L-BFGS algorithm.
+All the codes are available at GitHub~\cite{ThisPaperGitHub}.
 
-All the codes are available at our GitHub~\cite{ThisPaperGitHub}.
-
-\subsection{
-  Comparison with Random Initialization and Circle Initialization
-}\label{ssec:exprAll}
+\subsection{Comparison with Other Initializations}\label{ssec:exprAll}
 
 \begin{figure*}[t]
   \centering
@@ -599,7 +596,7 @@ All the codes are available at our GitHub~\cite{ThisPaperGitHub}.
   \end{minipage}
   \caption{
     Comparison of the proposed initialization (\textsf{CN}) with random initialization (no prefix).
-    Almost all of the cases, the difference are negative, meaning the proposed algorithm performed faster and better than random initialization.
+    In almost all cases, the difference is negative, meaning the proposed algorithm performed faster and better than random initialization.
   }
   \label{fig:overall}
 \end{figure*}
@@ -651,9 +648,9 @@ All the codes are available at our GitHub~\cite{ThisPaperGitHub}.
     \end{minipage}
     \caption{
       An example of a case where $w_{i,j} \notin \qty{0,1}$.
-      This result shows the proposed algorithm is actually extending the applicability of the pre-processing step.
-      Left: result of \textsf{CN}. separated by colors.
-      Right: result of \textsf{SA}. No separation.
+      This result shows the proposed algorithm is extending the applicability of the pre-processing step.
+      Left: the result of \textsf{CN}. Separated by colors.
+      Right: the result of \textsf{SA}. No separation.
     }
     \label{fig:weightedDense}
   \end{minipage}
@@ -662,24 +659,24 @@ All the codes are available at our GitHub~\cite{ThisPaperGitHub}.
   \centering
   \begin{tabular}{cccccc}
     \toprule
-     & \multicolumn{2}{c}{\texttt{collins\_15NN} (\textsf{CN} better)}
-     & \multicolumn{2}{c}{\texttt{dwt\_992} (\textsf{SA} better)}                                                                                      \\
+     & \multicolumn{2}{c}{\texttt{dwt\_992} (\textsf{SA} better)}
+     & \multicolumn{2}{c}{\texttt{collins\_15NN} (\textsf{CN} better)}                                                                                 \\
      & initial placement                                                                       & 50th iteration & initial placement & 50th iteration & \\
     \cmidrule(lr){2-3} \cmidrule(lr){4-5}
-    \rotatebox{90}{\textsf{CN} (proposed)}
-     & \includegraphics[width=0.3\columnwidth]{circle/vis/collins_15NN_CN-L-BFGS_50_first.png}
-     & \includegraphics[width=0.3\columnwidth]{circle/vis/collins_15NN_CN-L-BFGS_50_last.png}
-     & \includegraphics[width=0.3\columnwidth]{circle/vis/dwt_992_CN-L-BFGS_50_first.png}
-     & \includegraphics[width=0.3\columnwidth]{circle/vis/dwt_992_CN-L-BFGS_50_last.png}       &                                                       \\
-    \addlinespace
     \rotatebox{90}{\textsf{SA} (Ref.~\cite{ghassemitoosiSimulatedAnnealingPreProcessing2016})}
-     & \includegraphics[width=0.3\columnwidth]{circle/vis/collins_15NN_SA-L-BFGS_50_first.png}
-     & \includegraphics[width=0.3\columnwidth]{circle/vis/collins_15NN_SA-L-BFGS_50_last.png}
      & \includegraphics[width=0.3\columnwidth]{circle/vis/dwt_992_SA-L-BFGS_50_first.png}
-     & \includegraphics[width=0.3\columnwidth]{circle/vis/dwt_992_SA-L-BFGS_50_last.png}       &                                                       \\
+     & \includegraphics[width=0.3\columnwidth]{circle/vis/dwt_992_SA-L-BFGS_50_last.png}
+     & \includegraphics[width=0.3\columnwidth]{circle/vis/collins_15NN_SA-L-BFGS_50_first.png}
+     & \includegraphics[width=0.3\columnwidth]{circle/vis/collins_15NN_SA-L-BFGS_50_last.png}                                                          \\
+    \addlinespace
+    \rotatebox{90}{\textsf{CN} (proposed)}
+     & \includegraphics[width=0.3\columnwidth]{circle/vis/dwt_992_CN-L-BFGS_50_first.png}
+     & \includegraphics[width=0.3\columnwidth]{circle/vis/dwt_992_CN-L-BFGS_50_last.png}
+     & \includegraphics[width=0.3\columnwidth]{circle/vis/collins_15NN_CN-L-BFGS_50_first.png}
+     & \includegraphics[width=0.3\columnwidth]{circle/vis/collins_15NN_CN-L-BFGS_50_last.png}                                                          \\
     \bottomrule
   \end{tabular}
-  \caption{Table showing images for initial and 50th iteration placements for Collin15NN and DWT992 datasets.}
+  \caption{Visualization results showing initial and 50th iteration placements for \texttt{dwt\_992} and \texttt{collins\_15NN}.}
   \label{tab:results}
   \label{fig:CN_vs_SA}
 \end{figure*}
@@ -744,76 +741,74 @@ All the codes are available at our GitHub~\cite{ThisPaperGitHub}.
     \makecell{\small{\textsf{\textbf{CN}-L-BFGS}}                                                                                                        \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/vis/3elt_CN-L-BFGS.png}} &
     \makecell{\small{\textsf{BEST}}                                                                                                                      \\[-0.2em]\includegraphics[width=0.27\columnwidth]{individual/vis/opt_3elt.png}} \\
   \end{tabular}
-  \caption{Numerical experiment results for various graphs.  Please refer Sec.~\ref{ssec:exprDetail} for details.}
+  \caption{Numerical experiment results for various graphs.  Please refer to Sec.~\ref{ssec:exprDetail} for details.}
   \label{fig:individual}
 \end{figure*}
 
 To begin with, we conducted exhaustive experiments to evaluate the performance of the proposed algorithm (\textsf{CN}) compared to random initialization (no prefix) and circle initialization (\textsf{SA}) with various graphs.
 
 As a dataset, we used matrices from Sparse Matrix Collection~\cite{davis2011university} satisfying the condition~\eqref{eq:WCondition} with $\abs{V} \leq 1000$, in total 124 graphs.
-For fairness, when we compare with \textsf{SA}, the experiments were conducted under the same conditions as those assumed in Ref.~\cite{ghassemitoosiSimulatedAnnealingPreProcessing2016}.
-Specifically, weights $w_{i,j}$ were set to 1 if the two vertices are connected; otherwise, they were set to 0.
+For fairness, when we compare with \textsf{SA}, we converted the graph to a unweighted one. We set weights $w_{i,j}$ to $1$ if $\{ i,j \} \in E$; otherwise, we set it to $0$.
 
-For non-\textsf{CN} algorithms, $N_\mathrm{iter}^\mathsf{FR}$ and $N_\mathrm{iter}^\mathsf{L-BFGS}$ as 50, the default parameter of NetworkX~\cite{hagberg2008exploring}.
-For \textsf{CN} algorithms, we set them as 45, since it contains pre-processing step. We can roughly expect that the computational time is equivalent to a few iterations of the FR algorithm, as mentioned in Sec.~\ref{ssec:setup}.
+We set $N_\mathrm{iter}^\mathsf{FR}=N_\mathrm{iter}^\mathsf{L-BFGS}=50$, the default parameter of NetworkX~\cite{hagberg2008exploring}, except for the \textsf{CN} algorithms compared with random initialization.
+We set them as 45 in this case, since it contains the pre-processing step. We can roughly expect that the computational time is equivalent to a few iterations of FR or L-BFGS algorithms, as mentioned in Sec.~\ref{ssec:setup}.
 
 The results are shown in Fig.~\ref{fig:overall} and Fig.~\ref{fig:diff}.
-Almost all of the cases, the proposed algorithm performed better than both random initialization and circle initialization.
-There are a few cases where the proposed algorithm performed worse than other methods.
+In almost all cases, the proposed algorithm performed better than random or circle initialization.
+A few cases where the proposed algorithm performed worse than other methods.
 As for random initialization, one of such cases is \texttt{Spectro\_10NN
-} shown in Fig.~\ref{fig:proposeIsBad}. The proposed algorithm might fail to resolve the ``twist'' in the initial placement as shown in the figure, leading to the worse result. However, the average performance for this case was still almost the same with the random initialization.
+} shown in Fig.~\ref{fig:proposeIsBad}. The proposed algorithm might fail to resolve the ``twist'' in the initial placement, shown in the figure, leading to a worse result. However, the average performance for this case was still almost the same as that of the random initialization.
 As for circle initialization, we showed examples in Fig.~\ref{fig:CN_vs_SA}.
-The proposed algorithm outperforms in \texttt{collins\_15NN}, while it underperforms in \texttt{dwt\_992}.
-The colors of the vertices in the graphs presented in this section are assigned according to vertex indices, using a color map that provides a gradient from blue to red.
+The proposed algorithm outperforms in \texttt{collins\_15NN} and underperforms in \texttt{dwt\_992}.
+The colors of the vertices in the graphs presented in this section are assigned according to vertex indices using a color map that provides a gradient from blue to red.
 
 The interpretation of the results is as follows.
-First, this result strongly supports the effectiveness of the proposed algorithm. It successfully untangles the ``twists,'' leading to better outcomes with faster convergence. Even in the case where the proposed algorithm performed worse, the difference was not significant in almost all cases.
-Secondly, we can infer that the choice of initial placement can lead to advantages or disadvantages depending on the optimal placement.
-The advantage or disadvantage of the selected initial placement may vary depending on whether the optimal placement diverges or resembles the chosen initial shape.
-In particular, since the optimal shape of \texttt{collins\_15NN} is a linear shape, which differs from a circle.
-This difference likely contributed to the advantage of the proposed algorithm.
+First, this result strongly supports the effectiveness of the proposed algorithm. It successfully untangles the ``twists,'' leading to better outcomes with faster convergence. Even when the proposed algorithm performed worse, the difference was insignificant in almost all cases.
+Secondly, the choice of initial placement can lead to advantages or disadvantages depending on the optimal placement.
+In particular, since the optimal shape of \texttt{collins\_15NN} is a linear shape, which differs from a circle, \texttt{SA}'s performance can be worse than the proposed algorithm.
+Such difference likely contributed to the advantage of the proposed algorithm.
 Although the proposed method uses a hexagonal lattice $Q^\mathrm{hex}$, it can be adapted to other fixed placement $Q$.
 If the shape of the optimal solution is roughly known in advance, selecting a different $Q$, such as a $Q^\mathrm{circle}$, could further enhance the performance of the proposed algorithm.
 
-Additionally, although this is a case not originally considered in Ref.~\cite{ghassemitoosiSimulatedAnnealingPreProcessing2016}, we also conducted experiments with \textsf{CN} and \textsf{SA} for a case where the edge weight $w_{i,j}$ is not necessarily in $\qty{0,1}$.
-The weighted graph we made has 100 vertices and 1000 edges, with 3 groups of vertices.
-Every edge were generated randomly, and if the two vertices are in the same group, the edge weight was set to 1.0; otherwise, it was set to 0.1. It exhibits both strong and weak connections.
-The difference between the two is shown in Fig.~\ref{fig:weightedDense}.
-When we ignore the edge weights and just solve Prob.~\eqref{eq:sa}, the graph is just a Erdos--Renyi graph and thus \textsf{SA} cannot find any meaningful structure in the initial placement.
-On the other hand, the proposed algorithm can find the structure of the graph and we can observe that the left graph in Fig.~\ref{fig:weightedDense} is separated by the groups, i.e., the node color.
+Additionally, although this is a case not considered in Ref.~\cite{ghassemitoosiSimulatedAnnealingPreProcessing2016}, we also conducted experiments with \textsf{CN} and \textsf{SA} for a case where the edge weight $w_{i,j}$ is not necessarily in $\qty{0,1}$.
+We made a weighted graph having 100 vertices and 1000 edges with three groups of vertices.
+We generated every edge randomly, and if the two vertices were in the same group, we set the edge weight to 1.0; otherwise, we set it to 0.1. It exhibits both strong and weak connections.
+Fig.~\ref{fig:weightedDense} shows the difference between the two initialization.
+When we ignore the edge weights and just solve Prob.~\eqref{eq:sa}, the graph is just an Erdos--Renyi graph, and thus \textsf{SA} cannot find any meaningful structure in the initial placement.
+On the other hand, the proposed algorithm can find the graph's structure, and we can observe that the left graph in Fig.~\ref{fig:weightedDense} is separated by the groups, i.e., the node color.
+This result suggests that our proposed algorithm is effective even for weighted graphs, extending the applicability of the pre-processing step.
 
 \subsection{detailed Experiment}\label{ssec:exprDetail}
 
-We also conducted a detailed experiment to investigate the behavior of the proposed algorithm in detail. The result is shown in Fig.~\ref{fig:individual}.
+We also conducted a detailed experiment to investigate the behavior of the proposed algorithm in detail. Fig.~\ref{fig:individual} shows the results.
 
 The experiment details are as follows.
 As parameters, we used $N_\mathrm{iter}^\mathsf{FR} = N_\mathrm{iter}^\mathsf{L-BFGS} = 200$ as the maximum number of iterations.
-We tested with 7 graphs: \texttt{cycle300}, \texttt{jagmesh1}, \texttt{dwt\_1005}, \texttt{btree9}, \texttt{1138\_bus}, \texttt{dwt\_2680}, and \texttt{3elt}. \texttt{cycle300} is a cycle graph with 300 vertices, and btree9 is a perfect binary tree with $2^{9+1}-1=1023$ vertices. Other graphs are from Sparse Matrix Collection~\cite{davis2011university}, and these choices are based on the experiments conducted in Ref.~\cite{8419285}. Thus, although all the graphs are quite sparse so that $\abs{E} / (\abs{V}(V-1)/2)$ is less than 1\%, this is not an arbitrary choice. The important graphs often have such a sparsity.
+We tested with 7 graphs: \texttt{cycle300}, \texttt{jagmesh1}, \texttt{dwt\_1005}, \texttt{btree9}, \texttt{1138\_bus}, \texttt{dwt\_2680}, and \texttt{3elt}. \texttt{cycle300} is a cycle graph with 300 vertices, and \texttt{btree9} is a perfect binary tree with $2^{9+1}-1=1023$ vertices. Other graphs are from Sparse Matrix Collection~\cite{davis2011university}, and these choices are based on the experiments conducted in Ref.~\cite{zhengGraphDrawingStochastic2019}. Thus, although all the graphs are quite sparse so that $\abs{E} / (\abs{V}(V-1)/2)$ is less than 1\%, this is not an arbitrary choice. The important graphs often have such a sparsity.
 
 We first explain what Fig.~\ref{fig:individual} represents.
-The plots on the left illustrate the objective function values $f(X)$ on the vertical axis versus execution time on the horizontal axis, using 10 trials for each algorithm.
-Faint crosses represent the results of non-\textsf{CN} algorithms, while faint circles represent the results of \textsf{CN} algorithms, plotted every 10 iterations for each trial.
-The solid and dashed lines represent the average of these values across the 10 trials for each algorithm.
-If one of the trials terminated before reaching $N_\mathrm{iter}^\mathsf{FR}$ or $N_\mathrm{iter}^\mathsf{L-BFGS}$ iterations, the line was plotted up to the minimum trial count achieved across all trials.
-Each trial was conducted with a different seed, meaning that even deterministic algorithms, such as \textsf{FR} or \textsf{L-BFGS}, converged to different local optima due to variations in the initial random placement.
-The right graphs are at the iteration in which the most significant difference appeared among \{50,100,150\} iterations (or at the last iteration if it ended earlier), using the median performance seed for each algorithm.
+The plots on the left illustrate the objective function values $f(X)$ on the vertical axis versus execution time on the horizontal axis, using ten trials for each algorithm.
+Faint crosses represent the results with random initialization, while faint circles represent the results of \textsf{CN}, plotted every ten iterations for each trial.
+The solid and dashed lines represent the average of these values across the ten trials for each algorithm.
+If one of the trials terminated before reaching $N_\mathrm{iter}^\mathsf{FR}$-th or $N_\mathrm{iter}^\mathsf{L-BFGS}$-th iterations, we plotted up to the minimum trial count achieved across all trials. Each trial was conducted with a different seed.
+The graphs on the right are at the iteration in which the most significant difference appeared among \{50,100,150\}-th iterations (or at the last iteration if it ended earlier), using seed 1.
 
 The observations and implications of Fig.~\ref{fig:individual} are as follows.
-First, the solid plots for \textsf{CN} generally demonstrates superior performance compared to non-\textsf{CN}, validating the efficacy of the proposed method.
-Some exception of the superiority arise with \textsf{FR}, which exhibits oscillations in the plot, likely due to excessive step sizes leading to overshooting.
-Although we refrained from altering \textsf{FR} for fairness, adjusting the step size could enable the proposed method to achieve its intended performance.
-In fact, the initial $f(X)$ of \textsf{CN-FR} is clearly small enough compared to the objective function values produced by \textsf{FR} alone, suggesting that the proposed method is yielding a good initial placement.
-Additionally, the visualization results support the effectiveness of the proposed initial placement. In most cases, placements obtained with \textsf{CN} better represent the intended geometric arrangement compared to non-\textsf{CN} placements.
+First, the solid plots for \textsf{CN} generally demonstrate superior performance compared to non-\textsf{CN}, validating the efficacy of the proposed method.
+Some exceptions of the superiority arise with \textsf{FR}, which exhibits oscillations in the plot, likely due to excessive step sizes leading to overshooting.
+Although we refrained from altering \textsf{FR} for fairness, adjusting the step size (or using adaptive step size) could enable the proposed method to achieve its intended performance.
+Still, the initial $f(X)$ of \textsf{CN-FR} is small enough compared to the objective function values produced by \textsf{FR} alone, suggesting that the proposed method is yielding a good initial placement.
+Additionally, the visualization results support the effectiveness of the proposed initial placement. In most cases, placements obtained with \textsf{CN} better represent the intended geometric arrangement showed in the ``BEST'' column, obtained by running at most 500 iterations of L-BFGS, than non-\textsf{CN} placements.
 
-As a side note, regardless of \textsf{CN} or non-\textsf{CN}, the algorithms using \textsf{L-BFGS} consistently outperforms those using \textsf{FR}.
-This finding is consistent with prior research~\cite{6183577}, though, regrettably, this technique remains relatively unknown in the field of graph drawing.
-One of the aims of our paper is to further emphasize and popularize the use of \textsf{L-BFGS} in graph drawing, and these results provide a strong basis for this argument.
+As a side note, regardless of \textsf{CN} or non-\textsf{CN}, the algorithms using \textsf{L-BFGS} consistently outperform those using \textsf{FR}.
+This finding is consistent with prior research~\cite{6183577}, though regrettably, this technique remains relatively unknown in graph drawing.
+One of the aims of our paper is to emphasize further and popularize the use of the L-BFGS algorithm in graph drawing, and these results provide substantial proof for this argument.
 
-\section{Challenges of the Coordinate Newton Direction}\label{sec:challenges}
+\section{Challenges of Coordinate Newton Direction}\label{sec:challenges}
 
-In this section, we explain the rationale for why we took a roundabout approach to optimize Prob.~\eqref{eq:fr}.
-As we have explained, we first transformed it into a discrete optimization problem, Prob.~\eqref{eq:frApprox3}, and then optimized it using the coordinate Newton direction. However, is it possible to directly leverage the coordinate Newton direction to optimize Prob.~\eqref{eq:fr}?
-We think the answer is no, and in this section, we explain the reasons behind this conclusion.
+In this section, we explain why we took a roundabout approach to optimize Prob.~\eqref{eq:fr}.
+As we have explained, we first transformed it into the discrete optimization problem, Prob.~\eqref{eq:frApprox3}, then optimized it using the coordinate Newton direction. However, can we directly leverage the coordinate Newton direction to optimize Prob.~\eqref{eq:fr}?
+We think the answer is no, and in this section, we explain the reasons behind this conclusion and the rationale for our approach.
 
 \subsection{Possible Approach with Coordinate Newton Direction}\label{ssec:possibleApproach}
 
@@ -824,7 +819,7 @@ We think the answer is no, and in this section, we explain the reasons behind th
     \includegraphics[height=2.2cm]{whyRSNfail/whyRSNfail.pdf}
     \caption{
       The inaccurate quadratic approximation.
-      For the red vertex on the right graph, its coordinate Newton direction is the red arrow, which is apparently a bad direction.
+      For the red vertex on the right graph, its coordinate Newton direction is the red arrow, which is a bad direction.
     }
     \label{fig:whyRSNfail}
   \end{minipage}
@@ -839,88 +834,95 @@ We think the answer is no, and in this section, we explain the reasons behind th
   \end{minipage}
 \end{figure*}
 
-We explain a possible approach to optimize Prob.~\eqref{eq:fr} using the coordinate Newton direction.
-As mentioned, our approach resembles to the RSN method, one of the subspace methods, and RSN and its variant have been proposed in the context of continuous optimization~\cite{NEURIPS2019_bc6dc48b,
+We first explain a possible approach using the coordinate Newton direction to optimize Prob.~\eqref{eq:fr}.
+As mentioned, our approach is based on the stochastic coordinate descent and is also resembles the randomized subspace Newton, one of the subspace methods~\cite{NEURIPS2019_bc6dc48b,
   fujiRandomizedSubspaceRegularized2022,
   cartisRandomisedSubspaceMethods2022,
   nozawaRandomizedSubspaceGradient2023,
   higuchiFastConvergenceSecondOrder2024}.
-The algorithm below is based on this method.
+However, our approach differs from these because we convert the problem to the discrete optimization problem.
 
-We take the following algorithm as a direct application of the subspace methods to Prob.~\eqref{eq:fr}; Namely, we randomly select a vertex $v_i$, apply Newton's method or its regularized variant to $f_i$ using the gradient in Eq.~\eqref{eq:gradientFi} and its Hessian:
+The direct application of such method to Prob.~\eqref{eq:fr} is as follows: we randomly select a vertex $v_i$, apply Newton's method or its regularized variant to $f_i$ using the gradient in Eq.~\eqref{eq:gradientFi} and its Hessian:
 \begin{gather*}
   \nabla^2 f_i(x_i) = \sum_{j \neq i} \left(\frac{w_{i,j}\norm{x_i - x_j}}{k} - \frac{k^2}{\norm{x_i - x_j}^2}\right) \mqty(1&0\\0&1)+ \\
   \sum_{j \neq i} \left(\frac{w_{i,j}}{k \norm{x_i - x_j}} + \frac{2k^2}{\norm{x_i - x_j}^4}\right) (x_i - x_j)(x_i - x_j)^\top.
 \end{gather*}
-Then, we update the position of vertex $v_i$, and repeat this process until convergence.
+Then, we update the position of vertex $v_i$ and repeat this process until convergence. We do not go through any discrete optimization problem with this approach.
 However, this approach fails to work effectively in practice.
-In the following, we explain the reasons behind this difficulty.
+In the following, we explain the reasons behind this failure.
 
-\subsection{Inaccuracy of quadratic approximation}\label{ssec:inaccuracy}
+\subsection{Inaccuracy of Quadratic Approximation}\label{ssec:inaccuracy}
 
-One of the reasons why it fails is the inaccuracy of quadratic approximation, particularly a specific issue arises when restricting the optimization to a coordinate block.
+One of the reasons why it fails is the inaccuracy of quadratic approximation; particularly, a specific issue arises when restricting the optimization to a coordinate block.
 
 We show an example of this issue in Fig.~\ref{fig:whyRSNfail}.
-Let a graph $G$ be as shown in the left, where $k$ and all positive edge weights $w_{i,j}$ are set to 1.
-In the situation depicted on the right, the points of $G$ are set as
+Let a graph $G$ be the one on the left, where $k$ and all positive edge weights $w_{i,j}$ are 1.
+In the situation depicted on the right, the position of points are
 \begin{equation*}
   X = \begin{pmatrix}
     0 & -1 & -0.85  & -0.85  & 1 \\
     0 & 0  & +0.155 & -0.155 & 0
   \end{pmatrix}.
 \end{equation*}
-The key point of this example is that the Hessian $\nabla^2 f_1(x_2)$ is both positive definite and not ill-conditioned, which means that the Newton direction is a good direction in general. Indeed, we have $\nabla^2 f_1(x_2) \approx \mqty(1.841&0\\0&1.159)$.
-However, despite of such a good property of the Hessian, the Newton direction for $x_2$ (red arrow) is apparently a bad direction, leading to a significant deviation from the global optimal solution as it is. This is because the quadratic approximation in the restricted block coordinate $x_2$ is not accurate enough.
-This kind of illness cannot be resolved by just modifying the Newton's method we use for $f_i$, and it is an inherent and inevitable issue of the coordinate Newton direction.
+% todo
+The key point of this example is that the Hessian
+\begin{equation*}
+  \nabla^2 f_2(x_2) \approx \mqty(1.841&0\\0&1.159)
+\end{equation*}
+is both positive definite and not ill-conditioned, which means that the Newton direction is good in general. However, despite such a suitable property of the Hessian, the Newton direction for $x_2$ (red arrow) is a bad direction, leading to a significant deviation from the global optimal solution as it is. This badness comes from the inaccurate approximation of $f$ in the restricted block coordinates $x_2$.
+We cannot completely resolve this kind of illness by modifying Newton's method we use for $f_i$. This is an inherent and inevitable issue of the coordinate Newton direction.
 
-\subsection{Ignorance of other vertex movements}\label{ssec:ignorance}
+\subsection{Ignorance of Other Vertex Movements}\label{ssec:ignorance}
 
-Another issue is the ignorance of other vertex movements when optimizing each vertex individually.
-When optimizing for a vertex $v_i$, the coordinate Newton direction treat all other vertices $v_j (j \neq i)$ as fixed.
+Another reason is the ignorance of other vertex movements when optimizing each vertex individually.
+When optimizing for a vertex $v_i$, the coordinate Newton direction treats all other vertices $v_j (j \neq i)$ as fixed.
 
-This issue is illustrated in Figure~\ref{fig:whyRSNfail2}.
-Consider a subset of vertices in a mesh-like structure $G$, all vertices receive forces to the blue arrow directions.
-In this setting, both the FR algorithm and the L-BFGS algorithm progress the optimization without issue.
-On the other hand, if we attempt to optimize only for the red vertex in the right graph, due to its fixed directly connected neighbors, $v_0$ barely moves.
+Figure~\ref{fig:whyRSNfail2} illustrates this issue.
+Consider a subset of vertices that form a mesh-like structure in $G$, and all vertices receive forces to the blue arrow directions.
+In this setting, the FR and L-BFGS algorithms progress the optimization without issue.
+On the other hand, if we attempt to optimize only for the red vertex $v_1$ in the right graph, due to its fixed directly connected neighbors, $v_1$ barely moves.
 As a result, the overall optimization barely advances, in contrast to the alignment of the forces (blue arrows).
 
-In this way, ignoring the direction of forces on other vertices, can be a major shortcoming of the coordinate-based optimization method.
+In this way, ignoring the direction of forces on other vertices can be a significant shortcoming of the coordinate Newton direction.
 
-\subsection{Rationale for the Proposed Method}\label{ssec:rationale}
+\subsection{Rationale for Proposed Method}\label{ssec:rationale}
 
-As explained, we suspect that, while the coordinate Newton direction is effective for reducing the ``twist'' in a rough sense, it is not suitable for optimizing the overall placement.
+As explained, we suspect that while the coordinate Newton direction effectively reduces the ``twist'' in a rough sense, it is unsuitable for optimizing the overall placement.
 
-However, by converting the problem as stated in Section~\ref{ssec:reduction}, we can take this ignored interaction into account to some extent.
-The advantage of Prob.~\eqref{eq:frApprox3} is that not only reduction of the computational complexity from $\order{\abs{V}^2}$ to $\order{\abs{E}}$, but also allowing us to more easily take account for vertex interactions and prevent them from becoming too close to each other, since the points on $Q$ are far from each other at least by $\epsilon$.
-Thus, making the problem discrete brings the acceleration of each iteration as well as the high quality of the updated solution.
+However, by converting the problem as stated in Section~\ref{ssec:reduction}, we can mitigate these issues.
+The advantage of Prob.~\eqref{eq:frApprox3} is that not only reduction of the computational complexity from $\order{\abs{V}^2}$ to $\order{\abs{E}}$.
+It also brings the convexity of the problem, making the quadratic approximation more accurate than the original problem.
+Moreover, the discrete point set $Q$ mitigates the adverse effects caused by ignoring the movement of other vertices. This is because each point is always separated by at least $\epsilon$, making minor movements negligible and non-critical. The step size in the optimization is also assured to be more than $\epsilon$, evading the stagnate of the optimization.
+These advantages are the key to preventing the issues of Sec.~\ref{ssec:ignorance} and Sec.~\ref{ssec:inaccuracy}.
+Thus, making the problem discrete is essential to provides a high-quality initial placement.
 
-The important point is that, combined with some appropriate ideas, the coordinate-based methods can be very effective for the Prob.~\eqref{eq:fr}.
-Focusing on optimizing each vertex individually is a natural and valid approach, and with further refinements, the coordinate-based method holds the potential to efficiently yield global optimal solutions for Prob.~\eqref{eq:fr}.
+The crucial point is that, when combined with suitable strategies, the stochastic coordinate descent or randomized subspace Newton can be effective for the original continuous problem, Prob.~\eqref{eq:fr}.
+Focusing on each vertex separately is a natural and valid approach.
+With further refinements and by addressing the issues discussed in Sec.~\ref{ssec:inaccuracy} and Sec.~\ref{ssec:ignorance}, these methods hold the potential to efficiently provide good solutions for Prob.~\eqref{eq:fr}.
 
 \section{Discussion} \label{sec:discussion}
 
 In this section, we discuss the future directions of this research.
-Firstly, the proposed method would be better to combine with the some conventional techniques such as Multilevel approach. We explain this in Sec.~\ref{sec:combination}.
-Secondly, we explore the applications beyond the scope of graph drawing in Sec.~\ref{ssec:application}.
-Finally, we conclude this paper in Sec.~\ref{sec:conclusion}.
+Firstly, we discuss to combine our algorithm with some conventional techniques, such as the Multilevel approach.
+Secondly, we explore the applications beyond the scope of graph drawing.
+Finally, we conclude this paper.
 
 \subsection{Combination with Other Techniques}\label{sec:combination}
 
-This paper has demonstrated the effectiveness of the proposed method on various graphs, but we believe that it can also be applied to more larger-scale problems.
+This paper has demonstrated the effectiveness of the proposed method on various graphs, but we can also apply it to larger-scale problems.
 For instance, the Scalable Force-Directed Placement (sfdp) of Graphviz~\cite{ellsonGraphvizOpenSource2002}, based on \cite{Hu2006EfficientHF}, employs a multilevel approach to accelerate processing for larger graphs by progressively coarsening vertices.
-The result of sfdp shown in Fig.~\ref{fig:cycle} validate the utility of this technique.
 
-The coarsening operation does not conflict with the proposed method, making it feasible to combine both approaches.
-Specifically, by iteratively applying the proposed method to the entire coarsened graph or to groups of vertices consolidated through coarsening, it is possible to extend its applicability to larger-scale problems.
-This approach is expected to yield faster and higher-quality solutions.
+The coarsening operation in sfdp does not critically conflict with the proposed method, making it feasible to combine both approaches.
+Specifically, by iteratively applying the proposed method to the entire coarsened graph or groups of vertices consolidated through coarsening, it is possible to extend its applicability to larger-scale problems.
+We can expect this approach to yield faster and higher-quality solutions.
 Addressing this integration is one of the challenges for future research.
 
-In addition, the FR layout sometimes used not only in 2d but also in 3d~\cite{14738716211060306}. Although we have to modify some parts of the proposed algorithm to apply to 3d FR layout, such as the hexagonal lattice, its application would be not so difficult.
+In addition, the FR force model is sometimes used not only in $\bbR^2$ but also in $\bbR^3$~\cite{14738716211060306}. Although we have to modify some parts of the proposed algorithm for $\bbR^3$, such as the hexagonal lattice, its application would be easy.
 
 \subsection{Application to Other Problems}\label{ssec:application}
 
-In this subsection, we briefly discuss and explore the potential applicability of the subspace method to a wider range of problems.
-Although we employed the idea of subspace methods only for the optimization Prob.~\eqref{eq:fr}, we can see that its application is not necessarily limited to the FR layout alone.
+In this subsection, we briefly discuss and explore the potential applicability of stochastic coordinate descent to a broader range of problems.
+Although we utilized the coordinate Newton direction only for the optimization Prob.~\eqref{eq:fr}, we can see that its application is not necessarily limited to the FR force model alone.
 
 In general, the optimization Prob.~\eqref{eq:fr} is more broadly treated as ``objective functions arising from graphs''~\cite{recht-wright}:
 \begin{mini*}
@@ -930,16 +932,14 @@ In general, the optimization Prob.~\eqref{eq:fr} is more broadly treated as ``ob
   {}
 \end{mini*}
 where $\Omega_i$ is a regularization term for the $i$-th vertex, and $\lambda$ is a regularization parameter.
-The FR layout Prob.~\eqref{eq:fr} is obviously a special case of this problem class.
+Our optimization problem, Prob.~\eqref{eq:fr}, is a special case of this problem class.
+The authors of~\cite{recht-wright} claim that coordinate descent, based only on coordinate gradients, is effective for solving such problems. A variant of the proposed method utilizing the coordinate Newton direction can also be effective for such problems.
 
-We expect that a variant of subspace method to be effective for such problems, as shown in this study.
-The authors of~\cite{recht-wright} claim that coordinate descent is an effective method for solving such problems. Given the similarity between the subspace method and coordinate descent as depicted in Sec.~\ref{ssec:introRSN}, this claim supports the potential of the subspace method for a wider range of problems.
-
-For instance, we suspect that the graph isomorphism problem is one of the candidates for the application of the subspace method.
-The graph isomorphism problem is a well-known combinatorial optimization problem to determine whether two graphs $G_1,G_2$ are isomorphic, i.e., $G_1 \cong G_2$.
-In fact, the graph isomorphism problem is closely related to the graph drawing. Drawing a graph in a way that reveals its symmetry is at least as difficult as the graph isomorphism problem~\cite{eades1984heuristic}. Indeed, if two graphs $G_1$ and $G_2$ can be drawn in the same way, it becomes evident that $G_1 \cong G_2$. See Fig.~\ref{fig:iso} for reference.
-When we relax it to a continuous optimization problem on Riemannian manifolds as in~\cite{klusContinuousOptimizationMethods2023, klusContinuousOptimizationMethods2023}, we might be able to apply the subspace method to this problem as well.
-Investigating the applicability of the subspace method to these problems constitutes one of the future research directions.
+For instance, we suspect that the graph isomorphism problem is one of the candidates for the application.
+The graph isomorphism problem is a well-known combinatorial optimization problem to determine whether two graphs $G_1, G_2$ are isomorphic, i.e., $G_1 \cong G_2$.
+The graph isomorphism problem is closely related to the graph drawing. Drawing a graph in a way that reveals its symmetry is at least as difficult as the graph isomorphism problem~\cite{eades1984heuristic}. Indeed, if we can draw two graphs $G_1$ and $G_2$ in the same way, it becomes evident that $G_1 \cong G_2$. See Fig.~\ref{fig:iso} for reference.
+When we relax it to a continuous optimization problem on Riemannian manifolds~\cite{klusContinuousOptimizationMethods2023,klusContinuousOptimizationMethods2023}, we might be able to apply the stochastic coordinate descent or coordinate Newton direction to this problem as well.
+Investigating the the variant of our proposed algorithm to these problems constitutes one of the future research directions.
 
 \begin{figure}[t]
   \centering
@@ -953,16 +953,17 @@ Investigating the applicability of the subspace method to these problems constit
 
 \subsection{Conclusion} \label{sec:conclusion}
 
-In this study, we proposed a new initial placement with the subspace Newton direction.
-To demonstrate its effectiveness, we conducted numerical experiments, which revealed that the proposed method is effective across a variety of graphs. As for the research question posed in Sec.~\ref{sec:RQ}, we can answer that ``We can accelerate the optimization process for the FR layout by focusing on each vertex, especially with the subspace Newton direction''.
+In this study, we proposed a new initial placement with the coordinate Newton direction for the FR force model.
+The obtained initial placements have fewer ``twists'' than the random initialization, leading to faster convergence and better outcomes.
+To demonstrate its effectiveness, we conducted numerical experiments, which revealed that the proposed method is effective across various graphs, extending the applicability of the pre-processing step.
 
-We conclude this paper expecting that the proposed method may advance graph drawing of FR layout and highlight the potential of the subspace methods for addressing a wider range of graph-related optimization problems.
+We expect that the proposed method may advance the graph drawing of the FR force model and highlight the potential of the stochastic coordinate descent and its variants for addressing a broader range of graph-related optimization problems.
 
 \section{Acknowledgment}
 
 The author would like to express our sincere gratitude to PL Poirion and Andi Han for their insightful discussions, which have greatly inspired and influenced this research.
 
-The author also thanks the developers of NetworkX and Graphviz. Their excellent work on the library has been a great help in conducting this research.
+The author also thanks the developers of NetworkX and Graphviz. Their excellent work has been a great help in conducting this research.
 
 This work was partially supported by JSPS KAKENHI (23H03351,24K23853) and JST ERATO (JPMJER1903).
 

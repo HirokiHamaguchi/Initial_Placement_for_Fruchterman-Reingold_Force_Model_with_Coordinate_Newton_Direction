@@ -18,8 +18,3 @@ with open("main.tex", mode="r") as f:
             lines[i] = (
                 lines[i][: bra + 1] + lines[i][bra + 1 : ket].title() + lines[i][ket:]
             )
-
-with open("main2.tex", mode="w") as f:
-    f.writelines(lines)
-
-print("path:", os.path.abspath("main2.tex"))

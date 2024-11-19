@@ -14,14 +14,33 @@
 Language (slides): English
 Language (presentation): English
 
-題目 (Title): [todo]
+題目 (Title):
+Initial Placement for Fruchterman--Reingold force model with Coordinate Newton Direction
 (Research Introduction)
 
 概要 (Abstract):
-[todo]
+Graph drawing is a fundamental task in information visualization, with the Fruchterman--Reingold (FR) force model being one of the most popular choices.
+We can interpret this visualization task as a continuous optimization problem, which can be solved using the FR algorithm, a gradient descent-like method, or the L-BFGS algorithm, a quasi-Newton method.
+However, these methods are computationally expensive per iteration, which makes achieving high-quality visualizations for large-scale graphs challenging.
+
+In this paper, we propose a new initial placement based on the stochastic coordinate descent to accelerate the optimization process.
+We first reformulate the problem as a discrete optimization problem using a hexagonal lattice and then iteratively move a randomly selected vertex along the coordinate Newton direction.
+We can use the FR or L-BFGS algorithms to obtain the final placement.
+
+We demonstrate the effectiveness of our proposed approach through experiments, highlighting the potential of coordinate descent methods for graph drawing tasks.
+Additionally, we suggest combining our method with other graph drawing techniques for further improvement.
+We hope that this work will inspire future research of coordinate descent methods not only in graph drawing but also in broader graph-related applications.
 
 参考文献 (References):
-[todo]
+T. M. J. Fruchterman and E. M. Reingold, “Graph drawing by force-directed placement,” Software: Practice and Experience, vol. 21, no. 11, pp. 1129–1164, 1991. [Online]. Available: https://onlinelibrary.wiley.com/doi/abs/10.1002/spe.4380211102
+
+H. Hosobe, “Numerical optimization-based graph drawing revisited,” in 2012 IEEE Pacific Visualization Symposium, 2012, pp. 81–88.
+
+F. Ghassemi Toosi, N. S. Nikolov, and M. Eaton, “Simulated Annealing as a Pre-Processing Step for Force-Directed Graph Drawing,” in Proceedings of the 2016 on Genetic and Evolutionary Computation Conference Companion, ser. GECCO ’16 Companion. Association for Computing Machinery, 2016, pp. 997–1000. [Online]. Available: https://dl.acm.org/doi/10.1145/2908961.2931660
+
+J. X. Zheng, S. Pawar, and D. F. M. Goodman, “Graph Drawing by Stochastic Gradient Descent,” IEEE Transactions on Visualization and Computer Graphics, vol. 25, no. 9, pp. 2738–2748, 2019. [Online]. Available: https://ieeexplore.ieee.org/document/8419285
+
+T. Fuji, P.-L. Poirion, and A. Takeda, “Randomized subspace regularized Newton method for unconstrained non-convex optimization,” 2022. [Online]. Available: http://arxiv.org/abs/2209.04170
 
 --
 東京大学 大学院
