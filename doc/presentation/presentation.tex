@@ -1,57 +1,52 @@
-\RequirePackage{plautopatch}
-\documentclass[13pt,aspectratio=169,table,dvipdfmx]{beamer}
+\documentclass[dvipdfmx,13pt,aspectratio=169]{beamer}
 
 \usepackage{animate}
-\usepackage{bxdpx-beamer}
-\usepackage{amsmath, amssymb, amsthm, mathrsfs, amsfonts, dsfont}
-\usepackage[linesnumbered, ruled, vlined]{algorithm2e}
-\usepackage{annotate-equations}
-\usepackage{bbm}
-\usepackage{bm}
-\usepackage{booktabs}
-\usepackage{breakcites}
-\usepackage{calc}
-\usepackage[style=base]{caption}
-\usepackage{enumerate}
-\usepackage[T1]{fontenc}
-\usepackage{ifthen}
-\usepackage{listings}
-\usepackage{mathtools}
-\usepackage{makecell}
-\usepackage{mlmodern}
-\usepackage{multirow}
-\usepackage{newtxtext}
-\usepackage{optidef}
-\usepackage[deluxe]{otf}
-\usepackage{physics}
-\usepackage{pifont}
-\usepackage{setspace}
-\usepackage{stfloats}
-\usepackage{subfiles}
-\usepackage{subcaption}
-\usepackage{svg}
-\usepackage{tikz}
-\usepackage{xparse}
-\usepackage[all]{xy}
+% \usepackage{svg}
 
-% === Commands ===
+\usepackage{adjustbox}      % \begin{adjustbox}
+\usepackage[ruled, vlined]{algorithm2e}    % \begin{algorithm2e}
+\usepackage{amsmath}        % \begin{align*}
+\usepackage{amssymb}        % \mathbb{A}
+\usepackage{amsthm}         % \newtheorem
+\usepackage{bm,bbm}         % \bm{A}, \bbm{1}
+\usepackage{booktabs}       % \toprule, \midrule, \bottomrule
+\usepackage{enumitem}       % \begin{enumerate}[label=(\alph*)]
+\usepackage{hyperref}       % \href{URL}{text}
+\usepackage{ifthen}         % \ifthenelse
+\usepackage{lipsum}         % \lipsum
+\usepackage{makecell}       % \makecell{L1\L2}
+\usepackage{mathrsfs}       % \mathscr{A}
+\usepackage{mathtools}      % \mathrlap
+\usepackage{multirow}       % \multirow
+\usepackage{optidef}        % \begin{mini*}{x}{f(x)}{}{}
+\usepackage{orcidlink}      % \orcidlink
+\usepackage{physics}        % \qty, \norm, \abs
+\usepackage{subcaption}     % \captionsetup
+\usepackage{subfiles}       % \subfile{file}
+\usepackage{thm-restate}    % \begin{restatable}{theorem}{thm}
+\usepackage{tikz}           % \begin{tikzpicture}
+\usepackage{xparse}         % \NewDocumentCommand
+
+\hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue}
 
 \definecolor{cA}{HTML}{0072BD}
 \definecolor{cB}{HTML}{EDB120}
 \definecolor{cC}{HTML}{77AC30}
 \definecolor{cD}{HTML}{D95319}
-\definecolor{cE}{HTML}{7E2F8E}
-\newcommand{\cAText}[1]{\textcolor{cA}{#1}}
-\newcommand{\cBText}[1]{\textcolor{cB}{#1}}
-\newcommand{\cCText}[1]{\textcolor{cC}{#1}}
-\newcommand{\cDText}[1]{\textcolor{cD}{#1}}
-\newcommand{\cEText}[1]{\textcolor{cE}{#1}}
+
 \newcommand{\red}[1]{\textcolor{red}{#1}}
 \newcommand{\blue}[1]{\textcolor{blue}{#1}}
-\newcommand{\green}[1]{\textcolor{green}{#1}}
+\newcommand{\cyan}[1]{\textcolor{cyan}{#1}}
 \newcommand{\gray}[1]{\textcolor{gray}{#1}}
+\newcommand{\green}[1]{\textcolor{green}{#1}}
+\newcommand{\brown}[1]{\textcolor{brown}{#1}}
 \newcommand{\black}[1]{\textcolor{black}{#1}}
-
+\newcommand{\orange}[1]{\textcolor{orange}{#1}}
+\newcommand{\purple}[1]{\textcolor{purple}{#1}}
+\newcommand{\tccA}[1]{\textcolor{cA}{#1}}
+\newcommand{\tccB}[1]{\textcolor{cB}{#1}}
+\newcommand{\tccC}[1]{\textcolor{cC}{#1}}
+\newcommand{\tccD}[1]{\textcolor{cD}{#1}}
 \newcommand{\st}{\text{ s.t. }}
 \newcommand{\Img}[1]{\mathrm{Im}\qty(#1)}
 \newcommand{\Ker}[1]{\mathrm{Ker}\qty(#1)}
@@ -66,16 +61,6 @@
 \newcommand{\eqdef}{\eqqcolon}
 % https://tex.stackexchange.com/questions/5502/how-to-get-a-mid-binary-relation-that-grows
 \newcommand{\relmiddle}[1]{\mathrel{}\middle#1\mathrel{}}
-\newcommand{\cmark}{\cCText{\ding{51}}} % check mark
-\newcommand{\xmark}{\cDText{\ding{55}}} % cross mark
-
-\DeclareMathOperator{\Proj}{Proj}
-\DeclareMathOperator{\Exp}{Exp}
-\DeclareMathOperator{\Hess}{Hess}
-\DeclareMathOperator{\Retr}{Retr}
-\DeclareMathOperator{\Span}{span}
-\DeclareMathOperator{\myGrad}{grad}
-\renewcommand{\grad}{\myGrad}
 
 % https://tex.stackexchange.com/questions/564216/newcommand-for-each-letter
 \ExplSyntaxOn
@@ -88,52 +73,55 @@
 \definealphabet{bb}{\mathbb}{A}{Z}
 \definealphabet{rm}{\mathrm}{A}{Z}
 \definealphabet{cal}{\mathcal}{A}{Z}
-% \definealphabet{scr}{\mathscr}{A}{Z}
 \definealphabet{frak}{\mathfrak}{a}{z}
-\definealphabet{frak}{\mathfrak}{A}{Z}
-
-% === Settings ===
+% \definealphabet{scr}{\mathscr}{A}{Z}
+% \definealphabet{frak}{\mathfrak}{A}{Z}
 
 % https://qiita.com/rityo_masu/items/efd44bc8f9229e014237
 \allowdisplaybreaks[4]
 
 \usetikzlibrary{
   3d,
-  fit,
+  % fit,
   calc,
   math,
   matrix,
   patterns,
   backgrounds,
   arrows.meta,
+  shapes.geometric,
   decorations.pathmorphing,
 }
 
-% This declares a command \Comment
-% The argument will be surrounded by /* ... */
-% https://ja.overleaf.com/learn/latex/Algorithms
-\SetKwComment{Comment}{/* }{ */}
-
-\DontPrintSemicolon
-
-\parindent=0pt
-
 % === Beamer Settings ===
 
+% https://uplatexmemo.hatenadiary.jp/entry/2021/01/04/130013
+\usepackage{caption}
+\captionsetup[table]{justification=centering}
+\captionsetup[figure]{justification=centering}
+
 \usetheme{Boadilla}
-
-\usefonttheme{professionalfonts} % Be professional!
-
-% https://tex.stackexchange.com/questions/646333/size-of-integral-symbol-in-section-header-with-mlmodern
-\DeclareFontFamily{OMX}{mlmex}{}
-\DeclareFontShape{OMX}{mlmex}{m}{n}{%
-   <-{Stealth[length=2mm]}mlmex10%
-   }{} 
-\renewcommand{\familydefault}{\sfdefault}
 \usefonttheme{structurebold}
+\useinnertheme{circles}
 \setbeamerfont{alerted text}{series=\bfseries}
 \setbeamerfont{section in toc}{series=\mdseries}
 \setbeamerfont{itemize/enumerate body}{size=\large}
+\setbeamertemplate{blocks}[rounded]
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{footline}[frame number]
+\setbeamertemplate{title page}{%
+    \vspace{2.5em}
+    {\usebeamerfont{title} \usebeamercolor[fg]{title} \inserttitle \par}
+    {\usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle} \insertsubtitle \par}
+    \vspace{1.5em}
+    \begin{flushright}
+        \usebeamerfont{author}\insertauthor\par
+        \usebeamerfont{institute}\insertinstitute \par
+        \vspace{3em}
+        \usebeamerfont{date}\insertdate\par
+        \usebeamercolor[fg]{titlegraphic}\inserttitlegraphic
+    \end{flushright}
+}
 
 %Beamer Color
 \definecolor{blendedblue}{rgb}{0.2,0.2,0.7}
@@ -149,29 +137,10 @@
 \setbeamercolor{itemize subitem}{fg=black}
 \setbeamercolor{itemize subsubitem}{fg=black}
 
-\setbeamertemplate{blocks}[rounded]
-\useinnertheme{circles}
-\setbeamertemplate{navigation symbols}{}
-\setbeamertemplate{footline}[page number]
-
-\setbeamertemplate{title page}{%
-    \vspace{2.5em}
-    {\usebeamerfont{title} \usebeamercolor[fg]{title} \inserttitle \par}
-    {\usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle}\insertsubtitle \par}
-    \vspace{1.5em}
-    \begin{flushright}
-        \usebeamerfont{author}\insertauthor\par
-        \usebeamerfont{institute}\insertinstitute \par
-        \vspace{3em}
-        \usebeamerfont{date}\insertdate\par
-        \usebeamercolor[fg]{titlegraphic}\inserttitlegraphic
-    \end{flushright}
-}
-
 % === TITLE ===
-\title{\Huge{Improved Initial Placement for\\Fruchterman--Reingold Algorithm}}
+\title{\huge{Initial Placement\\for Fruchterman--Reingold force model\\with Coordinate Newton Direction}}
 \author{\Large{Hiroki Hamaguchi}}
-\institute{\large{Supervisors: Prof. Akiko Takeda}}
+\institute{\large{5th lab}\\\large{Supervisors: Prof. Akiko Takeda}}
 \date{2024/11/29}
 
 \newif\ifShowHidden
@@ -184,176 +153,41 @@
   \maketitle
 \fi
 
-\begin{frame}{Introduction for Graph Drawing}
-  \begin{columns}
-    \begin{column}{0.59\columnwidth}
-      \begin{itemize}
-        \item Graph $G = (V,E)$ (vertices $V$  / edges $E$)
-        \item Examples: Social Network, Transportation, Web, Molecular, Gene, etc.
-        \item \textbf{Graph Visualization} is an important task.
-      \end{itemize}
-    \end{column}
-    \begin{column}{0.39\columnwidth}
-      \begin{figure}[htbp]
-        \centering
-        \includegraphics[width=0.75\columnwidth]{imgs/example_fr.png}
-      \end{figure}
-    \end{column}
-  \end{columns}
-  \begin{figure}[htbp]
-    \begin{minipage}{0.49\columnwidth}
-      \centering
-      \includegraphics[height=32mm]{imgs/graph_social.jpg}
-      \caption*{
-        Social Network Graph\quad
-        \gray{\footnotesize{Designed by \href{www.freepik.com}{Freepik}}}
-      }
-    \end{minipage}
-    \begin{minipage}{0.49\columnwidth}
-      \centering
-      \includegraphics[height=32mm]{imgs/graph_railway.png}
-      \caption*{
-        Railroad Graph\quad
-        \gray{\footnotesize{By \href{https://commons.wikimedia.org/wiki/File:High_Speed_Railroad_Map_of_Europe.svg}{Bernese media},\href{https://creativecommons.org/licenses/by-sa/3.0}{CC BY-SA 3.0}}}
-      }
-    \end{minipage}
-  \end{figure}
-\end{frame}
-
 \ifShowHidden
-  \begin{frame}{Introduction for Graph Drawing}
-    \begin{tikzpicture}
-      \node[cA,font=\bfseries] (A) at (0,0) {Graph Drawing};
-      \node[cB] (B) at (-3.0,-1) {Discrete Based};
-      \node[align=left,anchor=north west] (B1) at ($(B)+(-2.0,-0.6-0.0)$) {\cBText{BFS layout}\\\small{\quad - for tree graph}};
-      \node[align=left,anchor=north west] (B2) at ($(B)+(-2.0,-0.6-1.0)$) {\cBText{Planar layout}\\\small{\quad - for planar graph}\\\scriptsize{\quad - \cite{tutteHowDrawGraph1963}}\\\scriptsize{\quad - \cite{chrobakLineartimeAlgorithmDrawing1995}}};
-      \node[align=left,anchor=north west] (B3) at ($(B)+(-2.0,-0.6-3.0)$) {\cBText{Layered graph drawing}\\\small{\quad - for DAG}\\\scriptsize{\quad - \cite{sugiyamaMethodsVisualUnderstanding1981}}};
-      \node[align=left,anchor=north west] (B4) at ($(B)+(-2.0,-0.6-4.5)$) {\cBText{Spectral layout~}\\\small{\quad - eigenvector of Laplacian}};
-      \node[draw=cB, thick,fit={(B1) (B2) (B3) (B4)}, inner sep=5pt] (BBox) {};
-
-      \node[cC,font=\bfseries] (C) at (+4.5,-1) {Continuous Based};
-      \node[cC] (C1) at ($(C)+(-2.5,-1)$) {Kamada--Kawai (KK)};
-      \node[cC] (C11) at ($(C1)+(0,-0.5)$) {\scriptsize{\cite{kamadaAlgorithmDrawingGeneral1989}}};
-      \node at ($(C11)+(0,-1.0)$) {
-        \begin{minipage}{4cm}
-          \begin{gather*}
-            \mathrm{minimize}\\
-            \sum_{i < j} \frac{k_{i,j}}{2} (d_{i,j}-l_{i,j})^2
-          \end{gather*}
-        \end{minipage}
-      };
-      \node[cC,font=\bfseries] (C2) at ($(C)+(+2.5,-1)$) {Fruchterman--Reingold (FR)};
-      \node[cC,font=\bfseries,align=center] (C21) at ($(C2)+(0,-0.5)$) {\scriptsize{\cite{fruchtermanGraphDrawingForcedirected1991}}};
-      \node at ($(C21)+(0,-1.0)$) {
-        \begin{minipage}{4cm}
-          \begin{gather*}
-            \mathrm{minimize}\\
-            \sum_{i<j} \qty(\frac{a_{i,j} d_{i,j}^3}{3k} - k^2\log{d_{i,j}})
-          \end{gather*}
-        \end{minipage}
-      };
-
-      \node[align=center] (C3) at ($(C)+(0.5,-4.3)$) {
-      \scriptsize{$d_{i,j}$: distance between nodes $v_i,v_j$ \;/\; $l_{i,j}$: optimal distance \;/\; $k,a_{i,j}$: constant}
-      };
-
-      \node (C01) at ($(C)+(-3.5,-5.5)$) {
-        \includegraphics[width=1cm]{imgs/networkx_logo.png}
-      };
-      \node (C02) at ($(C)+(-2.5,-5.5)$) {
-        \includegraphics[width=1cm]{imgs/GraphvizLogo.png}
-      };
-      \node[anchor=west] (C03) at ($(C)+(-2,-5.5)$) {
-        NetworkX and Graphviz support KK and FR
-      };
-      \node[draw=cC, thick,fit={(C01) (C02) (C03)}, inner sep=5pt] (CBox) {};
-
-      \draw[thick,-{Stealth[length=2mm]}] (A) |- ($(A)!0.5!(B)$) -| (B);
-      \draw[thick,-{Stealth[length=2mm]}] (A) |- ($(A)!0.5!(C)$) -| (C);
-      \draw[thick,-{Stealth[length=2mm]}] (C) |- ($(C)!0.5!(C1)$) -| (C1);
-      \draw[thick,-{Stealth[length=2mm]}] (C) |- ($(C)!0.5!(C2)$) -| (C2);
-    \end{tikzpicture}
-  \end{frame}
-\fi
-
-\ifShowHidden
-  \begin{frame}{Definition of FR Layout}
-    \begin{itemize}
-      \item Historically, FR layout seeks an \textbf{equilibrium of two forces}:
-    \end{itemize}
-    \begin{equation*}
-      F_{i,j}^a(d) \defeq \frac{a_{i,j} d^2}{k} \text{\quad (attraction)}, \quad F^r(d) \defeq -\frac{k^2}{d} \text{\quad (repulsion)}
-    \end{equation*}
-    \begin{itemize}
-      \item This problem can be redefine as an optimization problem:
-    \end{itemize}
-    \begin{equation*}
-      \mathrm{minimize} \; \sum_{i<j} E_{i,j}(d)
-      \quad \mathrm{where} \quad
-      E_{i,j}(d) \defeq \int_{0}^{d} F_{i,j}^a(r) \dd{r} + \int_{\infty}^{d} F^r(r) \dd{r} = \frac{a_{i,j} d^3}{3k} - k^2\log{d}
-    \end{equation*}
-    \begin{figure}[htbp]
-      \begin{minipage}{0.49\hsize}
-        \centering
-        \includegraphics[width=0.6\columnwidth]{imgs/example_fr.png}
-        \caption{
-          Example of FR layout
-          % 3d graph drawing \cite{doi:10.1177/14738716211060306}
-        }
-      \end{minipage}
-      \begin{minipage}{0.49\hsize}
-        \centering
-        \begin{tikzpicture}
-          \def\yAdjust{2}
-          \def\d{4}
-          \def\r{0.3}
-          \def\u{1.0}
-          \coordinate (M1) at (0,0);
-          \coordinate (M2) at (\d,0);
-
-          \draw (M1) circle(\r) node {$v_i$};
-          \draw (M2) circle(\r) node {$v_j$};
-
-          \draw (0,+1.6*\r*\yAdjust) -- (0,+2.4*\r*\yAdjust);
-          \draw (\d,+1.6*\r*\yAdjust) -- (\d,+2.4*\r*\yAdjust);
-          \draw[{Stealth[length=4,width=3]}-{Stealth[length=4,width=3]}] ($(M1)+(90:2*\r*\yAdjust)$) -- ($(M2)+(90:2*\r*\yAdjust)$)
-          node[midway,circle,fill=white,inner sep=0] {$d = k/a_{i,j}^{1/3}$};
-
-          \draw[-{Stealth[length=2mm]},thick,line cap=round] (+\r,0) -- (+\u,0) node[right] {$F^a_{i,j}(d)$};
-          \draw[-{Stealth[length=2mm]},thick,line cap=round] (-\r,0) -- (-\u,0) node[left] {$F^r(d)$};
-
-          \draw[dashed,domain=3.9:-3.1,samples=1000,smooth,variable=\x] plot(\x,{(-0.7+(pow((\d-\x)/\d,3)/3-ln((\d-\x)/\d))/2.2)*\yAdjust});
-          \node [star,
-            minimum size=0.25cm,
-            star point ratio=2.25,
-            inner sep=0pt,
-            draw, fill=black]
-          at (0,{(-0.7+(1/3)/2.2)*\yAdjust}) {};
-
-          \node at (-2.7,0.4*\yAdjust) {$E_{i,j}(d)$};
-        \end{tikzpicture}
-      \end{minipage}
-    \end{figure}
-  \end{frame}
-\fi
-
-\ifShowHidden
-  \begin{frame}{Algorithm for FR Layout}
+  \begin{frame}{Introduction of Graph Drawing}
     \begin{columns}
-      \begin{column}{0.4\columnwidth}
-        \textbf{``spring\_layout'' in NetworkX\\and ``fdp'' in Graphviz}
+      \begin{column}{0.58\columnwidth}
         \begin{itemize}
-          \item Adaptive cooling scheme
-          \item \textbf{gradient descent method}\\with constant step size\\per each vertex
-          \item strong \textbf{theoretical background}
-          \item \cite{tunkelang1999numerical}
+          \item Graph $G = (V,E)$ (vertices $V$  / edges $E$)
+          \item \textbf{Graph Visualization} \small{is an important task.}
+          \item \textbf{Force-directed graph drawing} \small{is a popular method.}
         \end{itemize}
-      \end{column}
-      \begin{column}{0.6\columnwidth}
         \begin{figure}[htbp]
           \centering
-          \includegraphics[width=\columnwidth]{imgs/FR_code.png}
-          \caption{\cite{kobourov2012spring}}
+          \begin{minipage}{0.55\columnwidth}
+            \centering
+            \includegraphics[width=\columnwidth]{introExample/social.jpg}
+            \caption*{
+              Social Network Graph
+              \gray{\footnotesize{Designed~by~\href{www.freepik.com}{Freepik}}}
+            }
+          \end{minipage}%
+          \begin{minipage}{0.45\columnwidth}
+            \centering
+            \includegraphics[width=\columnwidth]{introExample/railway.png}
+            \caption*{
+              Railroad Graph
+              \gray{\footnotesize{By~\href{https://commons.wikimedia.org/wiki/File:High_Speed_Railroad_Map_of_Europe.svg}{Bernese~media}, \href{https://creativecommons.org/licenses/by-sa/3.0}{CC~BY-SA~3.0}}}
+            }
+          \end{minipage}%
+        \end{figure}
+      \end{column}
+      \begin{column}{0.42\columnwidth}
+        \centering
+        \begin{figure}[htbp]
+          \centering
+          \includegraphics[height=0.75\textheight]{introExample/connectedPapers.png}
+          \includegraphics[height=0.1\textheight]{introExample/connectedPapersLogo.png}
         \end{figure}
       \end{column}
     \end{columns}
@@ -361,325 +195,455 @@
 \fi
 
 \ifShowHidden
-  \begin{frame}{Hardness of graph drawing}
-    \begin{itemize}
-      \item FR algorithm is powerful for network-like graphs, but \textbf{not for other types}.
-      \item Escaping from a plateau is \textbf{very difficult}.
-      \item Drawing $\bigcirc$ $\cong$ untangling tangled earphones
-    \end{itemize}
-    \begin{figure}[htbp]
-      \begin{minipage}{0.59\hsize}
-        \centering
-        \animategraphics[autoplay,loop,width=0.8\columnwidth]{5}{imgs/circle/circle-}{1}{1}
-        % \includegraphics[width=0.8\columnwidth]{imgs/circle/circle-50.png}
-        \caption{FR layout by NetworkX}
-      \end{minipage}
-      \begin{minipage}{0.40\hsize}
-        \centering
-        \includesvg[width=0.8\columnwidth]{imgs/circle_fdp.svg}
-        \caption{fdp layout by Graphviz}
-      \end{minipage}
-    \end{figure}
-  \end{frame}
-\fi
-
-\ifShowHidden
-  \begin{frame}{Graph Drawing as Continuous Optimization Problem}
-    \begin{itemize}
-      \item Research on graph drawing by \textbf{continuous optimization} is a hot topic.
-            \begin{itemize}
-              \large{
-              \item stress majorization \cite{gansnerGraphDrawingStress2005}
-              \item \textbf{L-BFGS} method~\cite{6183577} \cEText{(8 cites)}
-              \item GPU based \cite{gajdosParallelFruchtermanReingold2016}
-              \item \textbf{SGD} (stochastic gradient descent)~\cite{8419285} \cEText{(66 cites)}
-              \item and so on \cite{ahmedGraphDrawingGradient2020,ahmedMulticriteriaScalableGraph2022,khanManyobjectiveEvolutionaryAlgorithm2024}
-                    }
-            \end{itemize}
-    \end{itemize}
-    \begin{center}
-      \textcolor{gray}{todo: explanation of L-BFGS and SGD\\
-        L-BFGs: quasi-Newton method with limited memory\\
-        SGD: stochastic gradient descent (mini-batch)}
-    \end{center}
-    $\to$ Our research aims to take over this flow of the research.
-  \end{frame}
-\fi
-
-\ifShowHidden
-  \begin{frame}{Problem: Inapplicability of SGD}
-    \begin{itemize}
-      \item \textbf{SGD} is powerful for KK layout, but \textbf{not for FR layout}.
-      \item KK layout first computes the optimal distance $l_{i,j}$ by Dijkstra's algorithm.
-      \item FR layout has $a_{i,j}=0$ if $v_i,v_j$ are not connected.
-    \end{itemize}
+  \begin{frame}{Graph Drawing by NetworkX}
     \begin{columns}
-      \begin{column}{0.1\columnwidth}\end{column}
-      \begin{column}{0.4\columnwidth}
-        \begin{equation*}
-          \mathrm{(KK)} \quad  f_{i,j}(d) = \frac{k}{2} (d_{i,j} - l_{i,j})^2
-        \end{equation*}
+      \begin{column}{0.62\columnwidth}
+        \begin{itemize}
+          \item NetworkX
+                \raisebox{-0.2\baselineskip}{\includegraphics[width=1.5em]{graphDrawing/networkxLogo.png}}
+                is a popular Python library.
+          \item \texttt{nx.draw} is the default function.
+          \item \large{\textbf{Fruchterman--Reingold algorithm}} is~implemented.
+        \end{itemize}
+        \begin{center}
+          \rule{0.8\columnwidth}{0.4pt}
+        \end{center}
+        \begin{itemize}
+          \item<1-> \Large{$\abs{V}=\phantom{0}10$: \phantom{1}0.2 sec / Well Visualized}
+          \item<2-> \Large{$\abs{V}=\phantom{0}20$: \phantom{1}0.2 sec / Tangled?}
+          \item<3-> \Large{$\abs{V}=500$: \red{11.5} sec / \red{WHAT IS THIS???}}
+        \end{itemize}
       \end{column}
-      \begin{column}{0.4\columnwidth}
-        \begin{equation*}
-          \mathrm{(FR)} \quad  f_{i,j}(d) = \frac{a_{i,j} d^3}{3k} - k^2\log{d}
-        \end{equation*}
-      \end{column}
-      \begin{column}{0.1\columnwidth}\end{column}
-    \end{columns}
-    \begin{figure}[htbp]
-      \centering
-      \begin{tikzpicture}
-        \def\radius{2}
-        \foreach \xShift/\nA/\nB/\nC/\nD/\nE/\nF/\desc in {
-            -3/1/2/3/3/2/1/$l_{i,j}$,
-            +3/1/0/0/0/0/1/$a_{i,j}$} {
-            \begin{scope}[xshift=\xShift cm]
-              \node at (-0.85*\radius,+0.85*\radius) {\large{\desc}};
-              \node (P0) at (0:\radius) [circle, fill=red, inner sep=0pt, minimum size=10pt] {};
-              \foreach \i in {1,...,6} {
-                  \node (P\i) at (\i*360/7: \radius) [circle, fill=black, inner sep=0pt, minimum size=6pt] {};
-                }
-              \draw (P0) -- (P1) -- (P2) -- (P3) -- (P4) -- (P5) -- (P6) -- (P0);
-              \foreach \i in {1,...,6} {
-                  \draw [decorate, decoration={coil,aspect=0.6,segment length=2mm,amplitude=1mm}] (P\i) -- (P0);
-                }
-              \node[right=5pt] at ($(P0)!0.5!(P1)$) {\nA};
-              \node[above=5pt] at ($(P0)!0.5!(P2)$) {\nB};
-              \node[above=5pt] at ($(P0)!0.5!(P3)$) {\nC};
-              \node[below=5pt] at ($(P0)!0.5!(P4)$) {\nD};
-              \node[below=5pt] at ($(P0)!0.5!(P5)$) {\nE};
-              \node[right=5pt] at ($(P0)!0.5!(P6)$) {\nF};
-            \end{scope}
-          }
-      \end{tikzpicture}
-    \end{figure}
-  \end{frame}
-\fi
-
-\ifShowHidden
-  \begin{frame}{The Purpose of this research}
-    \begin{table}
-      \centering
-      \begin{tabular}{c|c|c|c}
-        \toprule
-        Existing works                       & \makecell[c]{\cite{6183577}                                                                                         \\\cite{8419285}}    & \cite{ghassemitoosiSimulatedAnnealingPreProcessing2016} & \cite{NEURIPS2019_bc6dc48b}           \\
-        \midrule
-        \textbf{abstract}                    & \makecell[c]{L-BFGS / SGD                                                                                           \\for graph drawing} & \makecell[c]{pre-processing as\\initial placement}                     & \makecell[c]{random subspace\\algorithm}             \\[1.5em]
-        \textbf{limitation}                  & \makecell[c]{L-BFGS is slow                                                                                         \\SGD is un-apllicable} & \makecell[c]{just using\\a circle layout}                     & \makecell[c]{no existing work\\for FR layout}             \\
-        \midrule
-        \textcolor{red}{\textbf{What we do}} & \textcolor{red}{practical speed up} & \textcolor{red}{refine the strategy} & \makecell[c]{\textcolor{red}{apply to} \\\textcolor{red}{FR layout}} \\
-        \bottomrule
-      \end{tabular}
-    \end{table}
-  \end{frame}
-\fi
-
-\ifShowHidden
-  \begin{frame}{Key Observation: stochastic strategy}
-    \begin{columns}
-      \begin{column}{0.49\columnwidth}
-        \centering{
-          For far-quadratic objective functions
-          \begin{itemize}
-            \item[\cmark] \textbf{SGD} excels at rough optimization
-            \item[\xmark] \textbf{L-BFGS} is ineffective for this case\\
-                  \small{$\order{\abs{V}^2}$ per iteration is too expensive}
-          \end{itemize}}
-      \end{column}
-      \begin{column}{0.49\columnwidth}
-        \centering{
-          For near-quadratic objective functions
-          \begin{itemize}
-            \item[\cmark] \textbf{L-BFGS} excels at precise optimization
-            \item[\xmark] \textbf{SGD} is ineffective for this case\\
-                  \small{it is too easy to find a locally optimal solution}
-          \end{itemize}}
+      \begin{column}{0.38\columnwidth}
+        \begin{figure}[htbp]
+          \centering
+          \only<1>{\includegraphics[width=\columnwidth]{vscode/10.png}}
+          \only<2>{\includegraphics[width=\columnwidth]{vscode/20.png}}
+          \only<3>{\includegraphics[width=\columnwidth]{vscode/500.png}}
+        \end{figure}
       \end{column}
     \end{columns}
+  \end{frame}
+\fi
+
+\ifShowHidden
+  \begin{frame}{``Twist'' Causes Stagnation}
+    \begin{itemize}
+      \item
+            \textbf{Twist}: Unnecessary edge intersections or tangled structures.
+      \item Stagnation of the simulation process.
+      \item $\order{\abs{V}^2}$ per iteration. Slow for large-scale graphs.
+    \end{itemize}
     \begin{figure}[htbp]
       \centering
-      \begin{tikzpicture}
-        \foreach \xA/\yA/\xB/\yB/\xC/\yC/\xD/\yD/\xE/\yE/\xShift/\yShift in {
-            1.25/1.25/-0.25/0.75/-0.25/-1.25/0.75/-0.25/-1.25/-0.25/-5/0,
-            0/0/0/1/0/-1/1/0/-1/0/0/0,
-            0.2/-0.1/-0.3/1.2/-0.2/-0.9/1.1/-0.1/-1.1/0.1/+5/0} {
-            \begin{scope}[xshift=\xShift cm,yshift=\yShift cm]
-              \draw[dashed,color=gray,line width=0.5pt] (-1.5, 1.5) rectangle (1.5, -1.5);
-              \node[circle, fill=red,   minimum size=8pt] (a0) at (\xA, \yA) {};
-              \node[circle, fill=black, minimum size=8pt] (a1) at (\xB, \yB) {};
-              \node[circle, fill=black, minimum size=8pt] (a2) at (\xC, \yC) {};
-              \node[circle, fill=black, minimum size=8pt] (a3) at (\xD, \yD) {};
-              \node[circle, fill=black, minimum size=8pt] (a4) at (\xE, \yE) {};
-              \draw[decorate, decoration={coil, segment length=2, aspect=0.5}] (a0) -- (a1);
-              \draw[decorate, decoration={coil, segment length=2, aspect=0.5}] (a0) -- (a2);
-              \draw[decorate, decoration={coil, segment length=2, aspect=0.5}] (a0) -- (a3);
-              \draw[decorate, decoration={coil, segment length=2, aspect=0.5}] (a0) -- (a4);
-            \end{scope}
-          }
-
-        \draw[-{Stealth[length=10,width=0.4cm]},line width=0.15cm] (-3.1, 0) -- (-1.9, 0);
-        \draw[-{Stealth[length=10,width=0.4cm]},line width=0.15cm] (+3.1, 0) -- (+1.9, 0);
-      \end{tikzpicture}
+      \animategraphics[autoplay,loop,width=0.4\columnwidth]{5}{circle/circle-}{1}{1}
     \end{figure}
   \end{frame}
 \fi
 
 \ifShowHidden
-  \begin{frame}{Key Technique 1: Separation of the objective function}
-    \begin{align*}
-      f(X) =                      & \sum_{i<j} f_{i,j}(d_{i,j}) = \cAText{\overset{\text{attraction}}{\underbrace{\sum_{(i,j)\in E} f^a_{i,j}(d_{i,j})}_{\text{sparse}}}} + \cDText{\overset{\text{repulsion}}{\underbrace{\sum_{i<j} f^r_{i,j}(d_{i,j})}_{\text{dense}}}} \\
-      \to \mathrm{minimize} \quad & \cAText{\sum_{(i,j)\in E} f^a_{i,j}(d_{i,j})} \quad \mathrm{subject \enspace to} \quad \cDText{f^r_{i,j}(d_{i,j}) \leq \epsilon, \quad i<j}                                                                                            \\
-      \to \mathrm{minimize} \quad & \cAText{\sum_{(i,j)\in E} f^a_{i,j}(d_{i,j})} \quad \mathrm{subject \enspace to} \quad \cDText{\text{each $x_i$ has an exclusive $\epsilon'$-ball}}
-    \end{align*}
-    \begin{itemize}
-      \item Without constraints, $X=0$ is the optimal solution $\to$ \textbf{closest packing}
-      \item With \textbf{hexagonal close-packed} structure,
-            $f$ is the sum of $\abs{V}^2 \to \abs{E}$ terms
-      \item partially overlapped with \cite{ghassemitoosiSimulatedAnnealingPreProcessing2016,s22145179}
-    \end{itemize}
+  \begin{frame}{Previous Works}
+    \begin{columns}
+      \begin{column}{0.5\columnwidth}
+        \textbf{L-BFGS (Quasi-Newton Method)}
+        \begin{itemize}
+          \item Numerical optimization approach.
+          \item Effective for reducing stress in graph layouts.
+        \end{itemize}
+        \vspace{0.5cm}
+        \textbf{Limitations}
+        \begin{itemize}
+          \item Treats just as a general optimization problem.
+          \item Ignored inherent graph structure.
+        \end{itemize}
+      \end{column}
+      \begin{column}{0.5\columnwidth}
+        \textbf{Simulated Annealing (SA)}
+        \begin{itemize}
+          \item Stochastic optimization method.
+          \item Effective for addressing "twist" issues in graphs.
+          \item Improves visualization when combined with FR algorithm.
+        \end{itemize}
+        \vspace{0.5cm}
+        \textbf{Limitations}
+        \begin{itemize}
+          \item Restricted to unweighted graphs.
+          \item Limited to circle placement.
+          \item Inefficient due to random swapping.
+          \item Ignored sparsity of graphs.
+        \end{itemize}
+      \end{column}
+    \end{columns}
   \end{frame}
 \fi
 
 \ifShowHidden
-  \begin{frame}{proposed algorithm 1}
-    \begin{itemize}
-      \item exact projection: min cost flow problem $(\order{\abs{V}^3})$
-      \item heuristic projection: sort by coordinates $(\order{\abs{V} \log \abs{V}})$
-    \end{itemize}
-    \begin{figure}[htbp]
-      \begin{minipage}{0.45\hsize}
-        \centering
-        \includegraphics[width=\columnwidth]{imgs/hex1.png}
-      \end{minipage}
-      \begin{minipage}{0.45\hsize}
-        \centering
-        \includegraphics[width=\columnwidth]{imgs/hex2.png}
-      \end{minipage}
+  \begin{frame}{Our Contribution}
+    \begin{figure}[h]
+      \centering
+      \includegraphics[width=0.75\columnwidth]{../main/fig1/fig1_slide.pdf}
+      \caption{\texttt{jagmesh1} dataset after 50 iterations.}
     \end{figure}
   \end{frame}
 \fi
 
-% \item 代表的なTSPの解法: (Held-Karp), 2-opt, 3-opt, Lin-Kernighan, Christofides, etc.
-
-\ifShowHidden
-  \begin{frame}{Key Technique 2: Randomized subspace algorithm}
-    \begin{itemize}
-      \item Researches on Randomized Subspace Newton (\textbf{RSN}) are conducted.
-            \begin{itemize}
-              \item Proposed in~\cite{NEURIPS2019_bc6dc48b}
-              \item Extended in~\cite{cartisRandomisedSubspaceMethods2022},\cite{fujiRandomizedSubspaceRegularized2022},\cite{higuchiFastConvergenceSecondOrder2024}
-              \item Analysis is based on~\cite{karimireddyGlobalLinearConvergence2018}
-            \end{itemize}
-    \end{itemize}
-    \begin{columns}[T]
-      \column{0.5\columnwidth}
-      \begin{itemize}
-        \item Apply some second-order method to subspaces
-        \item graph drawing: optimize over $\prod_{i=1}^{n} \mathbb{R}^2$\\
-              $\to$ suitable for \textbf{RSN}!
-      \end{itemize}
-      \column{0.5\columnwidth}
-      \begin{figure}[htbp]
+\begin{frame}{Definition of FR Layout}
+  \begin{columns}
+    \begin{column}{0.7\columnwidth}
+      Historically, FR layout seeks an \textbf{equilibrium of two forces}:
+      \begin{equation*}
+        \tccA{F_{i,j}^\mathrm{a}(d) \defeq \frac{w_{i,j} d^2}{k}}, \quad \tccD{F^\mathrm{r}(d) \defeq -\frac{k^2}{d}}.
+      \end{equation*}
+      Its scalar potential, energy, is defined as
+      \begin{gather*}
+        \tccA{E_{i,j}^\mathrm{a}(d) \defeq \int_{0}^{d} F_{i,j}^\mathrm{a}(r) \dd{r} = \frac{w_{i,j} d^3}{3k}}, \quad
+        \tccD{E^\mathrm{r}(d)       \defeq \int_{\infty}^{d} F^\mathrm{r}(r) \dd{r} = -k^2\log{d}}, \\
+        E_{i,j}(d)            \defeq \tccA{E_{i,j}^\mathrm{a}(d)} + \tccD{E^\mathrm{r}(d)}.
+      \end{gather*}
+      Seek equilibrium $\leftrightarrow$ \textbf{find local minimum of $f(X)$} (\textbf{non}-convex):
+      \begin{mini}
+        {X \in \bbR^{2 \times n}}
+        {f(X) \defeq \sum_{i<j} E_{i,j}(\norm{x_i - x_j}).}
+        {\label{eq:fr}}
+        {}
+      \end{mini}
+    \end{column}
+    \begin{column}{0.3\columnwidth}
+      \begin{figure}[h]
         \centering
-        \includegraphics[width=0.9\columnwidth]{imgs/randomSubspace.pdf}
+        \includegraphics[width=\columnwidth]{../main/fr_layout/fr_layout.pdf}
       \end{figure}
-    \end{columns}
-  \end{frame}
-\fi
+      \begin{figure}[h]
+        \centering
+        \includegraphics[width=\columnwidth]{../main/energy_3d/energy_3d.png}
+      \end{figure}
+    \end{column}
+  \end{columns}
+\end{frame}
 
-% \ifShowHidden
-\begin{frame}{Advantages of Randomized Subspace Newton}
-  \begin{figure}[htbp]
-    \centering
-    \begin{tikzpicture}[scale=1.5]
-      \coordinate (A) at (0,0);
-      \coordinate (B) at (3,0);
-      \coordinate (C) at (0,2);
-
-      \draw[decorate, decoration={coil, segment length=4, aspect=0.5}] (A) -- (B);
-      \draw[decorate, decoration={coil, segment length=4, aspect=0.5}] (A) -- (C);
-
-      \draw[gray, dashed, ultra thick] (A) -- ++(9/2.8,4/2.8);
-      \draw[red, ultra thick, -] (A) -- ++(1.125,0.57142);
-      \node[star, star points=5, star point ratio=2.25, fill=red,scale=0.5] at ($(A)+(1.125,0.57142)$) {};
-      \node[anchor=west,align=left,gray] at ($(A)+(9/2.8+0.3,4/2.8)$) {\Large{$g=\nabla f$}\\[0.4em]\Large{Descent direction}};
-      \node[anchor=west,align=left,red] at (9/2.8+0.3,0.5) {\Large{$d=(\nabla^2 f)^{-1}\nabla f$}\\[0.4em]\Large{Newton's direction}};
-
-      \coordinate (opt) at ($(B)!0.5!(C)$);
-      \node[star, star points=5, star point ratio=2.25, fill=cA, minimum size=5pt] at (opt) {};
-      \node[above=0.5cm] at (opt) {\large{\cAText{optimal}}};
-
-      \filldraw[red] (A) circle (2pt);
-      \filldraw[black] (B) circle (2pt);
-      \filldraw[black] (C) circle (2pt);
-    \end{tikzpicture}
-  \end{figure}
+\begin{frame}{Newton's Method}
   \begin{itemize}
-    \item random subspace problem (subproblem for vertex $i$):
+    \item $f\colon \bbR^n \to \bbR$ : strictly convex function /  The second order approximation at $x_0$ is
           \begin{equation*}
-            \min_{x_i \in \mathbb{R}^2} \sum_{j \in \mathrm{Adj}(i)} \frac{a_{i,j} \norm{x_i - x_j}_2^3}{3k} \quad \leftarrow \text{\textbf{CONVEX} optimization}
+            f(x) \approx f(x_0) + \nabla f(x_0)^\top (x - x_0) + \frac{1}{2} (x - x_0)^\top \nabla^2 f(x_0) (x - x_0).
           \end{equation*}
-    \item Original problem, subspace problem, and restricted problem are all \textbf{NON-CONVEX}
-    \item All distance $d_{i,j}=\norm{x_i-x_j}_2 \geq \epsilon'$ $\to$ numerically stable
+    \item  argmin $x^*$ satisfies
+          \begin{align*}
+                 & \nabla f(x_0) + \nabla^2 f(x_0) (x^* - x_0) = 0 \\
+            \iff & x^* = x_0 - \nabla^2 f(x_0)^{-1} \nabla f(x_0).
+          \end{align*}
+    \item  $d = -\nabla^2 f(x_0)^{-1} \nabla f(x_0)$: \textbf{the Newton direction}
+          (\textbf{too expensive} ... )
+    \item coordinate Newton direction: $d_i = -\nabla^2 f_i(x_i)^{-1} \nabla f_i(x_i)$
+    \item Computable!
   \end{itemize}
 \end{frame}
+
+\begin{frame}{Reduction to Discrete}
+  Graphs have sparsity : $\tccA{\abs{E}} \ll \tccD{\abs{V}^2}$ / the energy function $E_{i,j}$ is $\tccD{-k^2\log{d}}$ for all $(i,j) \notin E$.
+  \begin{mini}
+    {X \in \bbR^{2 \times n}}
+    {\sum_{(i,j)\in E} \tccA{\frac{w_{i,j}\norm{x_i - x_j}^3}{3k}} - \tccD{\sum_{i<j} k^2\log{\norm{x_i - x_j}}}.}
+    {\label{eq:frApprox}}
+    {}
+  \end{mini}
+  Converting the second term into a constraint
+  (obj: $\tccA{\order{\abs{E}}}$ terms from $\tccD{\order{\abs{V}^2}}$ terms)
+  \begin{mini}
+    {X \in \bbR^{2 \times n}}
+    {f^{\mathrm{a}}(X) \defeq \tccA{\sum_{(i,j)\in E} \frac{w_{i,j}\norm{x_i - x_j}^3}{3k}}}
+    {\label{eq:frApprox2}}
+    {}
+    \addConstraint{\tccD{\norm{x_i - x_j}}}{\tccD{\geq \epsilon},\quad}{\forall (i,j)\,(i<j)}
+  \end{mini}
+  where $\epsilon$ is a suitably chosen positive constant.\\
+  This conversion does not lose the essence of the problem too much because $\tccD{E^\mathrm{r}(d)=-k^2\log{d}}$ is monotonically decreasing.
+\end{frame}
+
+\begin{frame}{Discrete Optimization}
+  \begin{columns}
+    \begin{column}{0.47\columnwidth}
+      problem \eqref{eq:frApprox2} still involves $\order{\abs{V}^2}$ constraints.
+      By \textbf{fixing} the possible point placement to $Q$ (any two points apart $\epsilon$), we can \textbf{skip the check of constraints} in the problem~\eqref{eq:frApprox2}.
+      \begin{mini}
+        {\pi\colon V \to \tccD{Q}}
+        {\tccA{\sum_{(i,j)\in E} \frac{w_{i,j}\norm{\pi(v_i) - \pi(v_j)}^3}{3k}},}
+        {\label{eq:frApprox3}}
+        {}
+        \addConstraint{\tccD{\pi \text{ is injective}}.}
+      \end{mini}
+      Skipping the check of $\order{\abs{V}^2}$ constraints\\
+      $\to$ Reducing the complexity to $\order{\abs{E}}$\\
+      $\to$ \textbf{speedup}.
+    \end{column}
+    \begin{column}{0.53\columnwidth}
+      \begin{figure}[t]
+        \centering
+        \includegraphics[width=\columnwidth]{../main/pi/pi.pdf}
+      \end{figure}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Proposed Algorithm 1}
+  We solve the problem~\eqref{eq:frApprox3} using the coordinate Newton direction.
+
+  Let the objective function $f^{\mathrm{a}}_i(x_i)$ corresponding to a vertex $v_i$ be
+  \begin{equation*}
+    f^{\mathrm{a}}_i(x_i) \defeq \sum_{j \neq i} \frac{w_{i,j}\norm{x_i - x_j}^3}{3k}.
+  \end{equation*}
+  Its gradient and Hessian matrix are
+  \begin{align*}
+    \nabla f^{\mathrm{a}}_i(x_i)   & = \sum_{j \neq i} \frac{w_{i,j}\norm{x_i - x_j}}{k} (x_i - x_j),     \\
+    \nabla^2 f^{\mathrm{a}}_i(x_i) & = \sum_{j \neq i} \frac{w_{i,j}\norm{x_i - x_j}}{k} \mqty(1      & 0 \\0&1) + \sum_{j \neq i} \frac{w_{i,j}}{k\norm{x_i - x_j}} (x_i - x_j)(x_i - x_j)^\top.
+  \end{align*}
+  Since $f^{\mathrm{a}}_i$ is convex, we can use the coordinate Newton direction.
+  This is a large difference from the functions $f_i(x_i)$ in Eq.~\eqref{eq:fi} and $f^{\mathrm{a}}(X)$ in Prob.~\eqref{eq:frApprox2}, which are not convex.
+\end{frame}
+
+\begin{frame}{proposed algorithm 2}
+  The ordinary updated rule with the coordinate Newton direction is
+  \begin{equation*}
+    x_i - \nabla^2 f^{\mathrm{a}}_i(x_i)^{-1} \nabla f^{\mathrm{a}}_i(x_i).
+  \end{equation*}
+  $x_i^\mathrm{new}$ may not be in the hexagonal lattice $Q^\mathrm{hex}$.
+  Thus, we must round to the nearest point in $Q^\mathrm{hex}$.
+  We empirically found that adding a random vector to the Newton direction is effective.
+  % for the optimization process, which is a similar strategy to the SA in Sec.~\ref{ssec:preprocessing}. This randomness can help to escape from local minima and to explore the solution space more effectively.
+  % In conclusion, the updated rule for the vertex $v_i$ is
+  \begin{equation*}
+    x_i^\mathrm{new} \gets \mathrm{round}\qty(x_i - \nabla^2 f^{\mathrm{a}}_i(x_i)^{-1} \nabla f^{\mathrm{a}}_i(x_i) + t \cdot \text{rand}),
+  \end{equation*}
+  where $\mathrm{round}(\hat{x})$ denotes the operation assigning $\hat{x}$ to the nearest point in the hexagonal lattice $Q^\mathrm{hex}$, $\mathrm{rand}$ is a random vector with a unit norm, and $t$ is a parameter controlling the randomness.
+
+  \begin{figure}[t]
+    \centering
+    \includegraphics[width=0.5\columnwidth]{../main/hex/hex.pdf}
+    \caption{Visual explanation of the one iteration of the proposed algorithm. Step1. Compute the coordinate Newton direction for a randomly selected vertex (blue). Step2. Decide $x_i^\mathrm{new}$ by rounding the direction and adding a random vector. Step3. Move the vertex and swap the vertices if there is a collision. In this case, swap blue and green vertices.}
+    \label{fig:hex}
+  \end{figure}
+\end{frame}
+
+\begin{frame}{optimal Scaling}
+  We can find optimal scaling factor $c^*$.
+  We scale $X = (x_1, \dots, x_n)$ as $x_i \gets c x_i$ for all $i$.\\
+  This problem is to minimize $\phi(c)$:
+  \begin{equation*}
+    \phi(c) \defeq \qty(\sum_{(i,j) \in E} \frac{w_{i,j} (c \norm{x_i - x_j})^3}{3k}) - k^2 \sum_{i < j} \log(c \norm{x_i - x_j})
+  \end{equation*}
+  The function $\phi(c)$ is convex, and we can find the optimal scaling factor $c^*$ by
+  \begin{equation}\label{eq:scaling}
+    c^* = \qty(\frac{k^2 n(n-1)}{3 \sum_{(i,j) \in E} \frac{w_{i,j} \norm{x_i - x_j}^3}{k}})^{1/3}.
+  \end{equation}
+  This value can be computed in $\order{\abs{E}}$ complexity.
+
+  Notably, the optimal solution to Prob.~\eqref{eq:frApprox3} is invariant under scaling. Thus, we can select any $\epsilon$ to define the hexagonal lattice $Q^\mathrm{hex}$ as far as we scale the placement by $c^*$ as post-processing.
+\end{frame}
+
+\begin{frame}[fragile]{Pseudo Code}
+  \begin{center}
+    \begin{minipage}{0.7\columnwidth}
+      \vspace{-0.2cm}
+      \begin{algorithm}[H]
+        \caption{Proposed algorithm as initial placement}
+        \label{alg:proposed}
+        % \KwIn{Graph $G_W = (V, E)$}
+        % \KwOut{Initial placement $X = (x_1, \dots, x_n)$}
+        Define parameters $N_\mathrm{iter}^\mathsf{CN}, t, \Delta t$ and hexagonal lattice $Q^\mathrm{hex}$\;
+        Set $\pi$ as a injection from $V$ to $Q^\mathrm{hex}$ randomly\;
+        \For{$j \gets 0$ \KwTo $N_\mathrm{iter}^\mathsf{CN}$}{
+        $v_i \gets \text{randomly selected vertex from } V$\;
+        $x_i \gets \pi(v_i)$\;
+        $x_i^\mathrm{new} \gets \mathrm{round}(x_i - \nabla^2 f_i(x_i)^{-1} \nabla f_i(x_i) + t \cdot \mathrm{rand})$\;
+          \If{$\exists v_j \st \pi(v_j) = x_i^\mathrm{new}$}{
+            Swap $v_i$ and $v_j$ in $\pi$\;
+          } \Else{
+            $\pi(v_i) \gets x_i^\mathrm{new}$\;
+          }
+          }
+        $x_i \gets \pi(v_i)$ for all $v_i \in V$\;
+        $c^* \gets \text{optimal scaling factor by Eq.~\eqref{eq:scaling}}$\;
+        $x_i \gets c^* x_i$ for all $v_i \in V$\;
+          \Return $X$
+      \end{algorithm}
+    \end{minipage}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Results 1}
+  \begin{figure}[h]
+    \centering
+    \addtolength{\tabcolsep}{-0.5em}
+    \begin{tabular}{cccccc}
+      \multicolumn{6}{c}{\textbf{\texttt{jagmesh1}} $(\abs{V}=936, \abs{E}=2664, \text{sparsity}=0.609\text{\%})$ \quad Figures are at 50 iterations.}    \\
+      \raisebox{-.5\height}{\includegraphics[width=0.275\columnwidth]{../main/individual/plot/jagmesh1.pdf}} &
+      \makecell{\small{\textsf{FR}}                                                                                                                       \\[-0.2em]\includegraphics[width=0.135\columnwidth]{../main/individual/vis/jagmesh1_FR.png}} &
+      \makecell{\small{\textsf{L-BFGS}}                                                                                                                   \\[-0.2em]\includegraphics[width=0.135\columnwidth]{../main/individual/vis/jagmesh1_L-BFGS.png}} &
+      \makecell{\small{\textsf{\textbf{CN}-FR}}                                                                                                           \\[-0.2em]\includegraphics[width=0.135\columnwidth]{../main/individual/vis/jagmesh1_CN-FR.png}} &
+      \makecell{\small{\textsf{\textbf{CN}-L-BFGS}}                                                                                                       \\[-0.2em]\includegraphics[width=0.135\columnwidth]{../main/individual/vis/jagmesh1_CN-L-BFGS.png}} &
+      \makecell{\small{\textsf{BEST}}                                                                                                                     \\[-0.2em]\includegraphics[width=0.135\columnwidth]{../main/individual/vis/opt_jagmesh1.png}} \\
+
+      \multicolumn{6}{c}{\textbf{\texttt{dwt\_1005}} $(\abs{V}=1005, \abs{E}=3808, \text{sparsity}=0.755\text{\%})$ \quad Figures are at 100 iterations.} \\
+      \raisebox{-.5\height}{\includegraphics[width=0.275\columnwidth]{../main/individual/plot/dwt_1005.pdf}} &
+      \makecell{\small{\textsf{FR}}                                                                                                                       \\[-0.2em]\includegraphics[width=0.135\columnwidth]{../main/individual/vis/dwt_1005_FR.png}} &
+      \makecell{\small{\textsf{L-BFGS}}                                                                                                                   \\[-0.2em]\includegraphics[width=0.135\columnwidth]{../main/individual/vis/dwt_1005_L-BFGS.png}} &
+      \makecell{\small{\textsf{\textbf{CN}-FR}}                                                                                                           \\[-0.2em]\includegraphics[width=0.135\columnwidth]{../main/individual/vis/dwt_1005_CN-FR.png}} &
+      \makecell{\small{\textsf{\textbf{CN}-L-BFGS}}                                                                                                       \\[-0.2em]\includegraphics[width=0.135\columnwidth]{../main/individual/vis/dwt_1005_CN-L-BFGS.png}} &
+      \makecell{\small{\textsf{BEST}}                                                                                                                     \\[-0.2em]\includegraphics[width=0.135\columnwidth]{../main/individual/vis/opt_dwt_1005.png}} \\
+    \end{tabular}
+  \end{figure}
+\end{frame}
+
+\begin{frame}{Results 2}
+  \begin{figure}[h]
+    \centering
+    \addtolength{\tabcolsep}{-0.5em}
+    \begin{tabular}{cccccc}
+      \multicolumn{6}{c}{\textbf{\texttt{dwt\_2680}} $(\abs{V}=2680, \abs{E}=11173, \text{sparsity}=0.311\text{\%})$ \quad Figures are at 150 iterations.} \\
+      \raisebox{-.5\height}{\includegraphics[width=0.275\columnwidth]{../main/individual/plot/dwt_2680.pdf}} &
+      \makecell{\small{\textsf{FR}}                                                                                                                        \\[-0.2em]\includegraphics[width=0.135\columnwidth]{../main/individual/vis/dwt_2680_FR.png}} &
+      \makecell{\small{\textsf{L-BFGS}}                                                                                                                    \\[-0.2em]\includegraphics[width=0.135\columnwidth]{../main/individual/vis/dwt_2680_L-BFGS.png}} &
+      \makecell{\small{\textsf{\textbf{CN}-FR}}                                                                                                            \\[-0.2em]\includegraphics[width=0.135\columnwidth]{../main/individual/vis/dwt_2680_CN-FR.png}} &
+      \makecell{\small{\textsf{\textbf{CN}-L-BFGS}}                                                                                                        \\[-0.2em]\includegraphics[width=0.135\columnwidth]{../main/individual/vis/dwt_2680_CN-L-BFGS.png}} &
+      \makecell{\small{\textsf{BEST}}                                                                                                                      \\[-0.2em]\includegraphics[width=0.135\columnwidth]{../main/individual/vis/opt_dwt_2680.png}} \\
+
+      \multicolumn{6}{c}{\textbf{\texttt{3elt}} $(\abs{V}=4720, \abs{E}=13722, \text{sparsity}=0.123\text{\%})$ \quad Figures are at 150 iterations.}      \\
+      \raisebox{-.5\height}{\includegraphics[width=0.275\columnwidth]{../main/individual/plot/3elt.pdf}}     &
+      \makecell{\small{\textsf{FR}}                                                                                                                        \\[-0.2em]\includegraphics[width=0.135\columnwidth]{../main/individual/vis/3elt_FR.png}} &
+      \makecell{\small{\textsf{L-BFGS}}                                                                                                                    \\[-0.2em]\includegraphics[width=0.135\columnwidth]{../main/individual/vis/3elt_L-BFGS.png}} &
+      \makecell{\small{\textsf{\textbf{CN}-FR}}                                                                                                            \\[-0.2em]\includegraphics[width=0.135\columnwidth]{../main/individual/vis/3elt_CN-FR.png}} &
+      \makecell{\small{\textsf{\textbf{CN}-L-BFGS}}                                                                                                        \\[-0.2em]\includegraphics[width=0.135\columnwidth]{../main/individual/vis/3elt_CN-L-BFGS.png}} &
+      \makecell{\small{\textsf{BEST}}                                                                                                                      \\[-0.2em]\includegraphics[width=0.135\columnwidth]{../main/individual/vis/opt_3elt.png}} \\
+    \end{tabular}
+  \end{figure}
+\end{frame}
+
+% \ifShowHidden
+%   \begin{frame}{Algorithm for FR Layout}
+%     \begin{columns}
+%       \begin{column}{0.4\columnwidth}
+%         \textbf{``spring\_layout'' in NetworkX\\and ``fdp'' in Graphviz}
+%         \begin{itemize}
+%           \item Adaptive cooling scheme
+%           \item \textbf{gradient descent method}\\with constant step size\\per each vertex
+%           \item strong \textbf{theoretical background}
+%           \item \cite{tunkelang1999numerical}
+%         \end{itemize}
+%       \end{column}
+%       \begin{column}{0.6\columnwidth}
+%         \begin{figure}[htbp]
+%           \centering
+%           \includegraphics[width=\columnwidth]{imgs/FR_code.png}
+%           \caption{\cite{kobourov2012spring}}
+%         \end{figure}
+%       \end{column}
+%     \end{columns}
+%   \end{frame}
+% \fi
+
+% \ifShowHidden
+%   \begin{frame}{Key Technique 1: Separation of the objective function}
+%     \begin{align*}
+%       f(X) =                      & \sum_{i<j} f_{i,j}(d_{i,j}) = \cAText{\overset{\text{attraction}}{\underbrace{\sum_{(i,j)\in E} f^a_{i,j}(d_{i,j})}_{\text{sparse}}}} + \cDText{\overset{\text{repulsion}}{\underbrace{\sum_{i<j} f^r_{i,j}(d_{i,j})}_{\text{dense}}}} \\
+%       \to \mathrm{minimize} \quad & \cAText{\sum_{(i,j)\in E} f^a_{i,j}(d_{i,j})} \quad \mathrm{subject \enspace to} \quad \cDText{f^r_{i,j}(d_{i,j}) \leq \epsilon, \quad i<j}                                                                                            \\
+%       \to \mathrm{minimize} \quad & \cAText{\sum_{(i,j)\in E} f^a_{i,j}(d_{i,j})} \quad \mathrm{subject \enspace to} \quad \cDText{\text{each $x_i$ has an exclusive $\epsilon'$-ball}}
+%     \end{align*}
+%     \begin{itemize}
+%       \item Without constraints, $X=0$ is the optimal solution $\to$ \textbf{closest packing}
+%       \item With \textbf{hexagonal close-packed} structure,
+%             $f$ is the sum of $\abs{V}^2 \to \abs{E}$ terms
+%       \item partially overlapped with \cite{ghassemitoosiSimulatedAnnealingPreProcessing2016,s22145179}
+%     \end{itemize}
+%   \end{frame}
+% \fi
+
+% \ifShowHidden
+%   \begin{frame}{Key Technique 2: Randomized subspace algorithm}
+%     \begin{itemize}
+%       \item Researches on Randomized Subspace Newton (\textbf{RSN}) are conducted.
+%             \begin{itemize}
+%               \item Proposed in~\cite{NEURIPS2019_bc6dc48b}
+%               \item Extended in~\cite{cartisRandomisedSubspaceMethods2022},\cite{fujiRandomizedSubspaceRegularized2022},\cite{higuchiFastConvergenceSecondOrder2024}
+%               \item Analysis is based on~\cite{karimireddyGlobalLinearConvergence2018}
+%             \end{itemize}
+%     \end{itemize}
+%     \begin{columns}[T]
+%       \column{0.5\columnwidth}
+%       \begin{itemize}
+%         \item Apply some second-order method to subspaces
+%         \item graph drawing: optimize over $\prod_{i=1}^{n} \mathbb{R}^2$\\
+%               $\to$ suitable for \textbf{RSN}!
+%       \end{itemize}
+%       \column{0.5\columnwidth}
+%       \begin{figure}[htbp]
+%         \centering
+%         \includegraphics[width=0.9\columnwidth]{imgs/randomSubspace.pdf}
+%       \end{figure}
+%     \end{columns}
+%   \end{frame}
+% \fi
+
+% % \ifShowHidden
+% \begin{frame}{Advantages of Randomized Subspace Newton}
+%   \begin{figure}[htbp]
+%     \centering
+%     \begin{tikzpicture}[scale=1.5]
+%       \coordinate (A) at (0,0);
+%       \coordinate (B) at (3,0);
+%       \coordinate (C) at (0,2);
+
+%       \draw[decorate, decoration={coil, segment length=4, aspect=0.5}] (A) -- (B);
+%       \draw[decorate, decoration={coil, segment length=4, aspect=0.5}] (A) -- (C);
+
+%       \draw[gray, dashed, ultra thick] (A) -- ++(9/2.8,4/2.8);
+%       \draw[red, ultra thick, -] (A) -- ++(1.125,0.57142);
+%       \node[star, star points=5, star point ratio=2.25, fill=red,scale=0.5] at ($(A)+(1.125,0.57142)$) {};
+%       \node[anchor=west,align=left,gray] at ($(A)+(9/2.8+0.3,4/2.8)$) {\Large{$g=\nabla f$}\\[0.4em]\Large{Descent direction}};
+%       \node[anchor=west,align=left,red] at (9/2.8+0.3,0.5) {\Large{$d=(\nabla^2 f)^{-1}\nabla f$}\\[0.4em]\Large{Newton's direction}};
+
+%       \coordinate (opt) at ($(B)!0.5!(C)$);
+%       \node[star, star points=5, star point ratio=2.25, fill=cA, minimum size=5pt] at (opt) {};
+%       \node[above=0.5cm] at (opt) {\large{\cAText{optimal}}};
+
+%       \filldraw[red] (A) circle (2pt);
+%       \filldraw[black] (B) circle (2pt);
+%       \filldraw[black] (C) circle (2pt);
+%     \end{tikzpicture}
+%   \end{figure}
+%   \begin{itemize}
+%     \item random subspace problem (subproblem for vertex $i$):
+%           \begin{equation*}
+%             \min_{x_i \in \mathbb{R}^2} \sum_{j \in \mathrm{Adj}(i)} \frac{a_{i,j} \norm{x_i - x_j}_2^3}{3k} \quad \leftarrow \text{\textbf{CONVEX} optimization}
+%           \end{equation*}
+%     \item Original problem, subspace problem, and restricted problem are all \textbf{NON-CONVEX}
+%     \item All distance $d_{i,j}=\norm{x_i-x_j}_2 \geq \epsilon'$ $\to$ numerically stable
+%   \end{itemize}
+% \end{frame}
+% % \fi
+
+% \ifShowHidden
+%   \begin{frame}{proposed algorithm 2}
+%     \begin{algorithm}[H]
+%       \SetAlgoLined
+%       \KwIn{Set of indices $S$, initial vectors $v_i$}
+%       \KwOut{Updated vector $v_i$}
+%       Initialize $X$ randomly\;
+%       \While{not converged}{
+%         Randomly select an index $i \in S$ except for the taboo list\;
+%         Compute Newton's direction $d_i=(\nabla^2 f_i)^{-1}\nabla f_i$\;
+%         Update $v_i$ subject to the constraints\;
+%         \If{not updated}{
+%           Add $i$ to the taboo list\;
+%         }
+%       }
+%       \Return $X$\;
+%       \caption{Randomized Newton Direction Update for Vector $v_i$}
+%     \end{algorithm}
+%   \end{frame}
 % \fi
 
 \ifShowHidden
-  \begin{frame}{proposed algorithm 2}
-    \begin{algorithm}[H]
-      \SetAlgoLined
-      \KwIn{Set of indices $S$, initial vectors $v_i$}
-      \KwOut{Updated vector $v_i$}
-      Initialize $X$ randomly\;
-      \While{not converged}{
-        Randomly select an index $i \in S$ except for the taboo list\;
-        Compute Newton's direction $d_i=(\nabla^2 f_i)^{-1}\nabla f_i$\;
-        Update $v_i$ subject to the constraints\;
-        \If{not updated}{
-          Add $i$ to the taboo list\;
-        }
-      }
-      \Return $X$\;
-      \caption{Randomized Newton Direction Update for Vector $v_i$}
-    \end{algorithm}
-  \end{frame}
-\fi
-
-\ifShowHidden
-  % \begin{frame}{Possible Application 1}
-  %     \begin{itemize}
-  %         \item Originally, this kind of problems are solved by \textbf{stochastic coordinate descent}
-  %         \item Random subspace algorithms might be applicable to these problems
-  %     \end{itemize}
-  %     \begin{figure}[htbp]
-  %         \begin{minipage}{0.45\hsize}
-  %             \centering
-  %             \includegraphics[width=\columnwidth]{imgs/SCD1.png}
-  %             \caption{\href{https://people.eecs.berkeley.edu/~brecht/opt4ml_book/O4MD_06_Coordinate_Descent.pdf}{hyperlink}}
-  %         \end{minipage}
-  %         \begin{minipage}{0.45\hsize}
-  %             \centering
-  %             \includegraphics[width=\columnwidth]{imgs/SCD2.png}
-  %             \caption{\href{https://www.cs.ubc.ca/~schmidtm/Courses/5XX-S22/S3.pdf}{hyperlink}}
-  %         \end{minipage}
-  %     \end{figure}
-  % \end{frame}
-  % \begin{frame}{Possible Application 2}
-  %     \begin{itemize}
-  %         \item Optimize $f(x)$ where $x \in \mathbb{R}^{n}$, not $\prod_{i=1}^{n} \mathbb{R}^2$.
-  %         \item Assume that if two of the points are too close, $f(x)$ drastically increases.
-  %         \item Similar algorithms might be applicable to this problem.
-  %         \item Is there any concrete instance?
-  %         \item Is there any algorithm already well known?
-  %     \end{itemize}
-  %     \begin{figure}[htbp]
-  %         \centering
-  %         \includegraphics[width=0.5\columnwidth]{imgs/applicatoin1d.png}
-  %     \end{figure}
-  % \end{frame}
-  \begin{frame}{Algotithm for FR Layout 2}
+  \begin{frame}{Applicatoin1}
     \begin{columns}
       \begin{column}{0.4\columnwidth}
         \textbf{``sfdp'' in Graphviz}
@@ -700,26 +664,47 @@
         \end{figure}
       \end{column}
     \end{columns}
+
+    % This paper has demonstrated the effectiveness of the proposed method on various graphs, but we can also apply it to larger-scale problems.
+    % For instance, the Scalable Force-Directed Placement (sfdp) of Graphviz~\cite{ellsonGraphvizOpenSource2002}, based on \cite{Hu2006EfficientHF}, employs a multilevel approach to accelerate processing for larger graphs by progressively coarsening vertices.
+
+    % The coarsening operation in sfdp does not critically conflict with the proposed method, making it feasible to combine both approaches.
+    % Specifically, by iteratively applying the proposed method to the entire coarsened graph or groups of vertices consolidated through coarsening, it is possible to extend its applicability to larger-scale problems.
+    % We can expect this approach to yield faster and higher-quality solutions.
+    % Addressing this integration is one of the challenges for future research.
   \end{frame}
-  \begin{frame}{Possible Application 3}
-    \begin{itemize}
-      \item (Continuous relaxation of) graph isomorphism problem
-            \begin{itemize}
-              \item displaying symmetry is at least as difficult as graph isomorphism \cite{eades1984heuristic}
-              \item When we draw $G \defeq G_1 \cup G_2$, $G$ displays symmetry if $G_1 \cong G_2$.
-            \end{itemize}
-      \item Graph isomorphism problem with Frank-Wolfe algorithm \cite{klusContinuousOptimizationMethods2023}
-            \begin{mini*}
-              {Q}{||QA-BQ||^2_F}{}{}
-              \addConstraint{Q}{\in \left\{ Q \in \mathbb{R}^{n \times n} \relmiddle| Q^\top Q = I_n \right\}}
-            \end{mini*}
-      \item Many-to-Many graph isomorphism \cite{zaslavskiyManytoManyGraphMatching2010}
-            \begin{mini*}
-              {P}{||G - PHP^\top ||^2_F}{}{}
-              \addConstraint{P}{\in \left\{ P \in \{0, 1\}^{n \times n} \relmiddle| P1_n = 1_n, P^\top 1_n = 1_n \right\}}
-            \end{mini*}
-            % \item I'm still doubtful, but these papers seems really interesting. (+ Riemannian optimization)
-    \end{itemize}
+\fi
+
+\ifShowHidden
+  \begin{frame}{Application2}
+    \begin{columns}
+      \begin{column}{0.5\columnwidth}
+        \textbf{``objective functions arising from graphs''}~\cite{recht-wright}
+        \begin{itemize}
+          \item \textbf{stochastic coordinate descent}~\cite{recht-wright} is a popular method.
+          \item Can we use coordinate Newton direction?
+        \end{itemize}
+        \begin{mini*}
+          {X \in \bbR^{2 \times n}}
+          {f(X) = \sum_{(i,j)\in E} f_{i,j}(x_i, x_j)+\lambda \sum_{i=1}^{n} \Omega_i(x_i),}
+          {}
+          {}
+        \end{mini*}
+      \end{column}
+      \begin{column}{0.5\columnwidth}
+        \textbf{graph isomorphism problem}
+        \begin{itemize}
+          \item When we relax it to a continuous optimization problem on Riemannian manifolds~\cite{klusContinuousOptimizationMethods2023,klusContinuousOptimizationMethods2023}
+                % \addConstraint{Q}{\in \left\{ Q \in \mathbb{R}^{n \times n} \relmiddle| Q^\top Q = I_n \right\}}
+          \item  Drawing graph symmetry is at least as difficult as the graph isomorphism problem~\cite{eades1984heuristic}.
+          \item Can we utilize coordinate Newton direction to Riemanian optimization?
+        \end{itemize}
+        \begin{figure}[t]
+          \centering
+          \includegraphics[width=\columnwidth]{../main/iso/iso.pdf}
+        \end{figure}
+      \end{column}
+    \end{columns}
   \end{frame}
 \fi
 
@@ -728,14 +713,13 @@
     \begin{block}{Summary}
       \begin{itemize}
         \item Fruchterman--Reingold layout is a tough problem
-        \item Hexagonal close-packed structure + RSN result in a powerful initialization
-        \item initialization + L-BFGS give a great solution
+        \item Hexagonal Lattice + coordinate Newton direction
+        \item initialization + L-BFGS gives the best result
       \end{itemize}
     \end{block}
     \begin{block}{Acknowledgement}
       \large{
-        This work was heavily inspired by the insightful discussions and valuable contributions of \textbf{Pierre-Louis Poirion}, \textbf{Andi Han} and \textbf{Naoki Marumo}.\\
-        I would like to express my sincere gratitude to them.
+        I would like to express my sincere gratitude to \textbf{Pierre-Louis Poirion}, \textbf{Andi Han}, and \textbf{Naoki Marumo}.
       }
     \end{block}
   \end{frame}

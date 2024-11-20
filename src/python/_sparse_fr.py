@@ -88,8 +88,6 @@ def _sparse_fruchterman_reingold(
             pos += delta_pos
             # cool temperature
             t -= dt
-            if verbose:
-                print(f"{calcCost(pos,A,k)=}")
             if (np.linalg.norm(delta_pos) / nnodes) < threshold:
                 break
             yield pos
