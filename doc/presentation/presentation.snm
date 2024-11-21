@@ -1,7 +1,11 @@
-\beamer@slide {eq:fr}{9}
+\beamer@slide {eq:Eij}{10}
+\beamer@slide {eq:fr}{10}
 \beamer@slide {eq:frApprox}{11}
 \beamer@slide {eq:frApprox2}{11}
 \beamer@slide {eq:frApprox3}{12}
 \beamer@slide {fig:hex}{14}
 \beamer@slide {eq:scaling}{15}
 \beamer@slide {alg:proposed}{16}
+\beamer@slide {fig:overall}{17}
+\beamer@slide {fig:diff}{17}
+\beamer@slide {fig:CN_vs_SA}{20}

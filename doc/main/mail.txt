@@ -23,7 +23,7 @@ Graph drawing is a fundamental task in information visualization, with the Fruch
 We can interpret this visualization task as a continuous optimization problem, which can be solved using the FR algorithm, a gradient descent-like method, or the L-BFGS algorithm, a quasi-Newton method.
 However, these methods are computationally expensive per iteration, which makes achieving high-quality visualizations for large-scale graphs challenging.
 
-In this paper, we propose a new initial placement based on the stochastic coordinate descent to accelerate the optimization process.
+In this research, we propose a new initial placement based on the stochastic coordinate descent to accelerate the optimization process.
 We first reformulate the problem as a discrete optimization problem using a hexagonal lattice and then iteratively move a randomly selected vertex along the coordinate Newton direction.
 We can use the FR or L-BFGS algorithms to obtain the final placement.
 
