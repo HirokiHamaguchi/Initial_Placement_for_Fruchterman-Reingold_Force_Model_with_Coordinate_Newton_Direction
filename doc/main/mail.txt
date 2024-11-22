@@ -29,7 +29,7 @@ We can use the FR or L-BFGS algorithms to obtain the final placement.
 
 We demonstrate the effectiveness of our proposed approach through experiments, highlighting the potential of coordinate descent methods for graph drawing tasks.
 Additionally, we suggest combining our method with other graph drawing techniques for further improvement.
-We hope that this work will inspire future research of coordinate descent methods not only in graph drawing but also in broader graph-related applications.
+We also discuss the relationship between our proposed method and broader graph-related applications.
 
 参考文献 (References):
 T. M. J. Fruchterman and E. M. Reingold, “Graph drawing by force-directed placement,” Software: Practice and Experience, vol. 21, no. 11, pp. 1129–1164, 1991. [Online]. Available: https://onlinelibrary.wiley.com/doi/abs/10.1002/spe.4380211102
