@@ -31,7 +31,6 @@ void solve_init(const Problem& problem, const bool measureTime, const int seed,
   std::uniform_int_distribution<int> distVertex(0, problem.n - 1);
   std::uniform_real_distribution<double> distHexR(0, grid.k);
   std::uniform_real_distribution<double> distHexTheta(0, 2 * M_PI);
-  std::uniform_real_distribution<double> distSA(0.0, 1.0);
 
   // simulated annealing parameters
   const int ITERATIONS = 2 * problem.n * (problem.n * problem.n / problem.m);
