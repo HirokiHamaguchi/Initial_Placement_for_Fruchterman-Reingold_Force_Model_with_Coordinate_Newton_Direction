@@ -168,12 +168,12 @@ struct Problem {
   }
 
   void optimalScaling(Eigen::VectorXf& position) const {
-    // Minimize_x x^3 score_a - k^2 n(n-1) \log(x)
+    // Minimize_x x^3 score_a - k^2 n(n-1)/2 \log(x)
     // where score_a = \sum_{i < j} w_{ij} d_{ij}^3 / (3k)
     // Minimize f(x) = x^3 score_a - coeff_r \log(x) : convex
     // f'(x) = 3x^2 score_a - coeff_r / x
     double score_a = calcScore(position, false);
-    double coeff_r = std::pow(k, 2) * n * (n - 1);
+    double coeff_r = std::pow(k, 2) * n * (n - 1) / 2;
     double xStar = std::pow(coeff_r / (3 * score_a), 1.0 / 3);
     position *= xStar;
   }
