@@ -46,20 +46,19 @@
         }
     }
 
-  \begin{scope}[xshift=1.6cm,yshift=1.6cm]
-    \foreach \i in {0,...,6}{
-        \pgfmathsetmacro{\angle}{90+360/7*\i}
+  \begin{scope}[xshift=0.6cm,yshift=1.6cm]
+    \foreach \i in {1,...,7}{
+        \pgfmathsetmacro{\angle}{90+360/7*(\i-1)}
         \filldraw[draw=black,fill=black] (\angle:1) circle (1.5pt);
-        \node at (\angle:0.7) {\small $v_\i$};
       }
     \node[regular polygon, regular polygon sides=7, minimum size=2cm, draw, thick] at (0,0) {};
   \end{scope}
 
-  \node[anchor=center] at (0,1.6) {\Large G:};
-  \node[anchor=center,align=center] at ($(a05)+(0,1.6)$) {
-    \large{projections:}\\
-    \Large{
-      \textcolor{cA}{$\pi_1$}, \textcolor{cB}{$\pi_2$}, \textcolor{cC}{$\pi_3$}
-    }};
+  \node[anchor=east,align=left] at (-0.7,1.6) {\large{G:}};
+  \node[anchor=center,align=center] at ($(a05)+(0.3,1.6)$) {
+    \large{projections:}
+    \Large{\textcolor{cA}{$\pi_1$}, \textcolor{cB}{$\pi_2$}, \textcolor{cC}{$\pi_3$}}
+  };
+  \node[anchor=east,align=left] at (-0.7,{-sqrt(3)/2}) {\large{$Q^\mathrm{hex}$:}};
 \end{tikzpicture}
 \end{document}

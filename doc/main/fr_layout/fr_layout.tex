@@ -26,34 +26,36 @@
 
 \begin{tikzpicture}
   \begin{scope}[xshift=-2.5cm]
-    \foreach \i in {0,1,2,3,4}{
-        \node[circle, fill=black, minimum size=8pt] (a\i) at ({90+72*\i}:1.5) {};
+    \foreach \i in {1,...,5}{
+        \node[circle, fill=black, text=white,minimum size=0.5cm] (a\i) at ({90+72*(\i-1)}:1.5) {\i};
       }
-    \foreach \i/\j in {0/1,0/4,1/2,1/3,2/3,2/4,3/4}{
+    \foreach \i/\j in {1/2,1/5,2/3,2/4,3/4,3/5,4/5}{
         \draw[thick] (a\i) -- (a\j);
       }
   \end{scope}
   \begin{scope}[xshift=+2.5cm]
-    \foreach \i in {0,1,2,3,4}{
-        \node[circle, fill=black, minimum size=8pt] (a\i) at ({90+72*\i}:1.5) {};
+    \foreach \i in {1,...,5}{
+        \node[circle, fill=black, text=white, minimum size=0.5cm] (a\i) at ({90+72*(\i-1)}:1.5) {\i};
       }
-    \foreach \i/\j in {0/1,0/4,1/2,1/3,2/3,2/4,3/4}{
+    \foreach \i/\j in {1/2,1/5,2/3,2/4,3/4,3/5,4/5}{
         \draw[decorate, decoration={coil, segment length=4}] (a\i) -- (a\j);
       }
-    \foreach \i/\j in {0/2,0/3,1/4}{
+    \foreach \i/\j in {1/3,1/4,2/5}{
         \draw[decorate, decoration={coil, segment length=4.5},gray] (a\i) -- (a\j);
       }
   \end{scope}
+
   \node[scale=2] at (0,0) {$\leftrightarrows$};
+
   \begin{scope}[xshift=-0.35cm, yshift=-3cm]
     \def\d{4}
-    \def\r{0.3}
+    \def\r{0.25}
     \def\u{1.0}
     \coordinate (M1) at (0,0);
     \coordinate (M2) at (\d,0);
 
-    \draw[fill=black] (M1) circle(\r) node[white,scale=1.4] {$v_i$};
-    \draw[fill=black] (M2) circle(\r) node[white,scale=1.4] {$v_j$};
+    \draw[fill=black] (M1) circle (\r) node[white] {$i$};
+    \draw[fill=black] (M2) circle (\r) node[white] {$j$};
 
     \draw (0,+1.6*\r) -- (0,+2.4*\r);
     \draw (\d,+1.6*\r) -- (\d,+2.4*\r);
