@@ -12,16 +12,16 @@ Score: 9.429783
 Score: 15.469500
 Score: 19.650947
 CN-FR
-Score: 14.715423
-Score: 40.079682
-Score: -2.786620
-Score: -3.284379
-Score: 1.415689
-Score: 5.299286
-Score: 5.164647
-Score: 7.974194
-Score: 4.130118
-Score: 1.681706
+Score: 14.710255
+Score: 40.048641
+Score: -2.724914
+Score: -3.414049
+Score: 1.289274
+Score: 5.208553
+Score: 4.815099
+Score: 8.186796
+Score: 4.367724
+Score: 1.967419
 SA-L-BFGS
 Score: -25.251375
 Score: -26.612598
@@ -34,16 +34,16 @@ Score: -24.844410
 Score: -26.656590
 Score: -21.763840
 CN-L-BFGS
-Score: -25.094902
-Score: -21.054380
-Score: -27.306179
-Score: -27.259254
-Score: -27.187624
-Score: -25.043779
-Score: -27.809912
-Score: -27.834927
-Score: -25.735714
-Score: -26.409140
+Score: -23.455961
+Score: -21.814137
+Score: -26.766415
+Score: -27.316420
+Score: -26.926979
+Score: -24.766117
+Score: -27.798241
+Score: -27.828712
+Score: -25.714071
+Score: -26.284082
 ash85
 SA-FR
 Score: 8.458260
@@ -57,16 +57,16 @@ Score: 8.584393
 Score: 8.519567
 Score: 8.459568
 CN-FR
-Score: 8.794542
-Score: 10.802794
-Score: 8.243113
-Score: 21.298672
-Score: 7.800104
-Score: 7.987549
-Score: 7.834653
-Score: 7.872882
-Score: 9.786152
-Score: 7.834823
+Score: 8.810633
+Score: 10.805396
+Score: 8.260468
+Score: 21.230569
+Score: 7.791209
+Score: 7.985521
+Score: 7.819513
+Score: 7.857721
+Score: 9.786403
+Score: 7.821274
 SA-L-BFGS
 Score: 7.571325
 Score: 7.571324
@@ -79,15 +79,15 @@ Score: 7.571330
 Score: 7.571329
 Score: 7.571325
 CN-L-BFGS
-Score: 7.571325
-Score: 7.571353
-Score: 7.571326
-Score: 8.290469
-Score: 7.571325
-Score: 7.571324
-Score: 7.571325
-Score: 7.571327
 Score: 7.571328
+Score: 7.571335
+Score: 7.571324
+Score: 10.175465
+Score: 7.571324
+Score: 7.571324
+Score: 7.571324
+Score: 7.571324
+Score: 7.571324
 Score: 7.571324
 bcspwr01
 SA-FR
@@ -102,16 +102,16 @@ Score: -1.156932
 Score: -2.077270
 Score: -2.172357
 CN-FR
-Score: -2.240821
-Score: -2.017020
-Score: -1.940567
-Score: 2.133191
-Score: -2.202519
-Score: -2.221074
-Score: -2.102001
-Score: -0.716564
-Score: -2.214368
-Score: -2.124543
+Score: -2.240682
+Score: -2.016985
+Score: -1.939458
+Score: 2.133101
+Score: -2.202708
+Score: -2.221038
+Score: -2.102142
+Score: -0.716551
+Score: -2.214352
+Score: -2.124547
 SA-L-BFGS
 Score: -2.337507
 Score: -2.337506
@@ -124,16 +124,16 @@ Score: -2.334930
 Score: -2.333331
 Score: -2.333665
 CN-L-BFGS
-Score: -2.336355
-Score: -2.337535
-Score: -2.337526
-Score: -1.915756
-Score: -2.337833
-Score: -2.333941
-Score: -2.337856
-Score: -2.337267
-Score: -2.337851
-Score: -2.337860
+Score: -2.336468
+Score: -2.337527
+Score: -2.337528
+Score: -1.826066
+Score: -2.337846
+Score: -2.337538
+Score: -2.337859
+Score: -2.337479
+Score: -2.337848
+Score: -2.337857
 bcspwr02
 SA-FR
 Score: 2.706957
@@ -147,16 +147,16 @@ Score: 0.650713
 Score: 0.678938
 Score: 0.676389
 CN-FR
-Score: 2.651395
-Score: 0.811956
-Score: 0.666243
-Score: 2.912055
-Score: 0.784455
-Score: 0.743273
-Score: 0.627506
-Score: 0.822721
+Score: 2.651546
+Score: 0.811959
+Score: 0.666345
+Score: 2.901303
+Score: 0.784664
+Score: 0.743274
+Score: 0.627806
+Score: 0.822552
 Score: 0.575374
-Score: 0.652416
+Score: 0.651931
 SA-L-BFGS
 Score: 1.995877
 Score: 0.583931
@@ -169,16 +169,16 @@ Score: 0.610863
 Score: 0.595636
 Score: 0.601176
 CN-L-BFGS
-Score: 2.340418
-Score: 0.610918
-Score: 0.610864
-Score: 2.147178
-Score: 0.581974
+Score: 1.949243
+Score: 0.610919
+Score: 0.610865
+Score: 1.949520
+Score: 0.581958
 Score: 0.671822
-Score: 0.581955
-Score: 0.531270
+Score: 0.581952
 Score: 0.531268
-Score: 0.531269
+Score: 0.531274
+Score: 0.531267
 bcspwr03
 SA-FR
 Score: -3.163205
@@ -192,16 +192,16 @@ Score: -6.634089
 Score: -6.131660
 Score: -4.594798
 CN-FR
-Score: -6.631591
-Score: -4.703721
-Score: -6.045147
-Score: -6.351738
-Score: -4.821964
-Score: -4.517613
-Score: -4.870359
-Score: -5.431376
-Score: -1.911221
-Score: -4.944698
+Score: -6.684920
+Score: -4.688576
+Score: -6.073312
+Score: -6.329269
+Score: -4.802430
+Score: -4.516760
+Score: -4.845002
+Score: -5.379034
+Score: -1.896913
+Score: -4.930162
 SA-L-BFGS
 Score: -7.658519
 Score: -9.877192
@@ -214,16 +214,16 @@ Score: -9.845192
 Score: -9.842447
 Score: -8.094883
 CN-L-BFGS
-Score: -9.858071
-Score: -8.273222
-Score: -9.613463
-Score: -9.938995
-Score: -8.061017
-Score: -9.544060
-Score: -8.259852
-Score: -9.510854
-Score: -7.981498
-Score: -8.238869
+Score: -9.864890
+Score: -8.248034
+Score: -9.593910
+Score: -10.023448
+Score: -8.027311
+Score: -9.718125
+Score: -8.061936
+Score: -9.491813
+Score: -8.000699
+Score: -8.300643
 bcspwr04
 SA-FR
 Score: 9.966091
@@ -237,16 +237,16 @@ Score: 16.833665
 Score: 1.671506
 Score: 12.131854
 CN-FR
-Score: 7.534643
-Score: -1.681081
-Score: 9.051632
-Score: 17.935707
-Score: 18.537887
-Score: 31.247491
-Score: -0.747599
-Score: 22.626655
-Score: -2.556676
-Score: 8.630636
+Score: 7.574477
+Score: -1.799715
+Score: 9.967137
+Score: 17.957867
+Score: 18.386027
+Score: 31.242532
+Score: -0.794729
+Score: 22.697330
+Score: -2.446791
+Score: 8.733779
 SA-L-BFGS
 Score: 3.057488
 Score: -6.507449
@@ -259,16 +259,16 @@ Score: 0.160737
 Score: -7.932685
 Score: -2.540102
 CN-L-BFGS
-Score: -2.840924
-Score: -7.717786
-Score: -7.788971
-Score: 8.262407
-Score: -0.452324
-Score: 5.757251
-Score: -7.770646
-Score: 7.863726
-Score: -11.757203
-Score: -7.394004
+Score: -2.920806
+Score: -7.712908
+Score: -7.666376
+Score: 8.276237
+Score: -0.173765
+Score: 6.242290
+Score: -7.773742
+Score: 9.219207
+Score: -11.842235
+Score: -7.341324
 bcspwr05
 SA-FR
 Score: -23.428774
@@ -282,16 +282,16 @@ Score: -23.718107
 Score: -43.473559
 Score: 2.053613
 CN-FR
-Score: -68.598759
-Score: -35.289749
-Score: -58.658245
-Score: -64.348370
-Score: -67.453070
-Score: -61.698835
-Score: -58.379073
-Score: -59.260531
-Score: -65.435940
-Score: -52.545706
+Score: -68.638898
+Score: -35.402957
+Score: -58.764219
+Score: -64.087352
+Score: -67.681724
+Score: -61.705207
+Score: -58.289209
+Score: -59.222865
+Score: -65.276313
+Score: -52.564729
 SA-L-BFGS
 Score: -59.184261
 Score: -83.025185
@@ -304,16 +304,16 @@ Score: -75.155464
 Score: -75.670135
 Score: -45.876545
 CN-L-BFGS
-Score: -88.760445
-Score: -74.356384
-Score: -86.849617
-Score: -88.390503
-Score: -88.556427
-Score: -84.028511
-Score: -78.670090
-Score: -83.138885
-Score: -88.384972
-Score: -79.142860
+Score: -89.254524
+Score: -72.357635
+Score: -86.754799
+Score: -88.421974
+Score: -88.462219
+Score: -83.980698
+Score: -79.005615
+Score: -83.281624
+Score: -88.366653
+Score: -80.198738
 can_144
 SA-FR
 Score: 3.326996
@@ -327,16 +327,16 @@ Score: 19.495695
 Score: 18.078194
 Score: 3.322634
 CN-FR
-Score: 22.342292
-Score: 20.166623
-Score: 17.233929
-Score: 16.230454
-Score: 22.132525
-Score: 11.449157
-Score: 21.178133
-Score: 24.669128
-Score: 15.329934
-Score: 10.521962
+Score: 22.388627
+Score: 19.907397
+Score: 17.279775
+Score: 16.354093
+Score: 22.183655
+Score: 10.489924
+Score: 21.449910
+Score: 24.166512
+Score: 15.280332
+Score: 10.479263
 SA-L-BFGS
 Score: 3.146415
 Score: 3.180763
@@ -349,16 +349,16 @@ Score: 3.674298
 Score: 3.161249
 Score: 3.148748
 CN-L-BFGS
-Score: 18.325085
-Score: 3.389790
-Score: 3.363032
-Score: 3.175725
-Score: 18.282791
-Score: 3.152150
-Score: 3.156351
-Score: 4.957296
-Score: 3.150060
-Score: 3.148208
+Score: 18.313091
+Score: 3.206596
+Score: 3.242089
+Score: 3.175224
+Score: 16.806688
+Score: 3.152146
+Score: 3.157375
+Score: 5.427477
+Score: 3.161018
+Score: 3.155409
 can_161
 SA-FR
 Score: 50.592847
@@ -372,16 +372,16 @@ Score: 62.516476
 Score: 50.829093
 Score: 53.431642
 CN-FR
-Score: 51.346494
-Score: 50.580419
-Score: 50.462236
-Score: 50.658946
-Score: 56.876949
-Score: 50.735727
-Score: 50.723489
-Score: 52.136944
-Score: 50.551474
-Score: 59.566478
+Score: 51.264650
+Score: 50.585755
+Score: 50.488802
+Score: 50.622437
+Score: 56.869886
+Score: 50.757827
+Score: 50.695074
+Score: 52.154346
+Score: 50.557266
+Score: 59.563269
 SA-L-BFGS
 Score: 50.310730
 Score: 50.310726
@@ -394,16 +394,16 @@ Score: 61.574284
 Score: 50.310730
 Score: 50.310734
 CN-L-BFGS
-Score: 50.310730
-Score: 50.310730
 Score: 50.310726
 Score: 50.310726
-Score: 50.311058
 Score: 50.310730
-Score: 50.321186
-Score: 50.310726
 Score: 50.310730
-Score: 50.310772
+Score: 50.311031
+Score: 50.310730
+Score: 50.310730
+Score: 50.311497
+Score: 50.310921
+Score: 50.311420
 can_187
 SA-FR
 Score: 26.921994
@@ -417,16 +417,16 @@ Score: 9.568471
 Score: 9.992962
 Score: 9.872683
 CN-FR
-Score: 11.039500
-Score: 27.318584
-Score: 42.871576
-Score: 29.645818
-Score: 21.479143
-Score: 34.817533
-Score: 23.263927
-Score: 14.820579
-Score: 30.677475
-Score: 10.868349
+Score: 11.008692
+Score: 27.506836
+Score: 42.874210
+Score: 29.508426
+Score: 20.948636
+Score: 34.839603
+Score: 23.649874
+Score: 14.741934
+Score: 30.902923
+Score: 10.885385
 SA-L-BFGS
 Score: 9.688839
 Score: 9.230451
@@ -439,16 +439,16 @@ Score: 9.230329
 Score: 9.231705
 Score: 9.620417
 CN-L-BFGS
-Score: 9.405267
-Score: 9.705797
-Score: 9.420878
-Score: 9.584293
-Score: 9.546583
-Score: 9.433723
-Score: 9.613771
-Score: 9.667473
-Score: 9.237967
-Score: 9.557905
+Score: 9.416797
+Score: 9.626365
+Score: 9.774261
+Score: 9.622188
+Score: 9.545308
+Score: 9.435719
+Score: 9.645524
+Score: 9.614787
+Score: 9.591101
+Score: 9.532468
 can_229
 SA-FR
 Score: 61.498619
@@ -462,16 +462,16 @@ Score: 52.234193
 Score: 51.587094
 Score: 62.665288
 CN-FR
-Score: 53.804367
-Score: 61.793382
-Score: 54.383568
-Score: 53.255839
-Score: 55.019199
-Score: 52.645520
-Score: 56.558243
-Score: 53.780750
-Score: 54.116006
-Score: 58.946634
+Score: 53.890739
+Score: 61.703695
+Score: 54.279253
+Score: 53.273483
+Score: 55.054362
+Score: 52.718275
+Score: 56.507439
+Score: 53.871520
+Score: 54.197009
+Score: 58.783001
 SA-L-BFGS
 Score: 51.088882
 Score: 51.095688
@@ -484,16 +484,16 @@ Score: 51.087925
 Score: 51.089352
 Score: 51.142582
 CN-L-BFGS
-Score: 51.081669
-Score: 51.104107
-Score: 51.085854
-Score: 51.084686
-Score: 51.089054
-Score: 51.081558
-Score: 51.088894
-Score: 51.090134
-Score: 51.085800
-Score: 51.093338
+Score: 51.088215
+Score: 51.085785
+Score: 51.086002
+Score: 51.092293
+Score: 51.089046
+Score: 51.081615
+Score: 51.098015
+Score: 51.088486
+Score: 51.085812
+Score: 51.086765
 can_24
 SA-FR
 Score: 8.642113
@@ -509,14 +509,14 @@ Score: 8.643368
 CN-FR
 Score: 8.644660
 Score: 8.643316
-Score: 8.642056
-Score: 8.644423
-Score: 8.644848
-Score: 9.378382
-Score: 8.642839
-Score: 8.644821
+Score: 8.642031
+Score: 8.644422
+Score: 8.644864
+Score: 9.378347
+Score: 8.642840
+Score: 8.645177
 Score: 9.342432
-Score: 8.642165
+Score: 8.642164
 SA-L-BFGS
 Score: 8.641261
 Score: 8.641261
@@ -529,15 +529,15 @@ Score: 8.641261
 Score: 8.641261
 Score: 8.641261
 CN-L-BFGS
-Score: 8.641262
+Score: 9.338999
 Score: 8.641261
-Score: 8.641262
+Score: 9.338999
 Score: 8.641261
 Score: 8.641261
 Score: 9.338999
-Score: 9.335039
+Score: 9.335040
 Score: 8.641261
-Score: 8.641261
+Score: 9.338999
 Score: 8.641261
 can_256
 SA-FR
@@ -552,16 +552,16 @@ Score: 134.574823
 Score: 150.562323
 Score: 136.236011
 CN-FR
-Score: 133.769082
-Score: 140.435197
-Score: 138.559463
-Score: 134.228422
-Score: 134.210516
-Score: 133.666158
-Score: 134.004788
-Score: 132.595237
-Score: 134.690915
-Score: 132.741736
+Score: 133.777524
+Score: 140.276811
+Score: 138.716238
+Score: 134.218021
+Score: 134.225904
+Score: 133.663549
+Score: 133.992476
+Score: 132.592299
+Score: 134.807577
+Score: 132.758400
 SA-L-BFGS
 Score: 132.663086
 Score: 134.592209
@@ -574,16 +574,16 @@ Score: 133.928467
 Score: 144.008789
 Score: 135.896530
 CN-L-BFGS
-Score: 133.474274
-Score: 138.560226
-Score: 135.322922
-Score: 133.559143
-Score: 133.610703
-Score: 133.678192
-Score: 132.698959
-Score: 132.522598
-Score: 132.603226
-Score: 132.531174
+Score: 133.461990
+Score: 138.526459
+Score: 135.068359
+Score: 133.543991
+Score: 133.594757
+Score: 133.688217
+Score: 132.695175
+Score: 132.522690
+Score: 132.630020
+Score: 132.534836
 can_268
 SA-FR
 Score: 125.959714
@@ -597,16 +597,16 @@ Score: 125.300281
 Score: 125.331926
 Score: 125.303139
 CN-FR
-Score: 125.204602
-Score: 125.764941
-Score: 125.506509
-Score: 126.238293
-Score: 125.337901
-Score: 126.014748
-Score: 127.583990
-Score: 126.336718
-Score: 125.332953
-Score: 125.490603
+Score: 125.238778
+Score: 125.716497
+Score: 125.555530
+Score: 126.285878
+Score: 125.354258
+Score: 125.884795
+Score: 127.423643
+Score: 126.358395
+Score: 125.323705
+Score: 125.502884
 SA-L-BFGS
 Score: 125.296417
 Score: 124.962502
@@ -619,16 +619,16 @@ Score: 124.957878
 Score: 124.966675
 Score: 125.161667
 CN-L-BFGS
-Score: 124.959328
-Score: 125.128410
-Score: 125.257629
-Score: 125.300087
-Score: 124.989754
-Score: 125.276718
-Score: 125.015671
-Score: 124.972801
-Score: 124.966232
-Score: 125.227715
+Score: 124.959290
+Score: 125.126427
+Score: 125.264557
+Score: 125.294609
+Score: 124.992805
+Score: 125.272461
+Score: 125.110352
+Score: 124.977272
+Score: 124.971397
+Score: 125.233772
 can_292
 SA-FR
 Score: 94.995306
@@ -642,16 +642,16 @@ Score: 94.938083
 Score: 94.916441
 Score: 94.749847
 CN-FR
-Score: 95.046862
-Score: 95.760821
-Score: 94.617246
-Score: 94.636762
-Score: 94.682754
-Score: 94.646154
-Score: 94.867232
-Score: 95.229861
-Score: 105.962950
-Score: 94.650148
+Score: 95.035393
+Score: 95.721881
+Score: 94.633068
+Score: 94.624139
+Score: 94.664956
+Score: 94.655229
+Score: 94.883724
+Score: 95.222554
+Score: 106.201439
+Score: 94.637421
 SA-L-BFGS
 Score: 94.390388
 Score: 94.489494
@@ -664,16 +664,16 @@ Score: 94.429382
 Score: 94.385582
 Score: 94.390793
 CN-L-BFGS
-Score: 94.389214
-Score: 94.426865
-Score: 94.397446
-Score: 94.383209
-Score: 94.378586
-Score: 94.410889
-Score: 94.397194
-Score: 94.398544
-Score: 94.583824
-Score: 94.380219
+Score: 94.389603
+Score: 94.456841
+Score: 94.387085
+Score: 94.387520
+Score: 94.384369
+Score: 94.422607
+Score: 94.413467
+Score: 94.390854
+Score: 94.612968
+Score: 94.380798
 can_445
 SA-FR
 Score: 144.730405
@@ -687,16 +687,16 @@ Score: 144.352012
 Score: 139.213838
 Score: 148.260445
 CN-FR
-Score: 133.291176
-Score: 153.050082
-Score: 139.032850
-Score: 148.705124
-Score: 133.584261
-Score: 132.831107
-Score: 151.044763
-Score: 138.902606
-Score: 134.698754
-Score: 136.309015
+Score: 133.271010
+Score: 152.967048
+Score: 139.066955
+Score: 148.656641
+Score: 133.538043
+Score: 132.839242
+Score: 151.027322
+Score: 139.034379
+Score: 134.670044
+Score: 136.280585
 SA-L-BFGS
 Score: 132.056183
 Score: 145.577820
@@ -709,16 +709,16 @@ Score: 131.787918
 Score: 131.653870
 Score: 132.573975
 CN-L-BFGS
-Score: 131.728256
-Score: 144.312714
-Score: 132.243317
-Score: 144.224380
-Score: 131.590576
-Score: 131.567993
-Score: 143.253098
-Score: 131.877274
-Score: 131.649338
-Score: 131.992111
+Score: 131.728653
+Score: 144.248550
+Score: 132.001968
+Score: 145.300995
+Score: 131.593719
+Score: 131.571396
+Score: 143.368652
+Score: 131.851822
+Score: 131.622650
+Score: 131.821808
 can_61
 SA-FR
 Score: 21.952437
@@ -732,16 +732,16 @@ Score: 21.901521
 Score: 21.916741
 Score: 22.758473
 CN-FR
-Score: 21.938112
-Score: 22.292832
-Score: 21.888284
-Score: 21.874195
-Score: 21.893519
-Score: 21.925637
-Score: 21.878304
-Score: 22.352351
-Score: 23.194777
-Score: 21.883017
+Score: 21.935132
+Score: 22.294970
+Score: 21.896991
+Score: 21.875877
+Score: 21.888881
+Score: 21.921200
+Score: 21.873006
+Score: 22.226770
+Score: 23.200438
+Score: 21.884603
 SA-L-BFGS
 Score: 22.607519
 Score: 22.607517
@@ -757,12 +757,12 @@ CN-L-BFGS
 Score: 21.843727
 Score: 21.843729
 Score: 21.843727
-Score: 21.843725
 Score: 21.843727
 Score: 21.843727
+Score: 21.843731
 Score: 21.843725
-Score: 21.843946
-Score: 22.607550
+Score: 21.843878
+Score: 22.607525
 Score: 21.843727
 can_62
 SA-FR
@@ -777,16 +777,16 @@ Score: -2.644058
 Score: -6.110120
 Score: -6.128878
 CN-FR
-Score: -3.323702
-Score: -3.424441
-Score: -5.436568
-Score: -4.010081
-Score: -1.692829
-Score: -5.145271
-Score: -1.309612
-Score: -3.299600
-Score: -4.451474
-Score: -4.722658
+Score: -3.358580
+Score: -3.424438
+Score: -5.455962
+Score: -4.010532
+Score: -1.698483
+Score: -5.141481
+Score: -1.313068
+Score: -3.299592
+Score: -4.451245
+Score: -4.722326
 SA-L-BFGS
 Score: -6.294132
 Score: -4.308689
@@ -799,16 +799,16 @@ Score: -4.314238
 Score: -6.540927
 Score: -6.540915
 CN-L-BFGS
-Score: -4.661456
-Score: -5.548854
-Score: -6.540881
-Score: -6.539951
-Score: -4.324113
-Score: -6.540427
-Score: -6.492856
-Score: -6.293588
-Score: -5.714360
-Score: -6.540856
+Score: -4.480568
+Score: -5.370757
+Score: -6.540884
+Score: -6.539849
+Score: -4.324455
+Score: -6.539222
+Score: -6.034827
+Score: -6.293104
+Score: -6.312007
+Score: -6.540892
 can_634
 SA-FR
 Score: 232.823562
@@ -822,16 +822,16 @@ Score: 224.703085
 Score: 264.039082
 Score: 235.402873
 CN-FR
-Score: 205.676494
-Score: 205.507656
-Score: 205.534866
-Score: 217.402122
-Score: 213.012341
-Score: 234.133275
-Score: 203.133178
-Score: 213.608675
-Score: 206.194343
-Score: 210.286279
+Score: 205.637586
+Score: 205.662063
+Score: 205.573975
+Score: 217.587790
+Score: 212.772874
+Score: 234.223092
+Score: 203.074729
+Score: 213.831022
+Score: 206.195877
+Score: 210.425300
 SA-L-BFGS
 Score: 201.960251
 Score: 201.725662
@@ -844,16 +844,16 @@ Score: 201.626663
 Score: 202.637390
 Score: 202.752838
 CN-L-BFGS
-Score: 201.570694
-Score: 201.488174
-Score: 201.510437
-Score: 201.461746
-Score: 201.447098
-Score: 201.735214
-Score: 201.456314
-Score: 201.459030
-Score: 201.433365
-Score: 201.444458
+Score: 201.579926
+Score: 201.485092
+Score: 201.524796
+Score: 201.448822
+Score: 201.456848
+Score: 201.692093
+Score: 201.448776
+Score: 201.466064
+Score: 201.418655
+Score: 201.436066
 can_715
 SA-FR
 Score: 188.344487
@@ -867,16 +867,16 @@ Score: 194.393270
 Score: 191.959383
 Score: 199.827946
 CN-FR
-Score: 189.995190
-Score: 255.390748
-Score: 194.058133
-Score: 197.878104
-Score: 253.353080
-Score: 189.907191
-Score: 190.687177
-Score: 193.911927
-Score: 193.642665
-Score: 186.687583
+Score: 190.097729
+Score: 255.203505
+Score: 194.071599
+Score: 197.895243
+Score: 253.360037
+Score: 189.945031
+Score: 190.695037
+Score: 193.918327
+Score: 193.526258
+Score: 186.642525
 SA-L-BFGS
 Score: 186.878830
 Score: 191.064301
@@ -889,16 +889,16 @@ Score: 189.593384
 Score: 190.218323
 Score: 190.365921
 CN-L-BFGS
-Score: 185.336807
-Score: 230.141663
-Score: 186.224380
-Score: 190.404144
-Score: 247.628220
-Score: 184.083405
-Score: 184.959976
-Score: 185.916687
-Score: 187.200989
-Score: 183.034332
+Score: 185.223633
+Score: 235.544861
+Score: 186.317123
+Score: 190.240433
+Score: 248.028931
+Score: 184.017487
+Score: 184.723221
+Score: 186.038895
+Score: 186.915726
+Score: 183.119217
 can_73
 SA-FR
 Score: 25.084843
@@ -912,16 +912,16 @@ Score: 25.071773
 Score: 25.070963
 Score: 25.090845
 CN-FR
-Score: 25.087677
-Score: 25.073927
-Score: 28.009153
-Score: 25.077454
-Score: 25.103493
-Score: 28.004402
-Score: 28.159731
-Score: 25.064538
-Score: 27.157931
-Score: 28.433923
+Score: 25.079761
+Score: 25.086052
+Score: 27.985191
+Score: 25.084611
+Score: 25.103749
+Score: 28.004657
+Score: 28.164480
+Score: 25.064527
+Score: 27.158192
+Score: 28.427780
 SA-L-BFGS
 Score: 25.057011
 Score: 25.057013
@@ -934,16 +934,16 @@ Score: 25.057013
 Score: 25.057016
 Score: 25.057013
 CN-L-BFGS
-Score: 25.057022
-Score: 25.057013
-Score: 25.079350
-Score: 25.057014
-Score: 25.057043
-Score: 25.069321
-Score: 25.058676
-Score: 25.056896
-Score: 25.057096
-Score: 25.060875
+Score: 25.056870
+Score: 25.057011
+Score: 25.415958
+Score: 25.057034
+Score: 25.057104
+Score: 25.057117
+Score: 25.057364
+Score: 25.056997
+Score: 25.057016
+Score: 25.109972
 can_838
 SA-FR
 Score: 319.597727
@@ -957,16 +957,16 @@ Score: 246.371889
 Score: 240.141758
 Score: 229.136338
 CN-FR
-Score: 236.509754
-Score: 233.362179
-Score: 238.032027
-Score: 291.541586
-Score: 264.838751
-Score: 239.179423
-Score: 254.844711
-Score: 259.118560
-Score: 266.210588
-Score: 240.458760
+Score: 236.578904
+Score: 233.254193
+Score: 238.377950
+Score: 291.582543
+Score: 264.578992
+Score: 239.751837
+Score: 254.819304
+Score: 259.051389
+Score: 265.989107
+Score: 239.843814
 SA-L-BFGS
 Score: 226.515396
 Score: 224.806915
@@ -979,16 +979,16 @@ Score: 224.978668
 Score: 224.873337
 Score: 224.812653
 CN-L-BFGS
-Score: 224.857224
-Score: 224.858017
-Score: 224.827789
-Score: 225.596695
-Score: 225.465561
-Score: 224.897629
-Score: 224.950790
-Score: 225.246964
-Score: 224.910141
-Score: 224.850449
+Score: 224.862915
+Score: 224.936569
+Score: 224.844437
+Score: 225.181747
+Score: 225.454559
+Score: 224.911407
+Score: 225.007538
+Score: 225.397522
+Score: 224.955200
+Score: 224.859375
 can_96
 SA-FR
 Score: 30.478834
@@ -1002,16 +1002,16 @@ Score: 31.006530
 Score: 31.056447
 Score: 30.543755
 CN-FR
-Score: 30.491776
-Score: 30.519921
-Score: 31.880225
-Score: 31.098556
-Score: 30.531712
-Score: 30.828186
-Score: 30.786552
-Score: 30.503538
-Score: 30.498447
-Score: 30.455126
+Score: 30.503283
+Score: 30.511960
+Score: 31.871661
+Score: 31.077448
+Score: 30.504753
+Score: 30.838384
+Score: 30.773724
+Score: 30.507936
+Score: 30.471912
+Score: 30.450368
 SA-L-BFGS
 Score: 30.374741
 Score: 30.377945
@@ -1024,16 +1024,16 @@ Score: 30.377214
 Score: 30.392826
 Score: 30.374737
 CN-L-BFGS
-Score: 30.388805
-Score: 30.374737
-Score: 30.374737
-Score: 30.675426
-Score: 30.374735
-Score: 30.427752
-Score: 30.388805
 Score: 30.388803
-Score: 30.374737
+Score: 30.374739
+Score: 30.374741
+Score: 30.431984
+Score: 30.388807
+Score: 30.463140
+Score: 30.407196
+Score: 30.374752
 Score: 30.374735
+Score: 30.388805
 dwt_162
 SA-FR
 Score: 26.203056
@@ -1047,16 +1047,16 @@ Score: 8.577311
 Score: -9.383538
 Score: 12.926886
 CN-FR
-Score: -2.893395
-Score: 14.763498
-Score: -0.862215
-Score: 8.039448
-Score: -4.992082
-Score: 11.658999
-Score: 9.531804
-Score: 8.273574
-Score: -3.626373
-Score: 8.553743
+Score: -2.706510
+Score: 14.778405
+Score: -0.908272
+Score: 8.231265
+Score: -4.982936
+Score: 11.677653
+Score: 9.511782
+Score: 8.091111
+Score: -3.642785
+Score: 8.531195
 SA-L-BFGS
 Score: -5.605840
 Score: -2.148711
@@ -1069,16 +1069,16 @@ Score: 4.480206
 Score: -10.607163
 Score: -8.307614
 CN-L-BFGS
-Score: -10.579068
-Score: -10.426556
-Score: -10.590885
-Score: -10.593088
-Score: -10.390125
-Score: -10.169868
-Score: -10.262280
-Score: -10.439167
-Score: -10.584904
-Score: -10.543919
+Score: -10.592586
+Score: -10.323909
+Score: -10.601526
+Score: -10.589271
+Score: -10.444045
+Score: -9.492544
+Score: -10.240484
+Score: -10.418056
+Score: -10.595400
+Score: -10.535172
 dwt_193
 SA-FR
 Score: 112.922800
@@ -1092,16 +1092,16 @@ Score: 112.979109
 Score: 115.724071
 Score: 114.939532
 CN-FR
-Score: 112.482025
-Score: 112.351630
-Score: 114.614786
-Score: 112.813995
-Score: 112.650872
-Score: 113.365130
-Score: 115.358178
-Score: 115.627764
-Score: 112.621118
-Score: 112.403030
+Score: 112.477501
+Score: 112.355752
+Score: 114.690965
+Score: 112.960424
+Score: 112.642241
+Score: 113.272584
+Score: 114.974008
+Score: 115.638784
+Score: 112.622422
+Score: 112.414496
 SA-L-BFGS
 Score: 112.459702
 Score: 112.450287
@@ -1114,15 +1114,15 @@ Score: 112.255814
 Score: 112.462364
 Score: 112.525368
 CN-L-BFGS
-Score: 112.237000
-Score: 112.235123
-Score: 113.815773
-Score: 112.256111
-Score: 112.237526
-Score: 112.447937
-Score: 113.603172
-Score: 114.148697
-Score: 112.450294
+Score: 112.237091
+Score: 112.250938
+Score: 113.969269
+Score: 112.275810
+Score: 112.237198
+Score: 112.463074
+Score: 113.317169
+Score: 114.648766
+Score: 112.450287
 Score: 112.234840
 dwt_209
 SA-FR
@@ -1137,16 +1137,16 @@ Score: 53.502881
 Score: 51.503000
 Score: 54.075561
 CN-FR
-Score: 53.022537
-Score: 50.125436
-Score: 52.980607
-Score: 49.948358
-Score: 49.351669
-Score: 54.021712
-Score: 49.723728
-Score: 49.021531
-Score: 51.260291
-Score: 54.275673
+Score: 52.888037
+Score: 50.003502
+Score: 52.964339
+Score: 49.912251
+Score: 49.382969
+Score: 53.967446
+Score: 49.703610
+Score: 49.100695
+Score: 51.306251
+Score: 54.258606
 SA-L-BFGS
 Score: 47.768200
 Score: 49.208412
@@ -1159,16 +1159,16 @@ Score: 49.207756
 Score: 49.366337
 Score: 49.860844
 CN-L-BFGS
-Score: 47.803806
-Score: 48.227867
-Score: 49.863789
-Score: 48.019775
-Score: 47.793285
-Score: 47.802483
-Score: 47.782944
-Score: 47.756454
-Score: 48.174862
-Score: 49.864128
+Score: 47.793434
+Score: 48.178341
+Score: 49.758633
+Score: 48.022274
+Score: 47.790550
+Score: 47.807816
+Score: 47.783783
+Score: 47.752888
+Score: 48.154007
+Score: 49.862877
 dwt_221
 SA-FR
 Score: 10.458476
@@ -1182,16 +1182,16 @@ Score: -4.899669
 Score: 3.758347
 Score: 0.300041
 CN-FR
-Score: 4.971508
-Score: -1.315689
-Score: 17.822596
-Score: 4.179730
-Score: 26.602255
-Score: 8.492019
-Score: 22.499202
-Score: 5.495903
-Score: 17.598313
-Score: 10.476195
+Score: 5.004095
+Score: -1.158307
+Score: 18.086134
+Score: 4.285462
+Score: 26.677683
+Score: 8.477382
+Score: 22.431056
+Score: 5.251400
+Score: 17.497275
+Score: 10.441966
 SA-L-BFGS
 Score: -16.210989
 Score: -18.838549
@@ -1204,16 +1204,16 @@ Score: -20.021193
 Score: -18.347803
 Score: -21.086327
 CN-L-BFGS
-Score: -17.844479
-Score: -20.730169
-Score: -18.987206
-Score: -19.264629
-Score: -18.223988
-Score: -19.489199
-Score: -12.643559
-Score: -16.848595
-Score: -15.781939
-Score: -20.140743
+Score: -17.967957
+Score: -20.524719
+Score: -18.901300
+Score: -19.630835
+Score: -18.297598
+Score: -19.581974
+Score: -11.572736
+Score: -16.901176
+Score: -15.517031
+Score: -18.351887
 dwt_245
 SA-FR
 Score: 8.295328
@@ -1227,16 +1227,16 @@ Score: 16.751479
 Score: 19.993935
 Score: 10.735209
 CN-FR
-Score: 14.872880
-Score: 13.542085
-Score: 12.904143
-Score: 13.570716
-Score: 11.733398
-Score: 11.534162
-Score: 32.238803
-Score: 8.253310
-Score: 14.977377
-Score: 12.854733
+Score: 14.913362
+Score: 13.373308
+Score: 12.829946
+Score: 13.469986
+Score: 11.705913
+Score: 11.489614
+Score: 32.170248
+Score: 8.499953
+Score: 14.774980
+Score: 12.726508
 SA-L-BFGS
 Score: 3.561255
 Score: 5.180908
@@ -1249,16 +1249,16 @@ Score: 6.076361
 Score: 5.863699
 Score: 5.578973
 CN-L-BFGS
-Score: 10.710093
-Score: 5.392673
-Score: 3.289196
-Score: 8.474271
-Score: 4.398590
-Score: 6.466698
-Score: 23.603783
-Score: 3.479734
-Score: 9.930216
-Score: 3.456946
+Score: 10.640750
+Score: 5.447382
+Score: 3.332371
+Score: 8.479998
+Score: 4.406580
+Score: 6.489322
+Score: 23.419447
+Score: 3.513745
+Score: 10.013619
+Score: 3.445437
 dwt_307
 SA-FR
 Score: 82.117617
@@ -1272,16 +1272,16 @@ Score: 62.484695
 Score: 63.415883
 Score: 60.088235
 CN-FR
-Score: 63.221372
-Score: 64.510400
-Score: 61.270901
-Score: 62.386105
-Score: 65.523342
-Score: 64.406747
-Score: 64.136699
-Score: 61.225463
-Score: 61.053438
-Score: 63.428653
+Score: 63.226997
+Score: 64.505412
+Score: 61.240965
+Score: 62.405992
+Score: 65.561627
+Score: 64.481497
+Score: 64.160127
+Score: 61.212766
+Score: 61.060078
+Score: 63.333183
 SA-L-BFGS
 Score: 60.113571
 Score: 62.098827
@@ -1294,16 +1294,16 @@ Score: 59.545059
 Score: 60.071621
 Score: 58.158100
 CN-L-BFGS
-Score: 60.490864
-Score: 60.050789
-Score: 58.194820
-Score: 60.649261
-Score: 60.905720
-Score: 61.787933
-Score: 59.956177
-Score: 59.615845
-Score: 59.596634
-Score: 61.007542
+Score: 60.510193
+Score: 60.019604
+Score: 58.086563
+Score: 60.662975
+Score: 60.905785
+Score: 61.821602
+Score: 60.009804
+Score: 59.714573
+Score: 59.602066
+Score: 61.023975
 dwt_310
 SA-FR
 Score: 19.783260
@@ -1317,16 +1317,16 @@ Score: -9.163972
 Score: -5.233708
 Score: 6.948510
 CN-FR
-Score: 22.512064
-Score: 13.082419
-Score: 32.399175
-Score: -8.030186
-Score: -8.213051
-Score: 9.436586
-Score: 14.032068
-Score: 0.632312
-Score: 28.847498
-Score: 36.431560
+Score: 22.647494
+Score: 13.273724
+Score: 32.439695
+Score: -8.256665
+Score: -8.238676
+Score: 9.165009
+Score: 14.247406
+Score: 0.349866
+Score: 28.769220
+Score: 36.140787
 SA-L-BFGS
 Score: -47.834454
 Score: -56.186646
@@ -1339,16 +1339,16 @@ Score: -59.376884
 Score: -60.392174
 Score: -54.694389
 CN-L-BFGS
-Score: -52.001839
-Score: -55.655525
-Score: -36.713402
-Score: -56.398159
-Score: -60.135708
-Score: -55.303162
-Score: -59.636379
-Score: -56.958168
-Score: -43.154766
-Score: -50.918182
+Score: -53.392101
+Score: -54.012360
+Score: -33.372879
+Score: -55.763378
+Score: -59.607597
+Score: -54.443275
+Score: -59.560669
+Score: -57.035187
+Score: -43.030052
+Score: -52.434204
 dwt_361
 SA-FR
 Score: 19.485388
@@ -1362,16 +1362,16 @@ Score: 27.215568
 Score: 47.578939
 Score: 20.947338
 CN-FR
-Score: 8.367264
-Score: 16.593094
-Score: 11.912804
-Score: 26.595381
-Score: 31.812548
-Score: 29.122635
-Score: 12.406427
-Score: 52.579779
-Score: 20.791158
-Score: 4.178301
+Score: 8.305126
+Score: 16.497876
+Score: 11.808397
+Score: 26.536023
+Score: 31.766329
+Score: 29.144035
+Score: 12.400314
+Score: 52.608977
+Score: 20.875034
+Score: 4.121331
 SA-L-BFGS
 Score: -21.754845
 Score: -21.044678
@@ -1384,16 +1384,16 @@ Score: -21.539703
 Score: -14.745210
 Score: -21.524115
 CN-L-BFGS
-Score: -21.881485
-Score: -15.334610
-Score: -21.884571
-Score: -21.721771
-Score: -14.666331
-Score: -21.859434
-Score: -21.812834
-Score: -21.221243
-Score: -21.810257
-Score: -21.894764
+Score: -21.866940
+Score: -15.155487
+Score: -21.842033
+Score: -21.727194
+Score: -14.777827
+Score: -21.849152
+Score: -21.816778
+Score: -21.189005
+Score: -21.779518
+Score: -21.900103
 dwt_419
 SA-FR
 Score: 29.575754
@@ -1407,16 +1407,16 @@ Score: 27.105416
 Score: 69.996782
 Score: 26.194621
 CN-FR
-Score: 43.247339
-Score: 35.407604
-Score: 71.958846
-Score: 44.135248
-Score: 44.857110
-Score: 43.053858
-Score: 41.676056
-Score: 53.259733
-Score: 97.557432
-Score: 58.326096
+Score: 42.787734
+Score: 35.527867
+Score: 72.011185
+Score: 44.448589
+Score: 45.271613
+Score: 43.216096
+Score: 41.486711
+Score: 53.219884
+Score: 97.147246
+Score: 58.319748
 SA-L-BFGS
 Score: -7.402253
 Score: 10.480305
@@ -1429,16 +1429,16 @@ Score: -7.376532
 Score: 13.755317
 Score: -7.398638
 CN-L-BFGS
-Score: -7.369977
-Score: 8.281271
-Score: -7.124166
-Score: -7.053499
-Score: 7.963357
-Score: -7.484878
-Score: 9.238244
-Score: 10.835858
-Score: -4.573372
-Score: 9.628054
+Score: -7.374886
+Score: 8.237612
+Score: -7.109539
+Score: -7.277527
+Score: 3.364369
+Score: -7.456829
+Score: 9.447736
+Score: 11.126054
+Score: -4.013643
+Score: 9.861105
 dwt_503
 SA-FR
 Score: 128.143477
@@ -1452,16 +1452,16 @@ Score: 125.226768
 Score: 146.309609
 Score: 121.665095
 CN-FR
-Score: 150.525279
-Score: 122.605467
-Score: 128.744273
-Score: 144.735657
-Score: 134.461235
-Score: 111.108108
-Score: 136.416982
-Score: 123.374972
-Score: 121.271440
-Score: 127.263811
+Score: 150.444603
+Score: 122.516574
+Score: 128.739395
+Score: 144.738513
+Score: 134.730495
+Score: 111.071440
+Score: 136.266873
+Score: 123.401737
+Score: 121.285108
+Score: 127.053225
 SA-L-BFGS
 Score: 98.310303
 Score: 97.861816
@@ -1474,16 +1474,16 @@ Score: 102.672615
 Score: 95.956146
 Score: 100.273453
 CN-L-BFGS
-Score: 99.371094
-Score: 95.219559
-Score: 95.113480
-Score: 104.198692
-Score: 95.440491
-Score: 95.331856
-Score: 96.126495
-Score: 97.086266
-Score: 95.564369
-Score: 111.545990
+Score: 98.038635
+Score: 95.239029
+Score: 95.165398
+Score: 104.757187
+Score: 95.492409
+Score: 95.289116
+Score: 96.445374
+Score: 96.634438
+Score: 95.479218
+Score: 111.250992
 dwt_59
 SA-FR
 Score: 5.104391
@@ -1497,16 +1497,16 @@ Score: 3.469920
 Score: 1.426087
 Score: -0.847753
 CN-FR
-Score: 2.795416
-Score: 2.359124
-Score: 1.129770
-Score: 2.530196
-Score: 0.909639
-Score: 3.548482
-Score: 2.182747
-Score: 9.336698
-Score: -0.924388
-Score: 0.986131
+Score: 2.793876
+Score: 2.368486
+Score: 1.129895
+Score: 2.533168
+Score: 0.917134
+Score: 3.529653
+Score: 2.144281
+Score: 9.327681
+Score: -0.912494
+Score: 0.986460
 SA-L-BFGS
 Score: -1.198970
 Score: 0.369487
@@ -1519,16 +1519,16 @@ Score: -1.199055
 Score: -0.297752
 Score: -1.199076
 CN-L-BFGS
-Score: -1.180137
-Score: -1.199047
-Score: 0.345462
-Score: -1.199062
-Score: -1.157043
-Score: -1.197175
-Score: 0.345997
-Score: 0.480754
+Score: -1.198936
+Score: -1.199067
+Score: 0.330278
+Score: -1.199070
+Score: -0.752378
+Score: -1.197800
+Score: 0.299054
+Score: 0.448626
 Score: -1.199075
-Score: 0.316749
+Score: -0.340043
 dwt_592
 SA-FR
 Score: 58.059534
@@ -1542,16 +1542,16 @@ Score: -6.748657
 Score: 24.698924
 Score: -13.141193
 CN-FR
-Score: 36.724870
-Score: 22.702609
-Score: 9.823602
-Score: 5.965763
-Score: 41.232114
-Score: 37.554522
-Score: 5.348734
-Score: 4.584781
-Score: 1.647272
-Score: 36.929847
+Score: 36.923968
+Score: 22.868382
+Score: 9.921481
+Score: 5.962043
+Score: 41.308504
+Score: 37.762735
+Score: 5.266972
+Score: 4.357274
+Score: 1.526245
+Score: 36.889766
 SA-L-BFGS
 Score: -51.155525
 Score: -57.603584
@@ -1564,16 +1564,16 @@ Score: -76.593834
 Score: -57.747032
 Score: -71.925140
 CN-L-BFGS
-Score: -67.718048
-Score: -65.884338
-Score: -71.413490
-Score: -75.558479
-Score: -61.733284
-Score: -71.669884
-Score: -71.738884
-Score: -72.798477
-Score: -69.069901
-Score: -59.406357
+Score: -66.590660
+Score: -65.181915
+Score: -70.226631
+Score: -75.253494
+Score: -63.244556
+Score: -71.561050
+Score: -70.689339
+Score: -72.705292
+Score: -68.999191
+Score: -60.309586
 dwt_66
 SA-FR
 Score: -9.043215
@@ -1587,16 +1587,16 @@ Score: -8.029558
 Score: -13.759723
 Score: -12.027413
 CN-FR
-Score: -13.089593
-Score: -10.452385
-Score: -7.945046
-Score: -12.957666
-Score: -5.183999
-Score: -6.576948
-Score: -8.978205
-Score: -12.260586
-Score: -6.330230
-Score: -12.498347
+Score: -12.878768
+Score: -10.416196
+Score: -8.097077
+Score: -13.059823
+Score: -5.211820
+Score: -6.574489
+Score: -8.965883
+Score: -12.263248
+Score: -6.332983
+Score: -12.559473
 SA-L-BFGS
 Score: -25.497440
 Score: -25.558603
@@ -1609,16 +1609,16 @@ Score: -25.439951
 Score: -25.517569
 Score: -25.551928
 CN-L-BFGS
-Score: -25.098118
-Score: -24.673113
-Score: -24.143684
-Score: -25.329544
-Score: -25.012329
-Score: -25.432302
-Score: -24.692991
-Score: -25.272469
-Score: -24.146221
-Score: -25.015034
+Score: -25.278563
+Score: -24.813414
+Score: -23.735182
+Score: -25.381792
+Score: -25.138638
+Score: -25.412134
+Score: -24.583303
+Score: -25.290356
+Score: -24.143373
+Score: -25.120304
 dwt_72
 SA-FR
 Score: -15.070302
@@ -1632,16 +1632,16 @@ Score: -13.484362
 Score: -14.120287
 Score: -12.891268
 CN-FR
-Score: -10.709644
-Score: -13.756819
-Score: -14.296174
-Score: -10.856516
-Score: -11.920193
-Score: -15.892602
-Score: -7.851755
-Score: -10.947073
-Score: -11.891685
-Score: -10.938862
+Score: -10.708070
+Score: -13.757655
+Score: -14.296859
+Score: -10.850922
+Score: -11.920158
+Score: -15.892596
+Score: -7.853738
+Score: -10.948165
+Score: -11.891552
+Score: -10.938755
 SA-L-BFGS
 Score: -18.051153
 Score: -14.485300
@@ -1654,16 +1654,16 @@ Score: -17.777544
 Score: -17.364422
 Score: -17.038301
 CN-L-BFGS
-Score: -15.220209
-Score: -18.047569
-Score: -18.074295
-Score: -17.118082
-Score: -17.929241
-Score: -18.108295
-Score: -14.360705
-Score: -15.450296
-Score: -18.014559
-Score: -17.364716
+Score: -15.166887
+Score: -18.035654
+Score: -18.076294
+Score: -17.298077
+Score: -17.769777
+Score: -18.107958
+Score: -14.339337
+Score: -15.302171
+Score: -17.929016
+Score: -16.511345
 dwt_758
 SA-FR
 Score: 37.183975
@@ -1677,16 +1677,16 @@ Score: -25.401507
 Score: -94.620963
 Score: -17.845255
 CN-FR
-Score: -12.193605
-Score: -46.307312
-Score: -88.580645
-Score: -53.167989
-Score: -22.619926
-Score: -45.775991
-Score: -37.556360
-Score: -70.962642
-Score: -73.299270
-Score: -86.716652
+Score: -12.812438
+Score: -45.997945
+Score: -89.037419
+Score: -53.155061
+Score: -22.711426
+Score: -45.931119
+Score: -37.569550
+Score: -71.052263
+Score: -73.248567
+Score: -87.645046
 SA-L-BFGS
 Score: -214.089294
 Score: -230.389297
@@ -1699,16 +1699,16 @@ Score: -245.836487
 Score: -268.652344
 Score: -286.190979
 CN-L-BFGS
-Score: -248.081924
-Score: -341.108002
-Score: -359.589233
-Score: -163.046829
-Score: -248.932968
-Score: -270.166931
-Score: -263.548462
-Score: -296.289551
-Score: -325.615662
-Score: -376.760956
+Score: -244.087463
+Score: -333.601685
+Score: -359.543671
+Score: -166.749557
+Score: -247.323013
+Score: -271.449707
+Score: -258.383057
+Score: -290.876312
+Score: -333.527588
+Score: -372.646393
 dwt_869
 SA-FR
 Score: 81.172606
@@ -1722,16 +1722,16 @@ Score: 8.007896
 Score: -92.785945
 Score: -64.055725
 CN-FR
-Score: -17.753983
-Score: -21.687629
-Score: 21.163426
-Score: 12.286763
-Score: -60.289995
-Score: 18.585379
-Score: -13.056127
-Score: -63.533485
-Score: -29.980656
-Score: 47.263174
+Score: -17.883998
+Score: -21.385748
+Score: 21.035417
+Score: 12.233561
+Score: -60.252774
+Score: 18.620123
+Score: -12.965752
+Score: -63.945205
+Score: -29.904571
+Score: 46.927220
 SA-L-BFGS
 Score: -202.874435
 Score: -215.948792
@@ -1744,16 +1744,16 @@ Score: -246.903488
 Score: -231.293243
 Score: -229.894424
 CN-L-BFGS
-Score: -224.224915
-Score: -265.985016
-Score: -128.711411
-Score: -239.340897
-Score: -249.872955
-Score: -193.520508
-Score: -248.969864
-Score: -250.179260
-Score: -235.809555
-Score: -104.614746
+Score: -218.625473
+Score: -267.296997
+Score: -129.474792
+Score: -235.293442
+Score: -250.850189
+Score: -192.989594
+Score: -250.479950
+Score: -254.740540
+Score: -235.000519
+Score: -105.072250
 dwt_87
 SA-FR
 Score: 12.041233
@@ -1767,16 +1767,16 @@ Score: 12.066052
 Score: 12.331651
 Score: 12.613106
 CN-FR
-Score: 11.733528
-Score: 11.397494
-Score: 11.370291
-Score: 11.946785
-Score: 11.110090
-Score: 11.249444
-Score: 12.949095
-Score: 12.218606
-Score: 12.232067
-Score: 12.457172
+Score: 11.726190
+Score: 11.397285
+Score: 11.381181
+Score: 11.890868
+Score: 11.109147
+Score: 11.219770
+Score: 12.846829
+Score: 12.201284
+Score: 12.244246
+Score: 12.456036
 SA-L-BFGS
 Score: 10.452164
 Score: 10.695333
@@ -1789,16 +1789,16 @@ Score: 10.608912
 Score: 10.689178
 Score: 10.666242
 CN-L-BFGS
-Score: 10.472438
-Score: 10.468260
-Score: 10.743467
-Score: 10.482500
-Score: 10.598619
-Score: 10.745759
-Score: 10.560764
-Score: 10.452159
-Score: 10.619228
-Score: 10.453099
+Score: 10.553068
+Score: 10.468593
+Score: 10.728152
+Score: 10.441826
+Score: 10.605964
+Score: 10.672139
+Score: 10.546119
+Score: 10.452817
+Score: 10.619444
+Score: 10.452198
 dwt_878
 SA-FR
 Score: 13.549949
@@ -1812,16 +1812,16 @@ Score: 39.124804
 Score: 61.559672
 Score: 133.136232
 CN-FR
-Score: -14.618460
-Score: -6.796536
-Score: 51.613684
-Score: -42.691167
-Score: 11.035984
-Score: 40.013678
-Score: 2.251724
-Score: 26.691730
-Score: 40.379992
-Score: -10.160077
+Score: -14.735221
+Score: -6.775877
+Score: 51.621736
+Score: -42.691151
+Score: 10.837028
+Score: 40.226211
+Score: 1.686018
+Score: 25.976571
+Score: 40.458617
+Score: -10.151194
 SA-L-BFGS
 Score: -154.642822
 Score: -121.923714
@@ -1834,16 +1834,16 @@ Score: -128.134506
 Score: -127.397644
 Score: -101.543747
 CN-L-BFGS
-Score: -168.666931
-Score: -151.594543
-Score: -92.961578
-Score: -161.285812
-Score: -143.972565
-Score: -170.736526
-Score: -158.291870
-Score: -136.660339
-Score: -138.192505
-Score: -153.550934
+Score: -170.573456
+Score: -151.241974
+Score: -83.200401
+Score: -161.061905
+Score: -140.048508
+Score: -171.172119
+Score: -158.423050
+Score: -147.874664
+Score: -139.140411
+Score: -154.963196
 dwt_918
 SA-FR
 Score: 30.820832
@@ -1857,16 +1857,16 @@ Score: -49.073257
 Score: 96.447086
 Score: -4.086374
 CN-FR
-Score: 42.126941
-Score: 64.838266
-Score: 2.154500
-Score: -8.044454
-Score: -41.063111
-Score: 3.127871
-Score: 48.668905
-Score: 40.923224
-Score: -23.376232
-Score: -46.063813
+Score: 42.117758
+Score: 64.862867
+Score: 2.236988
+Score: -8.326503
+Score: -41.905937
+Score: 3.010771
+Score: 48.589807
+Score: 41.325742
+Score: -23.589871
+Score: -46.035953
 SA-L-BFGS
 Score: -181.410660
 Score: -205.101746
@@ -1879,16 +1879,16 @@ Score: -200.112457
 Score: -163.873367
 Score: -187.949249
 CN-L-BFGS
-Score: -179.040405
-Score: -192.700348
-Score: -172.837112
-Score: -201.962631
-Score: -195.606720
-Score: -196.342850
-Score: -158.006470
-Score: -92.587769
-Score: -197.585861
-Score: -188.392258
+Score: -173.590836
+Score: -183.371567
+Score: -171.829742
+Score: -202.019272
+Score: -201.085846
+Score: -186.612946
+Score: -157.814224
+Score: -87.857559
+Score: -198.806351
+Score: -196.043564
 dwt_992
 SA-FR
 Score: 210.800273
@@ -1902,16 +1902,16 @@ Score: 256.867899
 Score: 182.263869
 Score: 264.228556
 CN-FR
-Score: 276.778050
-Score: 339.057087
-Score: 343.339148
-Score: 225.185684
-Score: 198.941550
-Score: 212.724667
-Score: 211.973654
-Score: 233.287773
-Score: 225.975733
-Score: 169.849707
+Score: 276.479131
+Score: 338.787690
+Score: 343.589199
+Score: 225.271992
+Score: 198.934810
+Score: 212.343657
+Score: 211.866326
+Score: 233.680279
+Score: 226.171129
+Score: 169.771949
 SA-L-BFGS
 Score: 84.551865
 Score: 116.326195
@@ -1924,16 +1924,16 @@ Score: 83.687042
 Score: 82.074608
 Score: 97.341835
 CN-L-BFGS
-Score: 108.182587
-Score: 90.257309
-Score: 149.077576
-Score: 104.966835
-Score: 105.943237
-Score: 108.487289
-Score: 82.692322
-Score: 107.645668
-Score: 84.856377
-Score: 82.928909
+Score: 107.726509
+Score: 90.586792
+Score: 196.279526
+Score: 104.770744
+Score: 105.680298
+Score: 108.149490
+Score: 82.710144
+Score: 108.099075
+Score: 83.958641
+Score: 82.425186
 jagmesh1
 SA-FR
 Score: -54.020694
@@ -1947,16 +1947,16 @@ Score: 55.408282
 Score: -3.610968
 Score: -34.370706
 CN-FR
-Score: -127.041818
-Score: -68.610761
-Score: -97.543912
-Score: -113.842481
-Score: -75.872542
-Score: -33.547473
-Score: -113.732998
-Score: -131.755904
-Score: -74.917556
-Score: -59.615507
+Score: -127.240093
+Score: -69.119204
+Score: -97.659880
+Score: -114.066503
+Score: -76.018966
+Score: -33.655315
+Score: -113.611510
+Score: -131.575488
+Score: -75.111185
+Score: -59.723888
 SA-L-BFGS
 Score: -301.751587
 Score: -173.432434
@@ -1969,16 +1969,16 @@ Score: -197.498108
 Score: -289.906952
 Score: -224.206543
 CN-L-BFGS
-Score: -308.050171
-Score: -251.442932
-Score: -306.429535
-Score: -309.103394
-Score: -272.897308
-Score: -255.855133
-Score: -312.209991
-Score: -308.567078
-Score: -274.363434
-Score: -216.175430
+Score: -307.923645
+Score: -261.252136
+Score: -305.972412
+Score: -308.667511
+Score: -274.190918
+Score: -253.506180
+Score: -311.935303
+Score: -310.089325
+Score: -275.582886
+Score: -216.097610
 lshp_265
 SA-FR
 Score: 17.339257
@@ -1992,16 +1992,16 @@ Score: 16.003213
 Score: 21.277031
 Score: 2.753249
 CN-FR
-Score: 3.847338
-Score: -1.185384
-Score: 12.473734
-Score: 23.250807
-Score: 0.465897
-Score: 19.842767
-Score: 11.063564
-Score: 40.476390
-Score: 8.966612
-Score: 8.233375
+Score: 3.823244
+Score: -1.156973
+Score: 12.535346
+Score: 23.197180
+Score: 0.751261
+Score: 19.877592
+Score: 11.075296
+Score: 40.393800
+Score: 8.874389
+Score: 8.191690
 SA-L-BFGS
 Score: -14.530301
 Score: 2.287221
@@ -2014,16 +2014,16 @@ Score: -14.832007
 Score: -14.532389
 Score: -14.838593
 CN-L-BFGS
-Score: -14.853238
-Score: -14.849915
-Score: -14.815979
-Score: -14.822442
-Score: -14.852650
-Score: -14.838509
-Score: -14.778996
-Score: -14.301741
-Score: -14.663940
-Score: -14.792153
+Score: -14.852887
+Score: -14.850292
+Score: -14.829916
+Score: -14.811963
+Score: -14.852743
+Score: -14.831481
+Score: -14.744940
+Score: -14.375552
+Score: -14.670683
+Score: -14.759687
 lshp_406
 SA-FR
 Score: 28.659084
@@ -2037,16 +2037,16 @@ Score: 11.413871
 Score: -21.121930
 Score: 5.254601
 CN-FR
-Score: 11.431301
-Score: -6.864250
-Score: 0.069483
-Score: 13.174849
-Score: 25.570245
-Score: -9.968042
-Score: 2.017624
-Score: 10.153716
-Score: 1.030130
-Score: 5.325023
+Score: 11.260526
+Score: -6.477265
+Score: 0.024265
+Score: 13.340864
+Score: 25.813654
+Score: -9.940995
+Score: 2.068010
+Score: 10.103583
+Score: 0.954325
+Score: 5.371389
 SA-L-BFGS
 Score: -50.572155
 Score: -31.813360
@@ -2059,16 +2059,16 @@ Score: -31.095741
 Score: -50.937256
 Score: -50.876808
 CN-L-BFGS
-Score: -50.320854
-Score: -50.862431
-Score: -44.393776
-Score: -50.539139
-Score: -50.740952
-Score: -50.834812
-Score: -36.010025
-Score: -50.292629
-Score: -50.851398
-Score: -37.833839
+Score: -50.263683
+Score: -50.874596
+Score: -41.342567
+Score: -50.601318
+Score: -50.551537
+Score: -50.788731
+Score: -34.299652
+Score: -50.098175
+Score: -50.868103
+Score: -39.464455
 lshp_577
 SA-FR
 Score: 44.319026
@@ -2082,16 +2082,16 @@ Score: 23.269029
 Score: 20.336021
 Score: -9.397678
 CN-FR
-Score: -27.444034
-Score: -24.018063
-Score: -18.686498
-Score: 3.805692
-Score: -46.788047
-Score: -1.296665
-Score: -17.325871
-Score: -21.797484
-Score: -56.636086
-Score: -2.359449
+Score: -27.480057
+Score: -24.164489
+Score: -18.993544
+Score: 3.965853
+Score: -46.561261
+Score: -1.241511
+Score: -17.289272
+Score: -21.724603
+Score: -56.658988
+Score: -2.543926
 SA-L-BFGS
 Score: -76.545326
 Score: -89.900604
@@ -2104,16 +2104,16 @@ Score: -104.376686
 Score: -89.050674
 Score: -104.343483
 CN-L-BFGS
-Score: -95.681633
-Score: -105.655403
-Score: -105.592438
-Score: -105.014984
-Score: -105.534630
-Score: -99.316765
-Score: -105.387344
-Score: -105.370857
-Score: -105.666199
-Score: -86.963341
+Score: -98.508217
+Score: -105.630951
+Score: -105.569923
+Score: -104.886375
+Score: -105.526581
+Score: -98.732872
+Score: -105.352921
+Score: -105.212151
+Score: -105.657204
+Score: -86.313431
 lshp_778
 SA-FR
 Score: 11.776489
@@ -2127,16 +2127,16 @@ Score: 10.746930
 Score: 31.914304
 Score: 7.868252
 CN-FR
-Score: -90.090475
-Score: -87.026158
-Score: -52.491761
-Score: -23.088113
-Score: -33.708209
-Score: 22.320630
-Score: -57.361218
-Score: -30.672877
-Score: -32.115084
-Score: -88.043865
+Score: -89.987944
+Score: -87.147831
+Score: -52.657312
+Score: -23.029914
+Score: -33.807352
+Score: 22.330820
+Score: -57.358726
+Score: -30.650653
+Score: -32.232722
+Score: -87.835136
 SA-L-BFGS
 Score: -133.229843
 Score: -90.161102
@@ -2149,16 +2149,16 @@ Score: -123.532700
 Score: -172.287292
 Score: -132.833908
 CN-L-BFGS
-Score: -180.265549
-Score: -180.556091
-Score: -130.573822
-Score: -118.968582
-Score: -133.686554
-Score: -95.377823
-Score: -180.094345
-Score: -132.419250
-Score: -122.983070
-Score: -180.371658
+Score: -180.260849
+Score: -180.380722
+Score: -128.779282
+Score: -118.677078
+Score: -129.525238
+Score: -95.288681
+Score: -179.798325
+Score: -130.289337
+Score: -120.562813
+Score: -180.382980
 G1
 SA-FR
 Score: 1160.975659
@@ -2172,16 +2172,16 @@ Score: 1160.616329
 Score: 1160.720069
 Score: 1161.790632
 CN-FR
-Score: 1159.411137
-Score: 1158.816411
-Score: 1159.121569
-Score: 1159.527565
-Score: 1159.315261
-Score: 1158.784273
-Score: 1159.925277
-Score: 1160.778322
-Score: 1158.627777
-Score: 1159.322695
+Score: 1159.352604
+Score: 1158.898885
+Score: 1159.606695
+Score: 1159.358262
+Score: 1159.519025
+Score: 1158.687506
+Score: 1160.022651
+Score: 1160.497309
+Score: 1158.691279
+Score: 1159.116156
 SA-L-BFGS
 Score: 1157.402344
 Score: 1158.009033
@@ -2194,16 +2194,16 @@ Score: 1158.142212
 Score: 1157.896118
 Score: 1158.110352
 CN-L-BFGS
-Score: 1156.560059
-Score: 1157.097046
-Score: 1156.579590
-Score: 1156.329956
-Score: 1156.830811
-Score: 1156.209717
-Score: 1157.267700
-Score: 1156.633667
-Score: 1156.489746
-Score: 1156.294312
+Score: 1156.686523
+Score: 1156.955566
+Score: 1156.490112
+Score: 1156.781128
+Score: 1156.590088
+Score: 1155.939819
+Score: 1157.203125
+Score: 1156.418945
+Score: 1156.549194
+Score: 1155.895264
 G14
 SA-FR
 Score: 767.966336
@@ -2217,16 +2217,16 @@ Score: 765.858973
 Score: 762.747753
 Score: 766.064385
 CN-FR
-Score: 761.360177
-Score: 766.395032
-Score: 762.078018
-Score: 760.369412
-Score: 763.529236
-Score: 762.076362
-Score: 763.093744
-Score: 762.014053
-Score: 761.587035
-Score: 761.300058
+Score: 761.333959
+Score: 766.364410
+Score: 762.154695
+Score: 760.438387
+Score: 763.494080
+Score: 762.102609
+Score: 763.063285
+Score: 761.973862
+Score: 761.587423
+Score: 761.287726
 SA-L-BFGS
 Score: 761.894531
 Score: 768.556641
@@ -2239,16 +2239,16 @@ Score: 765.023132
 Score: 761.104858
 Score: 762.675232
 CN-L-BFGS
-Score: 761.263977
-Score: 765.450012
-Score: 761.647827
-Score: 760.134460
-Score: 762.454041
-Score: 761.417419
-Score: 761.666138
-Score: 760.991211
-Score: 760.541504
-Score: 760.559387
+Score: 761.282898
+Score: 765.393433
+Score: 761.535461
+Score: 760.168945
+Score: 762.471741
+Score: 761.387329
+Score: 761.495300
+Score: 760.826660
+Score: 760.529358
+Score: 760.660217
 G15
 SA-FR
 Score: 769.957857
@@ -2262,16 +2262,16 @@ Score: 770.961141
 Score: 768.266965
 Score: 766.654621
 CN-FR
-Score: 765.447576
-Score: 762.736488
-Score: 762.935361
-Score: 762.015832
-Score: 763.049783
-Score: 765.459898
-Score: 762.552541
-Score: 767.370246
-Score: 762.381025
-Score: 763.892375
+Score: 765.463107
+Score: 762.799940
+Score: 762.898157
+Score: 762.156793
+Score: 762.998853
+Score: 765.627668
+Score: 762.665579
+Score: 767.423783
+Score: 762.380166
+Score: 763.964740
 SA-L-BFGS
 Score: 770.485657
 Score: 766.810913
@@ -2284,16 +2284,16 @@ Score: 768.335205
 Score: 767.722961
 Score: 766.207642
 CN-L-BFGS
-Score: 765.593750
-Score: 762.481445
-Score: 762.221191
-Score: 761.691650
-Score: 762.427856
-Score: 765.329895
-Score: 762.423279
-Score: 767.142151
-Score: 761.828491
-Score: 763.010132
+Score: 765.529053
+Score: 762.424744
+Score: 762.082520
+Score: 761.576904
+Score: 762.494019
+Score: 765.488770
+Score: 762.404236
+Score: 767.188049
+Score: 761.777588
+Score: 762.951843
 G16
 SA-FR
 Score: 767.190359
@@ -2307,16 +2307,16 @@ Score: 767.564738
 Score: 764.410767
 Score: 766.367332
 CN-FR
-Score: 760.035645
-Score: 759.668776
-Score: 758.394574
-Score: 761.074896
-Score: 756.828468
-Score: 759.064663
-Score: 758.919237
-Score: 759.906958
-Score: 758.539941
-Score: 755.636537
+Score: 760.095490
+Score: 759.663895
+Score: 758.293722
+Score: 761.142902
+Score: 756.857758
+Score: 759.162004
+Score: 758.906503
+Score: 759.857574
+Score: 758.550131
+Score: 755.667908
 SA-L-BFGS
 Score: 766.217957
 Score: 762.598206
@@ -2329,16 +2329,16 @@ Score: 767.411438
 Score: 762.241089
 Score: 765.501831
 CN-L-BFGS
-Score: 759.609314
-Score: 759.582764
-Score: 757.979675
-Score: 760.200928
-Score: 756.413757
-Score: 758.581787
-Score: 757.957947
-Score: 759.307922
-Score: 757.658020
-Score: 755.644592
+Score: 759.614685
+Score: 759.567261
+Score: 757.938232
+Score: 760.086853
+Score: 756.218262
+Score: 758.496094
+Score: 758.011047
+Score: 759.272156
+Score: 757.472412
+Score: 755.540833
 G17
 SA-FR
 Score: 765.661300
@@ -2352,16 +2352,16 @@ Score: 759.310506
 Score: 762.011349
 Score: 762.010797
 CN-FR
-Score: 756.116685
-Score: 756.565260
-Score: 756.942821
-Score: 758.055897
-Score: 758.278858
-Score: 757.405015
-Score: 756.674433
-Score: 756.286011
-Score: 757.956846
-Score: 758.153237
+Score: 756.263015
+Score: 756.545861
+Score: 756.916841
+Score: 758.094948
+Score: 758.304161
+Score: 757.417244
+Score: 756.567701
+Score: 756.333496
+Score: 757.901402
+Score: 758.162258
 SA-L-BFGS
 Score: 761.687012
 Score: 761.856018
@@ -2374,16 +2374,16 @@ Score: 757.914795
 Score: 760.693298
 Score: 761.243103
 CN-L-BFGS
-Score: 755.098999
-Score: 755.528442
-Score: 756.171631
-Score: 757.368530
-Score: 757.766113
-Score: 756.679565
-Score: 756.071167
-Score: 755.899414
-Score: 756.701843
-Score: 757.218933
+Score: 754.997803
+Score: 755.507568
+Score: 756.165588
+Score: 757.335144
+Score: 757.808472
+Score: 756.752930
+Score: 756.076599
+Score: 755.867981
+Score: 756.645691
+Score: 757.186401
 G2
 SA-FR
 Score: 1161.722228
@@ -2397,16 +2397,16 @@ Score: 1159.424145
 Score: 1160.288009
 Score: 1161.065338
 CN-FR
-Score: 1159.347874
-Score: 1158.198166
-Score: 1158.644171
-Score: 1159.499944
-Score: 1158.536856
-Score: 1158.809195
-Score: 1158.784205
-Score: 1159.154005
-Score: 1159.118803
-Score: 1157.809906
+Score: 1159.215374
+Score: 1158.139043
+Score: 1158.493047
+Score: 1159.448864
+Score: 1158.892451
+Score: 1159.005497
+Score: 1158.569517
+Score: 1158.789937
+Score: 1159.198721
+Score: 1158.307959
 SA-L-BFGS
 Score: 1157.356567
 Score: 1157.575562
@@ -2419,16 +2419,16 @@ Score: 1156.722656
 Score: 1157.381592
 Score: 1157.215820
 CN-L-BFGS
-Score: 1155.439209
-Score: 1155.978882
-Score: 1155.898438
-Score: 1155.901978
-Score: 1155.659058
-Score: 1155.665894
-Score: 1156.833862
-Score: 1156.755981
-Score: 1156.134766
-Score: 1156.843262
+Score: 1155.249268
+Score: 1155.888306
+Score: 1156.310547
+Score: 1155.551636
+Score: 1155.362427
+Score: 1155.645874
+Score: 1156.208862
+Score: 1156.682495
+Score: 1155.873291
+Score: 1156.618408
 G3
 SA-FR
 Score: 1159.128196
@@ -2442,16 +2442,16 @@ Score: 1160.899922
 Score: 1160.617976
 Score: 1158.285121
 CN-FR
-Score: 1158.969810
-Score: 1157.886332
-Score: 1159.069748
-Score: 1159.163842
-Score: 1158.277996
-Score: 1157.997188
-Score: 1157.817172
-Score: 1158.162123
-Score: 1157.394722
-Score: 1159.122525
+Score: 1159.135501
+Score: 1158.646468
+Score: 1158.983765
+Score: 1158.741932
+Score: 1158.218223
+Score: 1158.634017
+Score: 1157.692856
+Score: 1158.309933
+Score: 1157.527125
+Score: 1158.579252
 SA-L-BFGS
 Score: 1156.463867
 Score: 1156.832764
@@ -2464,16 +2464,16 @@ Score: 1157.362549
 Score: 1157.810913
 Score: 1155.789429
 CN-L-BFGS
-Score: 1156.147095
-Score: 1157.621216
-Score: 1154.910400
-Score: 1156.284912
-Score: 1155.219727
-Score: 1155.289673
-Score: 1155.470581
-Score: 1154.589478
-Score: 1154.896118
-Score: 1155.284546
+Score: 1156.331909
+Score: 1156.819580
+Score: 1154.860840
+Score: 1156.552490
+Score: 1155.371460
+Score: 1155.140869
+Score: 1154.944214
+Score: 1154.649170
+Score: 1154.839600
+Score: 1155.025635
 G4
 SA-FR
 Score: 1159.418674
@@ -2487,16 +2487,16 @@ Score: 1159.879438
 Score: 1159.774641
 Score: 1158.517404
 CN-FR
-Score: 1160.997267
-Score: 1158.667828
-Score: 1157.618960
-Score: 1159.093961
-Score: 1159.646682
-Score: 1158.919392
-Score: 1159.264123
-Score: 1158.388389
-Score: 1161.008190
-Score: 1161.075226
+Score: 1161.076185
+Score: 1158.547069
+Score: 1157.727234
+Score: 1159.001988
+Score: 1159.499563
+Score: 1158.937820
+Score: 1159.032098
+Score: 1158.274767
+Score: 1160.927236
+Score: 1160.916993
 SA-L-BFGS
 Score: 1157.478516
 Score: 1157.648438
@@ -2509,16 +2509,16 @@ Score: 1155.704956
 Score: 1156.465820
 Score: 1155.561279
 CN-L-BFGS
-Score: 1157.251221
-Score: 1155.912842
-Score: 1156.717773
-Score: 1157.082275
-Score: 1157.127441
-Score: 1157.420166
-Score: 1156.254883
-Score: 1157.322754
-Score: 1156.557739
-Score: 1156.498779
+Score: 1156.950317
+Score: 1156.140015
+Score: 1156.653564
+Score: 1156.556763
+Score: 1157.091797
+Score: 1157.398071
+Score: 1156.065552
+Score: 1157.205444
+Score: 1156.717896
+Score: 1157.187866
 G43
 SA-FR
 Score: 1250.699132
@@ -2532,16 +2532,16 @@ Score: 1250.768476
 Score: 1248.243063
 Score: 1249.165670
 CN-FR
-Score: 1247.922896
-Score: 1249.212291
-Score: 1246.040156
-Score: 1248.421990
-Score: 1249.883970
-Score: 1253.043772
-Score: 1248.159448
-Score: 1248.701489
-Score: 1249.766444
-Score: 1248.788049
+Score: 1247.801734
+Score: 1249.055259
+Score: 1246.024362
+Score: 1248.206500
+Score: 1249.745351
+Score: 1252.753796
+Score: 1248.230139
+Score: 1248.730816
+Score: 1249.890085
+Score: 1248.597964
 SA-L-BFGS
 Score: 1247.272095
 Score: 1249.172363
@@ -2554,16 +2554,16 @@ Score: 1248.101440
 Score: 1245.815430
 Score: 1246.633911
 CN-L-BFGS
-Score: 1245.747070
-Score: 1246.942505
-Score: 1243.770264
-Score: 1245.844116
-Score: 1246.794556
-Score: 1250.331299
-Score: 1247.066284
-Score: 1246.640381
-Score: 1247.342651
-Score: 1246.213501
+Score: 1245.879883
+Score: 1247.092285
+Score: 1243.953369
+Score: 1246.003540
+Score: 1246.748779
+Score: 1250.591309
+Score: 1246.833252
+Score: 1246.718750
+Score: 1247.397705
+Score: 1245.781616
 G44
 SA-FR
 Score: 1248.402587
@@ -2577,16 +2577,16 @@ Score: 1248.144149
 Score: 1251.588093
 Score: 1249.205113
 CN-FR
-Score: 1249.552975
-Score: 1248.222353
-Score: 1248.098908
-Score: 1247.697726
-Score: 1248.241320
-Score: 1247.694591
-Score: 1250.025240
-Score: 1250.323966
-Score: 1248.880410
-Score: 1247.080464
+Score: 1249.557566
+Score: 1248.061411
+Score: 1247.963518
+Score: 1247.957977
+Score: 1248.180395
+Score: 1247.632018
+Score: 1250.137003
+Score: 1250.449226
+Score: 1248.739848
+Score: 1247.162549
 SA-L-BFGS
 Score: 1245.591431
 Score: 1246.292114
@@ -2599,16 +2599,16 @@ Score: 1246.240601
 Score: 1249.441162
 Score: 1245.735474
 CN-L-BFGS
-Score: 1248.308105
-Score: 1245.683716
-Score: 1247.128540
-Score: 1246.300293
-Score: 1245.862915
-Score: 1245.772583
-Score: 1249.397095
-Score: 1246.936646
-Score: 1245.982056
-Score: 1245.166138
+Score: 1248.388184
+Score: 1245.442627
+Score: 1247.532349
+Score: 1245.921509
+Score: 1246.325684
+Score: 1245.860718
+Score: 1249.082153
+Score: 1246.908081
+Score: 1246.096802
+Score: 1245.238159
 G45
 SA-FR
 Score: 1247.695727
@@ -2622,16 +2622,16 @@ Score: 1248.555983
 Score: 1250.825182
 Score: 1251.986548
 CN-FR
-Score: 1250.355831
-Score: 1252.782545
-Score: 1250.156809
-Score: 1249.109442
-Score: 1250.636224
-Score: 1249.545614
-Score: 1250.712367
-Score: 1249.318642
-Score: 1251.319701
-Score: 1249.327960
+Score: 1250.350671
+Score: 1252.677268
+Score: 1250.441840
+Score: 1249.111612
+Score: 1250.662551
+Score: 1249.575758
+Score: 1250.734925
+Score: 1249.161071
+Score: 1251.255000
+Score: 1249.415862
 SA-L-BFGS
 Score: 1245.543823
 Score: 1246.942017
@@ -2644,16 +2644,16 @@ Score: 1245.750244
 Score: 1248.308105
 Score: 1248.723267
 CN-L-BFGS
-Score: 1248.980713
-Score: 1248.811523
-Score: 1249.251953
-Score: 1246.270996
-Score: 1249.156494
-Score: 1247.603394
-Score: 1247.812134
-Score: 1246.404785
-Score: 1247.733521
-Score: 1247.847412
+Score: 1248.921387
+Score: 1248.656860
+Score: 1249.015625
+Score: 1246.460815
+Score: 1248.638062
+Score: 1247.224609
+Score: 1247.564453
+Score: 1246.812622
+Score: 1247.634155
+Score: 1247.459106
 G46
 SA-FR
 Score: 1250.753003
@@ -2667,16 +2667,16 @@ Score: 1252.566708
 Score: 1250.059731
 Score: 1251.817229
 CN-FR
-Score: 1254.012928
-Score: 1249.830249
-Score: 1252.462681
-Score: 1251.942081
-Score: 1250.586737
-Score: 1251.549490
-Score: 1249.863457
-Score: 1250.159754
-Score: 1250.314874
-Score: 1250.722174
+Score: 1253.212250
+Score: 1249.796590
+Score: 1252.526586
+Score: 1251.898941
+Score: 1250.763363
+Score: 1251.505677
+Score: 1249.755088
+Score: 1250.237165
+Score: 1250.363308
+Score: 1250.613381
 SA-L-BFGS
 Score: 1248.520508
 Score: 1248.287109
@@ -2689,16 +2689,16 @@ Score: 1248.471436
 Score: 1246.832397
 Score: 1249.682861
 CN-L-BFGS
-Score: 1249.979858
-Score: 1247.016602
-Score: 1249.012207
-Score: 1248.861084
-Score: 1247.797363
-Score: 1247.785278
-Score: 1246.423340
-Score: 1249.232300
-Score: 1248.293213
-Score: 1248.806274
+Score: 1249.451050
+Score: 1246.738281
+Score: 1249.355225
+Score: 1249.387939
+Score: 1247.809326
+Score: 1247.760376
+Score: 1247.518311
+Score: 1248.809326
+Score: 1247.531006
+Score: 1248.319824
 G47
 SA-FR
 Score: 1250.844595
@@ -2712,16 +2712,16 @@ Score: 1251.386174
 Score: 1250.232180
 Score: 1250.101424
 CN-FR
-Score: 1251.337354
-Score: 1250.747452
-Score: 1249.473965
-Score: 1249.543834
-Score: 1252.037927
-Score: 1248.706411
-Score: 1251.867930
-Score: 1251.450299
-Score: 1250.986851
-Score: 1250.319172
+Score: 1251.264103
+Score: 1250.756045
+Score: 1249.534964
+Score: 1249.416174
+Score: 1252.118689
+Score: 1248.677087
+Score: 1251.637408
+Score: 1251.575932
+Score: 1250.827957
+Score: 1250.150038
 SA-L-BFGS
 Score: 1248.612305
 Score: 1248.872192
@@ -2734,16 +2734,16 @@ Score: 1248.841187
 Score: 1247.701172
 Score: 1246.887695
 CN-L-BFGS
-Score: 1247.963623
-Score: 1247.745972
-Score: 1249.196655
-Score: 1248.515259
-Score: 1248.623047
-Score: 1246.942139
-Score: 1249.107666
-Score: 1250.242920
-Score: 1248.230347
-Score: 1247.434448
+Score: 1248.121826
+Score: 1247.863892
+Score: 1249.476318
+Score: 1248.330444
+Score: 1248.949707
+Score: 1246.775635
+Score: 1249.027588
+Score: 1250.537231
+Score: 1248.578125
+Score: 1247.249512
 G5
 SA-FR
 Score: 1160.870120
@@ -2757,16 +2757,16 @@ Score: 1161.304533
 Score: 1160.220404
 Score: 1161.329481
 CN-FR
-Score: 1159.119730
-Score: 1158.813614
-Score: 1157.955923
-Score: 1155.720981
-Score: 1157.811128
-Score: 1158.198029
-Score: 1162.039137
-Score: 1157.603945
-Score: 1158.983198
-Score: 1159.305344
+Score: 1159.091183
+Score: 1158.164145
+Score: 1157.894497
+Score: 1156.775674
+Score: 1157.673443
+Score: 1157.934518
+Score: 1161.184659
+Score: 1157.357089
+Score: 1159.008888
+Score: 1159.224275
 SA-L-BFGS
 Score: 1157.828003
 Score: 1157.025635
@@ -2779,16 +2779,16 @@ Score: 1156.870850
 Score: 1156.883789
 Score: 1158.365967
 CN-L-BFGS
-Score: 1156.405518
-Score: 1157.300903
-Score: 1155.867432
-Score: 1154.349487
-Score: 1154.997559
-Score: 1156.244629
-Score: 1155.958496
-Score: 1155.489014
-Score: 1155.727417
-Score: 1155.763306
+Score: 1156.389526
+Score: 1157.052002
+Score: 1155.975708
+Score: 1154.399292
+Score: 1154.860474
+Score: 1156.468018
+Score: 1155.480469
+Score: 1155.437134
+Score: 1155.627075
+Score: 1156.100830
 G51
 SA-FR
 Score: 984.782304
@@ -2802,16 +2802,16 @@ Score: 979.380853
 Score: 977.405303
 Score: 982.647556
 CN-FR
-Score: 969.934729
-Score: 970.215955
-Score: 974.555295
-Score: 970.156433
-Score: 971.006437
-Score: 977.771871
-Score: 970.543027
-Score: 975.268793
-Score: 970.743032
-Score: 971.164588
+Score: 969.860795
+Score: 970.164974
+Score: 974.514336
+Score: 970.116706
+Score: 970.952726
+Score: 977.536555
+Score: 970.550952
+Score: 975.202756
+Score: 970.736602
+Score: 971.156330
 SA-L-BFGS
 Score: 983.804565
 Score: 981.733582
@@ -2824,16 +2824,16 @@ Score: 977.721497
 Score: 974.250000
 Score: 980.908997
 CN-L-BFGS
-Score: 968.915466
-Score: 969.794495
-Score: 973.284363
-Score: 969.562927
-Score: 969.437317
-Score: 975.971008
-Score: 969.879822
-Score: 973.752625
-Score: 970.080811
-Score: 970.195190
+Score: 968.851990
+Score: 969.818176
+Score: 973.609924
+Score: 969.526733
+Score: 969.334534
+Score: 975.793396
+Score: 969.817566
+Score: 974.278870
+Score: 969.821533
+Score: 970.174561
 G52
 SA-FR
 Score: 980.123585
@@ -2847,16 +2847,16 @@ Score: 979.364075
 Score: 976.268668
 Score: 980.016436
 CN-FR
-Score: 973.837528
-Score: 974.722457
-Score: 976.231046
-Score: 974.453532
-Score: 974.642268
-Score: 975.630865
-Score: 975.410480
-Score: 975.636073
-Score: 973.369215
-Score: 974.774810
+Score: 973.757275
+Score: 974.632361
+Score: 976.191175
+Score: 974.443741
+Score: 974.648440
+Score: 975.639206
+Score: 975.520705
+Score: 975.634728
+Score: 973.351833
+Score: 974.707214
 SA-L-BFGS
 Score: 980.570923
 Score: 979.131958
@@ -2869,16 +2869,16 @@ Score: 978.569458
 Score: 975.653931
 Score: 979.334290
 CN-L-BFGS
-Score: 973.496399
-Score: 974.179626
-Score: 974.964539
-Score: 973.454041
-Score: 973.112366
-Score: 974.872498
-Score: 974.862671
-Score: 974.364258
-Score: 972.456482
-Score: 974.322205
+Score: 973.640503
+Score: 974.366028
+Score: 974.992493
+Score: 973.443787
+Score: 972.949219
+Score: 974.859924
+Score: 974.697144
+Score: 974.366455
+Score: 972.366333
+Score: 973.949951
 G53
 SA-FR
 Score: 972.089317
@@ -2892,16 +2892,16 @@ Score: 972.391624
 Score: 972.285852
 Score: 975.003882
 CN-FR
-Score: 967.149429
-Score: 966.328980
-Score: 967.013041
-Score: 967.321061
-Score: 968.932164
-Score: 968.660916
-Score: 968.163071
-Score: 967.754154
-Score: 966.837424
-Score: 968.263578
+Score: 967.228298
+Score: 966.367085
+Score: 967.094453
+Score: 967.162990
+Score: 969.014580
+Score: 968.642916
+Score: 968.292800
+Score: 967.721982
+Score: 966.876051
+Score: 968.254514
 SA-L-BFGS
 Score: 970.944946
 Score: 970.425415
@@ -2914,16 +2914,16 @@ Score: 970.783264
 Score: 971.345886
 Score: 973.370422
 CN-L-BFGS
-Score: 966.683899
-Score: 966.087402
-Score: 966.140564
-Score: 965.197937
-Score: 968.422729
-Score: 967.703918
-Score: 967.588135
-Score: 966.747498
-Score: 966.130127
-Score: 967.042542
+Score: 966.691467
+Score: 966.008911
+Score: 966.060181
+Score: 965.267456
+Score: 968.270630
+Score: 967.635864
+Score: 967.537170
+Score: 966.951477
+Score: 966.079224
+Score: 967.065979
 G54
 SA-FR
 Score: 979.166762
@@ -2937,16 +2937,16 @@ Score: 979.016661
 Score: 981.573069
 Score: 979.904077
 CN-FR
-Score: 973.236037
-Score: 972.786435
-Score: 976.523372
-Score: 975.028890
-Score: 976.213544
-Score: 973.874578
-Score: 976.634911
-Score: 975.459220
-Score: 975.525218
-Score: 975.177951
+Score: 973.439516
+Score: 972.808307
+Score: 976.570242
+Score: 975.109777
+Score: 976.366127
+Score: 973.846257
+Score: 976.710099
+Score: 975.356871
+Score: 975.481182
+Score: 975.065264
 SA-L-BFGS
 Score: 978.844971
 Score: 976.449707
@@ -2959,16 +2959,16 @@ Score: 978.281189
 Score: 980.771179
 Score: 978.466858
 CN-L-BFGS
-Score: 973.384155
-Score: 972.187439
-Score: 975.597839
-Score: 973.560242
-Score: 975.152466
-Score: 973.346191
-Score: 974.894958
-Score: 974.633179
-Score: 974.429260
-Score: 974.424561
+Score: 973.510925
+Score: 972.065247
+Score: 975.604309
+Score: 973.588684
+Score: 975.099670
+Score: 973.400818
+Score: 974.832458
+Score: 974.595581
+Score: 974.447327
+Score: 974.355530
 mesh3e1
 SA-FR
 Score: 4.427729
@@ -2982,16 +2982,16 @@ Score: 6.220968
 Score: -14.240606
 Score: 3.092784
 CN-FR
-Score: -6.517678
-Score: 12.537612
-Score: 9.861191
-Score: 4.833539
-Score: -2.165763
-Score: -20.024865
-Score: 0.091926
-Score: 5.385230
-Score: 6.039501
-Score: -17.650762
+Score: -6.539799
+Score: 12.396732
+Score: 10.047343
+Score: 4.879869
+Score: -2.161107
+Score: -19.946662
+Score: 0.134185
+Score: 5.423338
+Score: 6.004852
+Score: -17.530940
 SA-L-BFGS
 Score: -29.172535
 Score: -23.924683
@@ -3004,16 +3004,16 @@ Score: -28.912228
 Score: -29.159859
 Score: -29.122915
 CN-L-BFGS
-Score: -29.193331
-Score: -10.627740
-Score: -29.174675
-Score: -27.886648
-Score: -29.170998
-Score: -29.196930
-Score: -29.176069
-Score: -29.163162
-Score: -27.999088
-Score: -29.197634
+Score: -29.193800
+Score: -11.196105
+Score: -29.180792
+Score: -28.486488
+Score: -29.175476
+Score: -29.191324
+Score: -29.171965
+Score: -29.162689
+Score: -27.877430
+Score: -29.192780
 mesh3em5
 SA-FR
 Score: 4.427729
@@ -3027,16 +3027,16 @@ Score: 6.220968
 Score: -14.240606
 Score: 3.092784
 CN-FR
-Score: -6.517678
-Score: 12.537612
-Score: 9.861191
-Score: 4.833539
-Score: -2.165763
-Score: -20.024865
-Score: 0.091926
-Score: 5.385230
-Score: 6.039501
-Score: -17.650762
+Score: -6.539799
+Score: 12.396732
+Score: 10.047343
+Score: 4.879869
+Score: -2.161107
+Score: -19.946662
+Score: 0.134185
+Score: 5.423338
+Score: 6.004852
+Score: -17.530940
 SA-L-BFGS
 Score: -29.172535
 Score: -23.924683
@@ -3049,16 +3049,16 @@ Score: -28.912228
 Score: -29.159859
 Score: -29.122915
 CN-L-BFGS
-Score: -29.193331
-Score: -10.627740
-Score: -29.174675
-Score: -27.886648
-Score: -29.170998
-Score: -29.196930
-Score: -29.176069
-Score: -29.163162
-Score: -27.999088
-Score: -29.197634
+Score: -29.193800
+Score: -11.196105
+Score: -29.180792
+Score: -28.486488
+Score: -29.175476
+Score: -29.191324
+Score: -29.171965
+Score: -29.162689
+Score: -27.877430
+Score: -29.192780
 sphere2
 SA-FR
 Score: 24.384782
@@ -3072,16 +3072,16 @@ Score: 24.245939
 Score: 24.565439
 Score: 24.457517
 CN-FR
-Score: 24.572072
-Score: 24.804462
-Score: 24.303518
-Score: 24.668860
-Score: 24.647225
-Score: 24.592809
-Score: 24.638493
-Score: 24.597306
-Score: 24.468631
-Score: 24.365482
+Score: 24.572162
+Score: 24.801892
+Score: 24.298843
+Score: 24.667139
+Score: 24.648466
+Score: 24.594203
+Score: 24.639614
+Score: 24.612560
+Score: 24.467655
+Score: 24.363697
 SA-L-BFGS
 Score: 24.238815
 Score: 24.240486
@@ -3094,14 +3094,14 @@ Score: 24.238815
 Score: 24.556545
 Score: 24.238813
 CN-L-BFGS
-Score: 24.238815
-Score: 24.238815
-Score: 24.238815
-Score: 24.643898
 Score: 24.238813
+Score: 24.238813
+Score: 24.238815
+Score: 24.645206
+Score: 24.238827
 Score: 24.556543
-Score: 24.558319
-Score: 24.238813
+Score: 24.558311
+Score: 24.238815
 Score: 24.238813
 Score: 24.238815
 sphere3
@@ -3117,16 +3117,16 @@ Score: 43.866067
 Score: 44.604379
 Score: 44.808007
 CN-FR
-Score: 44.143703
-Score: 43.255114
-Score: 43.609125
-Score: 43.672414
-Score: 42.259666
-Score: 45.117151
-Score: 43.705992
-Score: 44.082477
-Score: 43.135219
-Score: 43.856371
+Score: 44.159131
+Score: 43.288527
+Score: 43.620852
+Score: 43.672660
+Score: 42.273503
+Score: 45.068596
+Score: 43.707124
+Score: 44.046008
+Score: 43.146944
+Score: 43.850981
 SA-L-BFGS
 Score: 42.167542
 Score: 41.933792
@@ -3139,16 +3139,16 @@ Score: 42.117874
 Score: 42.149879
 Score: 43.315838
 CN-L-BFGS
-Score: 43.319565
-Score: 42.084404
-Score: 42.931698
-Score: 42.280853
+Score: 43.319592
+Score: 41.973133
+Score: 42.942680
+Score: 42.121552
 Score: 41.933758
-Score: 42.094566
-Score: 42.893497
-Score: 43.098385
-Score: 41.941643
-Score: 41.972893
+Score: 42.116959
+Score: 42.863049
+Score: 43.036160
+Score: 41.939590
+Score: 41.948952
 lap_25
 SA-FR
 Score: 9.384821
@@ -3163,15 +3163,15 @@ Score: 9.385476
 Score: 9.385693
 CN-FR
 Score: 9.385501
-Score: 9.384753
-Score: 9.385655
+Score: 9.384747
+Score: 9.385661
 Score: 9.385077
-Score: 9.385177
+Score: 9.385172
 Score: 9.384693
-Score: 9.385210
-Score: 9.385643
-Score: 9.416939
-Score: 11.316879
+Score: 9.385231
+Score: 9.385736
+Score: 9.416944
+Score: 11.316884
 SA-L-BFGS
 Score: 9.384166
 Score: 9.384166
@@ -3185,7 +3185,7 @@ Score: 9.384166
 Score: 9.384166
 CN-L-BFGS
 Score: 9.384166
-Score: 9.384166
+Score: 9.384854
 Score: 9.384166
 Score: 9.384166
 Score: 9.384166
@@ -3207,16 +3207,16 @@ Score: 58.628940
 Score: 58.643857
 Score: 58.623891
 CN-FR
-Score: 58.746545
-Score: 58.596753
-Score: 58.745067
-Score: 58.741026
-Score: 58.613636
-Score: 58.699373
-Score: 58.628977
-Score: 58.611065
-Score: 58.891869
-Score: 58.607595
+Score: 58.796124
+Score: 58.599471
+Score: 58.711407
+Score: 58.769156
+Score: 58.605242
+Score: 58.731633
+Score: 58.611444
+Score: 58.612274
+Score: 58.774831
+Score: 58.619102
 SA-L-BFGS
 Score: 58.797604
 Score: 58.575665
@@ -3229,16 +3229,16 @@ Score: 58.574482
 Score: 58.575520
 Score: 58.573700
 CN-L-BFGS
-Score: 58.577511
-Score: 58.569351
-Score: 58.579262
-Score: 58.571503
-Score: 58.575817
-Score: 58.575912
-Score: 58.590679
-Score: 58.577568
-Score: 58.578281
-Score: 58.582859
+Score: 58.602261
+Score: 58.572830
+Score: 58.574207
+Score: 58.567711
+Score: 58.576935
+Score: 58.582615
+Score: 58.580105
+Score: 58.576565
+Score: 58.580284
+Score: 58.566818
 GD96_c
 SA-FR
 Score: 7.700767
@@ -3252,16 +3252,16 @@ Score: 6.611488
 Score: 6.608844
 Score: 6.515922
 CN-FR
-Score: 6.818895
-Score: 7.496833
-Score: 6.524324
-Score: 7.665325
-Score: 7.187604
-Score: 6.860805
-Score: 7.649200
-Score: 6.658220
-Score: 7.179221
-Score: 7.434223
+Score: 6.871606
+Score: 7.467969
+Score: 6.606294
+Score: 7.679094
+Score: 7.210750
+Score: 6.867628
+Score: 7.700296
+Score: 6.657340
+Score: 7.198863
+Score: 7.435912
 SA-L-BFGS
 Score: 6.068698
 Score: 6.077212
@@ -3274,16 +3274,16 @@ Score: 5.865595
 Score: 5.907131
 Score: 5.865594
 CN-L-BFGS
-Score: 6.066835
-Score: 6.074498
+Score: 6.057380
+Score: 6.103555
+Score: 5.893960
+Score: 6.048487
+Score: 6.547130
 Score: 5.865595
-Score: 6.039776
-Score: 5.911359
-Score: 5.867047
-Score: 6.037982
-Score: 5.867047
-Score: 6.094754
-Score: 6.547741
+Score: 6.037816
+Score: 5.867046
+Score: 6.092720
+Score: 6.530622
 GD97_a
 SA-FR
 Score: 28.748187
@@ -3297,16 +3297,16 @@ Score: 25.887543
 Score: 28.803819
 Score: 25.693178
 CN-FR
-Score: 27.291282
-Score: 26.347237
-Score: 26.864271
-Score: 26.329325
-Score: 29.125894
-Score: 28.745898
-Score: 25.771936
-Score: 26.745185
-Score: 25.933657
-Score: 25.737237
+Score: 27.398595
+Score: 26.316577
+Score: 26.975342
+Score: 26.321568
+Score: 29.124715
+Score: 28.752083
+Score: 25.763233
+Score: 26.698656
+Score: 25.935730
+Score: 25.736726
 SA-L-BFGS
 Score: 25.682775
 Score: 25.682753
@@ -3319,16 +3319,16 @@ Score: 25.682747
 Score: 25.782267
 Score: 25.682747
 CN-L-BFGS
-Score: 25.683121
-Score: 25.683241
 Score: 25.682753
-Score: 25.682749
-Score: 25.684975
-Score: 28.660906
+Score: 25.682787
+Score: 25.682760
 Score: 25.682747
-Score: 25.682827
-Score: 25.682756
-Score: 25.682753
+Score: 25.683044
+Score: 28.671619
+Score: 25.682749
+Score: 25.682766
+Score: 25.682749
+Score: 25.682749
 GD98_c
 SA-FR
 Score: 50.315157
@@ -3342,16 +3342,16 @@ Score: 50.526467
 Score: 50.987696
 Score: 51.633774
 CN-FR
-Score: 50.608946
-Score: 50.651495
-Score: 50.383250
-Score: 51.229105
-Score: 50.257146
-Score: 50.905679
-Score: 49.600463
-Score: 49.672547
-Score: 50.413692
-Score: 50.197352
+Score: 50.502400
+Score: 50.680702
+Score: 50.368956
+Score: 51.199207
+Score: 50.279669
+Score: 50.880662
+Score: 49.641515
+Score: 49.685556
+Score: 50.446508
+Score: 50.163367
 SA-L-BFGS
 Score: 48.579941
 Score: 49.311359
@@ -3364,16 +3364,16 @@ Score: 48.614315
 Score: 49.130714
 Score: 49.514553
 CN-L-BFGS
-Score: 49.276024
-Score: 49.293201
-Score: 49.486683
-Score: 49.392281
-Score: 48.760216
-Score: 49.191338
-Score: 48.860542
-Score: 48.822498
-Score: 48.771198
-Score: 49.431793
+Score: 49.344872
+Score: 49.501263
+Score: 49.475891
+Score: 49.380470
+Score: 48.830811
+Score: 49.418098
+Score: 48.930290
+Score: 48.753269
+Score: 48.863384
+Score: 49.550507
 GD99_b
 SA-FR
 Score: 23.346233
@@ -3387,16 +3387,16 @@ Score: 22.894687
 Score: 23.542750
 Score: 22.866576
 CN-FR
-Score: 22.924360
-Score: 22.985102
-Score: 22.857352
-Score: 24.035573
-Score: 22.890889
-Score: 24.432994
-Score: 22.871162
-Score: 25.500711
-Score: 22.941988
-Score: 22.874617
+Score: 22.936400
+Score: 22.983535
+Score: 22.855342
+Score: 23.946594
+Score: 22.878386
+Score: 24.429668
+Score: 22.878129
+Score: 25.504884
+Score: 22.928579
+Score: 22.870009
 SA-L-BFGS
 Score: 22.816702
 Score: 22.816637
@@ -3409,16 +3409,16 @@ Score: 22.816795
 Score: 22.840775
 Score: 22.816626
 CN-L-BFGS
-Score: 22.833090
-Score: 22.833139
+Score: 22.826689
+Score: 22.833153
+Score: 22.819792
+Score: 22.822002
+Score: 22.816734
+Score: 22.819992
+Score: 22.816940
+Score: 22.820446
+Score: 22.816618
 Score: 22.821543
-Score: 22.898661
-Score: 22.816904
-Score: 22.817911
-Score: 22.816616
-Score: 22.831446
-Score: 22.821550
-Score: 22.833088
 Journals
 SA-FR
 Score: 175.560949
@@ -3432,16 +3432,16 @@ Score: 175.464782
 Score: 175.473167
 Score: 175.781388
 CN-FR
-Score: 175.428359
-Score: 175.645713
-Score: 175.669959
-Score: 175.587491
-Score: 175.437187
-Score: 175.510174
-Score: 175.771280
-Score: 175.438687
-Score: 175.524325
-Score: 174.969805
+Score: 175.364558
+Score: 175.779646
+Score: 175.566974
+Score: 175.781354
+Score: 175.568834
+Score: 175.736793
+Score: 175.815506
+Score: 175.768030
+Score: 175.640966
+Score: 175.414607
 SA-L-BFGS
 Score: 175.027130
 Score: 175.324905
@@ -3454,16 +3454,16 @@ Score: 175.500244
 Score: 174.993073
 Score: 175.391907
 CN-L-BFGS
-Score: 175.169388
-Score: 174.957581
-Score: 175.227722
-Score: 175.490143
-Score: 175.427078
-Score: 175.091904
-Score: 175.091873
-Score: 175.611465
-Score: 175.507446
-Score: 175.366440
+Score: 174.690063
+Score: 174.892899
+Score: 175.186722
+Score: 175.333664
+Score: 175.574570
+Score: 175.240646
+Score: 174.999649
+Score: 175.390488
+Score: 175.490662
+Score: 175.526581
 Sandi_authors
 SA-FR
 Score: 4.072324
@@ -3477,16 +3477,16 @@ Score: 1.749213
 Score: -0.131663
 Score: -0.741780
 CN-FR
-Score: -0.290962
-Score: 1.959976
-Score: 1.856920
-Score: 0.951293
-Score: -0.196954
-Score: 1.024132
-Score: 1.107870
-Score: 0.371554
-Score: 4.378691
-Score: -0.102071
+Score: -0.274716
+Score: 2.004142
+Score: 1.837206
+Score: 0.946705
+Score: -0.196512
+Score: 1.005280
+Score: 1.104155
+Score: 0.363201
+Score: 4.368140
+Score: -0.091601
 SA-L-BFGS
 Score: 1.206426
 Score: 1.095234
@@ -3499,16 +3499,16 @@ Score: 0.182856
 Score: -0.431434
 Score: -0.998316
 CN-L-BFGS
-Score: -0.886542
-Score: 0.311894
-Score: 0.364289
-Score: 0.275105
-Score: -0.586050
-Score: 0.233649
-Score: 0.687256
-Score: -1.015664
-Score: 4.005435
-Score: -0.434515
+Score: -0.877301
+Score: 0.326895
+Score: -0.211275
+Score: 0.280188
+Score: -0.586664
+Score: 0.228637
+Score: 0.692256
+Score: -1.035098
+Score: 3.972769
+Score: -0.454074
 USAir97
 SA-FR
 Score: 206.248063
@@ -3522,16 +3522,16 @@ Score: 207.873574
 Score: 208.496324
 Score: 208.250680
 CN-FR
-Score: 208.894741
-Score: 210.864783
-Score: 211.358445
-Score: 212.493733
-Score: 209.417176
-Score: 206.212044
-Score: 206.246036
-Score: 207.216796
-Score: 208.611540
-Score: 210.394023
+Score: 208.874113
+Score: 210.909710
+Score: 211.258654
+Score: 212.486421
+Score: 209.417257
+Score: 206.212314
+Score: 206.252270
+Score: 207.222683
+Score: 208.575932
+Score: 210.348404
 SA-L-BFGS
 Score: 209.874237
 Score: 207.054901
@@ -3544,16 +3544,16 @@ Score: 209.427765
 Score: 209.592743
 Score: 209.883621
 CN-L-BFGS
-Score: 209.387909
-Score: 211.288910
-Score: 212.365967
-Score: 212.620499
-Score: 209.668884
-Score: 206.726807
-Score: 206.818054
-Score: 207.604675
-Score: 209.270172
-Score: 210.004837
+Score: 209.620377
+Score: 211.392899
+Score: 212.486252
+Score: 212.301865
+Score: 209.650146
+Score: 206.744324
+Score: 206.887604
+Score: 207.577835
+Score: 209.083038
+Score: 209.940674
 EX1
 SA-FR
 Score: 534.601855
@@ -3567,16 +3567,16 @@ Score: 534.975025
 Score: 533.488765
 Score: 534.712404
 CN-FR
-Score: 533.228757
-Score: 534.770651
-Score: 533.308988
-Score: 533.171665
-Score: 534.248344
-Score: 532.536990
-Score: 534.354286
-Score: 532.752651
-Score: 534.726708
-Score: 534.367343
+Score: 533.280059
+Score: 534.733473
+Score: 533.334866
+Score: 533.186448
+Score: 534.259919
+Score: 532.605130
+Score: 534.350843
+Score: 532.691187
+Score: 534.834066
+Score: 534.411608
 SA-L-BFGS
 Score: 533.567078
 Score: 531.337585
@@ -3589,16 +3589,16 @@ Score: 531.106750
 Score: 531.851318
 Score: 531.428040
 CN-L-BFGS
-Score: 532.796326
-Score: 532.601562
-Score: 531.820190
-Score: 532.665833
-Score: 533.268921
-Score: 531.138245
-Score: 532.637329
-Score: 531.425110
-Score: 531.172302
-Score: 531.191223
+Score: 531.912415
+Score: 532.609863
+Score: 531.844971
+Score: 532.784180
+Score: 532.766479
+Score: 531.121887
+Score: 532.614258
+Score: 531.146973
+Score: 531.216370
+Score: 531.141663
 EX2
 SA-FR
 Score: 539.343166
@@ -3612,16 +3612,16 @@ Score: 534.416805
 Score: 537.168029
 Score: 537.566635
 CN-FR
-Score: 536.448609
-Score: 537.001205
-Score: 536.777372
-Score: 539.912685
-Score: 538.833086
-Score: 538.647092
-Score: 536.805655
-Score: 537.382423
-Score: 537.028883
-Score: 533.092729
+Score: 536.515953
+Score: 536.916349
+Score: 536.625640
+Score: 539.934624
+Score: 538.816359
+Score: 538.666495
+Score: 536.816351
+Score: 537.371330
+Score: 537.036980
+Score: 533.094083
 SA-L-BFGS
 Score: 537.120911
 Score: 536.711243
@@ -3634,16 +3634,16 @@ Score: 532.784851
 Score: 532.971863
 Score: 533.288574
 CN-L-BFGS
-Score: 532.756287
-Score: 533.755493
-Score: 532.599548
-Score: 536.543213
-Score: 538.142456
-Score: 537.924805
-Score: 535.988770
-Score: 535.800293
-Score: 532.393677
-Score: 532.490295
+Score: 532.643372
+Score: 534.112915
+Score: 532.599976
+Score: 536.643311
+Score: 538.166992
+Score: 537.966980
+Score: 535.872986
+Score: 535.237854
+Score: 532.381836
+Score: 532.510742
 Trefethen_20b
 SA-FR
 Score: 11.894555
@@ -3657,16 +3657,16 @@ Score: 11.962379
 Score: 11.921539
 Score: 12.026584
 CN-FR
-Score: 12.339966
-Score: 12.384659
-Score: 12.282088
-Score: 11.940001
-Score: 11.933484
-Score: 11.959354
-Score: 11.943825
-Score: 11.890255
-Score: 12.349791
-Score: 12.354122
+Score: 12.340629
+Score: 12.384630
+Score: 12.282093
+Score: 11.939186
+Score: 11.939801
+Score: 11.930950
+Score: 11.943498
+Score: 11.890256
+Score: 12.349873
+Score: 12.354471
 SA-L-BFGS
 Score: 11.916598
 Score: 12.178629
@@ -3680,15 +3680,15 @@ Score: 11.916598
 Score: 12.256572
 CN-L-BFGS
 Score: 12.256572
-Score: 12.178629
-Score: 11.916598
-Score: 11.916598
+Score: 12.250278
+Score: 11.929620
+Score: 11.934805
 Score: 11.889573
 Score: 11.889573
 Score: 11.889573
 Score: 11.916598
 Score: 12.256572
-Score: 11.916600
+Score: 11.916604
 Trefethen_20
 SA-FR
 Score: 12.895846
@@ -3702,16 +3702,16 @@ Score: 13.017539
 Score: 12.991444
 Score: 13.177681
 CN-FR
-Score: 12.950802
-Score: 12.979538
-Score: 13.406918
-Score: 13.410977
-Score: 12.924866
-Score: 13.040538
-Score: 12.894254
-Score: 13.349525
-Score: 12.904761
-Score: 12.981716
+Score: 12.950889
+Score: 12.979494
+Score: 13.406774
+Score: 13.429575
+Score: 12.924936
+Score: 12.977823
+Score: 12.892320
+Score: 13.356968
+Score: 12.898605
+Score: 12.979433
 SA-L-BFGS
 Score: 12.862024
 Score: 12.862024
@@ -3724,15 +3724,15 @@ Score: 12.931535
 Score: 12.931471
 Score: 12.895673
 CN-L-BFGS
-Score: 12.906742
-Score: 12.862024
-Score: 13.151647
+Score: 12.908715
+Score: 12.875350
+Score: 13.103047
 Score: 12.874582
 Score: 12.862024
-Score: 12.875350
 Score: 12.862024
-Score: 12.874937
-Score: 12.873647
+Score: 13.066169
+Score: 13.225622
+Score: 12.862024
 Score: 12.862024
 Trefethen_150
 SA-FR
@@ -3747,16 +3747,16 @@ Score: 128.847505
 Score: 129.390338
 Score: 128.851757
 CN-FR
-Score: 128.919532
-Score: 128.918219
-Score: 130.164505
-Score: 130.255501
-Score: 128.864486
-Score: 128.855199
-Score: 128.612849
-Score: 128.758454
-Score: 128.778656
-Score: 129.980316
+Score: 128.764944
+Score: 128.924293
+Score: 130.115337
+Score: 130.314096
+Score: 128.832183
+Score: 128.804844
+Score: 128.645995
+Score: 128.852696
+Score: 128.895851
+Score: 129.887373
 SA-L-BFGS
 Score: 128.703125
 Score: 128.367966
@@ -3769,16 +3769,16 @@ Score: 128.354187
 Score: 128.546432
 Score: 128.515594
 CN-L-BFGS
-Score: 128.319351
-Score: 128.440918
-Score: 128.472260
-Score: 128.476379
-Score: 128.540268
-Score: 128.696823
-Score: 128.505142
-Score: 128.529694
-Score: 128.368759
-Score: 128.780487
+Score: 128.343338
+Score: 128.451065
+Score: 128.450531
+Score: 128.465485
+Score: 128.648788
+Score: 128.695358
+Score: 128.509384
+Score: 128.505890
+Score: 128.328491
+Score: 128.908096
 Trefethen_200b
 SA-FR
 Score: 175.100824
@@ -3792,16 +3792,16 @@ Score: 175.564652
 Score: 174.807729
 Score: 174.875279
 CN-FR
-Score: 175.532183
-Score: 177.214820
-Score: 174.699617
-Score: 175.694842
-Score: 177.644636
-Score: 174.809349
-Score: 175.185024
-Score: 175.312559
-Score: 175.562574
-Score: 175.691295
+Score: 175.516185
+Score: 176.786590
+Score: 174.723144
+Score: 175.793215
+Score: 177.663442
+Score: 174.828243
+Score: 175.161275
+Score: 175.310525
+Score: 175.576557
+Score: 175.725089
 SA-L-BFGS
 Score: 174.861313
 Score: 174.857178
@@ -3814,16 +3814,16 @@ Score: 174.984451
 Score: 174.612488
 Score: 174.542160
 CN-L-BFGS
-Score: 174.918961
-Score: 177.297897
-Score: 174.529572
-Score: 174.768311
-Score: 175.341858
-Score: 174.952240
-Score: 175.152588
-Score: 175.110245
-Score: 175.022034
-Score: 174.961029
+Score: 174.887054
+Score: 177.349915
+Score: 174.537903
+Score: 174.691452
+Score: 175.345215
+Score: 175.045853
+Score: 175.043442
+Score: 175.172440
+Score: 174.718948
+Score: 174.959549
 Trefethen_200
 SA-FR
 Score: 176.491123
@@ -3837,16 +3837,16 @@ Score: 176.263709
 Score: 176.218646
 Score: 176.344932
 CN-FR
-Score: 176.465602
-Score: 176.386624
-Score: 176.002690
-Score: 176.017720
-Score: 176.421325
-Score: 175.829812
-Score: 175.917399
-Score: 176.006981
-Score: 176.335227
-Score: 176.444578
+Score: 176.353617
+Score: 176.374997
+Score: 176.082645
+Score: 175.963942
+Score: 176.458137
+Score: 175.868296
+Score: 175.921972
+Score: 176.024588
+Score: 176.294413
+Score: 176.600543
 SA-L-BFGS
 Score: 175.814529
 Score: 176.040787
@@ -3859,16 +3859,16 @@ Score: 176.057587
 Score: 175.835922
 Score: 175.782562
 CN-L-BFGS
-Score: 175.710617
-Score: 176.177811
-Score: 175.746353
-Score: 175.711777
-Score: 175.881393
-Score: 175.935562
-Score: 175.704605
-Score: 175.690491
-Score: 175.959335
-Score: 175.935959
+Score: 175.763962
+Score: 176.059036
+Score: 175.833740
+Score: 175.690369
+Score: 175.999954
+Score: 175.893066
+Score: 175.711853
+Score: 175.682922
+Score: 176.122330
+Score: 175.957916
 Trefethen_300
 SA-FR
 Score: 276.449456
@@ -3882,16 +3882,16 @@ Score: 275.423195
 Score: 275.957821
 Score: 276.544955
 CN-FR
-Score: 275.957436
-Score: 275.367127
-Score: 275.539091
-Score: 276.380605
-Score: 275.815939
-Score: 275.493451
-Score: 275.717343
-Score: 275.808261
-Score: 277.634334
-Score: 275.671346
+Score: 275.956757
+Score: 275.408787
+Score: 275.580287
+Score: 276.460123
+Score: 275.800801
+Score: 275.543084
+Score: 275.685983
+Score: 275.843171
+Score: 277.575074
+Score: 275.620172
 SA-L-BFGS
 Score: 275.482330
 Score: 275.339813
@@ -3904,16 +3904,16 @@ Score: 275.107574
 Score: 274.994537
 Score: 275.216583
 CN-L-BFGS
-Score: 275.072754
-Score: 274.981537
-Score: 275.377289
-Score: 275.833710
-Score: 275.091187
-Score: 275.010223
-Score: 275.207520
-Score: 275.178070
-Score: 275.069092
-Score: 274.995911
+Score: 275.057220
+Score: 274.992523
+Score: 275.386292
+Score: 275.691193
+Score: 275.108307
+Score: 275.073059
+Score: 275.202209
+Score: 275.121674
+Score: 275.049530
+Score: 274.981750
 Trefethen_500
 SA-FR
 Score: 462.831341
@@ -3927,16 +3927,16 @@ Score: 463.097338
 Score: 462.887830
 Score: 463.126103
 CN-FR
-Score: 462.443489
-Score: 463.033218
-Score: 462.962597
-Score: 462.907559
-Score: 463.031431
-Score: 462.905393
-Score: 462.799028
-Score: 462.853981
-Score: 462.903353
-Score: 462.991999
+Score: 462.401261
+Score: 463.050231
+Score: 462.988657
+Score: 462.766932
+Score: 463.020420
+Score: 462.936857
+Score: 462.806958
+Score: 462.845349
+Score: 462.906956
+Score: 462.996970
 SA-L-BFGS
 Score: 462.528625
 Score: 462.616058
@@ -3949,16 +3949,16 @@ Score: 462.563568
 Score: 462.582306
 Score: 462.576599
 CN-L-BFGS
-Score: 462.495331
-Score: 462.100525
-Score: 462.358643
-Score: 462.509613
-Score: 462.620209
-Score: 462.773804
-Score: 462.623962
-Score: 462.745575
-Score: 462.210419
-Score: 462.084808
+Score: 462.590912
+Score: 462.204132
+Score: 462.381592
+Score: 462.451263
+Score: 462.602570
+Score: 462.758728
+Score: 462.549713
+Score: 462.658203
+Score: 462.135651
+Score: 462.077087
 Trefethen_700
 SA-FR
 Score: 697.684722
@@ -3972,16 +3972,16 @@ Score: 700.650290
 Score: 698.121855
 Score: 698.538282
 CN-FR
-Score: 698.120088
-Score: 698.229810
-Score: 702.446701
-Score: 698.579177
-Score: 703.119940
-Score: 697.830992
-Score: 698.106400
-Score: 697.813407
-Score: 698.389151
-Score: 698.453705
+Score: 698.092948
+Score: 698.211028
+Score: 702.433311
+Score: 698.494546
+Score: 703.178870
+Score: 697.847832
+Score: 698.104066
+Score: 697.780994
+Score: 698.424941
+Score: 698.482209
 SA-L-BFGS
 Score: 697.166016
 Score: 697.053894
@@ -3994,16 +3994,16 @@ Score: 697.984924
 Score: 696.898438
 Score: 696.942566
 CN-L-BFGS
-Score: 697.117798
-Score: 697.060242
-Score: 701.340271
-Score: 697.006348
-Score: 697.454224
-Score: 696.746216
-Score: 697.834778
-Score: 697.130249
-Score: 697.560669
-Score: 697.504944
+Score: 697.072815
+Score: 697.023071
+Score: 701.237183
+Score: 696.999390
+Score: 697.355713
+Score: 696.766541
+Score: 697.847839
+Score: 697.125061
+Score: 697.724060
+Score: 697.522522
 adjnoun
 SA-FR
 Score: 75.814654
@@ -4017,16 +4017,16 @@ Score: 75.583423
 Score: 75.078597
 Score: 76.694812
 CN-FR
-Score: 76.269664
-Score: 75.072559
-Score: 76.708506
-Score: 75.926550
-Score: 75.249744
-Score: 77.160928
-Score: 76.460217
-Score: 76.581806
-Score: 75.595578
-Score: 75.085197
+Score: 76.340247
+Score: 75.056298
+Score: 76.800773
+Score: 76.187583
+Score: 75.218242
+Score: 76.853170
+Score: 76.476321
+Score: 76.597090
+Score: 75.536118
+Score: 75.056190
 SA-L-BFGS
 Score: 75.220909
 Score: 75.347977
@@ -4039,16 +4039,16 @@ Score: 75.185974
 Score: 75.156837
 Score: 76.024170
 CN-L-BFGS
-Score: 75.814308
-Score: 74.865219
-Score: 76.476486
-Score: 76.007240
-Score: 74.600212
-Score: 77.534172
-Score: 75.331711
-Score: 75.888176
-Score: 75.270447
-Score: 74.753578
+Score: 75.643829
+Score: 74.937202
+Score: 76.516113
+Score: 76.013351
+Score: 74.557686
+Score: 77.360535
+Score: 75.230690
+Score: 75.969299
+Score: 75.264999
+Score: 74.770706
 dolphins
 SA-FR
 Score: 17.895590
@@ -4062,16 +4062,16 @@ Score: 17.828773
 Score: 19.769480
 Score: 18.172930
 CN-FR
-Score: 18.040349
-Score: 17.890209
-Score: 18.031481
-Score: 19.687963
-Score: 18.281318
-Score: 18.022015
-Score: 17.918404
-Score: 17.835452
-Score: 17.987399
-Score: 18.961873
+Score: 18.065854
+Score: 17.919463
+Score: 18.050567
+Score: 19.696671
+Score: 18.277791
+Score: 17.978910
+Score: 17.931197
+Score: 17.837419
+Score: 17.985644
+Score: 18.971162
 SA-L-BFGS
 Score: 17.825491
 Score: 17.870932
@@ -4084,16 +4084,16 @@ Score: 17.739065
 Score: 17.837006
 Score: 17.822987
 CN-L-BFGS
-Score: 18.173067
-Score: 18.020853
-Score: 17.739271
-Score: 17.728756
-Score: 18.411547
-Score: 17.746603
-Score: 17.777155
-Score: 17.728477
-Score: 17.848734
-Score: 17.958435
+Score: 18.192968
+Score: 18.031799
+Score: 17.739269
+Score: 19.043156
+Score: 18.413492
+Score: 17.738352
+Score: 17.777040
+Score: 17.727921
+Score: 17.848740
+Score: 17.919500
 football
 SA-FR
 Score: 80.145236
@@ -4107,16 +4107,16 @@ Score: 79.943372
 Score: 80.072306
 Score: 80.080507
 CN-FR
-Score: 80.198156
-Score: 80.060162
-Score: 81.196189
-Score: 80.033190
-Score: 80.930481
-Score: 79.973493
-Score: 80.102048
-Score: 82.163447
-Score: 79.990354
-Score: 80.026071
+Score: 80.226878
+Score: 80.051402
+Score: 81.134169
+Score: 80.032025
+Score: 80.974366
+Score: 79.944682
+Score: 80.108671
+Score: 82.054341
+Score: 79.989134
+Score: 80.028991
 SA-L-BFGS
 Score: 79.844978
 Score: 80.013878
@@ -4129,16 +4129,16 @@ Score: 79.866943
 Score: 79.897125
 Score: 80.013878
 CN-L-BFGS
-Score: 80.002716
-Score: 79.995842
-Score: 80.024429
-Score: 79.874222
-Score: 79.998077
-Score: 79.834015
-Score: 79.997993
-Score: 79.876068
-Score: 79.865341
-Score: 79.998215
+Score: 80.001900
+Score: 79.995865
+Score: 80.023613
+Score: 79.899490
+Score: 80.002357
+Score: 79.828743
+Score: 79.998001
+Score: 79.939163
+Score: 79.863930
+Score: 80.011292
 karate
 SA-FR
 Score: 13.555160
@@ -4152,16 +4152,16 @@ Score: 13.474320
 Score: 13.401962
 Score: 13.511347
 CN-FR
-Score: 13.410163
-Score: 13.408203
-Score: 13.419906
-Score: 13.435127
-Score: 13.522705
-Score: 13.771815
-Score: 13.415193
-Score: 13.394578
-Score: 13.529684
-Score: 13.538167
+Score: 13.409658
+Score: 13.408169
+Score: 13.419905
+Score: 13.435126
+Score: 13.522675
+Score: 13.773599
+Score: 13.415197
+Score: 13.394638
+Score: 13.529788
+Score: 13.538050
 SA-L-BFGS
 Score: 13.376819
 Score: 13.424979
@@ -4174,16 +4174,16 @@ Score: 13.411335
 Score: 13.373835
 Score: 13.380952
 CN-L-BFGS
-Score: 13.430132
-Score: 13.375474
-Score: 13.410601
-Score: 13.428568
-Score: 13.350856
-Score: 13.423382
-Score: 13.401669
-Score: 13.354494
-Score: 13.420589
-Score: 13.340478
+Score: 13.430138
+Score: 13.375242
+Score: 13.353275
+Score: 13.442956
+Score: 13.344453
+Score: 13.568366
+Score: 13.401670
+Score: 13.424977
+Score: 13.404369
+Score: 13.346070
 lesmis
 SA-FR
 Score: 32.431620
@@ -4197,16 +4197,16 @@ Score: 31.669601
 Score: 31.674658
 Score: 31.725236
 CN-FR
-Score: 32.883832
-Score: 32.716814
-Score: 32.435062
-Score: 31.678745
-Score: 31.740583
-Score: 32.531017
-Score: 35.337294
-Score: 32.054319
-Score: 32.295271
-Score: 32.911325
+Score: 32.837175
+Score: 32.704955
+Score: 32.440119
+Score: 31.673019
+Score: 31.747836
+Score: 32.539033
+Score: 35.358304
+Score: 32.066919
+Score: 32.296938
+Score: 32.796886
 SA-L-BFGS
 Score: 33.322712
 Score: 31.680374
@@ -4219,16 +4219,16 @@ Score: 31.572458
 Score: 31.514318
 Score: 31.696171
 CN-L-BFGS
-Score: 32.099949
-Score: 32.297932
-Score: 32.490997
-Score: 31.549767
-Score: 31.635826
-Score: 32.016373
-Score: 32.963478
-Score: 31.699070
-Score: 32.140961
-Score: 32.575592
+Score: 32.117348
+Score: 32.369102
+Score: 32.509541
+Score: 31.578201
+Score: 31.651669
+Score: 32.017216
+Score: 34.923267
+Score: 31.731266
+Score: 32.148258
+Score: 32.653038
 polbooks
 SA-FR
 Score: 46.219002
@@ -4242,16 +4242,16 @@ Score: 46.232888
 Score: 46.673272
 Score: 46.165812
 CN-FR
-Score: 46.023659
-Score: 46.108816
-Score: 46.053725
-Score: 46.069776
-Score: 46.008223
-Score: 45.918060
-Score: 45.860577
-Score: 46.242144
-Score: 46.293281
-Score: 46.580308
+Score: 45.998055
+Score: 46.135793
+Score: 46.089568
+Score: 46.071501
+Score: 46.018741
+Score: 45.880303
+Score: 45.851489
+Score: 46.249720
+Score: 46.348553
+Score: 46.568248
 SA-L-BFGS
 Score: 45.800438
 Score: 45.775196
@@ -4264,16 +4264,16 @@ Score: 45.789429
 Score: 45.794189
 Score: 45.946320
 CN-L-BFGS
-Score: 45.881981
-Score: 45.976688
-Score: 45.815880
-Score: 45.785328
-Score: 45.895386
-Score: 45.824989
-Score: 45.761173
-Score: 46.180298
-Score: 45.850655
-Score: 46.161171
+Score: 45.884926
+Score: 45.988918
+Score: 45.827179
+Score: 45.791508
+Score: 45.911602
+Score: 45.818050
+Score: 45.759567
+Score: 46.141708
+Score: 45.843849
+Score: 45.756542
 jazz
 SA-FR
 Score: 165.497448
@@ -4287,16 +4287,16 @@ Score: 165.481064
 Score: 167.264124
 Score: 165.862535
 CN-FR
-Score: 165.284936
-Score: 164.730751
-Score: 165.435604
-Score: 165.198718
-Score: 164.923901
-Score: 167.037284
-Score: 164.986914
-Score: 165.083861
-Score: 164.788556
-Score: 165.210753
+Score: 165.391135
+Score: 164.741770
+Score: 165.423963
+Score: 165.205634
+Score: 164.923295
+Score: 166.956423
+Score: 164.983034
+Score: 165.055465
+Score: 164.791080
+Score: 165.273472
 SA-L-BFGS
 Score: 165.989578
 Score: 165.601242
@@ -4309,16 +4309,16 @@ Score: 166.036102
 Score: 166.061661
 Score: 165.488876
 CN-L-BFGS
-Score: 164.902298
-Score: 164.655228
-Score: 165.725372
-Score: 164.763519
-Score: 164.753082
-Score: 166.358749
-Score: 165.064072
-Score: 164.663071
-Score: 164.774170
-Score: 165.252151
+Score: 164.942627
+Score: 164.696411
+Score: 165.630737
+Score: 164.732285
+Score: 164.758820
+Score: 166.419647
+Score: 165.040359
+Score: 164.667679
+Score: 164.746521
+Score: 165.235641
 celegans_metabolic
 SA-FR
 Score: 326.716181
@@ -4332,16 +4332,16 @@ Score: 326.686162
 Score: 326.502306
 Score: 326.551640
 CN-FR
-Score: 327.216220
-Score: 330.295705
-Score: 328.554140
-Score: 328.576484
-Score: 328.159867
-Score: 327.851976
-Score: 326.806717
-Score: 326.782893
-Score: 329.996329
-Score: 327.319951
+Score: 327.215806
+Score: 330.171357
+Score: 328.492721
+Score: 328.546413
+Score: 328.112122
+Score: 327.875334
+Score: 326.776856
+Score: 326.922261
+Score: 329.906735
+Score: 327.501838
 SA-L-BFGS
 Score: 328.954468
 Score: 328.489136
@@ -4354,16 +4354,16 @@ Score: 328.839355
 Score: 329.246460
 Score: 328.913818
 CN-L-BFGS
-Score: 328.628662
-Score: 332.154388
-Score: 329.138458
-Score: 328.189514
-Score: 329.464813
-Score: 328.558075
-Score: 327.563507
-Score: 327.230927
-Score: 331.072479
-Score: 327.946320
+Score: 328.390259
+Score: 332.035248
+Score: 329.315430
+Score: 328.285400
+Score: 329.945160
+Score: 328.567749
+Score: 327.628601
+Score: 327.238739
+Score: 331.030426
+Score: 327.929199
 grid1
 SA-FR
 Score: 28.841243
@@ -4377,16 +4377,16 @@ Score: -1.972584
 Score: 2.717296
 Score: 27.384388
 CN-FR
-Score: 0.009419
-Score: -6.831692
-Score: 10.508139
-Score: 13.602831
-Score: 1.440399
-Score: 8.847361
-Score: -6.849898
-Score: 7.630634
-Score: -5.257625
-Score: -7.009323
+Score: 0.033010
+Score: -6.838011
+Score: 10.583736
+Score: 13.427960
+Score: 1.453493
+Score: 8.851622
+Score: -6.858210
+Score: 7.662219
+Score: -5.244508
+Score: -6.998812
 SA-L-BFGS
 Score: 2.183206
 Score: -12.044657
@@ -4399,16 +4399,16 @@ Score: -12.228362
 Score: -9.507646
 Score: 11.434462
 CN-L-BFGS
-Score: -7.145162
-Score: -12.099881
-Score: 6.354403
-Score: -5.652338
-Score: -12.086156
-Score: -10.475265
-Score: -12.285879
-Score: -10.314008
-Score: -12.586803
-Score: -12.042517
+Score: -6.176193
+Score: -12.247621
+Score: 6.349024
+Score: -3.839779
+Score: -12.063251
+Score: -4.174965
+Score: -12.170494
+Score: -10.695418
+Score: -12.583249
+Score: -12.085939
 grid1_dual
 SA-FR
 Score: 7.055769
@@ -4422,16 +4422,16 @@ Score: 5.630615
 Score: 11.161062
 Score: 21.751620
 CN-FR
-Score: -3.026774
-Score: 7.785911
-Score: 3.115497
-Score: -3.057372
-Score: 11.899054
-Score: 2.296778
-Score: 3.123772
-Score: -6.158015
-Score: 7.513924
-Score: 7.294064
+Score: -3.019423
+Score: 7.785994
+Score: 3.115966
+Score: -3.043855
+Score: 11.816718
+Score: 2.296705
+Score: 2.957653
+Score: -6.157799
+Score: 7.647873
+Score: 7.294786
 SA-L-BFGS
 Score: -10.580226
 Score: -11.068913
@@ -4444,16 +4444,16 @@ Score: -10.719157
 Score: -5.506467
 Score: -11.025508
 CN-L-BFGS
-Score: -11.347680
-Score: -4.216742
-Score: -10.015637
-Score: -10.957698
-Score: -11.070442
-Score: -6.686761
-Score: -10.267213
-Score: -11.132374
-Score: 2.979672
-Score: -1.997559
+Score: -11.346472
+Score: -4.471452
+Score: -9.908562
+Score: -10.749745
+Score: -11.207603
+Score: -6.903680
+Score: -10.205969
+Score: -11.109619
+Score: 2.614730
+Score: -2.906633
 netz4504_dual
 SA-FR
 Score: -67.077488
@@ -4467,16 +4467,16 @@ Score: -54.721098
 Score: 8.751316
 Score: -33.773008
 CN-FR
-Score: -107.118920
-Score: -83.412208
-Score: -80.405182
-Score: -74.729066
-Score: -79.652426
-Score: -91.803391
-Score: -99.782698
-Score: -92.094455
-Score: -56.779041
-Score: -77.820137
+Score: -107.067124
+Score: -83.365737
+Score: -80.447434
+Score: -74.667228
+Score: -79.901005
+Score: -91.893033
+Score: -99.910150
+Score: -92.095763
+Score: -56.833828
+Score: -77.836949
 SA-L-BFGS
 Score: -177.995865
 Score: -157.701920
@@ -4489,16 +4489,16 @@ Score: -162.404938
 Score: -190.807571
 Score: -202.672974
 CN-L-BFGS
-Score: -201.667038
-Score: -192.468353
-Score: -202.917847
-Score: -204.777237
-Score: -181.486557
-Score: -190.934662
-Score: -190.186218
-Score: -179.651550
-Score: -167.123093
-Score: -203.937973
+Score: -201.185806
+Score: -190.678192
+Score: -201.861191
+Score: -204.667023
+Score: -185.114365
+Score: -184.567459
+Score: -188.845139
+Score: -175.979233
+Score: -167.068680
+Score: -203.415985
 L
 SA-FR
 Score: -73.270825
@@ -4512,16 +4512,16 @@ Score: -84.229934
 Score: -50.276613
 Score: 56.366453
 CN-FR
-Score: -123.776761
-Score: -97.519237
-Score: -112.340963
-Score: -101.397598
-Score: -125.837937
-Score: -86.334484
-Score: -136.543786
-Score: -135.634484
-Score: -165.262302
-Score: -151.350340
+Score: -123.646821
+Score: -97.494869
+Score: -112.305227
+Score: -101.144408
+Score: -125.835812
+Score: -86.404730
+Score: -136.611013
+Score: -135.686230
+Score: -165.273192
+Score: -151.489062
 SA-L-BFGS
 Score: -189.728928
 Score: -215.740173
@@ -4534,16 +4534,16 @@ Score: -244.821030
 Score: -191.787537
 Score: -177.301010
 CN-L-BFGS
-Score: -216.105103
-Score: -194.151367
-Score: -245.036209
-Score: -227.834518
-Score: -259.376007
-Score: -201.406067
-Score: -205.886398
-Score: -257.397797
-Score: -258.445892
-Score: -256.387634
+Score: -216.563965
+Score: -193.878860
+Score: -243.229385
+Score: -225.961990
+Score: -259.012604
+Score: -202.012421
+Score: -205.876190
+Score: -257.172729
+Score: -258.689911
+Score: -255.719986
 cage
 SA-FR
 Score: 427.716379
@@ -4557,16 +4557,16 @@ Score: 427.708797
 Score: 427.701442
 Score: 427.779496
 CN-FR
-Score: 428.530135
-Score: 428.087130
-Score: 428.440213
-Score: 428.662560
-Score: 428.294547
-Score: 428.564235
-Score: 428.216310
-Score: 428.361675
-Score: 428.437712
-Score: 428.550835
+Score: 428.482951
+Score: 428.162674
+Score: 428.241529
+Score: 428.599560
+Score: 428.215369
+Score: 428.552743
+Score: 428.004679
+Score: 428.285149
+Score: 428.364187
+Score: 428.706215
 SA-L-BFGS
 Score: 426.587189
 Score: 426.630463
@@ -4579,16 +4579,16 @@ Score: 426.953461
 Score: 426.516907
 Score: 426.642639
 CN-L-BFGS
-Score: 427.034515
-Score: 426.857910
-Score: 427.388672
-Score: 427.003998
-Score: 426.837219
-Score: 427.060608
-Score: 426.900757
-Score: 427.413757
-Score: 426.790649
-Score: 427.013947
+Score: 427.192200
+Score: 427.015198
+Score: 427.137482
+Score: 426.850067
+Score: 426.943634
+Score: 426.864105
+Score: 427.005615
+Score: 427.320038
+Score: 426.839844
+Score: 426.920837
 chesapeake
 SA-FR
 Score: 26.130662
@@ -4602,16 +4602,16 @@ Score: 25.974823
 Score: 26.588960
 Score: 26.011362
 CN-FR
-Score: 25.757173
-Score: 25.880582
-Score: 26.204437
-Score: 25.875677
-Score: 26.280502
-Score: 25.909657
-Score: 26.050762
-Score: 25.684438
-Score: 26.077805
-Score: 25.979897
+Score: 25.706331
+Score: 25.880224
+Score: 26.206459
+Score: 26.079666
+Score: 26.280684
+Score: 25.961993
+Score: 26.051174
+Score: 25.686340
+Score: 26.103936
+Score: 25.978932
 SA-L-BFGS
 Score: 26.083500
 Score: 26.108597
@@ -4624,16 +4624,16 @@ Score: 25.953260
 Score: 26.248915
 Score: 25.839951
 CN-L-BFGS
-Score: 25.766575
-Score: 26.009287
-Score: 25.991358
-Score: 25.863014
-Score: 26.088697
-Score: 26.106333
-Score: 26.036108
-Score: 25.869137
-Score: 25.959730
-Score: 25.803122
+Score: 25.855049
+Score: 25.954403
+Score: 26.004078
+Score: 25.839323
+Score: 26.120275
+Score: 26.098879
+Score: 26.030254
+Score: 25.869135
+Score: 26.041611
+Score: 25.836021
 mycielskian2
 SA-FR
 Score: 0.339953
@@ -4740,13 +4740,13 @@ CN-FR
 Score: 5.623244
 Score: 5.548909
 Score: 5.621910
-Score: 5.668363
-Score: 5.873446
+Score: 5.668364
+Score: 5.873443
 Score: 5.691255
-Score: 5.579280
-Score: 5.601146
-Score: 5.524465
-Score: 5.621414
+Score: 5.579276
+Score: 5.601026
+Score: 5.524458
+Score: 5.621413
 SA-L-BFGS
 Score: 5.574657
 Score: 5.587955
@@ -4762,13 +4762,13 @@ CN-L-BFGS
 Score: 5.579751
 Score: 5.548779
 Score: 5.548779
-Score: 5.354250
-Score: 5.548779
-Score: 5.548779
-Score: 5.548779
-Score: 5.548779
+Score: 5.362897
 Score: 5.579751
-Score: 5.354250
+Score: 5.548779
+Score: 5.548779
+Score: 5.548779
+Score: 5.579752
+Score: 5.548779
 mycielskian5
 SA-FR
 Score: 15.796030
@@ -4782,16 +4782,16 @@ Score: 15.857340
 Score: 16.167372
 Score: 15.516392
 CN-FR
-Score: 15.535572
-Score: 15.911634
-Score: 15.789285
-Score: 15.646937
-Score: 16.005718
-Score: 15.667756
-Score: 15.786643
-Score: 15.762093
-Score: 15.590612
-Score: 15.986656
+Score: 15.601181
+Score: 15.900137
+Score: 15.789451
+Score: 15.645175
+Score: 16.022639
+Score: 15.668673
+Score: 15.786651
+Score: 15.758557
+Score: 15.591595
+Score: 15.986045
 SA-L-BFGS
 Score: 15.396610
 Score: 15.795450
@@ -4804,16 +4804,16 @@ Score: 15.784749
 Score: 15.937033
 Score: 15.464226
 CN-L-BFGS
-Score: 15.601867
-Score: 15.964962
-Score: 15.486938
-Score: 15.458909
-Score: 15.502926
-Score: 15.665280
-Score: 15.805467
-Score: 15.646339
-Score: 15.485772
-Score: 15.790918
+Score: 15.563111
+Score: 15.649390
+Score: 15.664837
+Score: 15.528568
+Score: 15.725207
+Score: 15.630348
+Score: 15.767171
+Score: 15.505802
+Score: 15.468540
+Score: 15.805213
 mycielskian6
 SA-FR
 Score: 39.483442
@@ -4827,16 +4827,16 @@ Score: 39.310188
 Score: 39.637929
 Score: 39.370478
 CN-FR
-Score: 39.328251
-Score: 39.491603
-Score: 39.299254
-Score: 39.377147
-Score: 39.245483
-Score: 39.720298
-Score: 39.683780
-Score: 39.188512
-Score: 39.443635
-Score: 39.475583
+Score: 39.334985
+Score: 39.560930
+Score: 39.289509
+Score: 39.234856
+Score: 39.233869
+Score: 39.948693
+Score: 39.702693
+Score: 39.145835
+Score: 39.412216
+Score: 39.476567
 SA-L-BFGS
 Score: 39.151707
 Score: 39.289474
@@ -4849,16 +4849,16 @@ Score: 39.156296
 Score: 39.347836
 Score: 39.079632
 CN-L-BFGS
-Score: 39.309765
-Score: 39.252300
-Score: 38.991001
-Score: 39.249649
-Score: 38.994411
-Score: 39.071892
-Score: 39.285130
-Score: 39.352356
-Score: 39.292580
-Score: 39.034943
+Score: 39.085060
+Score: 39.313641
+Score: 38.996304
+Score: 39.108967
+Score: 39.268513
+Score: 39.067715
+Score: 39.320721
+Score: 39.326233
+Score: 39.207027
+Score: 39.159237
 mycielskian7
 SA-FR
 Score: 92.924433
@@ -4872,16 +4872,16 @@ Score: 92.871372
 Score: 92.869176
 Score: 93.132835
 CN-FR
-Score: 92.341454
-Score: 92.215501
-Score: 92.815365
-Score: 92.274498
-Score: 92.680650
-Score: 92.311720
-Score: 92.468528
-Score: 92.734298
-Score: 92.552253
-Score: 92.568862
+Score: 92.164588
+Score: 92.252961
+Score: 92.862747
+Score: 92.316043
+Score: 92.699347
+Score: 92.305748
+Score: 92.578289
+Score: 92.538952
+Score: 92.562784
+Score: 92.527380
 SA-L-BFGS
 Score: 92.610107
 Score: 92.165054
@@ -4894,16 +4894,16 @@ Score: 92.464531
 Score: 92.393845
 Score: 92.389679
 CN-L-BFGS
-Score: 92.500771
-Score: 92.037949
-Score: 92.696152
-Score: 92.595345
-Score: 92.258629
-Score: 92.442284
-Score: 92.147041
-Score: 92.096024
-Score: 92.301430
-Score: 92.151360
+Score: 92.554825
+Score: 91.970390
+Score: 92.833824
+Score: 92.466232
+Score: 92.234085
+Score: 92.582054
+Score: 92.132843
+Score: 92.067650
+Score: 92.389832
+Score: 92.145569
 mycielskian8
 SA-FR
 Score: 210.392182
@@ -4917,16 +4917,16 @@ Score: 210.455494
 Score: 211.522959
 Score: 211.200556
 CN-FR
-Score: 209.872914
-Score: 210.327690
-Score: 209.765949
-Score: 210.011763
-Score: 209.684333
-Score: 210.016440
-Score: 210.498372
-Score: 210.146782
-Score: 210.078488
-Score: 209.443269
+Score: 209.703653
+Score: 210.165961
+Score: 209.789697
+Score: 210.081069
+Score: 209.702074
+Score: 209.976124
+Score: 210.440616
+Score: 210.071338
+Score: 209.968488
+Score: 209.678159
 SA-L-BFGS
 Score: 210.561249
 Score: 210.928604
@@ -4939,16 +4939,16 @@ Score: 211.443817
 Score: 211.111710
 Score: 210.366943
 CN-L-BFGS
-Score: 209.894257
-Score: 209.568680
-Score: 209.556732
-Score: 209.221588
-Score: 209.987518
-Score: 209.530991
-Score: 210.300217
-Score: 210.085327
-Score: 209.421600
-Score: 210.482254
+Score: 209.884338
+Score: 209.502258
+Score: 209.480591
+Score: 209.445541
+Score: 209.904022
+Score: 209.495468
+Score: 210.487671
+Score: 210.005264
+Score: 209.302216
+Score: 209.934921
 mycielskian9
 SA-FR
 Score: 468.065718
@@ -4962,16 +4962,16 @@ Score: 467.536022
 Score: 467.758770
 Score: 468.514926
 CN-FR
-Score: 466.022636
-Score: 467.043867
-Score: 465.965475
-Score: 467.017432
-Score: 467.333643
-Score: 466.321286
-Score: 466.446282
-Score: 466.286964
-Score: 467.578546
-Score: 467.008020
+Score: 465.985023
+Score: 467.293841
+Score: 466.109799
+Score: 467.410174
+Score: 467.279496
+Score: 466.360610
+Score: 466.435406
+Score: 466.296396
+Score: 467.417397
+Score: 466.990056
 SA-L-BFGS
 Score: 469.684326
 Score: 469.976166
@@ -4984,16 +4984,16 @@ Score: 469.596039
 Score: 469.528625
 Score: 470.984283
 CN-L-BFGS
-Score: 466.048676
-Score: 466.972351
-Score: 466.053284
-Score: 466.527283
-Score: 467.352539
-Score: 466.177277
-Score: 466.405914
-Score: 466.466492
-Score: 467.171021
-Score: 466.439880
+Score: 466.229431
+Score: 466.976624
+Score: 466.171173
+Score: 466.469116
+Score: 467.491577
+Score: 466.137238
+Score: 466.260376
+Score: 466.238922
+Score: 467.107269
+Score: 466.528229
 mycielskian10
 SA-FR
 Score: 1025.745256
@@ -5007,16 +5007,16 @@ Score: 1024.926430
 Score: 1025.069476
 Score: 1027.533836
 CN-FR
-Score: 1024.674358
-Score: 1024.710414
-Score: 1025.092547
-Score: 1025.359667
-Score: 1025.407962
-Score: 1024.961335
-Score: 1024.499218
-Score: 1023.838573
-Score: 1026.559379
-Score: 1023.398584
+Score: 1024.495090
+Score: 1024.705371
+Score: 1024.927449
+Score: 1025.460765
+Score: 1025.532564
+Score: 1024.606260
+Score: 1024.675608
+Score: 1023.702762
+Score: 1026.850758
+Score: 1023.813026
 SA-L-BFGS
 Score: 1030.883667
 Score: 1031.273071
@@ -5029,16 +5029,16 @@ Score: 1034.828491
 Score: 1035.103638
 Score: 1035.088135
 CN-L-BFGS
-Score: 1024.091675
-Score: 1023.052551
-Score: 1023.889282
-Score: 1023.793457
-Score: 1023.337646
-Score: 1024.356445
-Score: 1021.886658
-Score: 1023.013916
-Score: 1024.839722
-Score: 1022.166504
+Score: 1024.049683
+Score: 1023.148193
+Score: 1023.814087
+Score: 1023.660828
+Score: 1023.050964
+Score: 1024.215820
+Score: 1022.050476
+Score: 1023.034607
+Score: 1024.608032
+Score: 1022.311279
 breasttissue_10NN
 SA-FR
 Score: 82.626744
@@ -5052,16 +5052,16 @@ Score: 85.002961
 Score: 82.766696
 Score: 83.191932
 CN-FR
-Score: 82.781736
-Score: 83.824685
-Score: 82.907368
-Score: 82.617158
-Score: 83.066979
-Score: 83.019007
-Score: 82.684128
-Score: 82.718126
-Score: 84.447770
-Score: 82.943945
+Score: 82.785976
+Score: 83.793217
+Score: 82.920610
+Score: 82.613382
+Score: 83.114958
+Score: 83.021300
+Score: 82.689973
+Score: 82.736597
+Score: 84.384143
+Score: 82.914327
 SA-L-BFGS
 Score: 82.614914
 Score: 82.667450
@@ -5074,16 +5074,16 @@ Score: 82.672386
 Score: 82.671844
 Score: 82.640450
 CN-L-BFGS
-Score: 82.640305
-Score: 82.815460
-Score: 82.756287
-Score: 82.610954
-Score: 82.605812
-Score: 82.788483
-Score: 82.646805
-Score: 82.640297
-Score: 83.428131
-Score: 82.761391
+Score: 82.647125
+Score: 82.813599
+Score: 82.710159
+Score: 82.611694
+Score: 82.609550
+Score: 82.774460
+Score: 82.646904
+Score: 82.659866
+Score: 83.762360
+Score: 82.785599
 collins_15NN
 SA-FR
 Score: 26.934186
@@ -5097,16 +5097,16 @@ Score: 85.906999
 Score: -46.580867
 Score: 13.856072
 CN-FR
-Score: 15.801457
-Score: 61.939191
-Score: 112.703784
-Score: 0.731209
-Score: 63.105092
-Score: 72.835241
-Score: 16.305400
-Score: 79.743450
-Score: 56.691128
-Score: 98.873726
+Score: 19.429397
+Score: 62.783164
+Score: 112.354422
+Score: 1.353520
+Score: 62.755474
+Score: 72.849589
+Score: 14.810119
+Score: 79.908746
+Score: 57.181622
+Score: 98.444238
 SA-L-BFGS
 Score: -169.401245
 Score: -328.319244
@@ -5119,16 +5119,16 @@ Score: -272.020081
 Score: -313.159332
 Score: -78.926262
 CN-L-BFGS
-Score: -404.064941
-Score: -348.458069
-Score: -168.575470
-Score: -425.958221
-Score: -179.136444
-Score: -480.660797
-Score: -276.371216
-Score: -305.419037
-Score: -238.795029
-Score: -371.397461
+Score: -399.714081
+Score: -346.406097
+Score: -166.156189
+Score: -438.216888
+Score: -174.002853
+Score: -460.240906
+Score: -275.835541
+Score: -321.552216
+Score: -242.315796
+Score: -356.300720
 dermatology_5NN
 SA-FR
 Score: 17.952236
@@ -5142,16 +5142,16 @@ Score: 30.046846
 Score: -19.389338
 Score: 52.388284
 CN-FR
-Score: 14.608156
-Score: 29.380378
-Score: 19.664092
-Score: 8.393043
-Score: 45.599670
-Score: 29.740200
-Score: -4.803284
-Score: 13.930930
-Score: 12.900574
-Score: 25.839476
+Score: 14.239434
+Score: 29.138063
+Score: 19.269208
+Score: 8.398718
+Score: 45.443951
+Score: 29.625468
+Score: -4.707687
+Score: 13.943121
+Score: 13.103245
+Score: 25.846391
 SA-L-BFGS
 Score: -25.480789
 Score: -46.691010
@@ -5164,16 +5164,16 @@ Score: -33.555149
 Score: -50.070389
 Score: -48.619698
 CN-L-BFGS
-Score: -35.089916
-Score: -43.376484
-Score: -6.982172
-Score: -47.234505
-Score: -32.449734
-Score: -36.498875
-Score: -50.181950
-Score: -47.732746
-Score: -46.064919
-Score: -37.484222
+Score: -35.552277
+Score: -44.073868
+Score: -6.702777
+Score: -47.765953
+Score: -31.479389
+Score: -36.691589
+Score: -49.934013
+Score: -47.318615
+Score: -45.155567
+Score: -36.191402
 Ecoli_10NN
 SA-FR
 Score: 141.553806
@@ -5187,16 +5187,16 @@ Score: 129.943264
 Score: 155.568635
 Score: 130.126486
 CN-FR
-Score: 144.025712
-Score: 135.557059
-Score: 131.915313
-Score: 156.740701
-Score: 144.194743
-Score: 132.520362
-Score: 137.240041
-Score: 141.200327
-Score: 139.986003
-Score: 138.056973
+Score: 144.262267
+Score: 136.101162
+Score: 132.035165
+Score: 156.178922
+Score: 144.244460
+Score: 132.450668
+Score: 137.014339
+Score: 141.098945
+Score: 139.847164
+Score: 138.464826
 SA-L-BFGS
 Score: 129.592377
 Score: 129.590912
@@ -5209,16 +5209,16 @@ Score: 129.590118
 Score: 129.591034
 Score: 129.590271
 CN-L-BFGS
-Score: 130.385315
-Score: 129.590271
-Score: 129.590271
-Score: 129.799927
-Score: 129.599792
-Score: 129.590622
-Score: 129.622116
-Score: 129.591003
-Score: 129.597382
-Score: 129.593704
+Score: 130.364197
+Score: 129.590927
+Score: 129.590286
+Score: 129.635406
+Score: 129.591629
+Score: 129.590302
+Score: 129.603409
+Score: 129.591278
+Score: 129.593933
+Score: 129.590286
 Glass_10NN
 SA-FR
 Score: 110.463244
@@ -5232,16 +5232,16 @@ Score: 113.575370
 Score: 113.495372
 Score: 114.396968
 CN-FR
-Score: 111.765769
-Score: 119.949896
-Score: 117.475388
-Score: 115.897776
-Score: 125.208983
-Score: 113.512086
-Score: 116.632690
-Score: 113.871913
-Score: 113.905046
-Score: 113.074275
+Score: 111.777143
+Score: 119.911066
+Score: 117.912038
+Score: 115.867869
+Score: 125.036176
+Score: 113.508089
+Score: 116.725182
+Score: 113.894583
+Score: 113.915492
+Score: 113.190437
 SA-L-BFGS
 Score: 110.269714
 Score: 110.267914
@@ -5254,16 +5254,16 @@ Score: 112.910500
 Score: 110.989113
 Score: 110.497612
 CN-L-BFGS
-Score: 111.132156
-Score: 112.911812
-Score: 112.909286
-Score: 115.175262
-Score: 110.582901
-Score: 110.324738
-Score: 115.476303
-Score: 112.907822
-Score: 112.927437
-Score: 110.272316
+Score: 111.131729
+Score: 112.918884
+Score: 112.916565
+Score: 115.170082
+Score: 110.522301
+Score: 110.432610
+Score: 115.377541
+Score: 112.910522
+Score: 112.918823
+Score: 110.268700
 iris_dataset_30NN
 SA-FR
 Score: 91.016055
@@ -5277,16 +5277,16 @@ Score: 91.211817
 Score: 91.082006
 Score: 89.820466
 CN-FR
-Score: 90.712301
-Score: 91.714166
-Score: 99.294953
-Score: 91.006199
-Score: 90.672781
-Score: 93.815634
-Score: 92.923478
-Score: 100.492115
-Score: 93.500563
-Score: 93.053410
+Score: 90.809166
+Score: 91.758734
+Score: 99.206184
+Score: 91.118112
+Score: 90.185757
+Score: 93.771098
+Score: 93.077419
+Score: 99.984640
+Score: 93.183265
+Score: 92.645731
 SA-L-BFGS
 Score: 85.653618
 Score: 85.684647
@@ -5299,16 +5299,16 @@ Score: 85.683678
 Score: 85.791840
 Score: 85.684059
 CN-L-BFGS
-Score: 85.692780
-Score: 85.722542
-Score: 85.917175
-Score: 85.704865
-Score: 85.921684
-Score: 85.739510
-Score: 85.704041
-Score: 85.714661
-Score: 85.662689
-Score: 85.650154
+Score: 85.661903
+Score: 85.804543
+Score: 85.769928
+Score: 85.696236
+Score: 85.684746
+Score: 85.681740
+Score: 85.728737
+Score: 85.697266
+Score: 85.645149
+Score: 85.726768
 micromass_10NN
 SA-FR
 Score: 330.785812
@@ -5322,16 +5322,16 @@ Score: 332.698343
 Score: 328.351269
 Score: 327.870458
 CN-FR
-Score: 331.531884
-Score: 334.745027
-Score: 324.705516
-Score: 325.867202
-Score: 328.804736
-Score: 339.230471
-Score: 332.591927
-Score: 338.488818
-Score: 337.846002
-Score: 332.568211
+Score: 331.517151
+Score: 334.804886
+Score: 324.675884
+Score: 325.848427
+Score: 328.655528
+Score: 339.385008
+Score: 332.422382
+Score: 338.438190
+Score: 337.847389
+Score: 332.481615
 SA-L-BFGS
 Score: 328.458008
 Score: 327.094025
@@ -5344,16 +5344,16 @@ Score: 329.038818
 Score: 331.848511
 Score: 327.882874
 CN-L-BFGS
-Score: 328.976440
-Score: 332.299774
-Score: 324.648376
-Score: 325.111115
-Score: 327.057770
-Score: 332.561188
-Score: 328.221649
-Score: 336.217377
-Score: 333.632660
-Score: 331.461823
+Score: 329.335419
+Score: 331.248566
+Score: 324.570984
+Score: 325.101013
+Score: 326.949829
+Score: 332.733704
+Score: 327.920776
+Score: 337.153931
+Score: 333.781586
+Score: 331.332947
 Olivetti_norm_10NN
 SA-FR
 Score: 259.024806
@@ -5367,16 +5367,16 @@ Score: 258.815891
 Score: 272.504627
 Score: 260.350800
 CN-FR
-Score: 258.688637
-Score: 259.489473
-Score: 258.902006
-Score: 258.803988
-Score: 258.475393
-Score: 287.568631
-Score: 259.163925
-Score: 258.510853
-Score: 259.079085
-Score: 258.620654
+Score: 258.733009
+Score: 259.658397
+Score: 258.913525
+Score: 258.801720
+Score: 258.481862
+Score: 287.444977
+Score: 259.106996
+Score: 258.506165
+Score: 259.051803
+Score: 258.639421
 SA-L-BFGS
 Score: 258.192474
 Score: 258.189728
@@ -5389,16 +5389,16 @@ Score: 258.350372
 Score: 270.474518
 Score: 258.206329
 CN-L-BFGS
-Score: 258.211304
-Score: 258.189026
-Score: 258.234680
-Score: 258.190063
-Score: 258.226227
-Score: 258.246216
+Score: 258.210358
+Score: 258.188690
+Score: 258.214813
+Score: 258.186188
+Score: 258.232452
+Score: 258.247101
 Score: 258.192841
-Score: 258.240204
-Score: 258.763611
-Score: 258.246063
+Score: 258.238892
+Score: 258.761902
+Score: 258.253876
 Spectro_10NN
 SA-FR
 Score: 150.293833
@@ -5412,16 +5412,16 @@ Score: 123.044099
 Score: 150.351813
 Score: 118.767039
 CN-FR
-Score: 137.246398
-Score: 132.512216
-Score: 132.746468
-Score: 197.808172
-Score: 119.452481
-Score: 159.140945
-Score: 161.819634
-Score: 194.650256
-Score: 167.118602
-Score: 136.056259
+Score: 136.552005
+Score: 132.531981
+Score: 133.077051
+Score: 199.859013
+Score: 119.453027
+Score: 160.209580
+Score: 162.111356
+Score: 194.746233
+Score: 167.219184
+Score: 135.959307
 SA-L-BFGS
 Score: 104.992973
 Score: 102.910950
@@ -5434,16 +5434,16 @@ Score: 105.460953
 Score: 105.985176
 Score: 102.080757
 CN-L-BFGS
-Score: 102.571907
-Score: 103.751236
-Score: 102.998970
-Score: 110.620377
-Score: 101.918594
-Score: 103.911865
-Score: 101.850021
-Score: 102.106544
-Score: 103.750816
-Score: 103.729622
+Score: 102.392014
+Score: 106.237244
+Score: 102.944283
+Score: 142.902924
+Score: 101.956375
+Score: 103.810081
+Score: 101.951302
+Score: 102.177307
+Score: 103.345802
+Score: 105.926598
 umistfacesnorm_10NN
 SA-FR
 Score: 216.192636
@@ -5457,16 +5457,16 @@ Score: 188.261759
 Score: 214.398157
 Score: 234.991127
 CN-FR
-Score: 209.865144
-Score: 206.708501
-Score: 197.877810
-Score: 268.867421
-Score: 236.095941
-Score: 201.184487
-Score: 248.156112
-Score: 205.696075
-Score: 223.451372
-Score: 197.187543
+Score: 209.691010
+Score: 207.069883
+Score: 198.797204
+Score: 268.831520
+Score: 236.156653
+Score: 201.299359
+Score: 248.269254
+Score: 205.794011
+Score: 222.640822
+Score: 196.971929
 SA-L-BFGS
 Score: 193.522156
 Score: 184.457550
@@ -5479,16 +5479,16 @@ Score: 183.223404
 Score: 187.165726
 Score: 183.881363
 CN-L-BFGS
-Score: 183.635284
-Score: 188.384491
-Score: 188.186615
-Score: 193.923828
-Score: 206.899246
-Score: 184.450851
-Score: 189.420090
-Score: 188.530472
-Score: 189.778168
-Score: 184.265320
+Score: 183.699631
+Score: 188.373169
+Score: 188.253998
+Score: 195.930145
+Score: 207.873352
+Score: 184.933273
+Score: 190.015930
+Score: 188.561111
+Score: 189.443085
+Score: 183.997543
 Vehicle_10NN
 SA-FR
 Score: 282.484003
@@ -5502,16 +5502,16 @@ Score: 194.675019
 Score: 109.209232
 Score: 197.333037
 CN-FR
-Score: 197.044177
-Score: 171.096666
-Score: 193.927931
-Score: 200.685816
-Score: 137.234922
-Score: 208.059541
-Score: 124.932393
-Score: 182.012246
-Score: 150.400343
-Score: 200.072273
+Score: 196.930100
+Score: 171.127740
+Score: 193.501199
+Score: 200.820439
+Score: 137.695983
+Score: 207.947215
+Score: 124.769844
+Score: 181.951212
+Score: 149.873020
+Score: 200.651041
 SA-L-BFGS
 Score: 52.118301
 Score: 8.162645
@@ -5524,16 +5524,16 @@ Score: 16.482830
 Score: -19.216974
 Score: -2.946318
 CN-L-BFGS
-Score: 51.459919
-Score: -16.907682
-Score: 6.924174
-Score: -17.683956
-Score: -14.561632
-Score: -3.492325
-Score: -21.321548
-Score: -5.095906
-Score: -7.821034
-Score: 11.656327
+Score: 54.513935
+Score: -17.837669
+Score: 8.524902
+Score: -18.815165
+Score: -14.248352
+Score: -3.669518
+Score: -22.252132
+Score: -4.409473
+Score: 2.625819
+Score: 0.210996
 YaleA_10NN
 SA-FR
 Score: 114.464747
@@ -5547,16 +5547,16 @@ Score: 114.030005
 Score: 119.612714
 Score: 114.021257
 CN-FR
-Score: 117.474131
-Score: 120.302491
-Score: 119.536819
-Score: 116.611763
-Score: 118.492232
-Score: 114.401368
-Score: 117.964224
-Score: 117.890250
-Score: 114.441820
-Score: 117.096166
+Score: 117.421267
+Score: 120.306108
+Score: 119.470953
+Score: 116.631199
+Score: 118.360267
+Score: 114.379797
+Score: 118.045468
+Score: 117.740858
+Score: 114.360731
+Score: 117.154640
 SA-L-BFGS
 Score: 113.972046
 Score: 118.899452
@@ -5569,13 +5569,13 @@ Score: 113.966377
 Score: 119.154488
 Score: 113.965240
 CN-L-BFGS
-Score: 116.547432
-Score: 118.948914
-Score: 118.935150
-Score: 113.966179
-Score: 117.316635
-Score: 113.988060
-Score: 115.962029
-Score: 116.664162
-Score: 113.971123
-Score: 116.388962
+Score: 116.763298
+Score: 118.940903
+Score: 118.940437
+Score: 113.964622
+Score: 117.321167
+Score: 113.985008
+Score: 115.970924
+Score: 116.719231
+Score: 113.971947
+Score: 116.393158

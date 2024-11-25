@@ -3,4 +3,4 @@ dense
 SA-L-BFGS
 Score: 83.520111
 CN-L-BFGS
-Score: 78.819130
+Score: 78.859886
