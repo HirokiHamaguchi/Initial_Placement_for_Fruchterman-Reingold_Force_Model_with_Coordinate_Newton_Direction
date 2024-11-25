@@ -27,7 +27,7 @@
 \begin{tikzpicture}
   \begin{scope}[xshift=-2.5cm]
     \foreach \i in {1,...,5}{
-        \node[circle, fill=black, text=white,minimum size=0.5cm] (a\i) at ({90+72*(\i-1)}:1.5) {\i};
+        \node[circle, fill=black, text=white,minimum size=0.5cm] (a\i) at ({90+72*(\i-1)}:1.2) {\i};
       }
     \foreach \i/\j in {1/2,1/5,2/3,2/4,3/4,3/5,4/5}{
         \draw[thick] (a\i) -- (a\j);
@@ -35,14 +35,18 @@
   \end{scope}
   \begin{scope}[xshift=+2.5cm]
     \foreach \i in {1,...,5}{
-        \node[circle, fill=black, text=white, minimum size=0.5cm] (a\i) at ({90+72*(\i-1)}:1.5) {\i};
+        \node[circle, fill=black, text=white, minimum size=0.5cm] (a\i) at ({90+72*(\i-1)}:1.2) {\i};
       }
     \foreach \i/\j in {1/2,1/5,2/3,2/4,3/4,3/5,4/5}{
-        \draw[decorate, decoration={coil, segment length=4}] (a\i) -- (a\j);
-      }
-    \foreach \i/\j in {1/3,1/4,2/5}{
-        \draw[decorate, decoration={coil, segment length=4.5},gray] (a\i) -- (a\j);
-      }
+    \draw[cA,-{Stealth[length=2mm]},thick] (a\i) -- ($(a\i)!0.49!(a\j)$);
+    \draw[cA,-{Stealth[length=2mm]},thick] (a\j) -- ($(a\i)!0.51!(a\j)$);
+    }
+    \foreach \i/\j in {1/2,1/5,2/1,2/3,3/2,3/4,4/3,4/5,5/1,5/4}{
+    \draw[cD,-{Stealth[length=2mm]},thick] (a\i) -- ($1.5*(a\i)-0.5*(a\j)$);
+    }
+    \foreach \i/\j in {1/3,1/4,2/4,2/5,3/1,3/5,4/1,4/2,5/2,5/3}{
+    \draw[cD,-{Stealth[length=2mm]},thick] (a\i) -- ($1.25*(a\i)-0.25*(a\j)$);
+    }
   \end{scope}
 
   \node[scale=2] at (0,0) {$\leftrightarrows$};
@@ -62,8 +66,8 @@
     \draw[{Stealth[length=2mm]}-{Stealth[length=2mm]}] ($(M1)+(90:2*\r)$) -- ($(M2)+(90:2*\r)$)
     node[midway,circle,fill=white,inner sep=0] {$d$};
 
-    \draw[-{Stealth[length=2mm]},thick,line cap=round] (+\r,0) -- (+\u,0) node[right] {$F_{i,j}^\mathrm{a}(d)$};
-    \draw[-{Stealth[length=2mm]},thick,line cap=round] (-\r,0) -- (-\u,0) node[left] {$F^\mathrm{r}(d)$};
+    \draw[cA,-{Stealth[length=2mm]},thick] (+\r,0) -- (+\u,0) node[right] {$F_{i,j}^\mathrm{a}(d)$};
+    \draw[cD,-{Stealth[length=2mm]},thick] (-\r,0) -- (-\u,0) node[left] {$F^\mathrm{r}(d)$};
 
     \draw[dashed,domain=3.9:-3.1,samples=1000,smooth,variable=\x] plot(\x,{-0.7+(pow((\d-\x)/\d,3)/3-ln((\d-\x)/\d))/2.2});
     \node [star,
