@@ -30,10 +30,6 @@ class Hex {
 
   bool operator!=(const Hex& other) const { return !(*this == other); }
 
-  int length() const { return (std::abs(q) + std::abs(r) + std::abs(-q - r)) / 2; }
-
-  int distance(const Hex& other) const { return (*this - other).length(); }
-
   friend std::ostream& operator<<(std::ostream& os, const Hex& hex) {
     os << "Hex(" << hex.q << ", " << hex.r << ")";
     return os;

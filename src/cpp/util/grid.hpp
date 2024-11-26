@@ -43,14 +43,14 @@ struct Grid {
   }
 
   inline std::pair<float, float> hex2xy(double q, double r) const {
-    return {k * (q + r / 2.0), k * (r * std::sqrt(3) / 2.0)};
+    return {q + r / 2.0, r * std::sqrt(3) / 2.0};
   }
   inline std::pair<float, float> hex2xy(size_t i) const {
     return hex2xy(points[i].q, points[i].r);
   }
   Hex xy2hex(float x, float y) {
-    float r = y * 2.0 / (k * std::sqrt(3));
-    float q = x / k - r / 2.0;
+    float r = y * 2.0 / std::sqrt(3);
+    float q = x - r / 2.0;
     return Hex::round(q, r, -q - r);
   }
 
@@ -81,28 +81,6 @@ struct Grid {
 
   double calcScore(const Problem& problem, bool includeRepulsive = true) const {
     return problem.calcScore(toPosition(), includeRepulsive);
-  }
-
-  double calcScoreV(const Problem& problem, const Hex& hexI, const Hex& hexJ) const {
-    // calculate score difference. The score is defined by \sum_j \norm{xi-xj}_2^3/3k
-    auto i = array[to1DIndex(hexI.q, hexI.r)];
-    if (i == -1) return 0.0;
-    double score = 0.0;
-    auto [xi, yi] = hex2xy(hexI.q, hexI.r);
-    auto [xj, yj] = hex2xy(hexJ.q, hexJ.r);
-    for (auto& [k, w] : problem.adj[i]) {
-      auto [xk, yk] = hex2xy(k);
-      double dxi = xi - xk, dyi = yi - yk;
-      score -= w * std::pow(dxi * dxi + dyi * dyi, 1.5);
-      double dxj = xj - xk, dyj = yj - yk;
-      score += w * std::pow(dxj * dxj + dyj * dyj, 1.5);
-    }
-    return score / (3.0 * k);
-  }
-
-  double calcScoreDiff(const Problem& problem, const Hex& hexI, const Hex& hexJ) const {
-    // (post score) - (pre score) where post means after swapping hexI and hexJ
-    return calcScoreV(problem, hexI, hexJ) + calcScoreV(problem, hexJ, hexI);
   }
 
   void swap(int i, const Hex& hexI, const Hex& hexJ) {

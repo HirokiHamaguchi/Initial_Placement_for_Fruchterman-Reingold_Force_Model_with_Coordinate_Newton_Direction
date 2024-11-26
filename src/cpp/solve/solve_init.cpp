@@ -29,7 +29,7 @@ void solve_init(const Problem& problem, const bool measureTime, const int seed,
   // initialize random number generator
   std::mt19937 gen(seed);
   std::uniform_int_distribution<int> distVertex(0, problem.n - 1);
-  std::uniform_real_distribution<double> distHexR(0, grid.k);
+  std::uniform_real_distribution<double> distHexR(0, 1);
   std::uniform_real_distribution<double> distHexTheta(0, 2 * M_PI);
 
   // simulated annealing parameters
@@ -52,7 +52,7 @@ void solve_init(const Problem& problem, const bool measureTime, const int seed,
     }
 
     // if local minimum, continue
-    if (gx * gx + gy * gy < 1e-9) {
+    if ((gx * gx + gy * gy) * grid.k * grid.k < 1e-9) {
       addVis(grid, positions, it, measureTime);
       continue;
     }
