@@ -163,3 +163,76 @@ and we simplify it into this problem.
 We use the hexagonal lattice as the initial placement $Q$.
 
 Now, we will explain how to solve this problem in the second half.
+
+## 14
+
+To solve the problem, we use the coordinate Newton direction.
+So, to begin with, please let me introduce it in this slide.
+
+Let us consider a strictly convex function $f$.
+The second order approximation of $f$ at $x_0$ is this one.
+The argmin $x^*$ of this approximation must satisfy the stationary condition, the derivative of it equals zero.
+Thus, we obtain this equation and this red term is called the Newton direction in general.
+Here, please note that the Hessian matrix $\nabla^2 f(x_0)$ is positive definite since $f$ is strictly convex, so we can compute the inverse Hessian and this is a descent direction.
+This is an important property for the Newton direction.
+
+Although the Newton direction provides a critical step in iterative methods, it requires the computation of the inverse Hessian $\nabla^2 f(x_0)^{-1} \in \bbR^{n \times n}$, posing a high computational cost for large-scale problems.
+
+Still, we can leverage the concept of the Newton direction in a different manner, the stochastic coordinate descent with the coordinate Newton direction.
+Instead of computing the inverse Hessian $\nabla^2 f(x_0)^{-1}$ in the entire variable space $\bbR^n$, we limit the variable $x$ to its coordinate block $x_i$ with fewer dimensions, and compute this $f_i$'s Newton direction, the coordinate Newton direction.
+Since the coordinate Newton direction computation is much cheaper than that of the Newton direction, we can repeat this procedure many times.
+In general, this idea is known as stochastic coordinate descent or Randomized Subspace Newton (RSN) in a broader context.
+
+In particular, this coordinate Newton direction has an apparent natural affinity to the problem.
+By taking the position $x_i$ of the vertex $i$ as the coordinate block, we can compute the Newton direction.
+Although directly applying this idea to the problem is challenging, we leverage this coordinate Newton direction to propose our algorithm.
+
+## 15
+
+Now, we will explain the proposed method.
+First, by randomly taking a vertex $i$ from $V$, we compute the coordinate Newton direction for $x_i$, and its gradient and Hessian is computed as these.
+
+Since $f^a_i$ is strictly convex, which is different form the energy function $E_{i,j}$ and $f^a$, we can utilize the coordinate Newton direction.
+
+## 16
+
+Then, using this coordinate Newton direction, we update the position of $i$ as $x_i^{new}$ in the hexagonal lattice $Q^hex$, and by repeating this process, we can solve the problem.
+So, here, we explain how to update the position $x_i$ in an one iteration.
+
+If our problem is just a general continuous optimization problem, we can directly apply the coordinate Newton direction.
+However, $x_i^new$ may not be in the hexagonal lattice $Q^hex$. So we need to round it to the nearest point in $Q^hex$.
+This figure shows this rounding operation. Select the vertex $i$ at $x_i$, and compute the coordinate Newton direction as this arrow.
+Then, by rounding it to the nearest point in $Q^hex$, we determine the new position $x_i^{new}$. To keep the injectivity of the assignment $\pi$, we need to swap the vertices if necessary.
+
+In this process, we empirically found that adding a small random noise vector to the coordinate Newton direction is effective.
+This randomness is similar to the SA one, and it can help to escape from local minima and to explore the solution space more effectively.
+
+So, this it the one step of our proposed method, and we repeat this process for some iterations.
+
+## 17
+
+Finally, the obtained placement (this one) could be too small or too large, since we did not case about the scale. Thus, as the final step, we rescale by $c^*$ to obtain the initial placement  (like this) and apply L-BFGS algorithm for the final placement.
+
+So we have to the optimal scaling factor $c^*$. Recalling the original problem for the FR force model, the problem is to minimize this function $\phi(c)$. Here and here is the $c$.
+
+Since this function is convex, we can find the optimal scaling factor $c^*$ by solving this problem as this one.
+
+This value can be computed in the $\order{\abs{E}}$ complexity.
+Thus, as far as we rescale the placement by this $c^*$, we can select any $\epsilon$ to define the hexagonal lattice $Q^hex$. So we can eliminate the parameter $\epsilon$ from the problem.
+
+## 19
+
+Ok, now, this slide shows the pseudo-code of the proposed method.
+It is just a repeat of the previous slides.
+
+We first randomly select vertex $i$ from $V$, then compute the coordinate Newton direction and round it to $x_i^new$ in $Q^hex$, and update the position of $i$.
+We repeat this process until some iterations.
+Finally, we rescale by $c^*$ to obtain our proposed initial placement.
+
+So, this is the outline of our proposed method.
+
+## 20
+
+Next, we will show the experimental results.
+
+## 21

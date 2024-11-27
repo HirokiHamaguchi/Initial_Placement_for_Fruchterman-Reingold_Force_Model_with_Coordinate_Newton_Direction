@@ -4,7 +4,7 @@
 % \usepackage{svg}
 
 \usepackage{adjustbox}      % \begin{adjustbox}
-\usepackage[ruled, vlined]{algorithm2e}    % \begin{algorithm2e}
+\usepackage[linesnumbered, ruled, vlined]{algorithm2e}    % \begin{algorithm2e}
 \usepackage{amsmath}        % \begin{align*}
 \usepackage{amssymb}        % \mathbb{A}
 \usepackage{amsthm}         % \newtheorem
@@ -95,7 +95,6 @@
 
 % https://uplatexmemo.hatenadiary.jp/entry/2021/01/04/130013
 \usepackage{caption}
-\captionsetup[table]{justification=centering}
 \captionsetup[figure]{justification=centering}
 
 \usetheme{Boadilla}
@@ -153,305 +152,317 @@
 
 \begin{document}
 
-% \ifShowHidden
-\maketitle
-% \fi
+\ifShowHidden
+  \maketitle
+\fi
 
-\section{Introduction}
+\ifShowHidden
+  \section{Introduction}
+\fi
 
-% \ifShowHidden
-\begin{frame}{Introduction of Graph Drawing}
-  \begin{columns}
-    \begin{column}{0.58\columnwidth}
-      \large{%
-        Graph $G = (V,E)$ (vertices $V$  / edges $E$)\\
-        \textbf{Graph Drawing} \normalsize{is an fundamental task.}\\
-        \textbf{Force-directed graph drawing} \normalsize{is a popular method.}
-      }
-      \begin{figure}[htbp]
+\ifShowHidden
+  \begin{frame}{Introduction of Graph Drawing}
+    \begin{columns}
+      \begin{column}{0.58\columnwidth}
+        \large{%
+          Graph $G = (V,E)$ (vertices $V$  / edges $E$)\\
+          \textbf{Graph Drawing} \normalsize{is an fundamental task.}\\
+          \textbf{Force-directed graph drawing} \normalsize{is a popular method.}
+        }
+        \begin{figure}[htbp]
+          \centering
+          \begin{minipage}{0.55\columnwidth}
+            \centering
+            \includegraphics[width=\columnwidth]{introExample/social.jpg}
+            \caption*{
+              Social Network Graph
+              \gray{\footnotesize{Designed~by~\href{www.freepik.com}{Freepik}}}
+            }
+          \end{minipage}%
+          \begin{minipage}{0.45\columnwidth}
+            \centering
+            \includegraphics[width=\columnwidth]{introExample/railway.png}
+            \caption*{
+              Railroad Graph
+              \gray{\footnotesize{By~\href{https://commons.wikimedia.org/wiki/File:High_Speed_Railroad_Map_of_Europe.svg}{Bernese~media}, \href{https://creativecommons.org/licenses/by-sa/3.0}{CC~BY-SA~3.0}}}
+            }
+          \end{minipage}%
+        \end{figure}
+      \end{column}
+      \begin{column}{0.42\columnwidth}
         \centering
-        \begin{minipage}{0.55\columnwidth}
+        \vspace{-1.5em}
+        \begin{figure}[htbp]
           \centering
-          \includegraphics[width=\columnwidth]{introExample/social.jpg}
+          \includegraphics[height=0.77\textheight]{introExample/connectedPapers.png}
           \caption*{
-            Social Network Graph
-            \gray{\footnotesize{Designed~by~\href{www.freepik.com}{Freepik}}}
-          }
-        \end{minipage}%
-        \begin{minipage}{0.45\columnwidth}
+            \gray{\footnotesize{By~\raisebox{-0.4\baselineskip}{\includegraphics[height=0.07\textheight]{introExample/connectedPapersLogo.png}}
+                (\href{https://www.connectedpapers.com/}{Link})}
+            }}
+        \end{figure}
+      \end{column}
+    \end{columns}
+  \end{frame}
+\fi
+
+\ifShowHidden
+  \begin{frame}{Graph Drawing by NetworkX}
+    \begin{columns}
+      \begin{column}{0.62\columnwidth}
+        \large{%
+          NetworkX \raisebox{-0.2\baselineskip}{\includegraphics[width=1.5em]{graphDrawing/networkxLogo.png}}~\cite{hagberg2008exploring} is a popular Python library.\\
+          \texttt{nx.draw} is the default function.\\
+          \large{\textbf{Fruchterman--Reingold (FR) algorithm}} works.\\
+          (with 50 iterations)
+        }
+        \begin{center}
+          \rule{0.8\columnwidth}{0.4pt}
+        \end{center}
+        \Large{
+          \uncover<1->{$\abs{V}=\phantom{0}10$: \phantom{1}0.2 sec / Well Visualized}\\
+          \uncover<2->{$\abs{V}=\phantom{0}20$: \phantom{1}0.2 sec / Tangled?}\\
+          \uncover<3->{$\abs{V}=500$: \red{11.5} sec / \red{WHAT IS THIS???}}
+        }
+      \end{column}
+      \begin{column}{0.38\columnwidth}
+        \begin{figure}[htbp]
           \centering
-          \includegraphics[width=\columnwidth]{introExample/railway.png}
-          \caption*{
-            Railroad Graph
-            \gray{\footnotesize{By~\href{https://commons.wikimedia.org/wiki/File:High_Speed_Railroad_Map_of_Europe.svg}{Bernese~media}, \href{https://creativecommons.org/licenses/by-sa/3.0}{CC~BY-SA~3.0}}}
-          }
-        \end{minipage}%
-      \end{figure}
-    \end{column}
-    \begin{column}{0.42\columnwidth}
+          \only<1>{\includegraphics[width=\columnwidth]{vscode/10.png}}%
+          \only<2>{\includegraphics[width=\columnwidth]{vscode/20.png}}%
+          \only<3>{\includegraphics[width=\columnwidth]{vscode/500.png}}%
+        \end{figure}
+      \end{column}
+    \end{columns}
+  \end{frame}
+\fi
+
+\ifShowHidden
+  \begin{frame}{Fruchterman--Reingold Force Model}
+    The \textbf{FR force model} uses a force model~\cite{fruchtermanGraphDrawingForcedirected1991} with
+    \tccA{\Large{\textbf{a}}}\tccA{ttractive force} and
+    \tccD{\Large{\textbf{r}}}\tccD{epulsive force}:
+    \begin{equation*}
+      \tccA{F_{i,j}^\mathrm{a}(d) \defeq \frac{w_{i,j} d^2}{k}}, \quad \tccD{F^\mathrm{r}(d) \defeq -\frac{k^2}{d}}.
+    \end{equation*}
+    The \textbf{FR algorithm} seeks an \textbf{equilibrium} of two kind forces:
+    \begin{columns}
+      \begin{column}{0.5\columnwidth}
+        \begin{figure}[h]
+          \centering
+          \includegraphics[width=\columnwidth]{../main/fr_layout/fr_layout1.pdf}
+          \caption*{$w_{i,j} > 0 \iff \{i,j\} \in E$}
+        \end{figure}
+      \end{column}
+      \begin{column}{0.5\columnwidth}
+        \begin{figure}[h]
+          \centering
+          \includegraphics[width=\columnwidth]{../main/fr_layout/fr_layout2.pdf}
+          \caption*{$d = \norm{x_i - x_j}$}
+        \end{figure}
+      \end{column}
+    \end{columns}
+  \end{frame}
+\fi
+
+\ifShowHidden
+  \begin{frame}{``Twist'' Causes Stagnation}
+    \large{%
+      \textbf{Twist}: unnecessary folded and tangled structures~\cite{veldhuizenDynamicMultilevelGraph2007,cheongSnapshotVisualizationComplex2018}.\\
+      $\to$ Causing stagnation of the simulation process.\\
+      Slow for large-scale graphs. $\order{\abs{V}^2}$ per iteration.
+    }
+    \begin{figure}[htbp]
       \centering
-      \vspace{-1.5em}
-      \begin{figure}[htbp]
-        \centering
-        \includegraphics[height=0.77\textheight]{introExample/connectedPapers.png}
-        \caption*{
-          \gray{\footnotesize{By~\raisebox{-0.4\baselineskip}{\includegraphics[height=0.07\textheight]{introExample/connectedPapersLogo.png}}
-              (\href{https://www.connectedpapers.com/}{Link})}
-          }}
-      \end{figure}
-    \end{column}
-  \end{columns}
-\end{frame}
-% \fi
+      \animategraphics[autoplay,loop,width=0.4\columnwidth]{5}{circle/circle-}{1}{1}
+    \end{figure}
+  \end{frame}
+\fi
 
-% \ifShowHidden
-\begin{frame}{Graph Drawing by NetworkX}
-  \begin{columns}
-    \begin{column}{0.62\columnwidth}
-      \large{%
-        NetworkX \raisebox{-0.2\baselineskip}{\includegraphics[width=1.5em]{graphDrawing/networkxLogo.png}}~\cite{hagberg2008exploring} is a popular Python library.\\
-        \texttt{nx.draw} is the default function.\\
-        \large{\textbf{Fruchterman--Reingold (FR) algorithm}} works.\\
-        (with 50 iterations)
-      }
-      \begin{center}
-        \rule{0.8\columnwidth}{0.4pt}
-      \end{center}
-      \Large{
-        \uncover<1->{$\abs{V}=\phantom{0}10$: \phantom{1}0.2 sec / Well Visualized}\\
-        \uncover<2->{$\abs{V}=\phantom{0}20$: \phantom{1}0.2 sec / Tangled?}\\
-        \uncover<3->{$\abs{V}=500$: \red{11.5} sec / \red{WHAT IS THIS???}}
-      }
-    \end{column}
-    \begin{column}{0.38\columnwidth}
-      \begin{figure}[htbp]
-        \centering
-        \only<1>{\includegraphics[width=\columnwidth]{vscode/10.png}}%
-        \only<2>{\includegraphics[width=\columnwidth]{vscode/20.png}}%
-        \only<3>{\includegraphics[width=\columnwidth]{vscode/500.png}}%
-      \end{figure}
-    \end{column}
-  \end{columns}
-\end{frame}
-% \fi
+\ifShowHidden
+  \begin{frame}{Previous Works}
+    \begin{table}
+      \begin{tabular}{ll}
+        \large{\textbf{L-BFGS (Quasi-Newton Method)}}~\cite{6183577} &
+        \large{\textbf{Simulated Annealing (SA)}}~\cite{ghassemitoosiSimulatedAnnealingPreProcessing2016} \\
+        \begin{minipage}{0.5\columnwidth}
+          \quad Numerical optimization approach.\\
+          \quad Effective for reducing stress.
+        \end{minipage}
+                                                                     &
+        \begin{minipage}{0.5\columnwidth}
+          \quad Providing an initial placement\\
+          \quad Effective for addressing ``twist'' issues.
+        \end{minipage}
+        \\[1.5em]
+        \textbf{Limitations}                                         & \textbf{Limitations}
+        \\
+        \begin{minipage}{0.5\columnwidth}
+          \quad Treats just as a general optimization problem.\\
+          \quad Ignored inherent graph structure.
+          \begin{equation*}
+            \min_{X \in \bbR^{2\times n}} f(X) \to \min_{\overline{X} \in \bbR^{2n}} \overline{f}(\overline{X})
+          \end{equation*}
+        \end{minipage}
+                                                                     &
+        \begin{minipage}{0.5\columnwidth}
+          \quad Restricted to unweighted graphs.\\
+          \quad Limited to circle placement.\\
+          \quad Inefficient due to random swapping.\\
+          \quad Ignored sparsity of graphs.
+        \end{minipage}
+        \\[3em]
+        \textbf{\red{Our Aim}}                                       &
+        \textbf{\red{Our Aim}}
+        \\
+        \begin{minipage}{0.5\columnwidth}
+          \quad \red{Provide an initial placement.}\\
+          \quad \red{Accelerate the subsequent optimization.}
+        \end{minipage}          &
+        \begin{minipage}{0.5\columnwidth}
+          \quad \red{Improve the strategy.}\\
+          \quad \red{Extend the applicability.}
+        \end{minipage}
+      \end{tabular}
+    \end{table}
+  \end{frame}
+  % \fi
 
-\begin{frame}{Fruchterman--Reingold Force Model}
-  The \textbf{FR force model} uses a force model~\cite{fruchtermanGraphDrawingForcedirected1991} with
-  \tccA{\Large{\textbf{a}}}\tccA{ttractive force} and
-  \tccD{\Large{\textbf{r}}}\tccD{epulsive force}:
-  \begin{equation*}
-    \tccA{F_{i,j}^\mathrm{a}(d) \defeq \frac{w_{i,j} d^2}{k}}, \quad \tccD{F^\mathrm{r}(d) \defeq -\frac{k^2}{d}}.
-  \end{equation*}
-  The \textbf{FR algorithm} seeks an \textbf{equilibrium} of two kind forces:
-  \begin{columns}
-    \begin{column}{0.5\columnwidth}
-      \begin{figure}[h]
-        \centering
-        \includegraphics[width=\columnwidth]{../main/fr_layout/fr_layout1.pdf}
-        \caption*{$w_{i,j} > 0 \iff \{i,j\} \in E$}
-      \end{figure}
-    \end{column}
-    \begin{column}{0.5\columnwidth}
-      \begin{figure}[h]
-        \centering
-        \includegraphics[width=\columnwidth]{../main/fr_layout/fr_layout2.pdf}
-        \caption*{$d = \norm{x_i - x_j}$}
-      \end{figure}
-    \end{column}
-  \end{columns}
-\end{frame}
+  % \ifShowHidden
+  \begin{frame}{Our Contribution}
+    \begin{figure}[h]
+      \centering
+      \includegraphics[width=0.75\columnwidth]{../main/fig1/fig1_slide.pdf}
+      \caption{\texttt{jagmesh1} dataset after 50 iterations.}
+    \end{figure}
+  \end{frame}
+\fi
 
-% \ifShowHidden
-\begin{frame}{``Twist'' Causes Stagnation}
-  \large{%
-    \textbf{Twist}: unnecessary folded and tangled structures~\cite{veldhuizenDynamicMultilevelGraph2007,cheongSnapshotVisualizationComplex2018}.\\
-    $\to$ Causing stagnation of the simulation process.\\
-    Slow for large-scale graphs. $\order{\abs{V}^2}$ per iteration.
-  }
-  \begin{figure}[htbp]
-    \centering
-    \animategraphics[autoplay,loop,width=0.4\columnwidth]{5}{circle/circle-}{1}{1}
-  \end{figure}
-\end{frame}
-% \fi
+\ifShowHidden
+  \section{Proposed Method}
+\fi
 
-% \ifShowHidden
-\begin{frame}{Previous Works}
-  \begin{table}
-    \begin{tabular}{ll}
-      \large{\textbf{L-BFGS (Quasi-Newton Method)}}~\cite{6183577} &
-      \large{\textbf{Simulated Annealing (SA)}}~\cite{ghassemitoosiSimulatedAnnealingPreProcessing2016} \\
-      \begin{minipage}{0.5\columnwidth}
-        \quad Numerical optimization approach.\\
-        \quad Effective for reducing stress.
-      \end{minipage}
-                                                                   &
-      \begin{minipage}{0.5\columnwidth}
-        \quad Providing an initial placement\\
-        \quad Effective for addressing ``twist'' issues.
-      \end{minipage}
-      \\[1.5em]
-      \textbf{Limitations}                                         & \textbf{Limitations}
-      \\
-      \begin{minipage}{0.5\columnwidth}
-        \quad Treats just as a general optimization problem.\\
-        \quad Ignored inherent graph structure.
+\ifShowHidden
+  \begin{frame}{Formulation of the Problem}
+    \begin{columns}
+      \begin{column}{0.7\columnwidth}
+        The two forces in the FR force model:
         \begin{equation*}
-          \min_{X \in \bbR^{2\times n}} f(X) \to \min_{\overline{X} \in \bbR^{2n}} \overline{f}(\overline{X})
+          \tccA{F_{i,j}^\mathrm{a}(d) \defeq \frac{w_{i,j} d^2}{k}}, \quad \tccD{F^\mathrm{r}(d) \defeq -\frac{k^2}{d}}.
         \end{equation*}
-      \end{minipage}
-                                                                   &
-      \begin{minipage}{0.5\columnwidth}
-        \quad Restricted to unweighted graphs.\\
-        \quad Limited to circle placement.\\
-        \quad Inefficient due to random swapping.\\
-        \quad Ignored sparsity of graphs.
-      \end{minipage}
-      \\[3em]
-      \textbf{\red{Our Aim}}                                       &
-      \textbf{\red{Our Aim}}
-      \\
-      \begin{minipage}{0.5\columnwidth}
-        \quad \red{Provide an initial placement.}\\
-        \quad \red{Accelerate the subsequent optimization.}
-      \end{minipage}          &
-      \begin{minipage}{0.5\columnwidth}
-        \quad \red{Improve the strategy.}\\
-        \quad \red{Extend the applicability.}
-      \end{minipage}
-    \end{tabular}
-  \end{table}
-\end{frame}
-% \fi
+      \end{column}
+      \begin{column}{0.3\columnwidth}
+        \vspace{-3em}
+        \begin{figure}[h]
+          \centering
+          \includegraphics[width=\columnwidth]{../main/energy_3d/energy_3d.png}
+        \end{figure}
+      \end{column}
+    \end{columns}
+    Its scalar potential, energy, is defined as
+    \begin{gather*}
+      \tccA{E_{i,j}^\mathrm{a}(d) \defeq \int_{0}^{d} F_{i,j}^\mathrm{a}(r) \dd{r} = \frac{w_{i,j} d^3}{3k}}, \quad
+      \tccD{E^\mathrm{r}(d)       \defeq \int_{\infty}^{d} F^\mathrm{r}(r) \dd{r} = -k^2\log{d}}, \\
+      E_{i,j}(d)            \defeq \tccA{E_{i,j}^\mathrm{a}(d)} + \tccD{E^\mathrm{r}(d)}.
+    \end{gather*}
+    Seek equilibrium $\Leftrightarrow$ \textbf{find local minimum of $f(X)$} (\textbf{non}-convex):
+    \begin{mini}
+      {X \in \bbR^{2 \times n}}
+      {f(X) \defeq \sum_{i<j} E_{i,j}(\norm{x_i - x_j}).}
+      {\label{eq:fr}}
+      {}
+    \end{mini}
+  \end{frame}
+\fi
+
+\ifShowHidden
+  \begin{frame}{Simplify the Problem (1/2)}
+    \begin{columns}
+      \begin{column}{0.55\columnwidth}
+        Instead of the problem~\eqref{eq:fr}, we solve:
+        \begin{mini}
+          {X \in \bbR^{2 \times n}}
+          {\sum_{\{i,j\}\in E} \frac{w_{i,j}\norm{x_i - x_j}^3}{3k},}
+          {\label{eq:frApprox0}}
+          {}
+          \addConstraint{x_i}{\in Q^\mathrm{hex} \quad}{\text{for $1 \leq i \leq n$}}
+          \addConstraint{x_i}{\neq x_j \quad}{\text{for $1 \leq i < j \leq n$}.}
+        \end{mini}
+        where
+        \begin{equation*}
+          Q^\mathrm{hex} \defeq \left\{ \qty(q+\tfrac{1}{2}r, \tfrac{\sqrt{3}}{2}r) \relmiddle| q \in \bbZ, r \in \bbZ \right\}.
+        \end{equation*}
+      \end{column}
+      \begin{column}{0.45\columnwidth}
+        \begin{figure}[t]
+          \centering
+          \includegraphics[width=\columnwidth]{../main/pi/pi.pdf}
+        \end{figure}
+      \end{column}
+    \end{columns}
+
+    \vspace{0.3cm}
+    \hrulefill\\
+
+    We explain the reason. We simplify the problem~\eqref{eq:fr}.\\
+    Graphs have sparsity $\tccA{\abs{E}} \ll \tccD{\abs{V}^2}$.
+    We first separate $f(X)$ into $\tccA{E^\mathrm{a}_{i,j}}$ terms and $\tccD{E^\mathrm{r}}$ terms.
+    \begin{mini*}
+      {X \in \bbR^{2 \times n}}
+      {\tccA{\sum_{\{i,j\}\in E} \frac{w_{i,j}\norm{x_i - x_j}^3}{3k}} - \tccD{\sum_{i<j} k^2\log{\norm{x_i - x_j}}}.}
+      {}
+      {}
+    \end{mini*}
+  \end{frame}
+\fi
+
+\ifShowHidden
+  \begin{frame}{Simplify the Problem (2/2)}
+    Converting the second term into a constraint
+    (obj: $\tccA{\order{\abs{E}}}$ terms from $\tccD{\order{\abs{V}^2}}$ terms):
+    \begin{mini}
+      {X \in \bbR^{2 \times n}}
+      {\sum_{\{i,j\}\in E} \frac{w_{i,j}\norm{x_i - x_j}^3}{3k}- \sum_{i<j} k^2\log{\norm{x_i - x_j}},}
+      {}
+      {}
+      \addConstraint{x_i}{\in Q \quad}{\text{for $1 \leq i \leq n$}}
+      \addConstraint{x_i}{\neq x_j \quad}{\text{for $1 \leq i < j \leq n$}.}
+    \end{mini}
+    where $\epsilon$ is a constant.
+    $\tccD{-k^2\log{\norm{x_i-x_j}}} \to \tccD{\norm{x_i - x_j} \geq \epsilon}$ does not lose the problem essence.\\
+    Fix the point placement to $Q$ (any two points apart $\epsilon$) $\to$ \textbf{Skip the check of constraints}.
+    \begin{mini*}
+      {X \in \bbR^{2 \times n}}
+      {f^\mathrm{a}(X) \defeq \sum_{\{i,j\}\in E} \frac{w_{i,j}\norm{x_i - x_j}^3}{3k},}
+      {\label{eq:frApprox2}}
+      {}
+      \addConstraint{x_i}{\in Q \quad}{\text{for $1 \leq i \leq n$}}
+      \addConstraint{x_i}{\neq x_j \quad}{\text{for $1 \leq i < j \leq n$}}
+    \end{mini*}
+    Only treat \tccA{attractive forces}. Thus, the points set \tccD{$Q$} should be as dense as possible.\\
+    $\to$ \textbf{closet packing} (hexagonal lattice $Q^\mathrm{hex}$).
+  \end{frame}
+\fi
 
 % \ifShowHidden
-\begin{frame}{Our Contribution}
-  \begin{figure}[h]
-    \centering
-    \includegraphics[width=0.75\columnwidth]{../main/fig1/fig1_slide.pdf}
-    \caption{\texttt{jagmesh1} dataset after 50 iterations.}
-  \end{figure}
-\end{frame}
-% \fi
-
-\section{Proposed Method}
-
-% \ifShowHidden
-\begin{frame}{Formulation of the Problem}
-  \begin{columns}
-    \begin{column}{0.7\columnwidth}
-      The two forces in the FR force model:
-      \begin{equation*}
-        \tccA{F_{i,j}^\mathrm{a}(d) \defeq \frac{w_{i,j} d^2}{k}}, \quad \tccD{F^\mathrm{r}(d) \defeq -\frac{k^2}{d}}.
-      \end{equation*}
-    \end{column}
-    \begin{column}{0.3\columnwidth}
-      \vspace{-3em}
-      \begin{figure}[h]
-        \centering
-        \includegraphics[width=\columnwidth]{../main/energy_3d/energy_3d.png}
-      \end{figure}
-    \end{column}
-  \end{columns}
-  Its scalar potential, energy, is defined as
-  \begin{gather}
-    \tccA{E_{i,j}^\mathrm{a}(d) \defeq \int_{0}^{d} F_{i,j}^\mathrm{a}(r) \dd{r} = \frac{w_{i,j} d^3}{3k}}, \quad
-    \tccD{E^\mathrm{r}(d)       \defeq \int_{\infty}^{d} F^\mathrm{r}(r) \dd{r} = -k^2\log{d}}, \notag \\
-    E_{i,j}(d)            \defeq \tccA{E_{i,j}^\mathrm{a}(d)} + \tccD{E^\mathrm{r}(d)}. \label{eq:Eij}
-  \end{gather}
-  Seek equilibrium $\Leftrightarrow$ \textbf{find local minimum of $f(X)$} (\textbf{non}-convex):
-  \begin{mini}
-    {X \in \bbR^{2 \times n}}
-    {f(X) \defeq \sum_{i<j} E_{i,j}(\norm{x_i - x_j}).}
-    {\label{eq:fr}}
-    {}
-  \end{mini}
-\end{frame}
-% \fi
-
-% \ifShowHidden
-\begin{frame}{Simplify the Problem (1/2)}
-  \begin{columns}
-    \begin{column}{0.55\columnwidth}
-      Instead of the problem~\eqref{eq:fr}, we solve:
-      \begin{mini}
-        {\pi\colon V \to Q^\mathrm{hex}}
-        {\sum_{\{i,j\}\in E} \frac{w_{i,j}\norm{\pi(i) - \pi(j)}^3}{3k},}
-        {\label{eq:frApprox3}}
-        {}
-        \addConstraint{\pi \text{ is injective},}
-      \end{mini}
-      where
-      \begin{equation*}
-        Q^\mathrm{hex} \defeq \left\{ \qty(q+\tfrac{1}{2}r, \tfrac{\sqrt{3}}{2}r) \relmiddle| q \in \bbZ, r \in \bbZ \right\}.
-      \end{equation*}
-    \end{column}
-    \begin{column}{0.45\columnwidth}
-      \begin{figure}[t]
-        \centering
-        \includegraphics[width=\columnwidth]{../main/pi/pi.pdf}
-      \end{figure}
-    \end{column}
-  \end{columns}
-
-  \vspace{0.3cm}
-  \hrulefill\\
-
-  We explain the reason. We simplify the problem~\eqref{eq:fr}.\\
-  Graphs have sparsity $\tccA{\abs{E}} \ll \tccD{\abs{V}^2}$. We first separate $f(X)$ into two terms.
-  \begin{mini}
-    {X \in \bbR^{2 \times n}}
-    {\tccA{\sum_{\{i,j\}\in E} \frac{w_{i,j}\norm{x_i - x_j}^3}{3k}} - \tccD{\sum_{i<j} k^2\log{\norm{x_i - x_j}}}.}
-    {\label{eq:frApprox}}
-    {}
-  \end{mini}
-\end{frame}
-% \fi
-
-% \ifShowHidden
-\begin{frame}{Simplify the Problem (2/2)}
-  Converting the second term into a constraint
-  (obj: $\tccA{\order{\abs{E}}}$ terms from $\tccD{\order{\abs{V}^2}}$ terms):
-  \begin{mini}
-    {X \in \bbR^{2 \times n}}
-    {f^{\mathrm{a}}(X) \defeq \tccA{\sum_{\{i,j\}\in E} \frac{w_{i,j}\norm{x_i - x_j}^3}{3k}}}
-    {\label{eq:frApprox2}}
-    {}
-    \addConstraint{\tccD{\norm{x_i - x_j}}}{\tccD{\geq \epsilon},\quad}{\forall \{i,j\}\,(i<j)}
-  \end{mini}
-  where $\epsilon$ is a constant.
-  $\tccD{-k^2\log{\norm{x_i-x_j}}} \to \tccD{\norm{x_i - x_j} \geq \epsilon}$ does not lose the problem essence.\\
-  Fix the point placement to $Q$ (any two points apart $\epsilon$) $\to$ \textbf{Skip the check of constraints}.
-  \begin{mini}
-    {\pi\colon V \to \tccD{Q}}
-    {\tccA{\sum_{\{i,j\}\in E} \frac{w_{i,j}\norm{\pi(v_i) - \pi(v_j)}^3}{3k}}}
-    {\label{eq:frApprox3}}
-    {}
-    \addConstraint{\tccD{\pi \text{ is injective}}.}
-  \end{mini}
-  Only treat \tccA{attractive forces}. Thus, the points set \tccD{$Q$} should be as dense as possible.\\
-  $\to$ \textbf{closet packing} (hexagonal lattice $Q^\mathrm{hex}$).
-\end{frame}
-% \fi
-
 \begin{frame}{Summary of the First Half}
   The problem is
-  \begin{mini}
+  \begin{mini*}
     {X \in \bbR^{2 \times n}}
-    {f(X) \defeq \sum_{i<j} E_{i,j}(\norm{x_i - x_j}) = \tccA{\sum_{\{i,j\}\in E} \frac{w_{i,j}\norm{x_i - x_j}^3}{3k}} - \tccD{\sum_{i<j} k^2\log{\norm{x_i - x_j}}}.}
-    {\label{eq:fr}}
+    {f(X) \defeq \sum_{i<j} E_{i,j}(\norm{x_i - x_j}) = \tccA{\sum_{\{i,j\}\in E} \frac{w_{i,j}\norm{x_i - x_j}^3}{3k}} - \tccD{\sum_{i<j} k^2\log{\norm{x_i - x_j}}}. \tag{\ref{eq:fr}}}
     {}
-  \end{mini}
+    {}
+  \end{mini*}
   \begin{columns}
     \begin{column}{0.55\columnwidth}
       We simplify the problem as
-      \begin{mini}
-        {\pi\colon V \to \tccD{Q^\mathrm{hex}}}
-        {\tccA{\sum_{\{i,j\}\in E} \frac{w_{i,j}\norm{\pi(i) - \pi(j)}^3}{3k}},}
-        {\label{eq:frApprox3}}
+      \begin{mini*}
+        {X \in \bbR^{2 \times n}}
+        {\sum_{\{i,j\}\in E} \frac{w_{i,j}\norm{x_i - x_j}^3}{3k}, \tag{\ref{eq:frApprox0}}}
         {}
-        \addConstraint{\tccD{\pi \text{ is injective}},}
-      \end{mini}
+        {}
+        \addConstraint{x_i}{\in Q^\mathrm{hex} \quad}{\text{for $1 \leq i \leq n$}}
+        \addConstraint{x_i}{\neq x_j \quad}{\text{for $1 \leq i < j \leq n$}.}
+      \end{mini*}
     \end{column}
     \begin{column}{0.45\columnwidth}
       \begin{figure}[t]
@@ -462,6 +473,7 @@
   \end{columns}
   We will explain how to solve in the second half.
 \end{frame}
+% \fi
 
 % \ifShowHidden
 \begin{frame}{Base of Proposed Algorithm - Stochastic Coordinate Descent}
@@ -484,9 +496,9 @@
 
 % \ifShowHidden
 \begin{frame}{Proposed Algorithm (1/3) - Coordinate Newton Direction}
-  We solve the problem~\eqref{eq:frApprox3} using the coordinate Newton direction.
+  We solve the problem~\eqref{eq:frApprox0} using \textbf{the coordinate Newton direction.}
 
-  Let the objective function $f^{\mathrm{a}}_i(x_i)$ corresponding to a vertex $v_i$ be
+  Let $f^{\mathrm{a}}_i(x_i)$ corresponding to a vertex $v_i$ be
   \begin{equation*}
     f^{\mathrm{a}}_i(x_i) \defeq \sum_{j \neq i} \frac{w_{i,j}\norm{x_i - x_j}^3}{3k}.
   \end{equation*}
@@ -495,26 +507,25 @@
     \nabla f^{\mathrm{a}}_i(x_i)   & = \sum_{j \neq i} \frac{w_{i,j}\norm{x_i - x_j}}{k} (x_i - x_j),     \\
     \nabla^2 f^{\mathrm{a}}_i(x_i) & = \sum_{j \neq i} \frac{w_{i,j}\norm{x_i - x_j}}{k} \mqty(1      & 0 \\0&1) + \sum_{j \neq i} \frac{w_{i,j}}{k\norm{x_i - x_j}} (x_i - x_j)(x_i - x_j)^\top.
   \end{align*}
-  Since $f^{\mathrm{a}}_i$ is convex, we can use the coordinate Newton direction.
-  This is a large difference from the functions $E_{i,j}(\norm{\cdot - x_j})$ in Eq.~\eqref{eq:Eij} and $f^{\mathrm{a}}(\cdot)$ in Prob.~\eqref{eq:frApprox2}, which are not convex.
+  $f^{\mathrm{a}}_i$ is \textbf{strictly convex}.
+  Different from $E_{i,j}(\norm{\cdot - x_j})$ in~\eqref{eq:fr} and $f^{\mathrm{a}}(\cdot)$ in~\eqref{eq:frApprox2} (non-convex).
 \end{frame}
 % \fi
 
 % \ifShowHidden
 \begin{frame}{Proposed Algorithm (2/3) - Update Rule}
-  The ordinary updated rule with the coordinate Newton direction is
+  Ordinary updated rule:
   \begin{equation*}
-    x_i - \nabla^2 f^{\mathrm{a}}_i(x_i)^{-1} \nabla f^{\mathrm{a}}_i(x_i).
+    x_i^\mathrm{new} \gets x_i - \nabla^2 f^{\mathrm{a}}_i(x_i)^{-1} \nabla f^{\mathrm{a}}_i(x_i).
   \end{equation*}
   $x_i^\mathrm{new}$ may not be in the hexagonal lattice $Q^\mathrm{hex}$.
-  Thus, we must round to the nearest point in $Q^\mathrm{hex}$.
-  We empirically found that adding a random vector to the Newton direction is effective.
-  % for the optimization process, which is a similar strategy to the SA in Sec.~\ref{ssec:preprocessing}. This randomness can help to escape from local minima and to explore the solution space more effectively.
-  % In conclusion, the updated rule for the vertex $v_i$ is
+  Need rounding to the nearest point in $Q^\mathrm{hex}$.\\
+  We empirically found that adding a random noise is effective.
   \begin{equation*}
     x_i^\mathrm{new} \gets \mathrm{round}\qty(x_i - \nabla^2 f^{\mathrm{a}}_i(x_i)^{-1} \nabla f^{\mathrm{a}}_i(x_i) + t \cdot \text{rand}),
   \end{equation*}
-  where $\mathrm{round}(\hat{x})$ denotes the operation assigning $\hat{x}$ to the nearest point in the hexagonal lattice $Q^\mathrm{hex}$, $\mathrm{rand}$ is a random vector with a unit norm, and $t$ is a parameter controlling the randomness.
+  ($\mathrm{round}(\hat{x})$: the operation assigning $\hat{x}$ to the nearest point in $Q^\mathrm{hex}$,\\
+  $\mathrm{rand}$ is a random vector with a unit norm, and $t$ is a parameter controlling the randomness.)
 
   \begin{figure}[t]
     \centering
@@ -526,47 +537,65 @@
 
 % \ifShowHidden
 \begin{frame}{Proposed Algorithm (3/3) - Optimal Scaling}
-  We can find optimal scaling factor $c^*$.
-  We scale $X = (x_1, \dots, x_n)$ as $x_i \gets c x_i$ for all $i$.\\
-  This problem is to minimize $\phi(c)$:
-  \begin{equation*}
-    \phi(c) \defeq \qty(\sum_{\{i,j\} \in E} \frac{w_{i,j} (c \norm{x_i - x_j})^3}{3k}) - k^2 \sum_{i < j} \log(c \norm{x_i - x_j})
-  \end{equation*}
-  The function $\phi(c)$ is convex, and we can find the optimal scaling factor $c^*$ by
-  \begin{equation}\label{eq:scaling}
-    c^* = \qty(\frac{k^2 n(n-1)}{3 \sum_{\{i,j\} \in E} \frac{w_{i,j} \norm{x_i - x_j}^3}{k}})^{1/3}.
-  \end{equation}
-  This value can be computed in $\order{\abs{E}}$ complexity.
+  \begin{columns}
+    \begin{column}{0.75\columnwidth}
+      We can find optimal scaling factor $\red{c^*}$.
+      We scale $X = (x_1, \dots, x_n)$ as $x_i \gets c x_i$ for all $i$.
+      This problem is to minimize $\phi(c)$:
+      \begin{equation*}
+        \phi(c) \defeq \qty(\sum_{\{i,j\} \in E} \frac{w_{i,j} (\red{c} \norm{x_i - x_j})^3}{3k}) - k^2 \sum_{i < j} \log(\red{c} \norm{x_i - x_j})
+      \end{equation*}
+      $\phi(c)$ is convex, and the optimal scaling factor $\red{c^*}$ by
+      \begin{equation}\label{eq:scaling}
+        \red{c^*} = \qty(\frac{k^2 n(n-1)}{2 \sum_{\{i,j\} \in E} \frac{w_{i,j} \norm{x_i - x_j}^3}{k}})^{1/3}.
+      \end{equation}
+      This value can be computed in the \text{$\order{\abs{E}}$ complexity}.
 
-  Notably, the optimal solution to Prob.~\eqref{eq:frApprox3} is invariant under scaling. Thus, we can select any $\epsilon$ to define the hexagonal lattice $Q^\mathrm{hex}$ as far as we scale the placement by $c^*$ as post-processing.
+      As far as we rescale the placement by $\red{c^*}$,\\
+      \textbf{we can select any $\epsilon$} to define the hexagonal lattice $Q^\mathrm{hex}$.
+    \end{column}
+    \begin{column}{0.25\columnwidth}
+      \vspace{-0.5cm}
+      \begin{figure}[t]
+        \centering
+        \includegraphics[width=0.2\columnwidth]{../main/individual/vis/fig1_init_CN.png}\\
+        \begin{tikzpicture}
+          \draw[->, thick] (0, 0.5) -- (0, 0) node[midway, right] {$\times \red{c^*}$} node[midway, left] {\phantom{$\times c^*$}};
+        \end{tikzpicture}
+        \includegraphics[width=0.8\columnwidth]{../main/individual/vis/fig1_init_CN.png}\\
+        \begin{tikzpicture}
+          \draw[->, thick] (0, 0.5) -- (0, 0) node[midway, right] {L-BFGS} node[midway, left] {\phantom{L-BFGS}};
+        \end{tikzpicture}
+        \includegraphics[width=0.8\columnwidth]{../main/individual/vis/jagmesh1_CN-L-BFGS.png}
+      \end{figure}
+    \end{column}
+  \end{columns}
 \end{frame}
 % \fi
 
 % \ifShowHidden
 \begin{frame}[fragile]{Pseudo Code}
   \begin{center}
-    \begin{minipage}{0.7\columnwidth}
+    \begin{minipage}{0.88\columnwidth}
       \vspace{-0.2cm}
       \begin{algorithm}[H]
         \caption{Proposed algorithm as initial placement}
         \label{alg:proposed}
-        % \KwIn{Graph $G_W = (V, E)$}
-        % \KwOut{Initial placement $X = (x_1, \dots, x_n)$}
-        Define parameters $N_\mathrm{iter}^\mathsf{CN}, t, \Delta t$ and hexagonal lattice $Q^\mathrm{hex}$\;
-        Set $\pi$ as a injection from $V$ to $Q^\mathrm{hex}$ randomly\;
-        \For{$j \gets 0$ \KwTo $N_\mathrm{iter}^\mathsf{CN}$}{
-        $v_i \gets \text{randomly selected vertex from } V$\;
-        $x_i \gets \pi(v_i)$\;
+        \KwIn{Graph $G = (V, E)$, Weight $(w_{i,j})_{\qty{i,j} \in E}$, Parameters $N_\mathrm{iter}^\mathsf{CN}\in\bbN,$ $t_0>0$}
+        \KwOut{Initial placement $X = (x_1, \dots, x_n)$}
+        $t \gets t_0$\;
+        Sample $x_i \in Q$ for all $i \in V$ without replacement\;
+        \For{$m \gets 0$ \KwTo $N_\mathrm{iter}^\mathsf{CN}$}{
+        Select vertex $i \in V$ randomly\;
         $x_i^\mathrm{new} \gets \mathrm{round}(x_i - \nabla^2 f_i(x_i)^{-1} \nabla f_i(x_i) + t \cdot \mathrm{rand})$\;
-          \If{$\exists v_j \st \pi(v_j) = x_i^\mathrm{new}$}{
-            Swap $v_i$ and $v_j$ in $\pi$\;
+          \If{$\exists j \in V \st x_j = x_i^\mathrm{new}$}{
+            Swap $x_i$ and $x_j$\;
           } \Else{
-            $\pi(v_i) \gets x_i^\mathrm{new}$\;
+            $x_i \gets x_i^\mathrm{new}$\;
           }
+          $t \gets t - t_0 / N_\mathrm{iter}^\mathsf{CN}$\;
           }
-        $x_i \gets \pi(v_i)$ for all $v_i \in V$\;
-        $c^* \gets \text{optimal scaling factor by Eq.~\eqref{eq:scaling}}$\;
-        $x_i \gets c^* x_i$ for all $v_i \in V$\;
+        $x_i \gets c^* x_i$ for all $i \in V$ with $c^*$ by Eq.\eqref{eq:scaling}\;
           \Return $X$
       \end{algorithm}
     \end{minipage}

@@ -1,27 +1,25 @@
 \frametitle{Pseudo Code}
 \begin{center}
-    \begin{minipage}{0.7\columnwidth}
+    \begin{minipage}{0.88\columnwidth}
       \vspace{-0.2cm}
       \begin{algorithm}[H]
         \caption{Proposed algorithm as initial placement}
         \label{alg:proposed}
-        % \KwIn{Graph $G_W = (V, E)$}
-        % \KwOut{Initial placement $X = (x_1, \dots, x_n)$}
-        Define parameters $N_\mathrm{iter}^\mathsf{CN}, t, \Delta t$ and hexagonal lattice $Q^\mathrm{hex}$\;
-        Set $\pi$ as a injection from $V$ to $Q^\mathrm{hex}$ randomly\;
-        \For{$j \gets 0$ \KwTo $N_\mathrm{iter}^\mathsf{CN}$}{
-        $v_i \gets \text{randomly selected vertex from } V$\;
-        $x_i \gets \pi(v_i)$\;
+        \KwIn{Graph $G = (V, E)$, Weight $(w_{i,j})_{\qty{i,j} \in E}$, Parameters $N_\mathrm{iter}^\mathsf{CN}\in\bbN,$ $t_0>0$}
+        \KwOut{Initial placement $X = (x_1, \dots, x_n)$}
+        $t \gets t_0$\;
+        Sample $x_i \in Q$ for all $i \in V$ without replacement\;
+        \For{$m \gets 0$ \KwTo $N_\mathrm{iter}^\mathsf{CN}$}{
+        Select vertex $i \in V$ randomly\;
         $x_i^\mathrm{new} \gets \mathrm{round}(x_i - \nabla^2 f_i(x_i)^{-1} \nabla f_i(x_i) + t \cdot \mathrm{rand})$\;
-          \If{$\exists v_j \st \pi(v_j) = x_i^\mathrm{new}$}{
-            Swap $v_i$ and $v_j$ in $\pi$\;
+          \If{$\exists j \in V \st x_j = x_i^\mathrm{new}$}{
+            Swap $x_i$ and $x_j$\;
           } \Else{
-            $\pi(v_i) \gets x_i^\mathrm{new}$\;
+            $x_i \gets x_i^\mathrm{new}$\;
           }
+          $t \gets t - t_0 / N_\mathrm{iter}^\mathsf{CN}$\;
           }
-        $x_i \gets \pi(v_i)$ for all $v_i \in V$\;
-        $c^* \gets \text{optimal scaling factor by Eq.~\eqref{eq:scaling}}$\;
-        $x_i \gets c^* x_i$ for all $v_i \in V$\;
+        $x_i \gets c^* x_i$ for all $i \in V$ with $c^*$ by Eq.\eqref{eq:scaling}\;
           \Return $X$
       \end{algorithm}
     \end{minipage}
