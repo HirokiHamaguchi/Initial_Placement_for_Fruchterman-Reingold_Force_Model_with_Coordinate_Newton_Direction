@@ -3,7 +3,7 @@
 ## 1
 
 Thank you for the introduction.
-Then, I'd like to start today's my presentation. The presentation title is Initial Placement for Fruchterman--Reingold Force Model with Coordinate Newton Direction.
+Then, I'd like to start my presentation. The presentation title is Initial Placement for Fruchterman--Reingold Force Model with Coordinate Newton Direction.
 And my supervisor is Professor Akiko Takeda.
 
 ## 2
@@ -18,7 +18,7 @@ There are many examples of graphs, such as social network graphs, railroad graph
 In particular, graph drawing is one of the most fundamental tasks in information visualization.
 
 You are probably most familiar with graph drawing by CONNECTED PAPERS.
-You might have used this cite before.
+You might have used this site before.
 When you specify a paper (like this purple one), it draws a graph with vertices as papers and edges as citations.
 The drawn graph allows us to understand the flow and relevance of the research visually.
 Thus, correct and beautiful Graph drawing is essential not only in the theoretical field but also in the practical field.
@@ -37,7 +37,7 @@ So we import NetworkX as nx (at here).
 Unfortunately, the FR algorithm has an evident drawback.
 Let us consider a cycle graph example.
 When the number of vertices is 10, it well visualizes the graph in 0.2 seconds. There is no problem.
-When the number of vertices is 20, it starts to visualize the graph with a tangled structure in 0.2 seconds.
+When the number of vertices is 20, it starts visualizing the graph with a tangled structure in 0.2 seconds.
 And, When the number of vertices is 500, although it takes as long as 11.5 seconds and the graph is just a simple cycle, the visualization result is too messy, too tangled, and too twisted.
 
 This is exactly what we want to address in this study.
@@ -46,7 +46,7 @@ This is exactly what we want to address in this study.
 
 To explain this phenomenon, we introduce the FR force model.
 
-The FR force model uses a force model with two kind of forces: the attractive force $F^a_{i,j}$ (this one) and the repulsive force as $F_r$ (this one).
+The FR force model uses a force model with two kinds of forces: the attractive force $F^a_{i,j}$ (this one) and the repulsive force as $F_r$ (this one).
 
 $k$ is just a constant and $d$ is the distance between vertices $i$ and $j$.
 
@@ -70,7 +70,7 @@ As this gif shows, the FR algorithm from a random initial placement, the most st
 
 Although the optimal graph structure is just a simple cycle, the twist weakens or diminishes the forces, causing stagnation.
 
-Further, the FR algorithm suffers from high computational complexity when directly applied, $\order{\abs{V}^2}$ per iteration where $\abs{V}$ is the number of vertices.
+Further, the FR algorithm suffers from high computational complexity when directly applied, $\order{\abs{V}^2}$ per iteration, where $\abs{V}$ is the number of vertices.
 
 Thus, we need to find a way to avoid the twist with a small computational complexity.
 
@@ -90,21 +90,21 @@ Thus, directly applying the L-BFGS algorithm may not be the optimal strategy.
 In particular, it just starts from a random initial placement.
 
 So, we aim to further accelerate this optimization process.
-To achieve this, we especially put focus on providing the initial placement.
+To achieve this, we mainly focus on providing the initial placement.
 
 ## 8
 
 As we said, providing initial placement in the pre-processing step is another strategy.
 Indeed, a pre-processing step with Simulated Annealing (SA) is also known to be effective since SA can avoid getting stuck in local optima and leads to a better visualization combined with the FR algorithm.
 It also utilizes the inherent graph structure.
-However, this work is restricted to unweighted graphs since the objective function does not include the weight $w_{i,j}$, limited to a simple circle initial placement for this $Q$, inefficient due to it just randomly select two vertices and test swapping, and sometimes ignoring the graph's sparsity due to this term $E_2$, which can be a set of $\order{\abs{V}^2}$ edges.
+However, this work is restricted to unweighted graphs since the objective function does not include the weight $w_{i,j}$, limited to a simple circle initial placement for this $Q$, inefficient due to it just randomly selecting two vertices and test swapping, and sometimes ignoring the graph's sparsity due to this term $E_2$, which can be a set of $\order{\abs{V}^2}$ edges.
 
 So, it leaves significant room to improve the effectiveness and extend the applicability.
 We aim to improve this initial placement stationary to accelerate the subsequent optimization process, and extend the applicability to weighted graphs.
 
 ## 9
 
-In this situation, we propose a new initial placement for the FR force model as depicted in this figure.
+In this situation, we propose a new initial placement for the FR force model, as depicted in this figure.
 We provide an initial placement (this one) with fewer twists than random placement within a short time, accelerating the subsequent optimization process.
 
 We can use both the FR algorithm (this one) and the L-BFGS algorithm (this one) to obtain the final placement.
@@ -143,18 +143,18 @@ In this problem, we fix placement X as the subset of discrete points set $Q^hex$
 
 Here, we explain why we use this simplified problem.
 We derive this problem by simplifying the original problem, the problem (1).
-We first separate $f(X)$ to attractive energy term and repulsive energy term.
+We first separate $f(X)$ into attractive energy terms and repulsive energy terms.
 This is equivalent to the original problem, the problem (1).
 
 ## 13
 
 Then, we introduce the idea of initial placement.
-We fix the possible positions $x_i$ to a discrete points set $Q$.
-If we add a constraint the placement is limited to $Q$, the problem is converted to this one.
+We fix the possible positions $x_i$ to a discrete point set $Q$.
+If we add a constraint, the placement is limited to $Q$; the problem is converted to this one.
 
 As said before, thanks to the graph sparsity, the number of terms in the attractive energy, this blue one, is much less than the number of terms in the repulsive energy, this orange one.
 Thus, to simplify the problem, we want to drop this second term.
-When we take $Q$ such that every pair of vertices is apart by at least $\epsilon$,the second term becomes negligible.
+When we take $Q$ such that every pair of vertices is apart by at least $\epsilon$, the second term becomes negligible.
 This is because this $-k^2\log$ decreases monotonically concerning the distance.
 For sufficiently large $d$, the value of $-k^2\log$ does not vary excessively.
 For too small $d$, we can prevent the divergence of the energy function by setting $\epsilon$.
@@ -168,7 +168,7 @@ Thus, we use the hexagonal lattice, one of the closet packing, as $Q$.
 So, although the argument was somewhat complicated, this is the summary of the first half.
 The essence of this conversion is just simple.
 
-We want to solve this problem, composed of the attractive energy term and the repulsive energy term.
+We want to solve this problem: the sum of the attractive energy terms and the repulsive energy terms.
 
 And to drop this $\order{\abs{V}^2}$ second term, we simplify the problem by using the hexagonal lattice as the initial placement $Q$, so we skip to check the effect by the repulsive forces, which works for every pair of vertices.
 
@@ -180,7 +180,7 @@ To solve the problem, we can use the coordinate Newton direction.
 So, to begin with, please let me introduce it in this slide.
 
 Let us consider a strictly convex function $f$.
-The second order approximation of $f$ at $x_0$ is this one.
+The second-order approximation of $f$ at $x_0$ is this one.
 The minimum $x^*$ of this approximation must satisfy the stationary condition, the derivative of it equals zero.
 Thus, we obtain this equation and this red term is called the Newton direction in general.
 Here, please note that the Hessian matrix $\nabla^2 f(x_0)$ is positive definite since $f$ is strictly convex, so we can compute the inverse Hessian, assuring that this is a descent direction.
@@ -200,8 +200,8 @@ Although directly applying this idea to the problem is challenging, we leverage 
 ## 16
 
 Now, we will explain the proposed method.
-First, by randomly taking a vertex $i$ from $V$, we compute the coordinate Newton direction for $x_i$, and its gradient and Hessian is computed as these.
-Since this hessian is just 2 by 2, we can compute the inverse Hessian easily, and thus we can obtain the coordinate Newton direction.
+First, by randomly taking a vertex $i$ from $V$, we compute the coordinate Newton direction for $x_i$, and its gradient and Hessian are computed as these.
+Since this Hessian is just 2 by 2, we can compute the inverse Hessian easily, and thus we can obtain the coordinate Newton direction.
 
 Since $f^a_i$ is strictly convex, the coordinate Newton direction is a descent direction.
 This is different from the energy function $E_{i,j}$ and $f^a$.
@@ -212,25 +212,25 @@ Then, using this coordinate Newton direction, we update the position of $i$ as $
 So, here, we explain how to update the position $x_i$ in an one iteration.
 
 If our problem is just a general continuous optimization problem, we can directly apply the coordinate Newton direction.
-However, $x_i^new$ may not be in the hexagonal lattice $Q^hex$. So we need to round it to the nearest point in $Q^hex$.
+However, $x_i^new$ may not be in the hexagonal lattice $Q^hex$. So, we need to round it to the nearest point in $Q^hex$.
 This figure shows this rounding operation. Select the vertex $i$ at $x_i$, and compute the coordinate Newton direction as this arrow.
 Then, by rounding it to the nearest point in $Q^hex$, we determine the new position $x_i^{new}$. To keep the injectivity of the assignment $\pi$, we need to swap the vertices if necessary.
 
 In this process, we empirically found that adding a small random noise vector to the coordinate Newton direction is effective.
-This randomness is similar to the SA one, and it can help to escape from local minima and to explore the solution space more effectively.
+This randomness is similar to the SA one, and it can help to escape from local minima and explore the solution space more effectively.
 
-So, this it the one step of our proposed method, and we repeat this process for some iterations.
+So, this is the one step of our proposed method, and we repeat this process for some iterations.
 
 ## 18
 
-Finally, the obtained placement (this one) could be too small or too large, since we did not case about the scale. Thus, as the final step, we rescale by $c^*$ to obtain the initial placement  (like this) and apply L-BFGS algorithm for the final placement.
+Finally, the obtained placement (this one) could be too small or too large since we did not care about the scale. Thus, as the final step, we rescale by $c^*$ to obtain the initial placement  (like this) and apply the L-BFGS algorithm for the final placement.
 
-So we have to the optimal scaling factor $c^*$. Recalling the original problem for the FR force model, the problem is to minimize this function $\phi(c)$. Here and here is the $c$.
+So we have to find the optimal scaling factor $c^*$. Recalling the original problem for the FR force model, the problem is to minimize this function $\phi(c)$. Here and here is the $c$.
 
 Since this function is convex, we can find the optimal scaling factor $c^*$ by solving this problem as this one.
 
 This value can be computed in the $\order{\abs{E}}$ complexity.
-Thus, as far as we rescale the placement by this $c^*$, we can select any $\epsilon$ to define the hexagonal lattice $Q^hex$. So we can eliminate the parameter $\epsilon$ from the problem.
+Thus, as far as we rescale the placement by this $c^*$, we can select any $\epsilon$ to define the hexagonal lattice $Q^hex$. So, we can eliminate the parameter $\epsilon$ from the problem.
 
 ## 19
 
