@@ -3,7 +3,7 @@
 ## 1
 
 Thank you for the introduction.
-Then, I'd like to start today's presentation. The presentation title is Initial Placement for Fruchterman--Reingold Force Model with Coordinate Newton Direction.
+Then, I'd like to start today's my presentation. The presentation title is Initial Placement for Fruchterman--Reingold Force Model with Coordinate Newton Direction.
 And my supervisor is Professor Akiko Takeda.
 
 ## 2
@@ -18,29 +18,29 @@ There are many examples of graphs, such as social network graphs, railroad graph
 In particular, graph drawing is one of the most fundamental tasks in information visualization.
 
 You are probably most familiar with graph drawing by CONNECTED PAPERS.
-You might have used it before.
-When you specify a paper (like this purple one), it draws graph vertices as papers and edges as citations.
+You might have used this cite before.
+When you specify a paper (like this purple one), it draws a graph with vertices as papers and edges as citations.
 The drawn graph allows us to understand the flow and relevance of the research visually.
-Thus, correct and beautiful Graph drawing is essential not only in the academic field but also in the industrial field.
+Thus, correct and beautiful Graph drawing is essential not only in the theoretical field but also in the practical field.
 
 And, Force-directed graph drawing is one of the most popular methods for drawing graphs.
 
 ## 4
 
 The force-directed graph drawing uses a force model composed of particles with forces acting between them.
-Among the various force models, the Fruchterman--Reingold (FR) force model is the central focus of our study.
+Among the various force models, the Fruchterman--Reingold (FR) force model is the most prominent one, regarded as flexible, intuitive, and simple.
 
-Here is an example of NetworkX, the popular graph library in Python.
+Here is an example by NetworkX, the popular graph library in Python.
 So we import NetworkX as nx (at here).
 `nx.draw`, as known as `nx.spring_layout`, is the function to draw a graph using the FR force model, and NetworkX draws the graphs by FR algorithm with 50 iterations.
 
 Unfortunately, the FR algorithm has an evident drawback.
 Let us consider a cycle graph example.
-When the number of vertices is 10, it visualizes the graph in 0.2 seconds.
-When the number of vertices is 20, it visualizes the graph with a tangled structure in 0.2 seconds.
-And, When the number of vertices is 500, although it takes as long as 11.5 seconds, the visualization result is too messy, too tangled, and too twisted.
+When the number of vertices is 10, it well visualizes the graph in 0.2 seconds. There is no problem.
+When the number of vertices is 20, it starts to visualize the graph with a tangled structure in 0.2 seconds.
+And, When the number of vertices is 500, although it takes as long as 11.5 seconds and the graph is just a simple cycle, the visualization result is too messy, too tangled, and too twisted.
 
-This is exactly what we want to solve in this study.
+This is exactly what we want to address in this study.
 
 ## 5
 
@@ -61,7 +61,7 @@ This is how the FR algorithm works.
 
 Now, we can see why the problem we mentioned before can happen.
 The FR algorithm has issues that make it challenging to achieve high-quality visualizations for large-scale graphs.
-The most critical issue is that twist slows the simulation process.
+The most critical issue is that twist slows down the simulation process.
 The twist means unnecessary folded and tangled structures in the visualized graph.
 
 As this gif shows, the FR algorithm from a random initial placement, the most standard way to draw a graph, stagnates at the twisted structure.
@@ -81,9 +81,11 @@ Recent research has accelerated the process in various ways, one of which is to 
 
 L-BFGS algorithm, a family of quasi-Newton methods, is one such approach and is reported to be effective for graph drawing.
 Although this method can overcome the twist problem to some extent, it may sometimes require many iterations.
-There are cases where complete resolution cannot be achieved within a limited number of iterations, such as 50 iterations.
+It may fail to achieve the optimal visualization within a limited number of iterations, such as 50 iterations.
 Moreover, this method merely treats the problem as a general optimization problem (like this. Instead of the variable $X \in \bbR^{2\ times n}, it uses the variable $X \in \bbR^{2n}$).
 Thus, directly applying the L-BFGS algorithm may not be the optimal strategy.
+
+## 8
 
 Providing initial placement in the pre-processing step is another strategy.
 Indeed, a pre-processing step with Simulated Annealing (SA) is also known to be effective since SA can deal with twist issues and leads to a better visualization combined with the FR algorithm. It also utilizes the inherent graph structure.
@@ -92,7 +94,7 @@ It leaves significant room to improve the effectiveness and extend the applicabi
 
 So, we aim to provide an initial placement that can avoid the twist, accelerate the subsequent optimization process, and extend the applicability to weighted graphs.
 
-## 8
+## 9
 
 In this situation, we propose a new initial placement for the FR force model as depicted in this figure.
 We provide an initial placement (this one) with fewer twists than random placement within a short time, accelerating the subsequent optimization process.
@@ -104,11 +106,11 @@ This work extends the applicability of the initial placement idea to larger-scal
 This is the main contribution of our study.
 From now on, we will explain the details of our proposed method.
 
-## 9
+## 10
 
 Ok, then, let me explain the details of our proposed method.
 
-## 10
+## 11
 
 Firstly, we formulate the problem.
 Recall that the FR force model uses the attractive force $F^a_{i,j}$ and the repulsive force $F_r$.
@@ -119,9 +121,9 @@ The energy function between vertices $i$ and $j$ is defined as $E_{i,j}$, the su
 In the FR algorithm, we seek the equilibrium of the energy function by simulating the system.
 In contrast to this ordinary approach, we minimize the energy function to seek the equilibrium.
 
-Note that the argmin of $f(X)$ yields the equilibrium positions since $\nabla f(X)$ corresponds to the forces.
+Note that the minimum of $f$ yields the equilibrium positions since $\nabla f(X)$ corresponds to the forces.
 
-## 11
+## 12
 
 Next, to introduce our proposed method, we explain the simplified problem.
 
@@ -132,10 +134,10 @@ In this problem, we assign the vertices $V$ to the fixed set of point $Q^hex$, t
 (So we assign the vertices to the hexagonal lattice like this blue one, orange one, and green one. And the objective function is minimized from this one to this one. We aim to find the optimal assignment like this.)
 
 Here, we explain why we use this simplified problem.
-We start from simplifying the original problem, the problem (2).
+We start from simplifying the original problem, the problem (1).
 Since graphs generally have sparsity, we separate the attractive and repulsive energy to leverage the sparsity as this one.
 
-## 12
+## 13
 
 Then, we convert the second term into a constraint.
 
@@ -153,7 +155,7 @@ By fixing the possible point placement in advance, we can skip the check of the 
 Although this $Q$ is arbitrary, since we only consider the attractive energy $f^a(X)$, the point set $Q$ should be as dense as possible.
 Thus, we use the hexagonal lattice, one of the closet packing, as $Q$.
 
-## 13
+## 14
 
 So, this is the summary of the first half.
 
@@ -164,7 +166,7 @@ We use the hexagonal lattice as the initial placement $Q$.
 
 Now, we will explain how to solve this problem in the second half.
 
-## 14
+## 15
 
 To solve the problem, we use the coordinate Newton direction.
 So, to begin with, please let me introduce it in this slide.
@@ -187,14 +189,14 @@ In particular, this coordinate Newton direction has an apparent natural affinity
 By taking the position $x_i$ of the vertex $i$ as the coordinate block, we can compute the Newton direction.
 Although directly applying this idea to the problem is challenging, we leverage this coordinate Newton direction to propose our algorithm.
 
-## 15
+## 16
 
 Now, we will explain the proposed method.
 First, by randomly taking a vertex $i$ from $V$, we compute the coordinate Newton direction for $x_i$, and its gradient and Hessian is computed as these.
 
 Since $f^a_i$ is strictly convex, which is different form the energy function $E_{i,j}$ and $f^a$, we can utilize the coordinate Newton direction.
 
-## 16
+## 17
 
 Then, using this coordinate Newton direction, we update the position of $i$ as $x_i^{new}$ in the hexagonal lattice $Q^hex$, and by repeating this process, we can solve the problem.
 So, here, we explain how to update the position $x_i$ in an one iteration.
@@ -209,7 +211,7 @@ This randomness is similar to the SA one, and it can help to escape from local m
 
 So, this it the one step of our proposed method, and we repeat this process for some iterations.
 
-## 17
+## 18
 
 Finally, the obtained placement (this one) could be too small or too large, since we did not case about the scale. Thus, as the final step, we rescale by $c^*$ to obtain the initial placement  (like this) and apply L-BFGS algorithm for the final placement.
 
@@ -234,5 +236,3 @@ So, this is the outline of our proposed method.
 ## 20
 
 Next, we will show the experimental results.
-
-## 21

@@ -14,9 +14,9 @@
 #include "../util/timer.hpp"
 
 void addVis(const Grid& grid, std::vector<Eigen::VectorXf>& positions, int it,
-            bool measureTime) {
+            bool measureTime, const int ITERATIONS) {
   if (measureTime) return;
-  if (it % grid.n != 0) return;
+  if (it % (ITERATIONS / 10) != 0) return;
   positions.push_back(grid.toPosition());
 }
 
@@ -53,7 +53,7 @@ void solve_init(const Problem& problem, const bool measureTime, const int seed,
 
     // if local minimum, continue
     if ((gx * gx + gy * gy) * grid.k * grid.k < 1e-9) {
-      addVis(grid, positions, it, measureTime);
+      addVis(grid, positions, it, measureTime, ITERATIONS);
       continue;
     }
 
@@ -70,7 +70,7 @@ void solve_init(const Problem& problem, const bool measureTime, const int seed,
     // swap position
     if (grid.isInside(hexJ) && hexI != hexJ) grid.swap(i, hexI, hexJ);
 
-    addVis(grid, positions, it, measureTime);
+    addVis(grid, positions, it, measureTime, ITERATIONS);
 
     // assert(grid.isCorrectState());  // ! For debug
   }

@@ -76,7 +76,8 @@
         \ifthenelse{\equal{\kind}{0}}{
           \filldraw[draw=black,fill=black] (a11) circle (3pt);
         }{
-          \filldraw[draw=black,fill=black,cD] (a11) circle (3pt);
+          \filldraw[draw=cD,fill=cD] (a11) circle (3pt);
+          \draw[very thick,cD,densely dotted] ($(a11)+(0.75,0.35)$) circle (3pt);
         }
       \end{scope}
     }

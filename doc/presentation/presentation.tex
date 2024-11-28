@@ -250,14 +250,14 @@
         \begin{figure}[h]
           \centering
           \includegraphics[width=\columnwidth]{../main/fr_layout/fr_layout1.pdf}
-          \caption*{$w_{i,j} > 0 \iff \{i,j\} \in E$}
+          \caption*{\large{$w_{i,j} > 0 \iff \{i,j\} \in E$}}
         \end{figure}
       \end{column}
       \begin{column}{0.5\columnwidth}
         \begin{figure}[h]
           \centering
           \includegraphics[width=\columnwidth]{../main/fr_layout/fr_layout2.pdf}
-          \caption*{$d = \norm{x_i - x_j}$}
+          \caption*{\large{$d = \norm{x_i - x_j}$}}
         \end{figure}
       \end{column}
     \end{columns}
@@ -279,55 +279,69 @@
 \fi
 
 \ifShowHidden
-  \begin{frame}{Previous Works}
-    \begin{table}
-      \begin{tabular}{ll}
-        \large{\textbf{L-BFGS (Quasi-Newton Method)}}~\cite{6183577} &
-        \large{\textbf{Simulated Annealing (SA)}}~\cite{ghassemitoosiSimulatedAnnealingPreProcessing2016} \\
-        \begin{minipage}{0.5\columnwidth}
-          \quad Numerical optimization approach.\\
-          \quad Effective for reducing stress.
-        \end{minipage}
-                                                                     &
-        \begin{minipage}{0.5\columnwidth}
-          \quad Providing an initial placement\\
-          \quad Effective for addressing ``twist'' issues.
-        \end{minipage}
-        \\[1.5em]
-        \textbf{Limitations}                                         & \textbf{Limitations}
-        \\
-        \begin{minipage}{0.5\columnwidth}
-          \quad Treats just as a general optimization problem.\\
-          \quad Ignored inherent graph structure.
-          \begin{equation*}
-            \min_{X \in \bbR^{2\times n}} f(X) \to \min_{\overline{X} \in \bbR^{2n}} \overline{f}(\overline{X})
-          \end{equation*}
-        \end{minipage}
-                                                                     &
-        \begin{minipage}{0.5\columnwidth}
-          \quad Restricted to unweighted graphs.\\
-          \quad Limited to circle placement.\\
-          \quad Inefficient due to random swapping.\\
-          \quad Ignored sparsity of graphs.
-        \end{minipage}
-        \\[3em]
-        \textbf{\red{Our Aim}}                                       &
-        \textbf{\red{Our Aim}}
-        \\
-        \begin{minipage}{0.5\columnwidth}
-          \quad \red{Provide an initial placement.}\\
-          \quad \red{Accelerate the subsequent optimization.}
-        \end{minipage}          &
-        \begin{minipage}{0.5\columnwidth}
-          \quad \red{Improve the strategy.}\\
-          \quad \red{Extend the applicability.}
-        \end{minipage}
-      \end{tabular}
-    \end{table}
+  \begin{frame}{Previous Works (1/2) - L-BFGS}
+    \begin{columns}
+      \begin{column}{0.6\columnwidth}
+        \large{\textbf{L-BFGS (Quasi-Newton Method)}}~\cite{6183577}\\
+        \quad Numerical optimization approach.\\
+        \quad Overcome ``twist'' issues to some extent.\\
+        \quad Effective for reducing stress.\\[1.5em]
+        \textbf{Limitations}\\
+        \quad Treats just as a general optimization problem.
+        \begin{equation*}
+          \min_{X \in \bbR^{2\times n}} f(X) \to \min_{\overline{X} \in \bbR^{2n}} \overline{f}(\overline{X})
+        \end{equation*}
+        \quad May fail to achieve the optimal visualization.\\
+        \quad Ignored inherent graph structure.\\[1.5em]
+        \textbf{\red{Our Aim}}\\
+        \quad \red{Provide an initial placement.}\\
+        \quad \red{Accelerate the optimization.}
+      \end{column}
+      \begin{column}{0.4\columnwidth}
+        \begin{figure}[htbp]
+          \centering
+          \includegraphics[width=\columnwidth]{../main/comparison/comparison_FRandLBFGS.pdf}
+        \end{figure}
+      \end{column}
+    \end{columns}
   \end{frame}
-  % \fi
+\fi
 
-  % \ifShowHidden
+
+\ifShowHidden
+  \begin{frame}{Previous Works (2/2) - Simulated Annealing}
+    \begin{columns}
+      \begin{column}{0.5\columnwidth}
+        \large{\textbf{Simulated Annealing (SA)}}~\cite{ghassemitoosiSimulatedAnnealingPreProcessing2016}\\
+        \quad Providing an initial placement\\
+        \quad Effective for addressing ``twist'' issues.\\[1.5em]
+        \textbf{Limitations}\\
+        \quad Restricted to unweighted graphs.\\
+        \quad Limited to circle placement.\\
+        \quad Inefficient due to random swapping.\\
+        \quad Ignored sparsity of graphs.\\[1.5em]
+        \textbf{\red{Our Aim}}\\
+        \quad \red{Improve the strategy.}\\
+        \quad \red{Extend the applicability.}
+      \end{column}
+      \begin{column}{0.5\columnwidth}
+        \begin{mini*}
+          {X \in \bbR^{2 \times n}}
+          {\sum_{\{i,j\}\in E \cup E_2} \abs{\angle(x_i, x_j)},}
+          {}
+          {}
+          \addConstraint{x_i}{\in Q^\mathrm{circle} \quad}{\text{for $1 \leq i \leq n$}}
+          \addConstraint{x_i}{\neq x_j \quad}{\text{for $1 \leq i < j \leq n$}.}
+        \end{mini*}
+        \gray{\scriptsize{$Q^\mathrm{circle} \defeq \qty{(\cos(2\pi i/n), \sin(2\pi i/n)) \mid 1 \leq i \leq n}$\\
+            $E_2$: a set of vertex pairs with a shortest path distance equal to 2. \textbf{$\abs{E_2}$ could be $\Theta(n^2)$}.\\
+            $\angle(a, b)$: the angle between the lines from the origin to the points $a$ and $b$.}}
+      \end{column}
+    \end{columns}
+  \end{frame}
+\fi
+
+\ifShowHidden
   \begin{frame}{Our Contribution}
     \begin{figure}[h]
       \centering
@@ -351,7 +365,7 @@
         \end{equation*}
       \end{column}
       \begin{column}{0.3\columnwidth}
-        \vspace{-3em}
+        \vspace{-2.5em}
         \begin{figure}[h]
           \centering
           \includegraphics[width=\columnwidth]{../main/energy_3d/energy_3d.png}
@@ -417,28 +431,28 @@
 
 \ifShowHidden
   \begin{frame}{Simplify the Problem (2/2)}
-    Converting the second term into a constraint
-    (obj: $\tccA{\order{\abs{E}}}$ terms from $\tccD{\order{\abs{V}^2}}$ terms):
-    \begin{mini}
+    Following previous research, we fix the possible positions $x_i$ to a discrete set of points $Q$:
+    \begin{mini*}
       {X \in \bbR^{2 \times n}}
-      {\sum_{\{i,j\}\in E} \frac{w_{i,j}\norm{x_i - x_j}^3}{3k}- \sum_{i<j} k^2\log{\norm{x_i - x_j}},}
+      {\tccA{\sum_{\{i,j\}\in E} \frac{w_{i,j}\norm{x_i - x_j}^3}{3k}} - \tccD{\sum_{i<j} k^2\log{\norm{x_i - x_j}}},}
       {}
       {}
       \addConstraint{x_i}{\in Q \quad}{\text{for $1 \leq i \leq n$}}
       \addConstraint{x_i}{\neq x_j \quad}{\text{for $1 \leq i < j \leq n$}.}
-    \end{mini}
-    where $\epsilon$ is a constant.
-    $\tccD{-k^2\log{\norm{x_i-x_j}}} \to \tccD{\norm{x_i - x_j} \geq \epsilon}$ does not lose the problem essence.\\
-    Fix the point placement to $Q$ (any two points apart $\epsilon$) $\to$ \textbf{Skip the check of constraints}.
+    \end{mini*}
+    $\tccA{\abs{\{\{i,j\} \st \{i,j\} \in E\}}} \ll \tccD{\abs{\{\{i,j\} \st i<j\}}}$.
+    We want to drop the second term.\\
+    Take $Q$ such that $\norm{q_i - q_j} \geq \epsilon$ for all $q_i,q_j \in Q (q_i \neq q_j)$.
+    Then, the second term is negligible.
     \begin{mini*}
       {X \in \bbR^{2 \times n}}
-      {f^\mathrm{a}(X) \defeq \sum_{\{i,j\}\in E} \frac{w_{i,j}\norm{x_i - x_j}^3}{3k},}
+      {\tccA{f^\mathrm{a}(X) \defeq \sum_{\{i,j\}\in E} \frac{w_{i,j}\norm{x_i - x_j}^3}{3k}},}
       {\label{eq:frApprox2}}
       {}
-      \addConstraint{x_i}{\in Q \quad}{\text{for $1 \leq i \leq n$}}
-      \addConstraint{x_i}{\neq x_j \quad}{\text{for $1 \leq i < j \leq n$}}
+      \addConstraint{\tccD{x_i}}{\tccD{\in Q \quad}}{\text{for $1 \leq i \leq n$}}
+      \addConstraint{\tccD{x_i}}{\tccD{\neq x_j \quad}}{\text{for $1 \leq i < j \leq n$}.}
     \end{mini*}
-    Only treat \tccA{attractive forces}. Thus, the points set \tccD{$Q$} should be as dense as possible.\\
+    Only treat \tccA{\Large{\textbf{a}}}\tccA{ttractive force}. Thus, the points set \tccD{$Q$} should be as dense as possible.\\
     $\to$ \textbf{closet packing} (hexagonal lattice $Q^\mathrm{hex}$).
   \end{frame}
 \fi
@@ -457,11 +471,11 @@
       We simplify the problem as
       \begin{mini*}
         {X \in \bbR^{2 \times n}}
-        {\sum_{\{i,j\}\in E} \frac{w_{i,j}\norm{x_i - x_j}^3}{3k}, \tag{\ref{eq:frApprox0}}}
+        {\tccA{f^\mathrm{a}(X) \defeq \sum_{\{i,j\}\in E} \frac{w_{i,j}\norm{x_i - x_j}^3}{3k}}, \tag{\ref{eq:frApprox0}}}
         {}
         {}
-        \addConstraint{x_i}{\in Q^\mathrm{hex} \quad}{\text{for $1 \leq i \leq n$}}
-        \addConstraint{x_i}{\neq x_j \quad}{\text{for $1 \leq i < j \leq n$}.}
+        \addConstraint{\tccD{x_i}}{\tccD{\in Q \quad}}{\text{for $1 \leq i \leq n$}}
+        \addConstraint{\tccD{x_i}}{\tccD{\neq x_j \quad}}{\text{for $1 \leq i < j \leq n$}.}
       \end{mini*}
     \end{column}
     \begin{column}{0.45\columnwidth}
@@ -606,37 +620,10 @@
 \section{Experiments}
 
 \ifShowHidden
-  \begin{frame}{Experiments Result (overall)}
-    As a dataset, we used matrices from Sparse Matrix Collection~\cite{davis2011university}, in total 124 graphs.
-    \begin{figure}[h]
+  \begin{frame}{Experiments Result (gif)}
+    \begin{figure}[htbp]
       \centering
-      \begin{minipage}{0.5\columnwidth}
-        \centering
-        \includegraphics[width=\columnwidth]{../main/overall/plot/diff_FR_50.pdf}
-      \end{minipage}%
-      \begin{minipage}{0.5\columnwidth}
-        \centering
-        \includegraphics[width=\columnwidth]{../main/overall/plot/diff_L-BFGS_50.pdf}
-      \end{minipage}%
-      \caption{
-        Comparison of the proposed initialization (\textsf{CN}) with random initialization (no prefix).
-      }
-      \label{fig:overall}
-    \end{figure}
-    \begin{figure}[h]
-      \centering
-      \begin{minipage}{0.5\columnwidth}
-        \centering
-        \includegraphics[width=\columnwidth]{../main/circle/plot/diff_FR_50.pdf}
-      \end{minipage}%
-      \begin{minipage}{0.5\columnwidth}
-        \centering
-        \includegraphics[width=\columnwidth]{../main/circle/plot/diff_L-BFGS_50.pdf}
-      \end{minipage}%
-      \caption{
-        Comparison of the proposed initialization (\textsf{CN}) with circle initialization (\textsf{SA}) in Ref.~\cite{ghassemitoosiSimulatedAnnealingPreProcessing2016}.
-      }
-      \label{fig:diff}
+      \animategraphics[autoplay,loop,width=0.4\columnwidth]{5}{jagmesh1/CN-L-BFGS/}{0}{0}
     \end{figure}
   \end{frame}
 \fi
@@ -694,6 +681,42 @@
 \fi
 
 \ifShowHidden
+  \begin{frame}{Experiments Result (overall)}
+    As a dataset, we used matrices from Sparse Matrix Collection~\cite{davis2011university}, in total 124 graphs.
+    \begin{figure}[h]
+      \centering
+      \begin{minipage}{0.5\columnwidth}
+        \centering
+        \includegraphics[width=\columnwidth]{../main/overall/plot/diff_FR_50.pdf}
+      \end{minipage}%
+      \begin{minipage}{0.5\columnwidth}
+        \centering
+        \includegraphics[width=\columnwidth]{../main/overall/plot/diff_L-BFGS_50.pdf}
+      \end{minipage}%
+      \caption{
+        Comparison of the proposed initialization (\textsf{CN}) with random initialization (no prefix).
+      }
+      \label{fig:overall}
+    \end{figure}
+    \begin{figure}[h]
+      \centering
+      \begin{minipage}{0.5\columnwidth}
+        \centering
+        \includegraphics[width=\columnwidth]{../main/circle/plot/diff_FR_50.pdf}
+      \end{minipage}%
+      \begin{minipage}{0.5\columnwidth}
+        \centering
+        \includegraphics[width=\columnwidth]{../main/circle/plot/diff_L-BFGS_50.pdf}
+      \end{minipage}%
+      \caption{
+        Comparison of the proposed initialization (\textsf{CN}) with circle initialization (\textsf{SA}) in Ref.~\cite{ghassemitoosiSimulatedAnnealingPreProcessing2016}.
+      }
+      \label{fig:diff}
+    \end{figure}
+  \end{frame}
+\fi
+
+\ifShowHidden
   \begin{frame}{Comparision with SA method}
     \begin{figure}[t]
       \centering
@@ -732,8 +755,8 @@
         \textbf{A}: The ignorance of other vertex movements.\\
         \vspace{0.5cm}
         Discrete optimization problem \\
-        $\to$ at least $\epsilon$ movement\\
-        $\to$ more efficient than direct application.
+        $\to$ \textbf{At least $\epsilon$} movement\\
+        $\to$ \textbf{More efficient} than direct application.
       \end{column}
       \begin{column}{0.5\columnwidth}
         \begin{figure}[h]
@@ -752,32 +775,22 @@
 \ifShowHidden
   \begin{frame}{Future Work}
     \begin{columns}
-      \begin{column}{0.4\columnwidth}
-        \textbf{\texttt{sfdp} in Graphviz}
-        \begin{itemize}
-          \item Scalable Force-Directed Placement
-          \item \textbf{Multilevel} approach
-          \item Barnes--Hut algorithm (Q-tree)\cite{Hu2006EfficientHF}
-                \cite{barnesHierarchicalLogForcecalculation1986}
-          \item These methods are\\compatible with the proposed method.
-        \end{itemize}
+      \begin{column}{0.5\columnwidth}
+        \textbf{\texttt{sfdp} in Graphviz \raisebox{-0.2\baselineskip}{\includegraphics[width=1.5em]{graphDrawing/GraphvizLogo.png}}~\cite{ellsonGraphvizOpenSource2002}}\\
+        \quad \textbf{S}calable \textbf{F}orce-\textbf{D}irected \textbf{P}lacement.\\
+        \quad This is a \textbf{Multilevel} approach.\\
+        \quad Barnes--Hut algorithm (Q-tree)\cite{Hu2006EfficientHF,barnesHierarchicalLogForcecalculation1986}.\\
+        \quad These methods are\\
+        \quad compatible with the proposed method.
       \end{column}
-      \begin{column}{0.6\columnwidth}
+      \begin{column}{0.5\columnwidth}
         \begin{figure}[htbp]
           \centering
           \includegraphics[width=0.7\columnwidth]{imgs/BH.png}
-          \caption{\footnotesize{\url{https://jheer.github.io/barnes-hut/}}}
+          \caption{\footnotesize{\href{https://jheer.github.io/barnes-hut/}{link}}}
         \end{figure}
       \end{column}
     \end{columns}
-
-    % This paper has demonstrated the effectiveness of the proposed method on various graphs, but we can also apply it to larger-scale problems.
-    % For instance, the Scalable Force-Directed Placement (sfdp) of Graphviz~\cite{ellsonGraphvizOpenSource2002}, based on \cite{Hu2006EfficientHF}, employs a multilevel approach to accelerate processing for larger graphs by progressively coarsening vertices.
-
-    % The coarsening operation in sfdp does not critically conflict with the proposed method, making it feasible to combine both approaches.
-    % Specifically, by iteratively applying the proposed method to the entire coarsened graph or groups of vertices consolidated through coarsening, it is possible to extend its applicability to larger-scale problems.
-    % We can expect this approach to yield faster and higher-quality solutions.
-    % Addressing this integration is one of the challenges for future research.
   \end{frame}
 \fi
 
@@ -792,10 +805,9 @@
     Can we use coordinate Newton direction to these problems?
     \begin{columns}
       \begin{column}{0.5\columnwidth}
-        \textbf{graph isomorphism problem}\\
+        \textbf{Graph Isomorphism Problem}\\
         Drawing graph symmetry is at least as difficult as the graph isomorphism problem~\cite{eades1984heuristic}.\\
-        Continuous relaxation $\to$ optimization on Riemannian manifolds~\cite{klusContinuousOptimizationMethods2023,klusContinuousOptimizationMethods2023}\\
-        % \addConstraint{Q}{\in \left\{ Q \in \mathbb{R}^{n \times n} \relmiddle| Q^\top Q = I_n \right\}}
+        Continuous relaxation $\to$ optimization on Riemannian manifolds~\cite{klusContinuousOptimizationMethods2023}\\
         Can we utilize coordinate Newton direction to Riemannian optimization?\\
       \end{column}
       \begin{column}{0.5\columnwidth}
@@ -811,11 +823,9 @@
 \ifShowHidden
   \begin{frame}{End of the Presentation}
     \begin{block}{Summary}
-      \begin{itemize}
-        \item Fruchterman--Reingold layout is a tough problem
-        \item Hexagonal Lattice + coordinate Newton direction
-        \item initialization + L-BFGS gives the best result
-      \end{itemize}
+      \quad Fruchterman--Reingold layout is a tough problem\\
+      \quad Hexagonal Lattice + coordinate Newton direction\\
+      \quad initialization + L-BFGS gives the best result
     \end{block}
     \begin{block}{Acknowledgement}
       \large{
