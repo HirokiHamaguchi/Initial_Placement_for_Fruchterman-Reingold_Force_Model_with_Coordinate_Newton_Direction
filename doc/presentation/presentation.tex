@@ -210,10 +210,9 @@
     \begin{columns}
       \begin{column}{0.62\columnwidth}
         \large{%
-          NetworkX \raisebox{-0.2\baselineskip}{\includegraphics[width=1.5em]{graphDrawing/networkxLogo.png}}~\cite{hagberg2008exploring} is a popular Python library.\\
-          \texttt{nx.draw} is the default function.\\
-          \large{\textbf{Fruchterman--Reingold (FR) algorithm}} works.\\
-          (with 50 iterations)
+          \textbf{Fruchterman--Reingold (FR)} force model is prominent; flexible, intuitive, and simple.\\[1em]
+          \textbf{NetworkX} \raisebox{-0.2\baselineskip}{\includegraphics[width=1.5em]{graphDrawing/networkxLogo.png}}~\cite{hagberg2008exploring} is a popular Python library.\\
+          \texttt{nx.draw}: \large{\textbf{FR algorithm}} works with 50 iterations.
         }
         \begin{center}
           \rule{0.8\columnwidth}{0.4pt}
@@ -273,7 +272,7 @@
     }
     \begin{figure}[htbp]
       \centering
-      \animategraphics[autoplay,loop,width=0.4\columnwidth]{5}{circle/circle-}{1}{1}
+      \animategraphics[autoplay,loop,width=0.4\columnwidth]{5}{circle/circle-}{1}{1}%!!!50
     \end{figure}
   \end{frame}
 \fi
@@ -287,21 +286,22 @@
         \quad Overcome ``twist'' issues to some extent.\\
         \quad Effective for reducing stress.\\[1.5em]
         \textbf{Limitations}\\
-        \quad Treats just as a general optimization problem.
-        \begin{equation*}
-          \min_{X \in \bbR^{2\times n}} f(X) \to \min_{\overline{X} \in \bbR^{2n}} \overline{f}(\overline{X})
-        \end{equation*}
         \quad May fail to achieve the optimal visualization.\\
-        \quad Ignored inherent graph structure.\\[1.5em]
+        \quad Treats just as a general optimization problem.\\
+        \quad Start from \textbf{a random initial placement}.\\[1.5em]
         \textbf{\red{Our Aim}}\\
-        \quad \red{Provide an initial placement.}\\
-        \quad \red{Accelerate the optimization.}
+        \quad \red{Accelerate by improving initial placement.}\\
       \end{column}
       \begin{column}{0.4\columnwidth}
         \begin{figure}[htbp]
           \centering
           \includegraphics[width=\columnwidth]{../main/comparison/comparison_FRandLBFGS.pdf}
         \end{figure}
+        \begin{gather*}
+          n\defeq \abs{V}, \quad
+          X = \qty( x_1, x_2, \dots, x_n ),\\
+          \min_{X \in \bbR^{2\times n}} f(X) \to \min_{\overline{X} \in \bbR^{2n}} \overline{f}(\overline{X})
+        \end{gather*}
       \end{column}
     \end{columns}
   \end{frame}
@@ -390,9 +390,10 @@
 
 \ifShowHidden
   \begin{frame}{Simplify the Problem (1/2)}
+    \textbf{Obtain approximated solution quickly.} \quad
+    Instead of the problem~\eqref{eq:fr}, we solve:
     \begin{columns}
       \begin{column}{0.55\columnwidth}
-        Instead of the problem~\eqref{eq:fr}, we solve:
         \begin{mini}
           {X \in \bbR^{2 \times n}}
           {\sum_{\{i,j\}\in E} \frac{w_{i,j}\norm{x_i - x_j}^3}{3k},}
@@ -417,9 +418,8 @@
     \vspace{0.3cm}
     \hrulefill\\
 
-    We explain the reason. We simplify the problem~\eqref{eq:fr}.\\
-    Graphs have sparsity $\tccA{\abs{E}} \ll \tccD{\abs{V}^2}$.
-    We first separate $f(X)$ into $\tccA{E^\mathrm{a}_{i,j}}$ terms and $\tccD{E^\mathrm{r}}$ terms.
+    We explain the reason. We simplify the problem~\eqref{eq:fr}. \quad
+    Separate $f(X)$ into $\tccA{E^\mathrm{a}_{i,j}}$ and $\tccD{E^\mathrm{r}}$.
     \begin{mini*}
       {X \in \bbR^{2 \times n}}
       {\tccA{\sum_{\{i,j\}\in E} \frac{w_{i,j}\norm{x_i - x_j}^3}{3k}} - \tccD{\sum_{i<j} k^2\log{\norm{x_i - x_j}}}.}
@@ -431,7 +431,7 @@
 
 \ifShowHidden
   \begin{frame}{Simplify the Problem (2/2)}
-    Following previous research, we fix the possible positions $x_i$ to a discrete set of points $Q$:
+    Following previous research, fix the possible positions $x_i$ to a discrete points set $Q$:
     \begin{mini*}
       {X \in \bbR^{2 \times n}}
       {\tccA{\sum_{\{i,j\}\in E} \frac{w_{i,j}\norm{x_i - x_j}^3}{3k}} - \tccD{\sum_{i<j} k^2\log{\norm{x_i - x_j}}},}
@@ -474,7 +474,7 @@
         {\tccA{f^\mathrm{a}(X) \defeq \sum_{\{i,j\}\in E} \frac{w_{i,j}\norm{x_i - x_j}^3}{3k}}, \tag{\ref{eq:frApprox0}}}
         {}
         {}
-        \addConstraint{\tccD{x_i}}{\tccD{\in Q \quad}}{\text{for $1 \leq i \leq n$}}
+        \addConstraint{\tccD{x_i}}{\tccD{\in Q^\mathrm{hex} \quad}}{\text{for $1 \leq i \leq n$}}
         \addConstraint{\tccD{x_i}}{\tccD{\neq x_j \quad}}{\text{for $1 \leq i < j \leq n$}.}
       \end{mini*}
     \end{column}
@@ -495,7 +495,7 @@
   \begin{equation*}
     f(x) \approx f(x_0) + \nabla f(x_0)^\top (x - x_0) + \frac{1}{2} (x - x_0)^\top \nabla^2 f(x_0) (x - x_0).
   \end{equation*}
-  The argmin $x^*$ satisfies
+  The minimum $x^*$ satisfies
   \begin{align*}
          & \nabla f(x_0) + \nabla^2 f(x_0) (x^* - x_0) = 0                                                       \\
     \iff & x^* = x_0 \red{- \nabla^2 f(x_0)^{-1} \nabla f(x_0)}. \qquad \text{\textbf{\red{(Newton direction)}}}
@@ -522,7 +522,7 @@
     \nabla^2 f^{\mathrm{a}}_i(x_i) & = \sum_{j \neq i} \frac{w_{i,j}\norm{x_i - x_j}}{k} \mqty(1      & 0 \\0&1) + \sum_{j \neq i} \frac{w_{i,j}}{k\norm{x_i - x_j}} (x_i - x_j)(x_i - x_j)^\top.
   \end{align*}
   $f^{\mathrm{a}}_i$ is \textbf{strictly convex}.
-  Different from $E_{i,j}(\norm{\cdot - x_j})$ in~\eqref{eq:fr} and $f^{\mathrm{a}}(\cdot)$ in~\eqref{eq:frApprox2} (non-convex).
+  Different from $E_{i,j}(\norm{\cdot - x_j})$ in~\eqref{eq:fr} and $f^{\mathrm{a}}(\cdot)$ in~\eqref{eq:frApprox0} (non-convex).
 \end{frame}
 % \fi
 
@@ -623,7 +623,7 @@
   \begin{frame}{Experiments Result (gif)}
     \begin{figure}[htbp]
       \centering
-      \animategraphics[autoplay,loop,width=0.4\columnwidth]{5}{jagmesh1/CN-L-BFGS/}{0}{0}
+      \animategraphics[autoplay,loop,width=0.4\columnwidth]{5}{jagmesh1/CN-L-BFGS/}{0}{0}%!!!111
     \end{figure}
   \end{frame}
 \fi
@@ -650,6 +650,7 @@
         \makecell{\small{\textsf{\textbf{CN}-L-BFGS}}                                                                                                       \\[-0.2em]\includegraphics[width=0.135\columnwidth]{../main/individual/vis/dwt_1005_CN-L-BFGS.png}} &
         \makecell{\small{\textsf{BEST}}                                                                                                                     \\[-0.2em]\includegraphics[width=0.135\columnwidth]{../main/individual/vis/opt_dwt_1005.png}} \\
       \end{tabular}
+      \caption{``BEST'' is the 500th iteration of the proposed algorithm.}
     \end{figure}
   \end{frame}
 \fi
@@ -676,6 +677,7 @@
         \makecell{\small{\textsf{\textbf{CN}-L-BFGS}}                                                                                                        \\[-0.2em]\includegraphics[width=0.135\columnwidth]{../main/individual/vis/3elt_CN-L-BFGS.png}} &
         \makecell{\small{\textsf{BEST}}                                                                                                                      \\[-0.2em]\includegraphics[width=0.135\columnwidth]{../main/individual/vis/opt_3elt.png}} \\
       \end{tabular}
+      \caption{``BEST'' is the 500th iteration of the proposed algorithm.}
     \end{figure}
   \end{frame}
 \fi
@@ -773,7 +775,7 @@
 \fi
 
 \ifShowHidden
-  \begin{frame}{Future Work}
+  \begin{frame}{Future Work (1/2) - Combine with \texttt{sfdp}}
     \begin{columns}
       \begin{column}{0.5\columnwidth}
         \textbf{\texttt{sfdp} in Graphviz \raisebox{-0.2\baselineskip}{\includegraphics[width=1.5em]{graphDrawing/GraphvizLogo.png}}~\cite{ellsonGraphvizOpenSource2002}}\\
@@ -795,14 +797,15 @@
 \fi
 
 \ifShowHidden
-  \begin{frame}{``objective functions arising from graphs''~\cite{recht-wright}}
+  \begin{frame}{Future Work (2/2) - Broader Applications}
+    \textbf{``objective functions arising from graphs''}~\cite{recht-wright}\\
     \begin{equation*}
       f(X) = \sum_{\{i,j\}\in E} f_{i,j}(x_i, x_j)
       +\lambda \sum_{i=1}^{n} \Omega_i(x_i)
     \end{equation*}
     General optimization problem arising from graphs.\\
-    \textbf{stochastic coordinate descent}~\cite{recht-wright} is a popular method.\\
-    Can we use coordinate Newton direction to these problems?
+    \textbf{stochastic coordinate descent}~\cite{recht-wright} only with \text{the gradient} is a popular.\\
+    Can we use coordinate Newton direction?
     \begin{columns}
       \begin{column}{0.5\columnwidth}
         \textbf{Graph Isomorphism Problem}\\
