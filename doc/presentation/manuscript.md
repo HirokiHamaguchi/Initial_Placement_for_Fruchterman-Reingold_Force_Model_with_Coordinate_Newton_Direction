@@ -14,7 +14,7 @@ To begin with, I'll introduce and summarize our study.
 
 Firstly, please let me briefly introduce what the graph drawing is.
 The graph is a mathematical structure representing pairwise relationships between objects, composed from vertices $V$ and edges $E$.
-There are many examples of graphs, such as social network graphs, railroad graphs, computer network graphs, and so on.
+There are many examples of graphs, such as social network graphs, railroad graphs.
 In particular, graph drawing is one of the most fundamental tasks in information visualization.
 
 You are probably most familiar with graph drawing by CONNECTED PAPERS.
@@ -62,8 +62,7 @@ This is how the FR algorithm works.
 ## 6
 
 Now, we can see why the problem we mentioned before can happen.
-The FR algorithm has issues that make it challenging to achieve high-quality visualizations for large-scale graphs.
-The most critical issue is that twist slows down the simulation process.
+The most critical issue for the FR algorithm is that twist slows down the simulation process.
 The twist means unnecessary folded and tangled structures in the visualized graph.
 
 As this gif shows, the FR algorithm from a random initial placement, the most standard way to draw a graph, stagnates at the twisted structure.
@@ -78,38 +77,40 @@ Thus, we need to find a way to avoid the twist with a small computational comple
 
 In previous studies, several ways to improve the FR algorithm have been proposed.
 
-One of the strategies is to directly accelerate the simulation process with the forces, in other words, the optimization process of the energy function.
-Recent research has accelerated the process in various ways, one of which is to utilize numerical optimization methods.
+One of the strategies is to utilize L-BFGS algorithm, a family of quasi-Newton methods.
+It utilizes the approximated inverse Hessians and is reported to be effective then FR algorithm.
+It can overcome the twist problem to some extent.
 
-L-BFGS algorithm, a family of quasi-Newton methods, is one such approach and is reported to be effective for graph drawing.
-Although this method can overcome the twist problem to some extent, it may fail to achieve the optimal visualization result within a limited number of iterations, such as 50 iterations.
-Moreover, this method merely treats the problem as a general optimization problem (like this).
-$x_i$ is the position of vertex $i$ and $X$ is the matrix of all vertices.
+However, it has some limitations.
+Firstly, it also takes $\order{\abs{V}^2}$ per iteration.
+It may fail to achieve the optimal visualization result within a limited number of iterations.
+Moreover, this method just treats the problem as a general optimization problem (like this).
+$x_i$ is the position of vertex $i$ and $X$ is the matrix of all of these positions.
 Instead of using this matrix, it flattens into a vector, ignoring the inherent graph structure.
-Thus, directly applying the L-BFGS algorithm may not be the optimal strategy.
 In particular, it just starts from a random initial placement.
 
 So, we aim to further accelerate this optimization process.
-To achieve this, we mainly focus on providing the initial placement.
+To achieve this, we mainly focus on providing a better initial placement.
 
 ## 8
 
-As we said, providing initial placement in the pre-processing step is another strategy.
+As we said, providing initial placement is another strategy for graph drawing.
 Indeed, a pre-processing step with Simulated Annealing (SA) is also known to be effective since SA can avoid getting stuck in local optima and leads to a better visualization combined with the FR algorithm.
-It also utilizes the inherent graph structure.
-However, this work is restricted to unweighted graphs since the objective function does not include the weight $w_{i,j}$, limited to a simple circle initial placement for this $Q$, inefficient due to it just randomly selecting two vertices and test swapping, and sometimes ignoring the graph's sparsity due to this term $E_2$, which can be a set of $\order{\abs{V}^2}$ edges.
+It fix the placement to a circle placement $Q^circle$ and minimize the objective function (this one) by SA.
 
-So, it leaves significant room to improve the effectiveness and extend the applicability.
-We aim to improve this initial placement stationary to accelerate the subsequent optimization process, and extend the applicability to weighted graphs.
+However, this work is restricted to unweighted graphs since the objective function does not include the weight $w_{i,j}$, limited to a simple circle initial placement for this $Q$, inefficient since it just randomly selecting two vertices and test swapping, and sometimes ignoring the graph's sparsity due to this term $E_2$.
+
+So, it leaves significant room to improve the strategy.
+We aim to improve this to accelerate the subsequent optimization process,
+and extend the applicability of the idea of the initial placement to weighted, complex, and large-scale graphs.
 
 ## 9
 
-In this situation, we propose a new initial placement for the FR force model, as depicted in this figure.
-We provide an initial placement (this one) with fewer twists than random placement within a short time, accelerating the subsequent optimization process.
+So, in this situation, we propose a new initial placement for the FR force model, as depicted in this figure.
 
-We can use both the FR algorithm (this one) and the L-BFGS algorithm (this one) to obtain the final placement.
+When we start from a random initial placement, the FR and L-BFGS algorithms may stagnate at the twisted structure.
 
-Compared to the algorithm from a random initial placement, our proposed method can achieve a better visualization result.
+But, when we provide an initial placement (this one) with fewer twists than random placement within a short time, we can accelerate the subsequent optimization process, achieving a better visualization result.
 
 This is the main contribution of our study.
 From now on, we will explain the details of our proposed method.
@@ -246,3 +247,91 @@ So, this is the outline of our proposed method.
 ## 20
 
 Next, we will show the experimental results.
+
+## 21
+
+Firstly, I want show the gif of the proposed method.
+
+Our proposed algorithm starts from a random initial placement on the hexagonal lattice $Q^hex$.
+Then, it computes the coordinate Newton direction to update positions, quickly obtaining the initial placement with fewer twists.
+
+And then, we apply L-BFGS algorithm to obtain the final placement.
+This subsequent L-BFGS algorithm can achieve a better visualization result, since we provide initial placement with fewer twist, escaping the twist problem.
+
+## 22
+
+Next, we show more experimental results for individual graphs.
+
+Our proposed method, using Coordinate Newton, is represented by CN in these results.
+
+Here, in this plot, the solid lines shows the result with CN, the proposed method, and the dashed lines shows the result from a random initial placement.
+
+As you can see, for both FR (blue lines) and L-BFGS (orange lines), the solid lines (our proposed method) are better than the dashed lines in terms of the energy function value $f(X)$.
+
+The drawn graphs are also more resembling the optimal graph structure.
+
+## 23
+
+This tendency is also observed in the other graphs, with the vertices more than two thousand or more than four thousand.
+
+Not only for L-BFGS algorithm results, for FR algorithm results, our proposed method can achieve a better visualization result.
+
+## 24
+
+And here is the overall comparison with various graphs.
+We used matrices from the Sparse Matrix Collection as the adjacency matrices of the graphs, in total one hundred twenty four graphs.
+
+This result shows the difference between $f(X)$ by the proposed algorithm and the random initial placement.
+It shows the superior performance of our proposed method since its difference is mostly negative.
+
+When we compare with another initial placement method, Simulated Annealing (SA), our proposed method is also better for most cases.
+
+And at this point, dwt_992 is the case where our proposed method was worse than the SA method.
+In next slide, I will explain the reason.
+
+## 25
+
+So here is the visualization result of dwt_992, our worst case, and the result of collins_15NN, our best case.
+
+For the case of dwt_992, in the visualized graphs, we can not observe blue vertices. This means that the vertices are too close to each other, and the red vertices hide the blue vertices.
+This is quite different property from our assumed model, every points are apart by at least $\epsilon$. Thus, our proposed method does not work well for this case.
+
+In contrast, when we focus on collins_15NN, the best case, compared to the failure of the SA method to solve the twist, our proposed method can achieve a better visualization result, since the initial placement avoids the twist.
+
+Given that our proposed method can be also applicable to weighted, complex, and large-scale graphs, we can conclude that our proposed method is effective for the graph drawing with FR force model.
+
+## 26
+
+Finally, I will discuss the future works.
+
+## 27
+
+Firstly, we explain the combination with the other graph visualization techniques.
+
+sfdp is also a popular graph drawing algorithm in the Graphviz library.
+It stands for Scalable Force-Directed Placement, and it is known to be effective for large-scale graphs.
+This algorithm uses a multi-level approach, and it approximate graph using Barnes-Hut algorithm or Q-tree. By using this coarse approximation, it can reduce the number of vertices in the simulation.
+
+Our algorithm can be combined with sfdp. We can apply our proposed method to the graphs in the multi-level approach.
+Considering such a combination is one of the future works.
+
+## 28
+
+Secondly, we explain the extension to more broader applications in continuous optimization.
+
+In general, the objective function of the problem (1) is classified as a "objective function arising from graphs," which is defined as this one.
+
+For this general optimization problems, it is known that the stochastic coordinate descent is effective, but only with the coordinate gradient is a popular method.
+We want to investigate the applicability of our proposed method, the coordinate Newton direction, to this general optimization problems.
+
+In particular, Graph Isomorphism Problem is an interesting instance.
+It has affinity to the graph drawing, since drawing graph symmetry is at least as difficult as the graph isomorphism problem.
+
+When we relax the problem to the continuous optimization problem, the problem becomes the optimization problem on the Riemmanian manifold.
+
+Investigating whether or not we can utilize the coordinate Newton direction for Riemmanian optimization is also one of the future works.
+
+## 29
+
+That is all for my presentation.
+Thank you for your attention.

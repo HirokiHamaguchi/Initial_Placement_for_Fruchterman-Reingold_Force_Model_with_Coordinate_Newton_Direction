@@ -272,7 +272,7 @@
     }
     \begin{figure}[htbp]
       \centering
-      \animategraphics[autoplay,loop,width=0.4\columnwidth]{5}{circle/circle-}{1}{1}%!!!50
+      \animategraphics[autoplay,loop,width=0.4\columnwidth]{5}{circle/circle-}{1}{50}%!!!50
     \end{figure}
   \end{frame}
 \fi
@@ -287,7 +287,7 @@
         \quad Effective for reducing stress.\\[1.5em]
         \textbf{Limitations}\\
         \quad May fail to achieve the optimal visualization.\\
-        \quad Treats just as a general optimization problem.\\
+        \quad Flatten the matrix $X$ to a vector $\overline{X}$.\\
         \quad Start from \textbf{a random initial placement}.\\[1.5em]
         \textbf{\red{Our Aim}}\\
         \quad \red{Accelerate by improving initial placement.}\\
@@ -440,8 +440,7 @@
       \addConstraint{x_i}{\in Q \quad}{\text{for $1 \leq i \leq n$}}
       \addConstraint{x_i}{\neq x_j \quad}{\text{for $1 \leq i < j \leq n$}.}
     \end{mini*}
-    $\tccA{\abs{\{\{i,j\} \st \{i,j\} \in E\}}} \ll \tccD{\abs{\{\{i,j\} \st i<j\}}}$.
-    We want to drop the second term.\\
+    $\tccA{\abs{\{\{i,j\} \st \{i,j\} \in E\}} = \abs{E}} \ll \tccD{\abs{\{\{i,j\} \st i<j\}} = \order{\abs{V}^2}}$. Drop the second term.\\
     Take $Q$ such that $\norm{q_i - q_j} \geq \epsilon$ for all $q_i,q_j \in Q (q_i \neq q_j)$.
     Then, the second term is negligible.
     \begin{mini*}
@@ -566,7 +565,7 @@
       This value can be computed in the \text{$\order{\abs{E}}$ complexity}.
 
       As far as we rescale the placement by $\red{c^*}$,\\
-      \textbf{we can select any $\epsilon$} to define the hexagonal lattice $Q^\mathrm{hex}$.
+      \textbf{we don't need to care $\epsilon$} to define $Q (\norm{q_i - q_j} \geq \epsilon)$.
     \end{column}
     \begin{column}{0.25\columnwidth}
       \vspace{-0.5cm}
@@ -623,7 +622,7 @@
   \begin{frame}{Experiments Result (gif)}
     \begin{figure}[htbp]
       \centering
-      \animategraphics[autoplay,loop,width=0.4\columnwidth]{5}{jagmesh1/CN-L-BFGS/}{0}{0}%!!!111
+      \animategraphics[loop,width=0.4\columnwidth]{5}{jagmesh1/CN-L-BFGS/}{0}{67}%!!!111
     \end{figure}
   \end{frame}
 \fi
@@ -696,7 +695,7 @@
         \includegraphics[width=\columnwidth]{../main/overall/plot/diff_L-BFGS_50.pdf}
       \end{minipage}%
       \caption{
-        Comparison of the proposed initialization (\textsf{CN}) with random initialization (no prefix).
+        45th iter proposed initialization (\textsf{CN}) vs. 50th iter random initialization (no prefix).
       }
       \label{fig:overall}
     \end{figure}
@@ -711,7 +710,7 @@
         \includegraphics[width=\columnwidth]{../main/circle/plot/diff_L-BFGS_50.pdf}
       \end{minipage}%
       \caption{
-        Comparison of the proposed initialization (\textsf{CN}) with circle initialization (\textsf{SA}) in Ref.~\cite{ghassemitoosiSimulatedAnnealingPreProcessing2016}.
+        50th iter proposed initialization (\textsf{CN}) vs. 50th iter circle initialization (\textsf{SA})~\cite{ghassemitoosiSimulatedAnnealingPreProcessing2016}.
       }
       \label{fig:diff}
     \end{figure}
@@ -741,7 +740,7 @@
          & \includegraphics[width=0.15\columnwidth]{../main/circle/vis/collins_15NN_CN-L-BFGS_50_last.png}                                                          \\
         \bottomrule
       \end{tabular}
-      \caption{\small{Visualization results showing initial and 50th iteration placements for \texttt{dwt\_992} and \texttt{collins\_15NN}.}}
+      \caption{\small{Results showing initial and 50th iteration placements for \texttt{dwt\_992} and \texttt{collins\_15NN}.}}
       \label{fig:CN_vs_SA}
     \end{figure}
   \end{frame}
@@ -749,30 +748,30 @@
 
 \section{Discussion}
 
-\ifShowHidden
-  \begin{frame}{Rationale of the Proposed Method}
-    \begin{columns}
-      \begin{column}{0.5\columnwidth}
-        \textbf{Q}: Why we cannot directly apply coordinate descent to the problem?\\
-        \textbf{A}: The ignorance of other vertex movements.\\
-        \vspace{0.5cm}
-        Discrete optimization problem \\
-        $\to$ \textbf{At least $\epsilon$} movement\\
-        $\to$ \textbf{More efficient} than direct application.
-      \end{column}
-      \begin{column}{0.5\columnwidth}
-        \begin{figure}[h]
-          \centering
-          \includegraphics[width=\columnwidth]{../main/whyRSNfail2/whyRSNfail2.pdf}
-          \caption{
-            The ignorance of other vertex movements.
-            Although the blue arrows show the forces in this situation, the red vertex barely moves by the coordinate Newton direction.
-          }
-        \end{figure}
-      \end{column}
-    \end{columns}
-  \end{frame}
-\fi
+% \ifShowHidden
+%   \begin{frame}{Rationale of the Proposed Method}
+%     \begin{columns}
+%       \begin{column}{0.5\columnwidth}
+%         \textbf{Q}: Why we cannot directly apply coordinate descent to the problem~\eqref{eq:fr}?\\
+%         \textbf{A}: The ignorance of other vertices' movements.\\
+%         \vspace{0.5cm}
+%         Discrete optimization problem \\
+%         $\to$ \textbf{At least $\epsilon$} movement\\
+%         $\to$ \textbf{More efficient} than direct application.
+%       \end{column}
+%       \begin{column}{0.5\columnwidth}
+%         \begin{figure}[h]
+%           \centering
+%           \includegraphics[width=\columnwidth]{../main/whyRSNfail2/whyRSNfail2.pdf}
+%           \caption{
+%             The ignorance of other vertex movements.
+%             Although the blue arrows show the forces in this situation, the red vertex barely moves by the coordinate Newton direction.
+%           }
+%         \end{figure}
+%       \end{column}
+%     \end{columns}
+%   \end{frame}
+% \fi
 
 \ifShowHidden
   \begin{frame}{Future Work (1/2) - Combine with \texttt{sfdp}}
@@ -804,14 +803,14 @@
       +\lambda \sum_{i=1}^{n} \Omega_i(x_i)
     \end{equation*}
     General optimization problem arising from graphs.\\
-    \textbf{stochastic coordinate descent}~\cite{recht-wright} only with \text{the gradient} is a popular.\\
+    \textbf{stochastic coordinate descent}~\cite{recht-wright} only with \text{the gradient} is popular.\\
     Can we use coordinate Newton direction?
     \begin{columns}
       \begin{column}{0.5\columnwidth}
         \textbf{Graph Isomorphism Problem}\\
         Drawing graph symmetry is at least as difficult as the graph isomorphism problem~\cite{eades1984heuristic}.\\
         Continuous relaxation $\to$ optimization on Riemannian manifolds~\cite{klusContinuousOptimizationMethods2023}\\
-        Can we utilize coordinate Newton direction to Riemannian optimization?\\
+        Can we utilize coordinate Newton direction for Riemannian optimization?\\
       \end{column}
       \begin{column}{0.5\columnwidth}
         \begin{figure}[t]
