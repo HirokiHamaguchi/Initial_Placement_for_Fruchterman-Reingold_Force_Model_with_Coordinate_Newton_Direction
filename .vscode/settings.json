@@ -76,7 +76,6 @@
     ],
     "editor.tabSize": 2,
     "material-icon-theme.folders.associations": {
-        "main": "docs",
         "solve": "core",
     },
     "cSpell.words": [
