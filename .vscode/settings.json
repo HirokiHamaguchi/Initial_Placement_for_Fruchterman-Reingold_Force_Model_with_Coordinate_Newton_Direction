@@ -4,7 +4,7 @@
             "name": "ptex2pdf*2",
             "tools": [
                 "ptex2pdf",
-                "ptex2pdf",
+                "ptex2pdf"
             ]
         },
         {
@@ -20,7 +20,7 @@
             "name": "uplatex",
             "tools": [
                 "ptex2pdf (uplatex)",
-                "ptex2pdf (uplatex)",
+                "ptex2pdf (uplatex)"
             ]
         },
         {
@@ -76,7 +76,7 @@
     ],
     "editor.tabSize": 2,
     "material-icon-theme.folders.associations": {
-        "solve": "core",
+        "solve": "core"
     },
     "cSpell.words": [
         "Akiko",
@@ -297,5 +297,8 @@
         "format": "cpp",
         "semaphore": "cpp",
         "csignal": "cpp"
-    }
+    },
+    "latexlint.userDefinedRules": [
+        "w_"
+    ]
 }
