@@ -15,11 +15,14 @@ To generate faster and better layouts using the FR force model, we aim to **modi
 
 We can broadly classify our proposed method as an **energy-based algorithm**, but it may be more intuitive to interpret the approach as introducing a kind of momentum into the motion simulation and thus achieving a better layout. Please note that our proposal does not introduce a new model; **the conventional interpretation of the FR model works for most cases**.
 
-This method is based on the research by Hosobe, H. [^hosobe] and our research paper [^our]. We can update our paper to explain our proposal more clearly if necessary.
+This method is based on the research by Hosobe, H. [^hosobe] and our research paper [^our].
+Our paper mainly discusses the initial placement with this L-BFGS approach, but this L-BFGS's approach itself is also discussed in detail.
+We can update our paper to explain our proposal more clearly if necessary.
 
 ### Key Contribution
 
 Our proposed method can usually achieve better visualization with faster computation. The visualization result is shown in the figure.
+(The blue `FR` means the current `nx.spring_layout`, and the orange `FR (L-BFGS)` means the our proposed method.)
 
 $n \approx 500$ and 50 iterations:
 ![graphs_500_50](https://github.com/user-attachments/assets/17691e8f-2b11-4989-ab63-6f3aabd998b6)
@@ -45,9 +48,10 @@ Our proposed method introduces additional forces for each connected component an
 
 ## Algorithm
 
-In this section, we describe our proposed algorithm. We also wrote this content in our research paper [^our].
+In this section, we describe our proposed algorithm.
+We wrote this content in our research paper [^our], Section 8.3.
 
-TODO
+![algorithm](https://github.com/user-attachments/assets/aea35a94-bd14-4c79-9a73-86a945da4b59)
 
 ## Implementation
 
@@ -80,14 +84,22 @@ For small graphs with around 10 vertices, the overhead of the `L-BFGS` method ca
 We also compared our method with `nx.arf_layout` and `nx.forceatlas2_layout`.
 Although these methods do not directly use the FR force model, we think that `FR (L-BFGS)` provides better visualization.
 
-![arf_forceatlas_50_100](arf_forceatlas_50_100.png)
+$n \approx 50$ and 100 iterations:
+![arf_forceatlas_50_100](https://github.com/user-attachments/assets/140c3696-9a6e-437b-a552-1f69df493a51)
 
 ### Graphs from SuiteSparse Matrix Collection
 
 We tested our method on large-scale, real-world graphs from the SuiteSparse Matrix Collection.
 The superior performance of our method is evident in these cases as well.
 
-![ssgetpy_17758_100](ssgetpy_17758_100.png)
+200 iterations:
+![ssgetpy_17758_200](https://github.com/user-attachments/assets/c0f35f74-9f87-4983-9510-c8c583e936b4)
+
+For comparision, we listed some of the optimal layout as follows.
+
+||jagmesh1|1138_bus|dwt_2680|3elt|USPowerGrid|
+|-|-|-|-|-|-|
+| optimal layout  | ![jagmesh1](https://arxiv.org/html/2412.20317v2/extracted/6103965/individual/vis/opt_jagmesh1.png)  | ![1138_bus](https://arxiv.org/html/2412.20317v2/extracted/6103965/individual/vis/opt_1138_bus.png)  | ![dwt_2680](https://arxiv.org/html/2412.20317v2/extracted/6103965/individual/vis/opt_dwt_2680.png)  | ![3elt](https://arxiv.org/html/2412.20317v2/extracted/6103965/individual/vis/opt_3elt.png)  | ![USPowerGrid](http://yifanhu.net/GALLERY/GRAPHS/GIF_SMALL/Pajek@USpowerGrid.gif) |
 
 ### Special Cases
 
@@ -103,10 +115,11 @@ Although we do not provide specific output results here, we confirmed that our m
 
 We estimate the necessary memory size for the optimization as follows.
 
-1. We used batch processing with a batch size of 500, i,e., the size of `delta` in the `_l_bfgs_fruchterman_reingold` is $500 \times 100000 \times 2$ when the number of vertices is 100,000 and `dim=2`.
-2. `delta`'s data type is `np.float64`, which requires 8 bytes.
-3. The memory size is $500 \times 100000 \times 2 \times 8 \approx 0.74$ GB.
-4. In most modern computers or runtime environments, this memory size is not a problem.
+1. If we compute layout for a graph with 100'000 vertices for 100 iterations, it will takes about 55.5 hours with our laptop. (`(dim*|V|^2*iterations)/(computational speed per second) = (2*1e5^2*100)/1e7 = 200'000 seconds = 55.5 hours`. This method of estimation is broadly correct for smaller graphs.) Approximately this size would be the maximum size users would want to calculate.
+2. We used batch processing with a batch size of 500, i,e., the size of `delta` in the `_l_bfgs_fruchterman_reingold` is $500 \times 100000 \times 2$ when the number of vertices is 100,000 and `dim=2`.
+3. `delta`'s data type is `np.float64`, which requires 8 bytes.
+4. The memory size is $500 \times 100000 \times 2 \times 8 \approx 0.74$ GB.
+5. In most modern laptops or runtime environments, this memory size is not a problem.
 
 #### 3D Graphs
 
