@@ -139,9 +139,9 @@ Our method also works correctly when the `fixed` and `pos` parameters are specif
 
 We have demonstrated that our proposed method can, in most cases, achieve better visualization with faster computation compared to the existing method.
 
-As far as we anticipate, there are few major inconveniences that users will experience due to this change. If we must point out one, when increasing the number of nodes stepwise from 100 to 1000 and drawing a graph that includes negative edge weights, discontinuities may occur at 500 with `method="auto"`. How to weigh such corner cases against improvements in most situations is a matter of values. We personally think it's not a problem, but we would like to follow the community's intentions.
+As far as we anticipate, there are few major inconveniences that users will experience due to this change. If we must point out one, when increasing the number of nodes stepwise from 100 to 1000 and drawing a graph that includes negative edge weights, discontinuities may occur at 500 with `method="auto"`. How to balance such corner cases against improvements in most situations is a matter of values. We personally think it's not a problem, while we would like to follow the community's intentions.
 
-The most well-known algorithm for the FR force model for large-scale graphs is the multi-level approach, such as [Graphviz's sfdp](https://graphviz.org/docs/layouts/sfdp/). Instead of our approach, we could have implemented this in NetworkX.
+In general, the most well-known algorithm of the FR force model for large-scale graphs is the multi-level approach, such as [Graphviz's sfdp](https://graphviz.org/docs/layouts/sfdp/). Instead of our approach, we could have implemented this in NetworkX.
 
 However, a complex implementation is not necessarily the best choice for a lightweight library like NetworkX. Furthermore, it is implemented in Python, a language known for its relatively slow execution time.
 
