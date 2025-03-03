@@ -95,11 +95,13 @@ The superior performance of our method is evident in these cases as well.
 200 iterations:
 ![ssgetpy_17758_200](https://github.com/user-attachments/assets/c0f35f74-9f87-4983-9510-c8c583e936b4)
 
-For comparision, we listed some of the optimal layout as follows.
+For comparision, we listed some of the optimal layouts as follows.
 
-||jagmesh1|1138_bus|dwt_2680|3elt|USPowerGrid|
-|-|-|-|-|-|-|
-| optimal layout  | ![jagmesh1](https://arxiv.org/html/2412.20317v2/extracted/6103965/individual/vis/opt_jagmesh1.png)  | ![1138_bus](https://arxiv.org/html/2412.20317v2/extracted/6103965/individual/vis/opt_1138_bus.png)  | ![dwt_2680](https://arxiv.org/html/2412.20317v2/extracted/6103965/individual/vis/opt_dwt_2680.png)  | ![3elt](https://arxiv.org/html/2412.20317v2/extracted/6103965/individual/vis/opt_3elt.png)  | ![USPowerGrid](http://yifanhu.net/GALLERY/GRAPHS/GIF_SMALL/Pajek@USpowerGrid.gif) |
+||jagmesh1|1138_bus|dwt_1005|dwt_2680|3elt|USPowerGrid|
+|-|-|-|-|-|-|-|
+| optimal layout  | ![jagmesh1](https://arxiv.org/html/2412.20317v2/extracted/6103965/individual/vis/opt_jagmesh1.png)  | ![1138_bus](https://arxiv.org/html/2412.20317v2/extracted/6103965/individual/vis/opt_1138_bus.png)  | ![dwt_1005](https://arxiv.org/html/2412.20317v2/extracted/6103965/individual/vis/opt_dwt_1005.png)  | ![dwt_2680](https://arxiv.org/html/2412.20317v2/extracted/6103965/individual/vis/opt_dwt_2680.png)  | ![3elt](https://arxiv.org/html/2412.20317v2/extracted/6103965/individual/vis/opt_3elt.png)  | ![USPowerGrid](http://yifanhu.net/GALLERY/GRAPHS/GIF_SMALL/Pajek@USpowerGrid.gif) |
+
+Since the problem is a nonconvex optimization problem, it is easy to fall into the local optimum solutions, especially in cases such as `dwt_1005`, but depending on the seed, L-BFGS can obtain results close to those of optimal layout.
 
 ### Special Cases
 
