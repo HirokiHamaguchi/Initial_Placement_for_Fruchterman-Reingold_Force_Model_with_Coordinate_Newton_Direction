@@ -153,8 +153,8 @@ We hope our proposal will benefit the NetworkX community.
 
 Thank you for your attention.
 
-[^hosobe]: [Hosobe, H. (2012). Numerical optimization-based graph drawing revisited. In 2012 IEEE Pacific Visualization Symposium (pp. 81-88). IEEE.](https://ieeexplore.ieee.org/iel5/6178307/6183555/06183577.pdf)
+[^hosobe]: [Hosobe, Hiroshi. "Numerical optimization-based graph drawing revisited." In 2012 IEEE Pacific Visualization Symposium, pp. 81-88. IEEE, 2012.](https://ieeexplore.ieee.org/iel5/6178307/6183555/06183577.pdf)
 
-[^our]: [Hamaguchi, H., Marumo, N., & Takeda, A. (2024). Initial Placement for Fruchterman -- Reingold Force Model with Coordinate Newton Direction. arXiv preprint arXiv:2412.20317.](https://arxiv.org/abs/2412.20317)
+[^our]: [Hamaguchi, Hiroki, Naoki Marumo, and Akiko Takeda. "Initial Placement for Fruchterman--Reingold Force Model With Coordinate Newton Direction." arXiv preprint arXiv:2412.20317 (2024).](https://arxiv.org/abs/2412.20317)
 
-[^FR]: [Fruchterman, T. M., & Reingold, E. M. (1991). Graph drawing by force-directed placement. Software: Practice and experience, 21(11), 1129-1164.](https://onlinelibrary.wiley.com/doi/abs/10.1002/spe.4380211102)
+[^FR]: [Fruchterman, Thomas MJ, and Edward M. Reingold. "Graph drawing by force-directed placement." Software: Practice and experience 21, no. 11 (1991): 1129-1164.](http://dx.doi.org/10.1002/spe.4380211102)
