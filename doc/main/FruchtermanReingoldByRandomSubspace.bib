@@ -8,7 +8,8 @@
   eprint = {https://doi.org/10.1177/14738716211060306},
   pages = {143--152},
   doi = {10.1177/14738716211060306},
-  url = {https://doi.org/10.1177/14738716211060306}
+  url = {https://doi.org/10.1177/14738716211060306},
+  abstract = {The paper describes a method for the immersive, dynamic visualization of undirected, weighted graphs. Using the Fruchterman-Reingold method, force-directed graphs are drawn in a Virtual-Reality system. The user can walk through the data, as well as move vertices using controllers, while the network display rearranges in realtime according to Newtonian physics. In addition to the physics behind the employed method, the paper explains the most pertinent computational mechanisms for its implementation, using Unity, SteamVR, and a Virtual-Reality system such as HTC Vive (the source package is made available for download). It was found that the method allows for intuitive exploration of graphs with on the order of 102 vertices, and that dynamic extrusion of vertices and realtime readjustment of the network structure allows for developing an intuitive understanding of the relationship of a vertex to the remainder of the network. Based on this observation, possible future developments are suggested.}
 }
 
 @article{2020SciPy-NMeth,
@@ -51,6 +52,7 @@
   pages = {3--17},
   publisher = {Springer International Publishing},
   doi = {10.1007/978-3-030-68766-3_1},
+  abstract = {Readability criteria, such as distance or neighborhood preservation, are often used to optimize node-link representations of graphs to enable the comprehension of the underlying data. With few exceptions, graph drawing algorithms typically optimize one such criterion, usually at the expense of others. We propose a layout approach, Graph Drawing via Gradient Descent, \$\$(GD){\textasciicircum}2\$\$(GD)2, that can handle multiple readability criteria. \$\$(GD){\textasciicircum}2\$\$(GD)2can optimize any criterion that can be described by a smooth function. If the criterion cannot be captured by a smooth function, a non-smooth function for the criterion is combined with another smooth function, or auto-differentiation tools are used for the optimization. Our approach is flexible and can be used to optimize several criteria that have already been considered earlier (e.g., obtaining ideal edge lengths, stress, neighborhood preservation) as well as other criteria which have not yet been explicitly optimized in such fashion (e.g., vertex resolution, angular resolution, aspect ratio). We provide quantitative and qualitative evidence of the effectiveness of \$\$(GD){\textasciicircum}2\$\$(GD)2with experimental data and a functional prototype: http://hdc.cs.arizona.edu/{\textasciitilde}mwli/graph-drawing/.},
   isbn = {978-3-030-68766-3},
   langid = {english},
   file = {C:\Users\hirok\Zotero\storage\G43HFU9X\Ahmed et al. - 2020 - Graph Drawing via Gradient Descent, $$(GD)^2$$.pdf},
@@ -60,6 +62,7 @@
 @article{ahmedMulticriteriaScalableGraph2022,
   author = {Ahmed, Reyan and De Luca, Felice and Devkota, Sabin and Kobourov, Stephen and Li, Mingwei},
   year = {2022},
+  month = jun,
   journal = {IEEE Transactions on Visualization and Computer Graphics},
   volume = {28},
   number = {6},
@@ -68,6 +71,7 @@
   doi = {10.1109/TVCG.2022.3155564},
   url = {https://ieeexplore.ieee.org/abstract/document/9723546?casa_token=sa4ubp87AgAAAAAA:iswm0PGiUimNXtI1dYW1UHbgZSwa-3S1N8VQ5R7iZUXjXP5gLu0uL8O7_Py5hLyN6Q9vPknd},
   urldate = {2024-09-02},
+  abstract = {Readability criteria, such as distance or neighborhood preservation, are often used to optimize node-link representations of graphs to enable the comprehension of the underlying data. With few exceptions, graph drawing algorithms typically optimize one such criterion, usually at the expense of others. We propose a layout approach, Multicriteria Scalable Graph Drawing via Stochastic Gradient Descent, (SGD)\textsuperscript{2}(SGD)2, that can handle multiple readability criteria. (SGD)\textsuperscript{2}(SGD)2 can optimize any criterion that can be described by a differentiable function. Our approach is flexible and can be used to optimize several criteria that have already been considered earlier (e.g., obtaining ideal edge lengths, stress, neighborhood preservation) as well as other criteria which have not yet been explicitly optimized in such fashion (e.g., node resolution, angular resolution, aspect ratio). The approach is scalable and can handle large graphs. A variation of the underlying approach can also be used to optimize many desirable properties in planar graphs, while maintaining planarity. Finally, we provide quantitative and qualitative evidence of the effectiveness of (SGD)\textsuperscript{2}(SGD)2: we analyze the interactions between criteria, measure the quality of layouts generated from (SGD)\textsuperscript{2}(SGD)2 as well as the runtime behavior, and analyze the impact of sample sizes. The source code is available on github and we also provide an interactive demo for small graphs.},
   keywords = {gradient descent,Graph drawing,Layout,Linear programming,Minimization,Optimization,quality metrics,Standards,Stress},
   file = {C:\Users\hirok\Zotero\storage\KGJ5UQZY\Ahmed et al. - 2022 - Multicriteria Scalable Graph Drawing via Stochasti.pdf},
   title = {Multicriteria {{Scalable Graph Drawing}} via {{Stochastic Gradient Descent}}, $(SGD)^2$}
@@ -77,6 +81,7 @@
   title = {A Hierarchical {{O}}({{N}} Log {{N}}) Force-Calculation Algorithm},
   author = {Barnes, Josh and Hut, Piet},
   year = {1986},
+  month = dec,
   journal = {Nature},
   volume = {324},
   number = {6096},
@@ -86,6 +91,7 @@
   doi = {10.1038/324446a0},
   url = {https://www.nature.com/articles/324446a0},
   urldate = {2024-07-19},
+  abstract = {Until recently the gravitational N-body problem has been modelled numerically either by direct integration, in which the computation needed increases as N2, or by an iterative potential method in which the number of operations grows as N log N. Here we describe a novel method of directly calculating the force on N bodies that grows only as N log N. The technique uses a tree-structured hierarchical subdivision of space into cubic cells, each of which is recursively divided into eight subcells whenever more than one particle is found to occupy the same cell. This tree is constructed anew at every time step, avoiding ambiguity and tangling. Advantages over potential-solving codes are: accurate local interactions; freedom from geometrical assumptions and restrictions; and applicability to a wide class of systems, including (proto-)planetary, stellar, galactic and cosmological ones. Advantages over previous hierarchical tree-codes include simplicity and the possibility of rigorous analysis of error. Although we concentrate here on stellar dynamical applications, our techniques of efficiently handling a large number of long-range interactions and concentrating computational effort where most needed have potential applications in other areas of astrophysics as well.},
   copyright = {1986 Springer Nature Limited},
   langid = {english},
   keywords = {Humanities and Social Sciences,multidisciplinary,Science},
@@ -104,6 +110,7 @@
   doi = {10.1007/978-1-5041-2940-4_9},
   url = {https://doi.org/10.1007/978-1-5041-2940-4_9},
   urldate = {2024-07-19},
+  abstract = {We describe a repository of data for the testing of numerical algorithms and mathematical software for matrix computations. The repository is designed to accommodate both dense and sparse matrices, as well as software to generate matrices. It has been seeded with the well-known Harwell-Boeing sparse matrix collection. The raw data files have been augmented with an integrated World Wide Web interface which describes the matrices in the collection quantitatively and visually. For example, each matrix has a Web page which details its attributes, graphically depicts its sparsity pattern, and provides access to the matrix itself in several formats. In addition, a search mechanism is included which allows retrieval of matrices based on a variety of attributes, such as type and size, as well as through free-text search in abstracts. The URL is http://math.nist.gov/MatrizMarket/.},
   isbn = {978-1-5041-2940-4},
   langid = {english},
   keywords = {mathematical software,Numerical linear algebra,reference data,sparse matrices,test corpora,testing and evaluation,World Wide Web},
@@ -114,6 +121,7 @@
   title = {Randomised Subspace Methods for Non-Convex Optimization, with Applications to Nonlinear Least-Squares},
   author = {Cartis, Coralia and Fowkes, Jaroslav and Shao, Zhen},
   year = {2022},
+  month = nov,
   number = {arXiv:2211.09873},
   eprint = {2211.09873},
   primaryclass = {math},
@@ -121,6 +129,7 @@
   doi = {10.48550/arXiv.2211.09873},
   url = {http://arxiv.org/abs/2211.09873},
   urldate = {2024-07-24},
+  abstract = {We propose a general random subspace framework for unconstrained nonconvex optimization problems that requires a weak probabilistic assumption on the subspace gradient, which we show to be satisfied by various random matrix ensembles, such as Gaussian and sparse sketching, using Johnson-Lindenstrauss embedding properties. We show that, when safeguarded with trust region or quadratic regularization, this random subspace approach satisfies, with high probability, a complexity bound of order \${\textbackslash}mathcal\{O\}({\textbackslash}epsilon{\textasciicircum}\{-2\})\$ to drive the (full) gradient below \${\textbackslash}epsilon\$; matching in the accuracy order, deterministic counterparts of these methods and securing almost sure convergence. Furthermore, no problem dimension dependence appears explicitly in the projection size of the sketching matrix, allowing the choice of low-dimensional subspaces. We particularise this framework to Random Subspace Gauss-Newton (RS-GN) methods for nonlinear least squares problems, that only require the calculation of the Jacobian in the subspace; with similar complexity guarantees. Numerical experiments with RS-GN on CUTEst nonlinear least squares are also presented, with some encouraging results.},
   archiveprefix = {arXiv},
   keywords = {Mathematics - Optimization and Control},
   file = {C\:\\Users\\hirok\\Zotero\\storage\\UDF2LPHS\\Cartis et al. - 2022 - Randomised subspace methods for non-convex optimiz.pdf;C\:\\Users\\hirok\\Zotero\\storage\\RV5Y5IRT\\2211.html}
@@ -131,10 +140,12 @@
   booktitle = {2018 {{IEEE International Conference}} on {{Big Knowledge}} ({{ICBK}})},
   author = {Cheong, Se-Hang and Si, Yain-Whar},
   year = {2018},
+  month = jan,
   pages = {139--145},
   doi = {10.1109/ICBK.2018.00026},
   url = {https://ieeexplore.ieee.org/document/8588785/?arnumber=8588785},
   urldate = {2024-10-15},
+  abstract = {Force-directed algorithms are widely used for visualizing graphs. However, these algorithms are computationally expensive in producing good quality layouts for complex graphs. The layout quality is largely influenced by execution time and methods' input parameters especially for large complex graphs. The snapshots of visualization generated from these algorithms are useful in presenting the current view or a past state of an information on timeslices. Therefore, researchers often need to make a trade-off between the quality of visualization and the selection of appropriate force-directed algorithms. In this paper, we evaluate the quality of snapshots generated from 7 force-directed algorithms in terms of number of edge crossing and the standard deviations of edge length. Our experimental results showed that KK, FA2 and DH algorithms cannot produce satisfactory visualizations for large graphs within the time limit. KK-MS-DS algorithm can process large and planar graphs but it does not perform well for graphs with low average degrees. KK-MS algorithm produces better visualizations for sparse and non-clustered graphs than KK-MS-DS algorithm.},
   keywords = {Clustering algorithms,Data visualization,Gravity,Layout,Snapshot visualization Time-constrained execution Complex structured graphs Force-directed algorithms,Springs,Visualization},
   file = {C\:\\Users\\hirok\\Zotero\\storage\\R4E4Q743\\Cheong and Si - 2018 - Snapshot Visualization of Complex Graphs with Forc.pdf;C\:\\Users\\hirok\\Zotero\\storage\\F3I9TN9V\\8588785.html}
 }
@@ -143,6 +154,7 @@
   title = {A Linear-Time Algorithm for Drawing a Planar Graph on a Grid},
   author = {Chrobak, M. and Payne, T. H.},
   year = {1995},
+  month = may,
   journal = {Information Processing Letters},
   volume = {54},
   number = {4},
@@ -151,6 +163,7 @@
   doi = {10.1016/0020-0190(95)00020-D},
   url = {https://www.sciencedirect.com/science/article/pii/002001909500020D},
   urldate = {2024-09-03},
+  abstract = {We present a linear-time algorithm that, given an n-vertex planar graph G, finds an embedding of G into a (2n - 4) {\texttimes} (n - 2) grid such that the edges of G are straight-line segments.},
   keywords = {Algorithms},
   file = {C:\Users\hirok\Zotero\storage\JQJ5ERHY\002001909500020D.html}
 }
@@ -198,6 +211,7 @@
   issn = {0020-0255},
   doi = {10.1016/j.ins.2008.11.017},
   url = {https://www.sciencedirect.com/science/article/pii/S0020025508004799},
+  abstract = {We present an algorithm for the layout of undirected compound graphs, relaxing restrictions of previously known algorithms in regards to topology and geometry. The algorithm is based on the traditional force-directed layout scheme with extensions to handle multi-level nesting, edges between nodes of arbitrary nesting levels, varying node sizes, and other possible application-specific constraints. Experimental results show that the execution time and quality of the produced drawings with respect to commonly accepted layout criteria are quite satisfactory. The algorithm has also been successfully implemented as part of a pathway integration and analysis toolkit named PATIKA, for drawing complicated biological pathways with compartmental constraints and arbitrary nesting relations to represent molecular complexes and various types of pathway abstractions.},
   keywords = {Bioinformatics,Compound graphs,Force-directed graph layout,Graph drawing,Information visualization}
 }
 
@@ -220,6 +234,7 @@
   pages = {483--484},
   publisher = {Springer},
   doi = {10.1007/3-540-45848-4_57},
+  abstract = {Graphviz is a heterogeneous collection of graph drawing tools containing batch layout programs (dot, neato, fdp, twopi); a platform for incremental layout (Dynagraph); customizable graph editors (dotty, Grappa); a server for including graphs in Web pages (WebDot); support for graphs as COM objects (Montage); utility programs useful in graph visualization; and libraries for attributed graphs. The software is available under an Open Source license. The article[1] provides a detailed description of the package.},
   isbn = {978-3-540-45848-7},
   langid = {english},
   file = {C:\Users\hirok\Zotero\storage\T4FUV3BX\Ellson et al. - 2002 - Graphviz— Open Source Graph Drawing Tools.pdf}
@@ -237,6 +252,7 @@
   doi = {10.1002/spe.4380211102},
   url = {https://onlinelibrary.wiley.com/doi/abs/10.1002/spe.4380211102},
   urldate = {2024-07-24},
+  abstract = {We present a modification of the spring-embedder model of Eades [Congressus Numerantium, 42, 149--160, (1984)] for drawing undirected graphs with straight edges. Our heuristic strives for uniform edge lengths, and we develop it in analogy to forces in natural systems, for a simple, elegant, conceptually-intuitive, and efficient algorithm.},
   copyright = {Copyright {\copyright} 1991 John Wiley \& Sons, Ltd},
   langid = {english},
   keywords = {Force-directed placement,Graph drawing,Multi-level techniques,Simulated annealing},
@@ -247,6 +263,7 @@
   title = {Randomized Subspace Regularized {{Newton}} Method for Unconstrained Non-Convex Optimization},
   author = {Fuji, Terunari and Poirion, Pierre-Louis and Takeda, Akiko},
   year = {2022},
+  month = sep,
   number = {arXiv:2209.04170},
   eprint = {2209.04170},
   primaryclass = {math},
@@ -254,6 +271,7 @@
   doi = {10.48550/arXiv.2209.04170},
   url = {http://arxiv.org/abs/2209.04170},
   urldate = {2024-06-13},
+  abstract = {While there already exist randomized subspace Newton methods that restrict the search direction to a random subspace for a convex function, we propose a randomized subspace regularized Newton method for a non-convex function \{and more generally we investigate thoroughly the local convergence rate of the randomized subspace Newton method\}. In our proposed algorithm using a modified Hessian of the function restricted to some random subspace, with high probability, the function value decreases even when the objective function is non-convex. In this paper, we show that our method has global convergence under appropriate assumptions and its convergence rate is the same as that of the full regularized Newton method. \%We also prove that Furthermore, we can obtain a local linear convergence rate under some additional assumptions, and prove that this rate is the best we can hope, in general, when using random subspace. We furthermore prove that if the Hessian at the local optimum is rank defficient then superlienar convergence holds.},
   archiveprefix = {arXiv},
   keywords = {Mathematics - Optimization and Control},
   file = {C\:\\Users\\hirok\\Zotero\\storage\\TBPTQG45\\Fuji et al. - 2022 - Randomized subspace regularized Newton method for .pdf;C\:\\Users\\hirok\\Zotero\\storage\\SSYWSZ44\\2209.html}
@@ -263,6 +281,7 @@
   title = {A Parallel {{Fruchterman}}--{{Reingold}} Algorithm Optimized for Fast Visualization of Large Graphs and Swarms of Data},
   author = {Gajdo{\v s}, Petr and Je{\v z}owicz, Tom{\'a}{\v s} and Uher, Vojt{\v e}ch and Dohn{\'a}lek, Pavel},
   year = {2016},
+  month = feb,
   journal = {Swarm and Evolutionary Computation},
   volume = {26},
   pages = {56--63},
@@ -270,6 +289,7 @@
   doi = {10.1016/j.swevo.2015.07.006},
   url = {https://www.sciencedirect.com/science/article/pii/S2210650215000644},
   urldate = {2024-07-24},
+  abstract = {Graphs in computer science are widely used in social network analysis, computer networks, transportation networks, and many other areas. In general, they can visualize relationships between objects. However, fast drawing of graphs and other structures containing large numbers of data points with readable layouts is still a challenge. This paper describes a novel variant of the Fruchterman--Reingold graph layout algorithm which is adapted to GPU parallel architecture. A new approach based on space-filling curves and a new way of repulsive forces computation on GPU are described. The paper contains both performance and quality tests of the new algorithm.},
   keywords = {CUDA,Fast graph visualization,Fruchterman-Reingold,GPU,Graph layouts,Nearest neighbors},
   file = {C:\Users\hirok\Zotero\storage\7GVF7CLS\S2210650215000644.html}
 }
@@ -286,6 +306,7 @@
   doi = {10.1007/978-3-540-31843-9_25},
   url = {http://link.springer.com/10.1007/978-3-540-31843-9_25},
   urldate = {2024-07-22},
+  abstract = {One of the most popular graph drawing methods is based on achieving graph-theoretic target distances. This method was used by Kamada and Kawai [15], who formulated it as an energy optimization problem. Their energy is known in the multidimensional scaling (MDS) community as the stress function. In this work, we show how to draw graphs by stress majorization, adapting a technique known in the MDS community for more than two decades. It appears that majorization has advantages over the technique of Kamada and Kawai in running time and stability. We also found the majorization-based optimization being essential to a few extensions to the basic energy model. These extensions can improve layout quality and computation speed in practice.},
   isbn = {978-3-540-24528-5 978-3-540-31843-9},
   langid = {english},
   file = {C:\Users\hirok\Zotero\storage\4PU6SR2S\GKN04.pdf}
@@ -296,12 +317,14 @@
   booktitle = {Proceedings of the 2016 on {{Genetic}} and {{Evolutionary Computation Conference Companion}}},
   author = {Ghassemi Toosi, Farshad and Nikolov, Nikola S. and Eaton, Malachy},
   year = {2016},
+  month = jul,
   series = {{{GECCO}} '16 {{Companion}}},
   pages = {997--1000},
   publisher = {Association for Computing Machinery},
   doi = {10.1145/2908961.2931660},
   url = {https://dl.acm.org/doi/10.1145/2908961.2931660},
   urldate = {2024-09-10},
+  abstract = {We report on our findings using Simulated Annealing (SA) as a preprocessing step for force-directed graph drawing. Our proposed SA algorithm finds a smart initial vertex placement (instead of a random initial vertex placement) in order to decrease the chance of having edge crossings (local minima) and also to decrease the number of required iterations from start placement to the final placement.},
   isbn = {978-1-4503-4323-7},
   file = {C:\Users\hirok\Zotero\storage\L6Q8MNGZ\Ghassemi Toosi et al. - 2016 - Simulated Annealing as a Pre-Processing Step for F.pdf}
 }
@@ -310,6 +333,7 @@
   title = {A Fast Algorithm for Particle Simulations},
   author = {Greengard, L and Rokhlin, V},
   year = {1987},
+  month = dec,
   journal = {Journal of Computational Physics},
   volume = {73},
   number = {2},
@@ -318,6 +342,7 @@
   doi = {10.1016/0021-9991(87)90140-9},
   url = {https://www.sciencedirect.com/science/article/pii/0021999187901409},
   urldate = {2024-07-24},
+  abstract = {An algorithm is presented for the rapid evaluation of the potential and force fields in systems involving large numbers of particles whose interactions are Coulombic or gravitational in nature. For a system of N particles, an amount of work of the order O(N2) has traditionally been required to evaluate all pairwise interactions, unless some approximation or truncation method is used. The algorithm of the present paper requires an amount of work proportional to N to evaluate all interactions to within roundoff error, making it considerably more practical for large-scale problems encountered in plasma physics, fluid dynamics, molecular dynamics, and celestial mechanics.},
   file = {C:\Users\hirok\Zotero\storage\NN4JIHXP\0021999187901409.html}
 }
 
@@ -332,6 +357,7 @@
   title = {Fast {{Convergence}} to {{Second-Order Stationary Point}} through {{Random Subspace Optimization}}},
   author = {Higuchi, Rei and Poirion, Pierre-Louis and Takeda, Akiko},
   year = {2024},
+  month = jun,
   number = {arXiv:2406.14337},
   eprint = {2406.14337},
   primaryclass = {math},
@@ -339,6 +365,7 @@
   doi = {10.48550/arXiv.2406.14337},
   url = {http://arxiv.org/abs/2406.14337},
   urldate = {2024-07-24},
+  abstract = {We propose the Random Subspace Homogenized Trust Region (RSHTR) method, which efficiently solves high-dimensional non-convex optimization problems by identifying descent directions within randomly selected subspaces. RSHTR provides the strongest theoretical guarantees among random subspace algorithms for non-convex optimization, achieving an \${\textbackslash}varepsilon\$-approximate first-order stationary point in \$O({\textbackslash}varepsilon{\textasciicircum}\{-3/2\})\$ iterations and converging locally at a linear rate. Furthermore, under rank-deficient conditions, RSHTR satisfies \${\textbackslash}varepsilon\$-approximate second-order necessary condition in \$O({\textbackslash}varepsilon{\textasciicircum}\{-3/2\})\$ iterations and exhibits a local quadratic convergence.},
   archiveprefix = {arXiv},
   keywords = {90C06 90C26 90C30,Mathematics - Optimization and Control},
   file = {C\:\\Users\\hirok\\Zotero\\storage\\U3M7G37T\\Higuchi et al. - 2024 - Fast Convergence to Second-Order Stationary Point .pdf;C\:\\Users\\hirok\\Zotero\\storage\\REUWDATS\\2406.html}
@@ -358,6 +385,7 @@
   title = {An Algorithm for Drawing General Undirected Graphs},
   author = {Kamada, Tomihisa and Kawai, Satoru},
   year = {1989},
+  month = apr,
   journal = {Information Processing Letters},
   volume = {31},
   number = {1},
@@ -374,6 +402,7 @@
   title = {Global Linear Convergence of {{Newton}}'s Method without Strong-Convexity or {{Lipschitz}} Gradients},
   author = {Karimireddy, Sai Praneeth and Stich, Sebastian U. and Jaggi, Martin},
   year = {2018},
+  month = jun,
   number = {arXiv:1806.00413},
   eprint = {1806.00413},
   primaryclass = {cs, math, stat},
@@ -381,6 +410,7 @@
   doi = {10.48550/arXiv.1806.00413},
   url = {http://arxiv.org/abs/1806.00413},
   urldate = {2024-06-13},
+  abstract = {We show that Newton's method converges globally at a linear rate for objective functions whose Hessians are stable. This class of problems includes many functions which are not strongly convex, such as logistic regression. Our linear convergence result is (i) affine-invariant, and holds even if an (ii) approximate Hessian is used, and if the subproblems are (iii) only solved approximately. Thus we theoretically demonstrate the superiority of Newton's method over first-order methods, which would only achieve a sublinear \$O(1/t{\textasciicircum}2)\$ rate under similar conditions.},
   archiveprefix = {arXiv},
   keywords = {90C25 68Q25,Computer Science - Machine Learning,G.1.6,Mathematics - Optimization and Control,Statistics - Machine Learning},
   file = {C\:\\Users\\hirok\\Zotero\\storage\\M7IHV2IS\\Karimireddy et al. - 2018 - Global linear convergence of Newton's method witho.pdf;C\:\\Users\\hirok\\Zotero\\storage\\QKVDAHYF\\1806.html}
@@ -391,11 +421,13 @@
   booktitle = {2024 {{IEEE International Systems Conference}} ({{SysCon}})},
   author = {Khan, Burhan and Johnstone, Michael and Creighton, Douglas},
   year = {2024},
+  month = apr,
   pages = {1--7},
   issn = {2472-9647},
   doi = {10.1109/SysCon61195.2024.10553494},
   url = {https://ieeexplore.ieee.org/document/10553494},
   urldate = {2024-09-10},
+  abstract = {Determining the layout of a graph from an aesthetic point-of-view is a challenging task and becomes difficult with the increase in complexity of a graph. Aesthetic attributes of graphs can be captured in terms of metrics such as the number of edge crossings, uniform edge lengths, visualization of loops in causal loop diagrams, and a minimum distance between neighboring nodes. These metrics are then used as objectives in an evolutionary algorithm to obtain the optimal set of trade-off solutions, leading to a pleasing layout. As the number of aesthetic measures could be more than three, we propose a framework based on a many-objective evolutionary algorithm to produce aesthetically pleasing graph layouts. The outcome of this approach is compared with the ForceAtlas2 force-directed layout algorithm and the proposed approach demonstrates better results for the objectives.},
   keywords = {Aesthetics,Causal-loop Diagram,Complexity theory,Evolutionary computation,Evolutionary Computation,Graph Layout,Layout,Many-Objective,Measurement,Multi-Objective,Obesity,Optimization,Task analysis,Visualization},
   file = {C\:\\Users\\hirok\\Zotero\\storage\\DKEAL2I8\\Khan et al. - 2024 - A Many-objective Evolutionary Algorithm Approach f.pdf;C\:\\Users\\hirok\\Zotero\\storage\\S46C3HI4\\10553494.html}
 }
@@ -404,6 +436,7 @@
   title = {Continuous Optimization Methods for the Graph Isomorphism Problem},
   author = {Klus, Stefan and Gel{\ss}, Patrick},
   year = {2023},
+  month = nov,
   number = {arXiv:2311.16912},
   eprint = {2311.16912},
   primaryclass = {cs},
@@ -411,6 +444,7 @@
   doi = {10.48550/arXiv.2311.16912},
   url = {http://arxiv.org/abs/2311.16912},
   urldate = {2024-09-03},
+  abstract = {The graph isomorphism problem looks deceptively simple, but although polynomial-time algorithms exist for certain types of graphs such as planar graphs and graphs with bounded degree or eigenvalue multiplicity, its complexity class is still unknown. Information about potential isomorphisms between two graphs is contained in the eigenvalues and eigenvectors of their adjacency matrices. However, symmetries of graphs often lead to repeated eigenvalues so that associated eigenvectors are determined only up to basis rotations, which complicates graph isomorphism testing. We consider orthogonal and doubly stochastic relaxations of the graph isomorphism problem, analyze the geometric properties of the resulting solution spaces, and show that their complexity increases significantly if repeated eigenvalues exist. By restricting the search space to suitable subspaces, we derive an efficient Frank-Wolfe based continuous optimization approach for detecting isomorphisms. We illustrate the efficacy of the algorithm with the aid of various highly symmetric graphs.},
   archiveprefix = {arXiv},
   keywords = {Computer Science - Data Structures and Algorithms,Computer Science - Discrete Mathematics},
   file = {C\:\\Users\\hirok\\Zotero\\storage\\RJD7F6EZ\\Klus and Gelß - 2023 - Continuous optimization methods for the graph isom.pdf;C\:\\Users\\hirok\\Zotero\\storage\\W5LUSF8A\\2311.html}
@@ -420,12 +454,14 @@
   title = {Spring {{Embedders}} and {{Force Directed Graph Drawing Algorithms}}},
   author = {Kobourov, Stephen G.},
   year = {2012},
+  month = jan,
   number = {arXiv:1201.3011},
   eprint = {1201.3011},
   publisher = {arXiv},
   doi = {10.48550/arXiv.1201.3011},
   url = {http://arxiv.org/abs/1201.3011},
   urldate = {2024-10-15},
+  abstract = {Force-directed algorithms are among the most flexible methods for calculating layouts of simple undirected graphs. Also known as spring embedders, such algorithms calculate the layout of a graph using only information contained within the structure of the graph itself, rather than relying on domain-specific knowledge. Graphs drawn with these algorithms tend to be aesthetically pleasing, exhibit symmetries, and tend to produce crossing-free layouts for planar graphs. In this survey we consider several classical algorithms, starting from Tutte's 1963 barycentric method, and including recent scalable multiscale methods for large and dynamic graphs.},
   archiveprefix = {arXiv},
   keywords = {Computer Science - Computational Geometry,Computer Science - Data Structures and Algorithms,Computer Science - Discrete Mathematics},
   file = {C\:\\Users\\hirok\\Zotero\\storage\\KTM7GSCJ\\Kobourov - 2012 - Spring Embedders and Force Directed Graph Drawing .pdf;C\:\\Users\\hirok\\Zotero\\storage\\Z22S8YMR\\1201.html}
@@ -435,6 +471,7 @@
   title = {On the Limited Memory {{BFGS}} Method for Large Scale Optimization},
   author = {Liu, Dong C. and Nocedal, Jorge},
   year = {1989},
+  month = aug,
   journal = {Mathematical Programming},
   volume = {45},
   number = {1},
@@ -443,6 +480,7 @@
   doi = {10.1007/BF01589116},
   url = {https://doi.org/10.1007/BF01589116},
   urldate = {2024-10-15},
+  abstract = {We study the numerical performance of a limited memory quasi-Newton method for large scale optimization, which we call the L-BFGS method. We compare its performance with that of the method developed by Buckley and LeNir (1985), which combines cycles of BFGS steps and conjugate direction steps. Our numerical tests indicate that the L-BFGS method is faster than the method of Buckley and LeNir, and is better able to use additional storage to accelerate convergence. We show that the L-BFGS method can be greatly accelerated by means of a simple scaling. We then compare the L-BFGS method with the partitioned quasi-Newton method of Griewank and Toint (1982a). The results show that, for some problems, the partitioned quasi-Newton method is clearly superior to the L-BFGS method. However we find that for other problems the L-BFGS method is very competitive due to its low iteration cost. We also study the convergence properties of the L-BFGS method, and prove global convergence on uniformly convex problems.},
   langid = {english},
   keywords = {conjugate gradient method,Large scale nonlinear optimization,limited memory methods,partitioned quasi-Newton method},
   file = {C:\Users\hirok\Zotero\storage\U9ZCJ63W\Liu and Nocedal - 1989 - On the limited memory BFGS method for large scale .pdf}
@@ -452,6 +490,7 @@
   title = {Cubic Regularization of {{Newton}} Method and Its Global Performance},
   author = {Nesterov, Yurii and Polyak, B.T.},
   year = {2006},
+  month = aug,
   journal = {Mathematical Programming},
   volume = {108},
   number = {1},
@@ -460,6 +499,7 @@
   doi = {10.1007/s10107-006-0706-8},
   url = {https://doi.org/10.1007/s10107-006-0706-8},
   urldate = {2024-10-23},
+  abstract = {In this paper, we provide theoretical analysis for a cubic regularization of Newton method as applied to unconstrained minimization problem. For this scheme, we prove general local convergence results. However, the main contribution of the paper is related to global worst-case complexity bounds for different problem classes including some nonconvex cases. It is shown that the search direction can be computed by standard linear algebra technique.},
   langid = {english},
   keywords = {49M15,49M37,58C15,90C25,90C30,General nonlinear optimization,Global complexity bounds,Global rate of convergence,Newton method,Trust-region methods,Unconstrained optimization},
   file = {C:\Users\hirok\Zotero\storage\FHWZP5WZ\Nesterov and Polyak - 2006 - Cubic regularization of Newton method and its glob.pdf}
@@ -481,10 +521,12 @@
   booktitle = {2012 {{UKSim}} 14th {{International Conference}} on {{Computer Modelling}} and {{Simulation}}},
   author = {{Nitin}},
   year = {2012},
+  month = mar,
   pages = {39--45},
   doi = {10.1109/UKSim.2012.15},
   url = {https://ieeexplore.ieee.org/document/6205548},
   urldate = {2024-09-10},
+  abstract = {In this paper, we study how to modify a physical, force-directed method based upon the Fruchterman-Reingold (FR) graph layout algorithm so that it can be used for untangling. Specifically, we have chosen Lake\_20 Mesh, Lake\_35 Mesh and Tri\_20258 Mesh for our research work. All these meshes consist of small triangles. The objectives of aesthetic graph layout, such as minimization of edge intersections and near equalization of edge lengths, follow the goals of mesh untangling and generating good quality elements, respectively. We have successfully applied our method to untangle various shapes of triangles i.e. Lake\_20, Lake\_35 and Tri\_20258 finite element meshes.},
   keywords = {Finite element methods,Force,Force-directed approach,Graph embedding,Lakes,Layout,Mesh untangling,Partial differential equations,Shape,Smoothing methods},
   file = {C\:\\Users\\hirok\\Zotero\\storage\\HK73J67U\\Nitin - 2012 - On Untangled Meshes via Fruchterman Reingold Force.pdf;C\:\\Users\\hirok\\Zotero\\storage\\JAYBRMGW\\6205548.html}
 }
@@ -493,12 +535,14 @@
   title = {Randomized Subspace Gradient Method for Constrained Optimization},
   author = {Nozawa, Ryota and Poirion, Pierre-Louis and Takeda, Akiko},
   year = {2023},
+  month = jul,
   number = {arXiv:2307.03335},
   eprint = {2307.03335},
   publisher = {arXiv},
   doi = {10.48550/arXiv.2307.03335},
   url = {http://arxiv.org/abs/2307.03335},
   urldate = {2024-10-22},
+  abstract = {We propose randomized subspace gradient methods for high-dimensional constrained optimization. While there have been similarly purposed studies on unconstrained optimization problems, there have been few on constrained optimization problems due to the difficulty of handling constraints. Our algorithms project gradient vectors onto a subspace that is a random projection of the subspace spanned by the gradients of active constraints. We determine the worst-case iteration complexity under linear and nonlinear settings and theoretically confirm that our algorithms can take a larger step size than their deterministic version. From the advantages of taking longer step and randomized subspace gradients, we show that our algorithms are especially efficient in view of time complexity when gradients cannot be obtained easily. Numerical experiments show that they tend to find better solutions because of the randomness of their subspace selection. Furthermore, they performs well in cases where gradients could not be obtained directly, and instead, gradients are obtained using directional derivatives.},
   archiveprefix = {arXiv},
   keywords = {Mathematics - Optimization and Control},
   file = {C\:\\Users\\hirok\\Zotero\\storage\\7QS7MVJ2\\Nozawa et al. - 2023 - Randomized subspace gradient method for constraine.pdf;C\:\\Users\\hirok\\Zotero\\storage\\QNJU5SF9\\2307.html}
@@ -508,8 +552,10 @@
   title = {Chokkan/Liblbfgs},
   author = {Okazaki, Naoaki},
   year = {2024},
+  month = oct,
   url = {https://github.com/chokkan/liblbfgs},
   urldate = {2024-10-11},
+  abstract = {libLBFGS: a library of Limited-memory Broyden-Fletcher-Goldfarb-Shanno (L-BFGS)},
   copyright = {MIT}
 }
 
@@ -520,6 +566,7 @@
   institution = {Red Blob Games},
   url = {https://www.redblobgames.com/grids/hexagons/},
   urldate = {2024-10-12},
+  abstract = {Amit's guide to math, algorithms, and code for hexagonal grids},
   langid = {english},
   file = {C:\Users\hirok\Zotero\storage\SCP3BS5G\hexagons.html}
 }
@@ -528,8 +575,10 @@
   title = {Yixuan/{{LBFGSpp}}},
   author = {Qiu, Yixuan},
   year = {2024},
+  month = oct,
   url = {https://github.com/yixuan/LBFGSpp},
   urldate = {2024-10-11},
+  abstract = {A header-only C++ library for L-BFGS and L-BFGS-B algorithms},
   copyright = {MIT},
   keywords = {l-bfgs,l-bfgs-b,lbfgs-solver,lbfgsb-solver,limited-memory,optimization}
 }
@@ -551,6 +600,7 @@
   issn = {1424-8220},
   doi = {10.3390/s22145179},
   url = {https://www.mdpi.com/1424-8220/22/14/5179},
+  abstract = {Internet of Things (IoT) and Big Data technologies are becoming increasingly significant parts of national defense and the military, as well as in the civilian usage. The proper deployment of large-scale wireless sensor network (WSN) provides the foundation for these advanced technologies. Based on the Fruchterman--Reingold graph layout, we propose the Fruchterman--Reingold Hexagon (FR-HEX) algorithm for the deployment of WSNs. By allocating edges of hexagonal topology to sensor nodes, the network forms hexagonal network topology. A comprehensive evaluation of 50 simulations is conducted, which utilizes three evaluation metrics: average moving distance, pair correlation diversion (PCD), and system coverage rate. The FR-HEX algorithm performs consistently, the WSN topologies are properly regulated, the PCD values are below 0.05, and the WSN system coverage rate reaches 94},
   pubmedid = {35890858}
 }
 
@@ -558,6 +608,7 @@
   title = {Methods for {{Visual Understanding}} of {{Hierarchical System Structures}}},
   author = {Sugiyama, Kozo and Tagawa, Shojiro and Toda, Mitsuhiko},
   year = {1981},
+  month = feb,
   journal = {IEEE Transactions on Systems, Man, and Cybernetics},
   volume = {11},
   number = {2},
@@ -566,12 +617,13 @@
   doi = {10.1109/TSMC.1981.4308636},
   url = {https://ieeexplore-ieee-org.utokyo.idm.oclc.org/document/4308636},
   urldate = {2024-07-28},
+  abstract = {Two kinds of new methods are developed to obtain effective representations of hierarchies automatically: theoretical and heuristic methods. The methods determine the positions of vertices in two steps. First the order of the vertices in each level is determined to reduce the number of crossings of edges. Then horizontal positions of the vertices are determined to improve further the readability of drawings. The theoretical methods are useful in recognizing the nature of the problem, and the heuristic methods make it possible to enlarge the size of hierarchies with which we can deal. Performance tests of the heuristic methods and several applications are presented.},
   keywords = {Computer displays,Constraint theory,Engineering drawings,Flowcharts,Hierarchical systems,Image recognition,Information science,Processor scheduling,Programming,Testing},
   file = {C\:\\Users\\hirok\\Zotero\\storage\\AYIKWI4K\\Sugiyama et al. - 1981 - Methods for Visual Understanding of Hierarchical S.pdf;C\:\\Users\\hirok\\Zotero\\storage\\3DYKLH8G\\4308636.html}
 }
 
 @misc{ThisPaperGitHub,
-  title = {Hari64boli64/{{Initial Placement}} for {{Fruchterman}}--{{Reingold Force Model}} with {{Coordinate Newton Direction}}},
+  title = {Hari64boli64/{{Initial}}\_{{Placement}}\_for\_{{Fruchterman}}--{{Reingold}}\_{{Force}}\_{{Model}}\_with\_{{Coordinate}}\_{{Newton}}\_{{Direction}}},
   author = {Hiroki, Hamaguchi},
   url = {https://github.com/hari64boli64/Initial_Placement_for_Fruchterman-Reingold_Force_Model_with_Coordinate_Newton_Direction},
   urldate = {2024-10-31},
@@ -606,12 +658,14 @@
   title = {Dynamic {{Multilevel Graph Visualization}}},
   author = {Veldhuizen, Todd L.},
   year = {2007},
+  month = dec,
   number = {arXiv:0712.1549},
   eprint = {0712.1549},
   publisher = {arXiv},
   doi = {10.48550/arXiv.0712.1549},
   url = {http://arxiv.org/abs/0712.1549},
   urldate = {2024-11-22},
+  abstract = {We adapt multilevel, force-directed graph layout techniques to visualizing dynamic graphs in which vertices and edges are added and removed in an online fashion (i.e., unpredictably). We maintain multiple levels of coarseness using a dynamic, randomized coarsening algorithm. To ensure the vertices follow smooth trajectories, we employ dynamics simulation techniques, treating the vertices as point particles. We simulate fine and coarse levels of the graph simultaneously, coupling the dynamics of adjacent levels. Projection from coarser to finer levels is adaptive, with the projection determined by an affine transformation that evolves alongside the graph layouts. The result is a dynamic graph visualizer that quickly and smoothly adapts to changes in a graph.},
   archiveprefix = {arXiv},
   keywords = {Computer Science - Discrete Mathematics,Computer Science - Graphics},
   file = {C\:\\Users\\hirok\\Zotero\\storage\\KWJHATGS\\Veldhuizen - 2007 - Dynamic Multilevel Graph Visualization.pdf;C\:\\Users\\hirok\\Zotero\\storage\\E5YFGSSZ\\0712.html}
@@ -627,6 +681,7 @@
   pages = {515--530},
   publisher = {Springer},
   doi = {10.1007/978-3-642-15939-8_33},
+  abstract = {Graphs provide an efficient tool for object representation in various machine learning applications. Once graph-based representations are constructed, an important question is how to compare graphs. This problem is often formulated as a graph matching problem where one seeks a mapping between vertices of two graphs which optimally aligns their structure. In the classical formulation of graph matching, only one-to-one correspondences between vertices are considered. However, in many applications, graphs cannot be matched perfectly and it is more interesting to consider many-to-many correspondences where clusters of vertices in one graph are matched to clusters of vertices in the other graph. In this paper, we formulate the many-to-many graph matching problem as a discrete optimization problem and propose two approximate algorithms based on alternative continuous relaxations of the combinatorial problem. We compare new methods with other existing methods on several benchmark datasets.},
   isbn = {978-3-642-15939-8},
   langid = {english},
   keywords = {Chinese Character,Continuous Relaxation,Discrete Optimization Problem,Graph Match,Vertex Label},
@@ -637,6 +692,7 @@
   title = {Graph {{Drawing}} by {{Stochastic Gradient Descent}}},
   author = {Zheng, Jonathan X. and Pawar, Samraat and Goodman, Dan F. M.},
   year = {2019},
+  month = sep,
   journal = {IEEE Transactions on Visualization and Computer Graphics},
   volume = {25},
   number = {9},
@@ -645,6 +701,7 @@
   doi = {10.1109/TVCG.2018.2859997},
   url = {https://ieeexplore.ieee.org/document/8419285},
   urldate = {2024-11-18},
+  abstract = {A popular method of force-directed graph drawing is multidimensional scaling using graph-theoretic distances as input. We present an algorithm to minimize its energy function, known as stress, by using stochastic gradient descent (SGD) to move a single pair of vertices at a time. Our results show that SGD can reach lower stress levels faster and more consistently than majorization, without needing help from a good initialization. We then show how the unique properties of SGD make it easier to produce constrained layouts than previous approaches. We also show how SGD can be directly applied within the sparse stress approximation of Ortmann et al. [1], making the algorithm scalable up to large graphs.},
   keywords = {Annealing,Approximation algorithms,constraints,Graph drawing,Layout,Mathematical model,multidimensional scaling,relaxation,Schedules,Standards,stochastic gradient descent,Stress},
   file = {C\:\\Users\\hirok\\Zotero\\storage\\Y6KTDE39\\Zheng et al. - 2019 - Graph Drawing by Stochastic Gradient Descent.pdf;C\:\\Users\\hirok\\Zotero\\storage\\Y6ZQZ6LM\\8419285.html}
 }
