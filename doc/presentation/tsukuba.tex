@@ -20,6 +20,7 @@
 \usepackage{mathrsfs}       % \mathscr{A}
 \usepackage{mathtools}      % \mathrlap
 \usepackage{multirow}       % \multirow
+\usepackage[authoryear]{natbib}
 \usepackage{optidef}        % \begin{mini*}{x}{f(x)}{}{}
 \usepackage{orcidlink}      % \orcidlink
 \usepackage{physics}        % \qty, \norm, \abs
@@ -235,7 +236,7 @@
         \large{%
           \textbf{Fruchterman--Reingold (FR)} 力学モデルが著名\\
           一般的・直感的・シンプルなグラフ描画を実現\\[0.8em]
-          \textbf{NetworkX} \raisebox{-0.2\baselineskip}{\includegraphics[width=1.5em]{graphDrawing/networkxLogo.png}}~\cite{hagberg2008exploring} は著名なPythonライブラリ\\
+          \textbf{NetworkX} \raisebox{-0.4\baselineskip}{\includegraphics[width=2em]{graphDrawing/networkxLogo.png}} は著名なPythonライブラリ\\
           \texttt{nx.draw}: \large{\textbf{FR}}力学モデルを用いたグラフ描画
         }
         \begin{center}
@@ -262,27 +263,27 @@
 \ifShowHidden
   \begin{frame}{``捻じれ'' がもたらす停滞}
     \large{%
-      \textbf{捻じれ}とは、不必要な辺の交差や歪んだグラフ構造を指す~\cite{veldhuizenDynamicMultilevelGraph2007,cheongSnapshotVisualizationComplex2018}\\
+      \textbf{捻じれ}とは、不必要な辺の交差や歪んだグラフ構造を指す\\
+      \citep{veldhuizenDynamicMultilevelGraph2007,cheongSnapshotVisualizationComplex2018}\\
       $\to$ 特に大規模なグラフ描画において、深刻な問題となる\\
       \textbf{これを\red{2つの数理最適化手法によるアプローチ}で解決するのが本研究の目的}\\
     }
     \begin{figure}[htbp]
       \centering
-      \animategraphics[autoplay,loop,width=0.4\columnwidth]{5}{circle/circle-}{1}{1}%!!!50
+      \animategraphics[autoplay,loop,width=0.38\columnwidth]{5}{circle/circle-}{1}{1}%!!!50
     \end{figure}
   \end{frame}
 \fi
 
 \ifShowHidden
   \begin{frame}{Fruchterman--Reingold力学モデル (従来的解釈)}
-    \textbf{FR力学モデル}は
     \tccA{\Large{\textbf{a}}}\tccA{ttractive force (引力)}と
-    \tccD{\Large{\textbf{r}}}\tccD{epulsive force (斥力)}を用いる~\cite{fruchtermanGraphDrawingForcedirected1991}
+    \tccD{\Large{\textbf{r}}}\tccD{epulsive force (斥力)}が働く \citep{fruchtermanGraphDrawingForcedirected1991}
     \begin{equation*}
       \tccA{F_{i,j}^\mathrm{a}(d) \defeq \frac{w_{i,j} d^2}{k}}, \quad \tccD{F^\mathrm{r}(d) \defeq -\frac{k^2}{d}}.
     \end{equation*}
     \textbf{力指向グラフ描画}はこれらの力の\textbf{均衡点}を単純なシミュレーションで求める\\
-    \textbf{Multilevel Approach}という複雑だが強力な手法も併用可能 (GraphVizなど)
+    \textbf{Multilevel Approach}という複雑だが強力な手法も併用可能 (GraphVizなど)~\citep{Hu2006EfficientHF}
     \begin{columns}
       \begin{column}{0.5\columnwidth}
         \begin{figure}[h]
@@ -319,19 +320,19 @@
         \end{figure}
       \end{column}
     \end{columns}
-    これらのスカラーポテンシャル (エネルギー) は次のように定義される~\cite{6183577}
+    これらのスカラーポテンシャル (エネルギー) は次のように定義される~\citep{6183577}
     \begin{gather*}
       \tccA{E_{i,j}^\mathrm{a}(d) \defeq \int_{0}^{d} F_{i,j}^\mathrm{a}(r) \dd{r} = \frac{w_{i,j} d^3}{3k}}, \quad
       \tccD{E^\mathrm{r}(d)       \defeq \int_{\infty}^{d} F^\mathrm{r}(r) \dd{r} = -k^2\log{d}}, \\
       E_{i,j}(d)            \defeq \tccA{E_{i,j}^\mathrm{a}(d)} + \tccD{E^\mathrm{r}(d)}.
     \end{gather*}
-    均衡点を求める $\iff$ \textbf{$f(X)$の局所最適解を求める} (\textbf{非凸最適化問題})
-    \begin{mini}
+    均衡点を求める $\iff$ \textbf{$f(X)$ の局所最適解を求める} (\textbf{非凸最適化問題})
+    \begin{mini*}
       {X \in \bbR^{2 \times n}}
       {f(X) \defeq \sum_{i<j} E_{i,j}(\norm{x_i - x_j}).}
-      {\label{eq:fr}}
       {}
-    \end{mini}
+      {}
+    \end{mini*}
   \end{frame}
 \fi
 
@@ -342,7 +343,7 @@
         \textbf{L-BFGS法}を用いる\\
         無制約問題に対する微分情報を用いた最適化手法\\[0.5em]
 
-        効率的と知られていた~\cite{6183577}\\[0.5em]
+        効率的と知られていた\citep{6183577}\\[0.5em]
 
         \textbf{主に実装面での貢献}\\
         軽量な実装が特徴\\
@@ -390,7 +391,7 @@
 \ifShowHidden
   \begin{frame}{貢献2: 座標ニュートン方向を用いた初期配置}
     \textbf{\red{数理最適化によるアプローチを更に高速化出来ないか? $\to$ 初期配置(2つ目の貢献)}}\\
-    \textbf{焼き鈍し法}~\cite{ghassemitoosiSimulatedAnnealingPreProcessing2016}を用いた既存研究よりも、より広く適用出来る方法を提案
+    \textbf{焼き鈍し法}~\citep{ghassemitoosiSimulatedAnnealingPreProcessing2016}よりも、より広く適用出来る方法を提案
     \begin{figure}[h]
       \centering
       \includegraphics[width=0.7\columnwidth]{../main/fig1/fig1_slide.pdf}
@@ -401,7 +402,7 @@
 \ifShowHidden
   \begin{frame}{貢献2: 問題の簡略化 (1/2)}
     \textbf{初期配置として大まかな解を高速に得たい} \quad
-    問題~\eqref{eq:fr}の代わりに次を解く:
+    元問題の代わりに次を解く:
     \begin{columns}
       \begin{column}{0.55\columnwidth}
         \begin{mini}
@@ -426,7 +427,7 @@
     \end{columns}
     \vspace{0.3cm}
     \hrulefill\\
-    この導出理由: 問題~\eqref{eq:fr}において、
+    この導出理由: 元問題 $\text{minimize} f(X)$ において
     まず $f(X)$ を $\tccA{E^\mathrm{a}_{i,j}}$ と $\tccD{E^\mathrm{r}}$ に分離する
     \begin{mini*}
       {X \in \bbR^{2 \times n}}
@@ -439,7 +440,7 @@
 
 \ifShowHidden
   \begin{frame}{貢献2: 問題の簡略化 (2/2)}
-    先行研究~\cite{ghassemitoosiSimulatedAnnealingPreProcessing2016}に従い、$x_i$の位置を離散点集合$Q$に固定する:
+    先行研究~\citep{ghassemitoosiSimulatedAnnealingPreProcessing2016}に従い、$x_i$の位置を離散点集合$Q$に固定する:
     \begin{mini*}
       {X \in \bbR^{2 \times n}}
       {\tccA{\sum_{\{i,j\}\in E} \frac{w_{i,j}\norm{x_i - x_j}^3}{3k}} - \tccD{\sum_{i<j} k^2\log{\norm{x_i - x_j}}},}
@@ -473,10 +474,10 @@
   \end{mini*}
   \begin{columns}
     \begin{column}{0.55\columnwidth}
-      これを次のように簡略化することで、高速化を図る:
+      次のように簡略化すること高速化を図る:
       \begin{mini*}
         {X \in \bbR^{2 \times n}}
-        {\tccA{f^\mathrm{a}(X) \defeq \sum_{\{i,j\}\in E} \frac{w_{i,j}\norm{x_i - x_j}^3}{3k}}, \tag{\ref{eq:frApprox0}}}
+        {\tccA{f^\mathrm{a}(X) \defeq \sum_{\{i,j\}\in E} \frac{w_{i,j}\norm{x_i - x_j}^3}{3k}}}
         {}
         {}
         \addConstraint{\tccD{x_i}}{\tccD{\in Q^\mathrm{hex} \quad}}{\text{for $1 \leq i \leq n$}}
@@ -541,7 +542,7 @@
   \end{equation*}
   $x_i^\mathrm{new}$ は六角格子 $Q^\mathrm{hex}$ に含まれるとは限らず、
   $Q^\mathrm{hex}$ 上の最近点に丸める必要がある\\
-  経験的に、ランダムノイズを加えることが効果的である(SAと同様の原理)
+  経験的に、ランダムノイズを加えることが効果的である(焼き鈍し法と同様の原理)
   \begin{equation*}
     x_i^\mathrm{new} \gets \mathrm{round}\qty(x_i - \nabla^2 f^{\mathrm{a}}_i(x_i)^{-1} \nabla f^{\mathrm{a}}_i(x_i) + t \cdot \text{rand}),
   \end{equation*}
@@ -577,7 +578,7 @@
         \makecell{\small{\textsf{\textbf{CN}-L-BFGS}}                                                                                                       \\[-0.2em]\includegraphics[width=0.135\columnwidth]{../main/individual/vis/dwt_1005_CN-L-BFGS.png}} &
         \makecell{\small{\textsf{BEST}}                                                                                                                     \\[-0.2em]\includegraphics[width=0.135\columnwidth]{../main/individual/vis/opt_dwt_1005.png}} \\
       \end{tabular}
-      \caption{``BEST''は提案手法の500イテレーション目の状態}
+      \caption{``BEST''は提案手法の500反復目の状態}
     \end{figure}
   \end{frame}
 \fi
@@ -604,7 +605,7 @@
         \makecell{\small{\textsf{\textbf{CN}-L-BFGS}}                                                                                                        \\[-0.2em]\includegraphics[width=0.135\columnwidth]{../main/individual/vis/3elt_CN-L-BFGS.png}} &
         \makecell{\small{\textsf{BEST}}                                                                                                                      \\[-0.2em]\includegraphics[width=0.135\columnwidth]{../main/individual/vis/opt_3elt.png}} \\
       \end{tabular}
-      \caption{``BEST''は提案手法の500イテレーション目の状態}
+      \caption{``BEST''は提案手法の500反復目の状態}
     \end{figure}
   \end{frame}
 \fi
@@ -620,7 +621,8 @@
     \end{block}
     \begin{block}{今後の展望}
       \begin{itemize}
-        \item グラフ同型判定問題は、2つのグラフの直和を対称に描画するのと似た問題~\cite{eades1984heuristic,klusContinuousOptimizationMethods2023}\\
+        \item グラフ同型判定問題は、2つのグラフの直和を対称に描画するのと似た問題\\
+              \citep{eades1984heuristic,klusContinuousOptimizationMethods2023}
               提案手法と似た考えを応用出来ないか?
         \item GraphのSparsity自体をもっと効率的にL-BFGS法で使えないか?
         \item より広く、L-BFGS法自体を更に改善させることは出来ないか? (現在の我々の研究)
@@ -635,7 +637,7 @@
 \ifShowHidden
   \begin{frame}[allowframebreaks]{Reference}
     \beamertemplatetextbibitems
-    \bibliographystyle{IEEEtran}
+    \bibliographystyle{plainnat}
     \bibliography{../main/FruchtermanReingoldByRandomSubspace.bib}
     % \begin{thebibliography}{1}
     % \end{thebibliography}
