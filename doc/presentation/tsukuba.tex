@@ -263,10 +263,10 @@
 \ifShowHidden
   \begin{frame}{``捻じれ'' がもたらす停滞}
     \large{%
-      \textbf{捻じれ}とは、不必要な辺の交差や歪んだグラフ構造を指す\\
+      \textbf{捻じれ}とは、不必要な辺の交差や歪んだグラフ構造を指す。\\
       \citep{veldhuizenDynamicMultilevelGraph2007,cheongSnapshotVisualizationComplex2018}\\
-      $\to$ 特に大規模なグラフ描画において、深刻な問題となる\\
-      \textbf{これを\red{2つの数理最適化手法によるアプローチ}で解決するのが本研究の目的}\\
+      $\to$ 特に大規模なグラフ描画において、深刻な問題となる。\\
+      \textbf{これを\red{2つの数理最適化手法によるアプローチ}で解決するのが本研究の目的。}\\
     }
     \begin{figure}[htbp]
       \centering
@@ -282,7 +282,7 @@
     \begin{equation*}
       \tccA{F_{i,j}^\mathrm{a}(d) \defeq \frac{w_{i,j} d^2}{k}}, \quad \tccD{F^\mathrm{r}(d) \defeq -\frac{k^2}{d}}.
     \end{equation*}
-    \textbf{力指向グラフ描画}はこれらの力の\textbf{均衡点}を単純なシミュレーションで求める\\
+    \textbf{力指向グラフ描画}はこれらの力の\textbf{均衡点}を単純なシミュレーションで求める。\\
     \textbf{Multilevel Approach}という複雑だが強力な手法も併用可能 (GraphVizなど)~\citep{Hu2006EfficientHF}
     \begin{columns}
       \begin{column}{0.5\columnwidth}
@@ -320,7 +320,7 @@
         \end{figure}
       \end{column}
     \end{columns}
-    これらのスカラーポテンシャル (エネルギー) は次のように定義される~\citep{6183577}
+    これらのスカラーポテンシャル (エネルギー) は次のように定義される~\citep{6183577}。
     \begin{gather*}
       \tccA{E_{i,j}^\mathrm{a}(d) \defeq \int_{0}^{d} F_{i,j}^\mathrm{a}(r) \dd{r} = \frac{w_{i,j} d^3}{3k}}, \quad
       \tccD{E^\mathrm{r}(d)       \defeq \int_{\infty}^{d} F^\mathrm{r}(r) \dd{r} = -k^2\log{d}}, \\
@@ -341,15 +341,15 @@
     \begin{columns}
       \begin{column}{0.3\columnwidth}
         \textbf{L-BFGS法}を用いる\\
-        無制約問題に対する微分情報を用いた最適化手法\\[0.5em]
+        無制約問題に対する\mbox{微分}\mbox{情報}を用いた最適化手法\\[0.5em]
 
-        効率的と知られていた\citep{6183577}\\[0.5em]
+        効率的と知られていた。\citep{6183577}\\[0.5em]
 
         \textbf{主に実装面での貢献}\\
         軽量な実装が特徴\\
         (NetworkXというOSSで\\次バージョンより採用予定)\\[0.5em]
 
-        次ページで述べる非有界な場合に対する\textbf{モデル修正}\\などを新規に提案
+        次ページで述べる非有界な場合に対する\textbf{モデル修正}\\などを新規に提案した。
       \end{column}%
       \begin{column}{0.7\columnwidth}
         \begin{figure}[h]
@@ -366,17 +366,17 @@
     \begin{columns}
       \begin{column}{0.3\columnwidth}
         力学に基づくシミュレーションは、
-        非連結グラフや負辺ありでも動く\\[0.5em]
+        非連結グラフや負辺ありでも動く。\\[0.5em]
 
         しかし、最適化問題としては
-        実は\textbf{非有界}となる\\[0.5em]
+        実は\textbf{非有界}となる。\\[0.5em]
 
         \red{不合理な描画結果に!}\\[0.5em]
 
         連結グラフの場合に対する\\
         理論的同一性を保ちながら\\
         重なりが生じにくい\textbf{重力項}\\
-        を導入した
+        を導入した。
       \end{column}%
       \begin{column}{0.7\columnwidth}
         \begin{figure}[h]
@@ -391,7 +391,7 @@
 \ifShowHidden
   \begin{frame}{貢献2: 座標ニュートン方向を用いた初期配置}
     \textbf{\red{数理最適化によるアプローチを更に高速化出来ないか? $\to$ 初期配置(2つ目の貢献)}}\\
-    \textbf{焼き鈍し法}~\citep{ghassemitoosiSimulatedAnnealingPreProcessing2016}よりも、より広く適用出来る方法を提案
+    \textbf{焼き鈍し法}~\citep{ghassemitoosiSimulatedAnnealingPreProcessing2016}よりも、より広く適用出来る方法を提案。
     \begin{figure}[h]
       \centering
       \includegraphics[width=0.7\columnwidth]{../main/fig1/fig1_slide.pdf}
@@ -401,7 +401,7 @@
 
 \ifShowHidden
   \begin{frame}{貢献2: 問題の簡略化 (1/2)}
-    \textbf{初期配置として大まかな解を高速に得たい} \quad
+    \textbf{初期配置として大まかな解を高速に得たい。} \quad
     元問題の代わりに次を解く:
     \begin{columns}
       \begin{column}{0.55\columnwidth}
@@ -427,7 +427,7 @@
     \end{columns}
     \vspace{0.3cm}
     \hrulefill\\
-    この導出理由: 元問題 $\text{minimize} f(X)$ において
+    この導出理由: 元問題 $\text{minimize} \ f(X)$ において
     まず $f(X)$ を $\tccA{E^\mathrm{a}_{i,j}}$ と $\tccD{E^\mathrm{r}}$ に分離する
     \begin{mini*}
       {X \in \bbR^{2 \times n}}
@@ -449,8 +449,8 @@
       \addConstraint{x_i}{\in Q \quad}{\text{for $1 \leq i \leq n$}}
       \addConstraint{x_i}{\neq x_j \quad}{\text{for $1 \leq i < j \leq n$}.}
     \end{mini*}
-    $\tccA{\abs{\{\{i,j\} \st \{i,j\} \in E\}} = \abs{E}} \ll \tccD{\abs{\{\{i,j\} \st i<j\}} = \order{\abs{V}^2}}$. 第二項を落としたい\\
-    $\norm{q_i - q_j} \geq \epsilon$ $(q_i,q_j \in Q, q_i \neq q_j)$ を満たす $Q$ を取ると、第二項の影響を抑えられる
+    $\tccA{\abs{\{\{i,j\} \st \{i,j\} \in E\}} = \abs{E}} \ll \tccD{\abs{\{\{i,j\} \st i<j\}} = \order{\abs{V}^2}}$. 第二項を落としたい。\\
+    $\norm{q_i - q_j} \geq \epsilon$ $(q_i,q_j \in Q, q_i \neq q_j)$ を満たす $Q$ を取ると、第二項の影響を抑えられる。
     \begin{mini*}
       {X \in \bbR^{2 \times n}}
       {\tccA{f^\mathrm{a}(X) \defeq \sum_{\{i,j\}\in E} \frac{w_{i,j}\norm{x_i - x_j}^3}{3k}},}
@@ -459,7 +459,7 @@
       \addConstraint{\tccD{x_i}}{\tccD{\in Q \quad}}{\text{for $1 \leq i \leq n$}}
       \addConstraint{\tccD{x_i}}{\tccD{\neq x_j \quad}}{\text{for $1 \leq i < j \leq n$}.}
     \end{mini*}
-    $Q$としては六方最密構造を用いる
+    $Q$としては六方最密構造を用いる。
   \end{frame}
 \fi
 
@@ -491,7 +491,7 @@
       \end{figure}
     \end{column}
   \end{columns}
-  次以降で簡略化後の問題を解く方法を説明する
+  次以降で簡略化後の問題を解く方法を説明する。
 \end{frame}
 % \fi
 
@@ -508,8 +508,8 @@
   \end{align*}
   これは優れた更新則だが、ニュートン方向の計算は\textbf{非常に高コスト}...\\[1em]
 
-  我々は \large{\textbf{確率的座標降下法}} を \large{\textbf{\red{座標ニュートン方向}}} と組み合わせて使用する\\
-  $f_i(x_i)$ を $i$ 番目の座標（ランダムに選択）に制限した関数とする\\
+  我々は \large{\textbf{確率的座標降下法}} を \large{\textbf{\red{座標ニュートン方向}}} と組み合わせて使用する。\\
+  $f_i(x_i)$ を $i$ 番目の座標（ランダムに選択）に制限した関数とする。\\
   座標ニュートン方向: $d_i = -\nabla^2 f_i(x_i)^{-1} \nabla f_i(x_i)$ \red{$\leftarrow$ \large{\textbf{低コスト！計算可能！}}}
 \end{frame}
 % \fi
@@ -541,8 +541,8 @@
     x_i^\mathrm{new} \gets x_i - \nabla^2 f^{\mathrm{a}}_i(x_i)^{-1} \nabla f^{\mathrm{a}}_i(x_i).
   \end{equation*}
   $x_i^\mathrm{new}$ は六角格子 $Q^\mathrm{hex}$ に含まれるとは限らず、
-  $Q^\mathrm{hex}$ 上の最近点に丸める必要がある\\
-  経験的に、ランダムノイズを加えることが効果的である(焼き鈍し法と同様の原理)
+  $Q^\mathrm{hex}$ 上の最近点に丸める必要がある。\\
+  経験的に、ランダムノイズを加えることが効果的である(焼き鈍し法と同様の原理)。
   \begin{equation*}
     x_i^\mathrm{new} \gets \mathrm{round}\qty(x_i - \nabla^2 f^{\mathrm{a}}_i(x_i)^{-1} \nabla f^{\mathrm{a}}_i(x_i) + t \cdot \text{rand}),
   \end{equation*}
@@ -614,18 +614,19 @@
   \begin{frame}{最後に}
     \begin{block}{まとめ}
       \begin{itemize}
-        \item Fruchterman--Reingold レイアウトへの数理最適化によるアプローチを提案
-        \item 貢献1: L-BFGS法を用いた描画法のOSS実装
-        \item 貢献2: 座標ニュートン方向を用いた効率的な初期配置の計算方法の提案
+        \item[\textbullet] Fruchterman--Reingold レイアウトへの数理最適化によるアプローチを提案
+        \item[\textbullet] 貢献1: L-BFGS法を用いた描画法のOSS実装
+        \item[\textbullet] 貢献2: 座標ニュートン方向を用いた効率的な初期配置の計算方法の提案
       \end{itemize}
     \end{block}
     \begin{block}{今後の展望}
       \begin{itemize}
-        \item グラフ同型判定問題は、2つのグラフの直和を対称に描画するのと似た問題\\
+        \item[\textbullet] Multilevel Approachと最適化手法の融合
+        \item[\textbullet] グラフ同型判定問題は、2つのグラフの直和を対称に描画するのと似た問題\\
               \citep{eades1984heuristic,klusContinuousOptimizationMethods2023}
               提案手法と似た考えを応用出来ないか?
-        \item GraphのSparsity自体をもっと効率的にL-BFGS法で使えないか?
-        \item より広く、L-BFGS法自体を更に改善させることは出来ないか? (現在の我々の研究)
+        \item[\textbullet] GraphのSparsity自体をもっと効率的にL-BFGS法で使えないか?
+        \item[\textbullet] より広く、L-BFGS法自体を更に改善させることは出来ないか? (現在の我々の研究)
       \end{itemize}
     \end{block}
   \end{frame}
