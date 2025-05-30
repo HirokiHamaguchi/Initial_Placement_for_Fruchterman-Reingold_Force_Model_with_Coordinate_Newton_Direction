@@ -611,20 +611,17 @@
 
 \ifShowHidden
   \begin{frame}{最後に}
-    \begin{block}{まとめ}
+    \vspace{-1em}
+    \begin{figure}[htbp]
+      \centering
+      \includegraphics[width=0.3\columnwidth]{QR_networkx.png}
+    \end{figure}
+    \vspace{-1em}
+    \begin{block}{まとめと今後の展望}
       \begin{itemize}
-        \item[\textbullet] Fruchterman--Reingold レイアウトへの数理最適化によるアプローチを提案
-        \item[\textbullet] 貢献1: L-BFGS法を用いた描画法のOSS実装
-        \item[\textbullet] 貢献2: 座標ニュートン方向を用いた効率的な初期配置の計算方法の提案
-      \end{itemize}
-    \end{block}
-    \begin{block}{今後の展望}
-      \begin{itemize}
+        \item[\textbullet] 貢献1: 上記QR \quad 貢献2: 座標ニュートン方向を用いた初期配置の提案
         \item[\textbullet] Multilevel Approachと最適化手法の融合
-        \item[\textbullet] グラフ同型判定問題は、2つのグラフの直和を対称に描画するのと似た問題\\
-              \citep{eades1984heuristic,klusContinuousOptimizationMethods2023}
-              提案手法と似た考えを応用出来ないか?
-        \item[\textbullet] GraphのSparsity自体をもっと効率的にL-BFGS法で使えないか?
+        \item[\textbullet] グラフ同型判定問題は、2つのグラフの直和を対称に描画するのと似た問題
         \item[\textbullet] より広く、L-BFGS法自体を更に改善させることは出来ないか? (現在の我々の研究)
       \end{itemize}
     \end{block}
