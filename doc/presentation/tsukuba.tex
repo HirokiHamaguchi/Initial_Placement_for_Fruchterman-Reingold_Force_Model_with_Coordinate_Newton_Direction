@@ -230,12 +230,39 @@
 \fi
 
 \ifShowHidden
+  \begin{frame}{Fruchterman--Reingold力学モデル}
+    \tccA{\Large{\textbf{a}}}\tccA{ttractive force (引力)}と
+    \tccD{\Large{\textbf{r}}}\tccD{epulsive force (斥力)}が働く \citep{fruchtermanGraphDrawingForcedirected1991}
+    \begin{equation*}
+      \tccA{F_{i,j}^\mathrm{a}(d) \defeq \frac{w_{i,j} d^2}{k}}, \quad \tccD{F^\mathrm{r}(d) \defeq -\frac{k^2}{d}}.
+    \end{equation*}
+    \textbf{力指向グラフ描画}はこれらの力の\textbf{均衡点}を単純なシミュレーションで求める。\\
+    \textbf{Multilevel Approach}という複雑だが強力な手法も併用可能 (GraphVizなど)~\citep{Hu2006EfficientHF}
+    \begin{columns}
+      \begin{column}{0.5\columnwidth}
+        \begin{figure}[h]
+          \centering
+          \includegraphics[width=\columnwidth]{../main/fr_layout/fr_layout1.pdf}
+          \caption*{\large{$w_{i,j} > 0 \iff \{i,j\} \in E$}}
+        \end{figure}
+      \end{column}
+      \begin{column}{0.5\columnwidth}
+        \begin{figure}[h]
+          \centering
+          \includegraphics[width=\columnwidth]{../main/fr_layout/fr_layout2.pdf}
+          \caption*{\large{$d = \norm{x_i - x_j}$}}
+        \end{figure}
+      \end{column}
+    \end{columns}
+  \end{frame}
+\fi
+
+
+\ifShowHidden
   \begin{frame}{NetworkXによるグラフ描画}
     \begin{columns}
       \begin{column}{0.62\columnwidth}
         \large{%
-          \textbf{Fruchterman--Reingold (FR)} 力学モデルが著名\\
-          一般的・直感的・シンプルなグラフ描画を実現\\[0.8em]
           \textbf{NetworkX} \raisebox{-0.4\baselineskip}{\includegraphics[width=2em]{graphDrawing/networkxLogo.png}} は著名なPythonライブラリ\\
           \texttt{nx.draw}: \large{\textbf{FR}}力学モデルを用いたグラフ描画
         }
@@ -265,41 +292,13 @@
     \large{%
       \textbf{捻じれ}とは、不必要な辺の交差や歪んだグラフ構造を指す。\\
       \citep{veldhuizenDynamicMultilevelGraph2007,cheongSnapshotVisualizationComplex2018}\\
-      $\to$ 特に大規模なグラフ描画において、深刻な問題となる。\\
+      $\to$ 特に中大規模なグラフ描画において、深刻な問題となる。\\
       \textbf{これを\red{2つの数理最適化手法によるアプローチ}で解決するのが本研究の目的。}\\
     }
     \begin{figure}[htbp]
       \centering
       \animategraphics[autoplay,loop,width=0.38\columnwidth]{5}{circle/circle-}{1}{1}%!!!50
     \end{figure}
-  \end{frame}
-\fi
-
-\ifShowHidden
-  \begin{frame}{Fruchterman--Reingold力学モデル (従来的解釈)}
-    \tccA{\Large{\textbf{a}}}\tccA{ttractive force (引力)}と
-    \tccD{\Large{\textbf{r}}}\tccD{epulsive force (斥力)}が働く \citep{fruchtermanGraphDrawingForcedirected1991}
-    \begin{equation*}
-      \tccA{F_{i,j}^\mathrm{a}(d) \defeq \frac{w_{i,j} d^2}{k}}, \quad \tccD{F^\mathrm{r}(d) \defeq -\frac{k^2}{d}}.
-    \end{equation*}
-    \textbf{力指向グラフ描画}はこれらの力の\textbf{均衡点}を単純なシミュレーションで求める。\\
-    \textbf{Multilevel Approach}という複雑だが強力な手法も併用可能 (GraphVizなど)~\citep{Hu2006EfficientHF}
-    \begin{columns}
-      \begin{column}{0.5\columnwidth}
-        \begin{figure}[h]
-          \centering
-          \includegraphics[width=\columnwidth]{../main/fr_layout/fr_layout1.pdf}
-          \caption*{\large{$w_{i,j} > 0 \iff \{i,j\} \in E$}}
-        \end{figure}
-      \end{column}
-      \begin{column}{0.5\columnwidth}
-        \begin{figure}[h]
-          \centering
-          \includegraphics[width=\columnwidth]{../main/fr_layout/fr_layout2.pdf}
-          \caption*{\large{$d = \norm{x_i - x_j}$}}
-        \end{figure}
-      \end{column}
-    \end{columns}
   \end{frame}
 \fi
 
