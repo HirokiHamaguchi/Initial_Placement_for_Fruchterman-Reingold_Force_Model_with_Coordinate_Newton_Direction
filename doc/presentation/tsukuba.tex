@@ -297,7 +297,7 @@
     }
     \begin{figure}[htbp]
       \centering
-      \animategraphics[autoplay,loop,width=0.38\columnwidth]{5}{circle/circle-}{1}{1}%!!!50
+      \animategraphics[autoplay,loop,width=0.38\columnwidth]{5}{circle/circle-}{1}{50} %!!!50
     \end{figure}
   \end{frame}
 \fi
@@ -398,72 +398,7 @@
   \end{frame}
 \fi
 
-\ifShowHidden
-  \begin{frame}{貢献2: 問題の簡略化 (1/2)}
-    \textbf{初期配置として大まかな解を高速に得たい。} \quad
-    元問題の代わりに次を解く:
-    \begin{columns}
-      \begin{column}{0.55\columnwidth}
-        \begin{mini}
-          {X \in \bbR^{2 \times n}}
-          {\sum_{\{i,j\}\in E} \frac{w_{i,j}\norm{x_i - x_j}^3}{3k},}
-          {\label{eq:frApprox0}}
-          {}
-          \addConstraint{x_i}{\in Q^\mathrm{hex} \quad}{\text{for $1 \leq i \leq n$}}
-          \addConstraint{x_i}{\neq x_j \quad}{\text{for $1 \leq i < j \leq n$}.}
-        \end{mini}
-        where
-        \begin{equation*}
-          Q^\mathrm{hex} \defeq \left\{ \qty(q+\tfrac{1}{2}r, \tfrac{\sqrt{3}}{2}r) \relmiddle| q \in \bbZ, r \in \bbZ \right\}.
-        \end{equation*}
-      \end{column}
-      \begin{column}{0.45\columnwidth}
-        \begin{figure}[t]
-          \centering
-          \includegraphics[width=\columnwidth]{../main/pi/pi.pdf}
-        \end{figure}
-      \end{column}
-    \end{columns}
-    \vspace{0.3cm}
-    \hrulefill\\
-    この導出理由: 元問題 $\text{minimize} \ f(X)$ において
-    まず $f(X)$ を $\tccA{E^\mathrm{a}_{i,j}}$ と $\tccD{E^\mathrm{r}}$ に分離する
-    \begin{mini*}
-      {X \in \bbR^{2 \times n}}
-      {\tccA{\sum_{\{i,j\}\in E} \frac{w_{i,j}\norm{x_i - x_j}^3}{3k}} - \tccD{\sum_{i<j} k^2\log{\norm{x_i - x_j}}}.}
-      {}
-      {}
-    \end{mini*}
-  \end{frame}
-\fi
-
-\ifShowHidden
-  \begin{frame}{貢献2: 問題の簡略化 (2/2)}
-    先行研究~\citep{ghassemitoosiSimulatedAnnealingPreProcessing2016}に従い、$x_i$の位置を離散点集合$Q$に固定する:
-    \begin{mini*}
-      {X \in \bbR^{2 \times n}}
-      {\tccA{\sum_{\{i,j\}\in E} \frac{w_{i,j}\norm{x_i - x_j}^3}{3k}} - \tccD{\sum_{i<j} k^2\log{\norm{x_i - x_j}}},}
-      {}
-      {}
-      \addConstraint{x_i}{\in Q \quad}{\text{for $1 \leq i \leq n$}}
-      \addConstraint{x_i}{\neq x_j \quad}{\text{for $1 \leq i < j \leq n$}.}
-    \end{mini*}
-    $\tccA{\abs{\{\{i,j\} \st \{i,j\} \in E\}} = \abs{E}} \ll \tccD{\abs{\{\{i,j\} \st i<j\}} = \order{\abs{V}^2}}$. 第二項を落としたい。\\
-    $\norm{q_i - q_j} \geq \epsilon$ $(q_i,q_j \in Q, q_i \neq q_j)$ を満たす $Q$ を取ると、第二項の影響を抑えられる。
-    \begin{mini*}
-      {X \in \bbR^{2 \times n}}
-      {\tccA{f^\mathrm{a}(X) \defeq \sum_{\{i,j\}\in E} \frac{w_{i,j}\norm{x_i - x_j}^3}{3k}},}
-      {\label{eq:frApprox2}}
-      {}
-      \addConstraint{\tccD{x_i}}{\tccD{\in Q \quad}}{\text{for $1 \leq i \leq n$}}
-      \addConstraint{\tccD{x_i}}{\tccD{\neq x_j \quad}}{\text{for $1 \leq i < j \leq n$}.}
-    \end{mini*}
-    $Q$としては六方最密構造を用いる。
-  \end{frame}
-\fi
-
-% \ifShowHidden
-\begin{frame}{貢献2: ここまでのまとめ}
+\begin{frame}{貢献2: 初期配置を求める問題の定式化}
   元々の問題は以下であった:
   \begin{mini*}
     {X \in \bbR^{2 \times n}}
@@ -490,9 +425,33 @@
       \end{figure}
     \end{column}
   \end{columns}
-  次以降で簡略化後の問題を解く方法を説明する。
+  次以降でなぜこのように簡略化したのか、これをどう解くかを説明する。\\
 \end{frame}
-% \fi
+
+\ifShowHidden
+  \begin{frame}{貢献2: 問題の簡略化の理由}
+    先行研究~\citep{ghassemitoosiSimulatedAnnealingPreProcessing2016}に従い、$x_i$の位置を離散点集合$Q$に固定する:
+    \begin{mini*}
+      {X \in \bbR^{2 \times n}}
+      {\tccA{\sum_{\{i,j\}\in E} \frac{w_{i,j}\norm{x_i - x_j}^3}{3k}} - \tccD{\sum_{i<j} k^2\log{\norm{x_i - x_j}}},}
+      {}
+      {}
+      \addConstraint{x_i}{\in Q \quad}{\text{for $1 \leq i \leq n$}}
+      \addConstraint{x_i}{\neq x_j \quad}{\text{for $1 \leq i < j \leq n$}.}
+    \end{mini*}
+    $\tccA{\abs{\{\{i,j\} \st \{i,j\} \in E\}} = \abs{E}} \ll \tccD{\abs{\{\{i,j\} \st i<j\}} = \order{\abs{V}^2}}$. 第二項を落としたい。\\
+    $\norm{q_i - q_j} \geq \epsilon$ $(q_i,q_j \in Q, q_i \neq q_j)$ を満たす $Q$ を取ると、第二項の影響を抑えられる。
+    \begin{mini*}
+      {X \in \bbR^{2 \times n}}
+      {\tccA{f^\mathrm{a}(X) \defeq \sum_{\{i,j\}\in E} \frac{w_{i,j}\norm{x_i - x_j}^3}{3k}},}
+      {\label{eq:frApprox2}}
+      {}
+      \addConstraint{\tccD{x_i}}{\tccD{\in Q \quad}}{\text{for $1 \leq i \leq n$}}
+      \addConstraint{\tccD{x_i}}{\tccD{\neq x_j \quad}}{\text{for $1 \leq i < j \leq n$}.}
+    \end{mini*}
+    $Q$としては六方最密構造を用いる。
+  \end{frame}
+\fi
 
 % \ifShowHidden
 \begin{frame}{貢献2: 提案アルゴリズムの基礎 -- 確率的座標降下法}
