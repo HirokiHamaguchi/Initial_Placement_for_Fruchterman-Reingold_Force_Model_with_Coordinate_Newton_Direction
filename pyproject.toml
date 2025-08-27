@@ -1,0 +1,25 @@
+[project]
+name = "initial-placement-for-fr"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "numpy>=2.0.0",
+    "scipy>=1.14.0",
+    "matplotlib>=3.9.0",
+    "networkx>=3.3",
+    "requests>=2.32.0",
+    "tqdm>=4.66.0",
+    "ssgetpy==1.0rc2",
+]
+
+[tool.uv]
+dev-dependencies = [
+    "ipython>=8.26.0",
+    "ipykernel>=6.29.0",
+    "ipywidgets>=8.1.0",
+    "jupyterlab-widgets>=3.0.0",
+    "widgetsnbextension>=4.0.0",
+    "debugpy>=1.8.0",
+]
