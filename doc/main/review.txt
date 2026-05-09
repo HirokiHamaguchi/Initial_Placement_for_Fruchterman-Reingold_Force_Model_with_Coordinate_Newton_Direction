@@ -1,0 +1,101 @@
+Dear Hiroki Hamaguchi, Naoki Marumo, Akiko Takeda,
+
+I am resending the revision request for your submission to Journal of Graph Algorithms and Applications, "Initial Placement for Fruchterman--Reingold Force Model With Coordinate Newton Direction".
+Please find the reviews attached below -- let me know that you have successfully received them.
+
+Please acknowledge receipt of this message and submit your revised version within two months or contact me in case you need more time.
+
+Best regards,
+
+Stephen Kobourov
+Technical University Munich
+stephen.kobourov@tum.de
+
+
+
+------------------------------------------------------
+Reviewer A:
+
+This paper proposes an algorithm for efficiently computing initial layouts of graphs for the well-known Fruchterman-Reingold (FR) force model, which is given as Algorithm 1. For this purpose, the paper first proposes the use of the coordinate Newton direction in Subsection 4.1. Next, it introduces a discrete optimization problem (3) for initial layouts in Subsection 4.2. Then it gives how to solve the problem (3) by using the coordinate Newton direction in Subsection 4.3. The paper also provides the results of a numerical experiment on the comparison of the proposed algorithm with random initialization and simulated annealing-based initialization.
+
+The authors' approach is interesting, and I do not see any major problems with their construction of the proposed algorithm.
+
+However, this paper sometimes seems out of focus, probably because of the following two reasons.
+
+First, the authors do not sufficiently consider how well their approach matches the FR force model.
+
+Originally, Fruchterman and Reingold [10] proposed the FR model and solved it by using a pseudo-physical simulation-based algorithm (by following Eades' spring embedder method [8]). By contrast, Kamada and Kawai [21] proposed the KK force model and solved it by a Newton-like method. Also, many succeeding studies followed these approaches, i.e., either by combining simulation-based algorithms with the FR model or by combining Newton-like methods with the KK model. Although Hosobe [19] showed that both models could be solved with a Newton-like method called L-BFGS, the results still suggested that the KK model was more suitable for L-BFGS than the FR model.
+
+However, this submitted paper adopts an unusual approach that combines a Newton-like method with the FR model. I understand that the paper is focused only on the computation of initial layouts, but I think that the validation of adopting this approach is still insufficient.
+
+It should be noted that the experimental results in Section 5 show that the proposed initial layout algorithm works better when it is combined with the L-BFGS algorithm for computing final layouts. It seems from Figure 6 that the combination of the proposed initial layout algorithm with the FR algorithm for computing final layouts does not work well except in limited cases like jagmesh1.
+
+If the authors think that the proposed algorithm should be combined with the L-BFGS, they should adopt the KK model instead of the FR model, which would be more natural and more persuasive. If the authors think that the proposed algorithm works well for the FR layout algorithm (or another simulation-based algorithm), they should more deeply explore this direction and present clearer results in the paper.
+
+Second, the authors do not sufficiently consider differences between the FR force model and others, especially the KK model, which becomes apparent especially in Subsection 7.1.
+
+Here the authors first say "Although we utilized the coordinate Newton direction only for the optimization problem (1), we can see that its application is not necessarily limited to the FR force model alone", and then present "objective functions arising from graphs". Does the authors mean that this discussion applies to other force models including the KK model? If so, I think that the authors should adopt the KK model instead of the FR model.
+
+In addition, the authors present the graph isomorphism problem as an application of the proposed algorithm. I think that the KK model would be more suitable for this application than the FR model.
+
+Therefore, I recommend treating this paper as "Revisions Required".
+
+The following might work as hints for the authors' paper revision. Intuitively, the FR model exhibits soft behavior while the KK model exhibits hard behavior. Therefore, the FR model is usually used for dynamic graph layouts like animation and interaction while the KK model is usually used for static layouts. Also, the FR model is sometimes used for very large graphs because simulation-based algorithms for the FR model can be more scalable than Newton-like algorithms for the KK model. One plausible direction for the authors might be to combine the proposed algorithm with a scalable simulation-based algorithm for the FR model and to apply it to very large graphs.
+
+The following are minor comments.
+
+- Symbol E is used for two different purposes, one to indicate a set of graph edges and the other to indicate energies between nodes possibly with subscripts and superscripts. It will be better to use different symbols for these different concepts.
+
+- I wonder if (i, j) \in V^2 with i \ne j in (1) is appropriately intended. This treats both (i, j) and (j, i) in the sum.
+
+- Symbol \epsilon appears only once in Subsection 4.4, which seems strange.
+
+- Symbol f_i at line 6 of Algorithm 1 probably lacks the superscript "a".
+
+- In Subsection 5.3, the word "L-BFGS" that appears as superscripts of N does not seem to be correctly specified. The hyphen mark looks too long.
+
+- In the optimization problem called "objective functions arising from graphs" in Subsection 7.1, "=" probably should be ":=".
+
+- The header of Subsection 8.1 seems to have a problem with the hyphen mark again.
+
+Recommendation: Revisions Required
+
+------------------------------------------------------
+
+
+
+------------------------------------------------------
+Reviewer B:
+
+The paper under review presents a initial placement method to improve the quality of force-directed FR layouts. The assumption is to use Newton optimization to find a closer to optimal initial placement than random positioning, as it is in FR and in other similar techniques. The paper introduces a comprehensive technical explanation, and frames the contribution within multi-level layout literature and multi-objective optimization methods. An Experimental evaluation shows the validity of the approach, and also highlights some of its limits, especially in terms of scalability. The paper also includes a discussion about implementation and the impact of this research on other graph-related problems.
+
+The paper presents a research that is of clear interest to the audience of JGAA. Force directed is the basis of many advanced layout algorithm, so I fully acknowledge the motivation behind this research. The paper presents an abundance of technical details, but is for the most part easy to follow. The comprehensive math treatment is overall well explained, especially as intuitive explanations are given strategically throughout section 4. I checked the reasoning and passages behind the formulae, finding no major issue at the best of my knowledge.
+
+The paper however presents some weaknesses that I would like to discuss. In the Related Work section, in 3.1 Multilevel approaches are quickly dismissed. I don't understand the statement the statement about sfdp being "prior work" to FR - as the latter came way later than the former. This sentence should be clarified. Also, I believe that further space could be given to multi-level approaches, also considering that could be one potential application/extension of this technique beyond this paper.
+
+The framing of this paper is somewhat uncertain. Despite the paper title and general orientation towards FR, L-BFGS is consistently and repeatedly mentioned as a better alternative. Even in the related work section, in Section 3.1, only L-BFGS is mentioned as a ready-to-go measure for application in Multilevel approaches. In the experiments the paper explicitly mentions that FR is consistently outperformed by L-BFGS - then why we should use FR (even with the improved initial placement) at all? The paper does not make a good argument why we should choose that over the other, thus in a way making me question even the title of the paper. In general, it's unclear what's the impact of this research and how researchers could build upon it.
+
+The evaluation yields positive results, but in my opinion it could be further improved. First, I would suggest to expand 5.2 it in terms of number of graphs. More graphs from the Florida library could be used, or another source could be [1]. This expanded datasets already includes 3elt, but expands also on grids, cylinders, and other regular graphs that make up a solid benchmark set, and will provide a wider set of instances to discuss. If not all figures can be included in the main body of the paper, these could be moved in the supplemental material. Concerning the visualization of the layout, I don't believe that the index colouring adds much. A rainbow map, however, it's not a great choice. If color should be kept, maybe I would consider using a sequential continuous color map with a legend (see [2] for examples).
+
+One thing that comes out of the charts in Figure 6 is that this different initial positioning has limited effect on the way the objective function decreases over time - which is an interesting phenomenon. In FR, the chart appears shifted below by how "better" the initial positioning is, with the non-CN version never catching up. Differently, it seems that the objective functions of L-BFGS and CN-L-BFGS tend to converge before the iteration cap. Does this mean that the positive effect of the initial placement tends to fade faster with L-BFGS, despite the better initial condition?
+
+The dwt_992 and collins 15NN singularities could be described more. Would it be possible to generalize, highlighting what makes these two cases so different from each other? Speaking of singularities, in the charts it seems like there is a spike in f(X) right after the 0 seconds mark (like in 3elt, btree or cycle) is that an artifact?
+
+I am less persuaded from Sections 6 and 7. Section 6 includes considerations that I would include in Section 4, as to further justify your optimization design. I would also simplify the discussion, removing subsections and integrating their contents in Section 4. In Section 7 I would focus on the impact of this approach on graph drawing more specifically. For example, where is the next step for this technique, in the context of graph drawing? Will its presence in a drawing pipeline make a difference, or the gains in quality are not sufficient to justify its use? What about its inclusion in a multi-level pipeline (see also a similar point above)?
+
+I would move Section 8 to supplemental material out of the main body of the paper.
+
+Bilbiography must be updated. Some papers do not include any venue, others do not have a DOI, others only report their archive version (while journal versions are available).
+
+All in all, I believe in the potential of this paper in the context of JGAA. However, it requires further revisions before being accepted for publication.
+
+[1] Bartel, Gereon, et al. "An experimental evaluation of multilevel layout methods." International Symposium on Graph Drawing. Berlin, Heidelberg: Springer Berlin Heidelberg, 2010.
+
+[2] https://matplotlib.org/stable/users/explain/colors/colormaps.html
+
+Recommendation: Revisions Required
+
+------------------------------------------------------
+
+
+
