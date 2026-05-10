@@ -1,4 +1,4 @@
-% !LW recipe=pdflatex
+% !LW recipe=pdflatex&bibtex
 
 \documentclass[11pt]{article}
 
@@ -11,7 +11,6 @@
 \usepackage{amsthm} % \newtheorem
 \usepackage{bm, bbm} % \bm{A}, \bbm{1}
 \usepackage{booktabs} % \toprule, \midrule, \bottomrule
-\usepackage{cancel}
 \usepackage{cleveref} % \cref
 \usepackage{enumitem} % \begin{enumerate}[label=(\alph*)]
 \usepackage{ifthen} % \ifthenelse
@@ -24,34 +23,9 @@
 \usepackage{optidef} % \begin{mini*}{x}{f(x)}{}{}
 \usepackage{orcidlink} % \orcidlink
 \usepackage{physics} % \qty, \norm, \abs
-% \usepackage{subcaption}     % \captionsetup
-% \usepackage{subfiles}       % \subfile{file}
-% \usepackage{thm-restate}    % \begin{restatable}{theorem}{thm}
 \usepackage{tikz} % \begin{tikzpicture}
-\usepackage{ulem}
 \usepackage{xparse} % \NewDocumentCommand
-% \usepackage{calc}         % \setlength
-% \usepackage{cancel}       % \cancel
-% \usepackage{parskip}      % \setlength{\parskip}{0.5em}
-% \usepackage{csvsimple}    % \csvautotabular
-% \usepackage{diagbox}      % \diagbox
-% \usepackage{dsfont}       % \mathds{1}
-% \usepackage{epsfig}       % \epsfig
-% \usepackage{fancybx}      % \ovalbox
-% \usepackage{float}        % \begin{figure}[H]
-% \usepackage{lipsum}       % \lipsum
-% \usepackage{listings}     % \begin{lstlisting}
-% \usepackage{multicol}     % \begin{multicols}{2}
-% \usepackage{nicematrix}   % \begin{NiceMatrix}
-% \usepackage{qcircuit}     % \Qcircuit
 \usepackage{siunitx} % \SI{1}{\second}
-% \usepackage{stfloats}     % \begin{figure*}
-% \usepackage{subcaption}   % \begin{subfigure}
-% \usepackage{ulem}         % \sout
-% \usepackage{wrapfig}      % \begin{wrapfigure}
-% \usepackage[all]{xy}      % \xymatrix
-% \usepackage[dvipdfmx]{graphicx}
-% \usepackage[square, sort, comma, numbers]{natbib}
 
 \usepackage[a4paper,margin=30mm]{geometry}
 
@@ -140,7 +114,7 @@
 
 \begin{document}
 \title{ Initial Placement for Fruchterman--Reingold Force Model with
-  Coordinate Newton Direction }
+  Coordinate Newton Direction } % LLDisable
 \author{ Hiroki Hamaguchi\,\orcidlink{0009-0005-7348-1356} Naoki Marumo\,\orcidlink{0000-0002-7372-4275}
   Akiko Takeda\,\orcidlink{0000-0002-8846-4496}
   % <-this % stops a space
@@ -148,7 +122,7 @@
 \maketitle
 
 \begin{abstract}
-    The Fruchterman--Reingold (FR) force model is widely used in force-directed graph drawing, and multilevel approaches such as \textsf{sfdp} in Graphviz scale these methods effectively. A crucial step in multilevel schemes is refinement, which improves the graph layout typically performed with the FR algorithm. For this refinement, optimization-based methods, such as L-BFGS, often yield better layouts by exploiting past gradient information. However, they suffer from high per-iteration costs for large graphs and difficulty in handling highly twisted graphs.
+  The Fruchterman--Reingold (FR) force model is widely used in force-directed graph drawing, and multilevel approaches such as \textsf{sfdp} in Graphviz scale these methods effectively. A crucial step in multilevel schemes is refinement, which improves the graph layout typically performed with the FR algorithm. For this refinement, optimization-based methods, such as L-BFGS, often yield better layouts by exploiting past gradient information. However, they suffer from high per-iteration costs for large graphs and difficulty in handling highly twisted graphs.
 
     In this research, we propose a new initial placement based on the stochastic coordinate descent to accelerate the optimization process. We first reformulate the problem as a discrete optimization problem using a hexagonal lattice and then iteratively update a randomly selected vertex along the coordinate Newton direction with low per-iteration costs.
 
@@ -223,30 +197,34 @@ repulsive force $F^{\mathrm{r}}(d)$ are defined as
 where $k > 0$ is a constant parameter, often set to $1/\sqrt{n}$~\citep{fruchtermanGraphDrawingForcedirected1991}.
 The scalar potentials of these forces~\citep{6183577} are given by
 \begin{gather*}
-  E^{\mathrm{a}}_{i,j}(d) \coloneqq \int_{0}^{d}F_{i,j}^{\mathrm{a}}(r) \dd{r}=
-  \frac{a_{i,j}d^{3}}{3k}, \quad E^{\mathrm{r}}(d) \coloneqq \int_{1}^{d}F^{\mathrm{r}}
+  U^{\mathrm{a}}_{i,j}(d) \coloneqq \int_{0}^{d}F_{i,j}^{\mathrm{a}}(r) \dd{r}=
+  \frac{a_{i,j}d^{3}}{3k}, \quad U^{\mathrm{r}}(d) \coloneqq \int_{1}^{d}F^{\mathrm{r}}
   (r) \dd{r}= -k^{2}\log{d}, \\
-  E_{i,j}(d) \coloneqq E_{i,j}^{\mathrm{a}}(d) + E^{\mathrm{r}}(d).
+  U_{i,j}(d) \coloneqq U_{i,j}^{\mathrm{a}}(d) + U^{\mathrm{r}}(d).
 \end{gather*}
-For simplicity, we define $E_{i,j}(0)=\infty$.%
-\footnote{We can also use $-k^{2}\log(d + \epsilon^{\mathrm{r}})$ for $E^{\mathrm{r}}
+For simplicity, we define $U_{i,j}(0)=\infty$.%
+\footnote{We can also use $-k^{2}\log(d + \epsilon^{\mathrm{r}})$ for $U^{\mathrm{r}}
   (d)$ to prevent divergence, where $\epsilon^{\mathrm{r}}$ is constant.}
 Let $\norm{\cdot}$ denote the Euclidean norm in $\mathbb{R}^{2}$. Then, the problem is to minimize the energy with
 $X \coloneqq (x_{1}, \dots, x_{n}) \in \mathbb{R}^{2 \times n}$:
 \begin{mini}
-  {X \in \mathbb{R}^{2 \times n}} {f(X) \coloneqq \sum_{\substack{(i,j) \in V^2 \\ i \neq j}} E_{i,j}(\norm{x_i - x_j}).}
+  {X \in \mathbb{R}^{2 \times n}} {f(X) \coloneqq \sum_{\substack{(i,j) \in V^2 \\ i \neq j}} U_{i,j}(\norm{x_i - x_j}).}
   {\label{eq:fr}} {}
 \end{mini}
 
-While the energy function $E_{i,j}(d)$ is convex and minimized when
-$d = k/\sqrt[3]{a_{i,j}}$ for a positive $a_{i,j}$, a function $x_{i}\mapsto E_{i,j}
-  (\norm{x_i - x_j})$ is non-convex for a fixed $x_{j}$. Additionally, $E_{i,j}$ is not Lipschitz continuous near $d=0$, as illustrated in \cref{fig:energy3d}.
+Note that the summation is taken over ordered pairs $(i,j)$.
+For undirected graphs, this includes both $(i,j)$ and $(j,i)$ and therefore only scales the objective value by a constant factor (without changing the minimizers).
+We keep this form since it extends naturally to directed or asymmetric weights.
+
+While the energy function $U_{i,j}(d)$ is convex and minimized when
+$d = k/\sqrt[3]{a_{i,j}}$ for a positive $a_{i,j}$, a function $x_{i}\mapsto U_{i,j}
+  (\norm{x_i - x_j})$ is non-convex for a fixed $x_{j}$. Additionally, $U_{i,j}$ is not Lipschitz continuous near $d=0$, as illustrated in \cref{fig:energy3d}.
 These properties highlight the difficulty of the optimization problem.
 
 \begin{figure}[t]
   \centering
   \includegraphics[width=0.6\columnwidth]{energy_3d/energy_3d.png}
-  \caption{The energy function $E_{i,j}(\norm{x_i - x_j})$ for
+  \caption{The energy function $U_{i,j}(\norm{x_i - x_j})$ for
   $x_{i}=(x_{i,1},x_{i,2})$, $x_{j}=(0,0), a_{i,j}= 1$, and $k = 1$.}
   \label{fig:energy3d}
 \end{figure}
@@ -258,7 +236,7 @@ We next summarize the existing literature relevant to our work.
 
 \subsection{Multilevel Approach}
 
-Multilevel approaches such as \textsf{sfdp} are important prior work for this FR force model~\citep{Hu2006EfficientHF}. These methods use hierarchical coarsening and refinement to achieve efficient layout computation for large graphs.
+Multilevel approaches such as \textsf{sfdp} in Graphviz are important prior work on scalable force-directed graph drawing~\citep{Hu2006EfficientHF}. These methods use hierarchical coarsening and refinement to achieve efficient layout computation for large graphs.
 
 Our work is complementary to such multilevel methods.
 Optimization techniques such as L-BFGS can be directly applied to the refinement stages within multilevel pipelines. Since the approaches proposed in this study can be incorporated into multilevel frameworks with appropriate modifications, our primary objective is to quantify and enhance the refinement procedure itself.
@@ -275,7 +253,7 @@ The L-BFGS algorithm, a renowned and widely used optimization
 method, consistently outperforms the original FR algorithm in speed
 and layout quality~\citep{6183577}. It uses the function value and the gradient to find the local optima. We define the sum of terms associated with the vertex $x_{i}$ as $f_{i}$, which is explicitly given by
 \begin{equation*}
-  f_{i}(x_{i}) \coloneqq \sum_{j \in V \setminus \{i\}}\Big( E_{i,j}(\norm{x_{i}- x_{j}}) + E_{j,i}(\norm{x_{j}- x_{i}}) \Big).
+  f_{i}(x_{i}) \coloneqq \sum_{j \in V \setminus \{i\}}\Big( U_{i,j}(\norm{x_{i}- x_{j}}) + U_{j,i}(\norm{x_{j}- x_{i}}) \Big).
 \end{equation*}
 The $i$-th column of the gradient $\nabla f(X) \in \mathbb{R}^{2 \times n}$ is
 \begin{align*}
@@ -400,8 +378,8 @@ First, the problem~\eqref{eq:fr} is equivalent to the following:
   {} {}
 \end{mini*}
 This formulation separates the $\order{\abs{E}}$ terms from
-$E^{\mathrm{a}}_{i,j}$ and the $\order*{\abs{V}^2}$ terms from
-$E^{\mathrm{r}}$.
+$U^{\mathrm{a}}_{i,j}$ and the $\order*{\abs{V}^2}$ terms from
+$U^{\mathrm{r}}$.
 
 Here, following previous research mentioned in \cref{ssec:preprocessing}, we
 fix the possible positions $x_{i}$ of each vertex $i$ to a discrete set of
@@ -416,13 +394,13 @@ The goal is to simplify the objective function and choose $Q$ appropriately to
 derive a well-simplified problem.
 
 Due to the sparsity of many practical graphs, $\abs{E}\ll \abs{V}^{2}$ holds. To leverage this sparsity for simplification, we want to drop the second term
-that arises from the repulsive energy $E^{r}$:
+that arises from the repulsive energy $U^{r}$:
 \begin{equation*}
   -\sum_{i<j}k^{2}\log{\norm{x_i - x_j}}.
 \end{equation*}
 We impose a condition on $Q$ such that $\norm{q_{i}- q_{j}}\geq \epsilon$ for all
 $q_{i}, q_{j}\in Q$ with $q_{i}\neq q_{j}$. In this case, the term above is negligible.
-Since $E^{\mathrm{r}}(d)=-k^{2}\log{d}$ is a convex function such that it
+Since $U^{\mathrm{r}}(d)=-k^{2}\log{d}$ is a convex function such that it
 decreases monotonically concerning $d$, for sufficiently large $d$, the value
 of $-k^{2}\log{d}$ does not vary excessively. For too small $d$, we can
 prevent the divergence of the energy function by setting $\epsilon$. Thus, under this condition, we drop the second term and derive the problem as:
@@ -535,9 +513,17 @@ by $s^{*}$.
   \caption{Proposed algorithm for the initial placement}
   \label{alg:proposed} \KwIn{Graph $G = (V, E)$, Weight $(a_{i,j})_{\qty{i,j} \in E}$, Parameters $N_{\mathrm{iter}}^{\mathsf{CN}}\in\bbN,$ and $t_{0}>0$}
   \KwOut{Initial placement $X = (x_{1}, \dots, x_{n})$} $t \gets t_{0}$\;
-  Sample $x_{i}\in Q^{\mathrm{hex}}$ for all $i \in V$ without replacement\; \For{$m \gets 0$ \KwTo $N_{\mathrm{iter}}^{\mathsf{CN}}$}{ Select vertex $i \in V$ randomly\; Draw $r \in \bbR^{2}$ randomly from a unit circle\; $x_{i}^{\mathrm{new}}\gets \mathrm{round}(x_{i}- \nabla^{2}f_{i}(x_{i})^{-1}\nabla f_{i}(x_{i}) + t \cdot r)$\; \If{$\exists j \in V$ such that $x_{j}= x_{i}^{\mathrm{new}}$}{
-    % Swap $x_i$ and $x_j$\;
-    $x_{j}\gets x_{i}$\; } $x_{i}\gets x_{i}^{\mathrm{new}}$\; $t \gets t - t_{0}/ N_{\mathrm{iter}}^{\mathsf{CN}}$\; }
+  Sample $x_{i}\in Q^{\mathrm{hex}}$ for all $i \in V$ without replacement\;
+  \For{$m \gets 0$ \KwTo $N_{\mathrm{iter}}^{\mathsf{CN}}$}{
+    Select vertex $i \in V$ randomly\;
+    Draw $r \in \bbR^{2}$ randomly from a unit circle\;
+    $x_{i}^{\mathrm{new}}\gets \mathrm{round}(x_{i}- \nabla^{2}f_{i}^{\mathrm{a}}(x_{i})^{-1}\nabla f_{i}^{\mathrm{a}}(x_{i}) + t \cdot r)$\;
+    \If{$\exists j \in V$ such that $x_{j}= x_{i}^{\mathrm{new}}$}{
+      % Swap $x_i$ and $x_j$\;
+      $x_{j}\gets x_{i}$\;
+    }
+    $x_{i}\gets x_{i}^{\mathrm{new}}$\; $t \gets t - t_{0}/ N_{\mathrm{iter}}^{\mathsf{CN}}$\;
+  }
   $x_{i}\gets s^{*}x_{i}$ for all $i \in V$ with $s^{*}$ given by \cref{eq:scaling}\;
   \Return $X$
 \end{algorithm}
@@ -689,11 +675,11 @@ available at GitHub~\citep{ThisPaperGitHub}.
 We first show the plots and visualizations of the algorithms in \cref{fig:individual}.
 The experiment details are as follows. We fixed the maximum number of iterations
 of the FR and L-BFGS algorithms as $N_{\mathrm{iter}}^{\mathsf{FR}}= N_{\mathrm{iter}}
-    ^{\mathsf{L-BFGS}}= 200$. We tested with 7 graphs: \texttt{cycle300}, \texttt{jagmesh1},
+  ^{\mathsf{LBFGS}}= 200$. We tested with 7 graphs: \texttt{cycle300}, \texttt{jagmesh1},
 \texttt{dwt\_1005}, \texttt{btree9}, \texttt{1138\_bus}, \texttt{dwt\_2680}, and
 \texttt{3elt}. Here \texttt{cycle300} is a cycle graph with 300 vertices, and \texttt{btree9}
 is a perfect binary tree with $2^{9+1}-1=1023$ vertices. Other graphs are from
-Sparse Matrix Collection~\citep{davis2011university}, and these choices are based
+Sparse Matrix Collection~\citep{davisUniversityFloridaSparse2011}, and these choices are based
 on Ref.~\citep{zhengGraphDrawingStochastic2019}.
 
 In \cref{fig:individual}, the plots on the left illustrate the objective
@@ -702,6 +688,10 @@ graphs on the right are at the iteration in which the most significant
 difference appeared among \{50,100,150\}-th iterations (or at the last iteration
 if it ended earlier), using seed 1.
 The vertices in the graphs are colored according to vertex indices.
+In some FR runs, a small increase in $f(X)$ appears immediately after the start
+of the iterations; this can happen because the first few displacement steps are
+relatively large before the temperature decreases, so it is an artifact of the
+early-stage update schedule rather than a failure of the initialization.
 
 The observations and implications of \cref{fig:individual} are as follows.
 First, the plots with solid lines for \textsf{CN} generally demonstrate
@@ -720,6 +710,12 @@ is consistent with prior research~\citep{6183577}. Regrettably, however, L-BFGS
 is not yet widely popular in graph drawing. One of the aims of this paper is to
 promote the use of L-BFGS in graph drawing, and these results provide solid
 evidence for the effectiveness of L-BFGS.
+The effect of the initial placement also differs across the two solvers: for FR,
+a better initialization tends to produce a persistent offset in the objective
+curve, whereas for L-BFGS the curves often converge earlier so the relative
+advantage can fade near stationary points. Thus, the benefit of initialization
+should be judged not only by the final objective value, but also by the early-
+stage convergence behavior and runtime.
 
 \subsection{Comparison with Other Initializations}
 \label{ssec:exprAll}
@@ -750,9 +746,9 @@ one. It means that we set weights $a_{i,j}$ to $1$ if $a_{i,j}> 0$; otherwise,
 we set it to $0$.
 
 For the algorithms with random initial placement, we set $N_{\mathrm{iter}}^{\mathsf{FR}}
-  = N_{\mathrm{iter}}^{\mathsf{L-BFGS}}= 50$ , the same as the default parameter
+  = N_{\mathrm{iter}}^{\mathsf{LBFGS}}= 50$ , the same as the default parameter
 in NetworkX~\citep{hagberg2008exploring}. For the \textsf{CN} algorithms, we set
-$N_{\mathrm{iter}}^{\mathsf{FR}}= N_{\mathrm{iter}}^{\mathsf{L-BFGS}}= 45$,
+$N_{\mathrm{iter}}^{\mathsf{FR}}= N_{\mathrm{iter}}^{\mathsf{LBFGS}}= 45$,
 since the preprocessing step is expected to take as long as a few iterations
 of FR or L-BFGS, as mentioned in \cref{ssec:setup}.
 
@@ -801,14 +797,14 @@ By contrast, our discretization-based formulation allows us to circumvent these 
 
 One natural idea for solving problem~\eqref{eq:fr} is to apply existing optimization algorithms such as Stochastic Gradient Descent (SGD) or Stochastic Coordinate Descent.
 
-Applying SGD to graph drawing, particularly to the Kamada–Kawai (KK) layout~\citep{kamadaAlgorithmDrawingGeneral1989}, has been a notable direction~\citep{zhengGraphDrawingStochastic2019,ahmedMulticriteriaScalableGraph2021}. The KK model determines the layout by minimizing a stress-like energy $E_{i,j}^{\mathrm{KK}}$ defined for all vertex pairs. SGD corresponds to randomly selecting an edge ${i,j}$ and updating $x_i$ and $x_j$ using the gradient of $E_{i,j}^{\mathrm{KK}}$. This stochastic treatment reduces per-iteration complexity while retaining structural information, as $E_{i,j}^{\mathrm{KK}}$ is defined in terms of graph distance.
+Applying SGD to graph drawing, particularly to the Kamada–Kawai (KK) layout~\citep{kamadaAlgorithmDrawingGeneral1989}, has been a notable direction~\citep{zhengGraphDrawingStochastic2019,ahmedMulticriteriaScalableGraph2021}. The KK model determines the layout by minimizing a stress-like energy $U_{i,j}^{\mathrm{KK}}$ defined for all vertex pairs. SGD corresponds to randomly selecting an edge ${i,j}$ and updating $x_i$ and $x_j$ using the gradient of $U_{i,j}^{\mathrm{KK}}$. This stochastic treatment reduces per-iteration complexity while retaining structural information, as $U_{i,j}^{\mathrm{KK}}$ is defined in terms of graph distance.
 
-In contrast, applying SGD directly to the FR model is ineffective. When $a_{i,j}=0$, the energy term reduces to $E_{i,j}=-k^{2}\log d$, which depends only on Euclidean distance and ignores the graph structure. Consequently, gradients from a single sampled pair often fail to provide meaningful information for optimization.
+In contrast, applying SGD directly to the FR model is ineffective. When $a_{i,j}=0$, the energy term reduces to $U_{i,j}=-k^{2}\log d$, which depends only on Euclidean distance and ignores the graph structure. Consequently, gradients from a single sampled pair often fail to provide meaningful information for optimization.
 
-Another approach is to use Stochastic Coordinate Descent, which resembles Randomized Subspace Newton methods~\citep{NEURIPS2019_bc6dc48b, fujiRandomizedSubspaceRegularized2022, cartisRandomisedSubspaceMethods2022, nozawaRandomizedSubspaceGradient2023, higuchiFastConvergenceSecondOrder2024}.
+Another approach is to use Stochastic Coordinate Descent, which resembles Randomized Subspace Newton methods~\citep{NEURIPS2019_bc6dc48b, fujiTheoreticalAnalysisRandomized2025, cartisRandomisedSubspaceMethods2022, nozawaRandomizedSubspaceGradient2023, higuchiFastConvergenceSecondOrder2024}.
 For each vertex $i$, define the local energy
 \begin{equation}\label{eq:fi}
-  f_{i}(x_{i}) \defeq \sum_{j \in V \setminus \{i\}}E_{i,j}(\norm{x_i - x_j}),
+  f_{i}(x_{i}) \defeq \sum_{j \in V \setminus \{i\}}U_{i,j}(\norm{x_i - x_j}),
 \end{equation}
 whose gradient (the net force on $i$) and Hessian are
 \begin{gather*}\label{eq:gradientFi}
@@ -904,7 +900,7 @@ Although we utilized the coordinate Newton direction only for the optimization p
 In general, the optimization problem~\eqref{eq:fr} is more broadly treated as
 ``objective functions arising from graphs''~\citep{recht-wright}:
 \begin{mini*}
-  {X \in \bbR^{2 \times n}} {f(X) = \sum_{\{i,j\}\in E} f_{i,j}(x_i, x_j)+\lambda \sum_{i=1}^{n} \Omega_i(x_i),}
+  {X \in \bbR^{2 \times n}} {f(X) \defeq \sum_{\{i,j\}\in E} f_{i,j}(x_i, x_j)+\lambda \sum_{i=1}^{n} \Omega_i(x_i),}
   {} {}
 \end{mini*}
 where $\Omega_{i}$ is a regularization term for vertex $i$ and $\lambda > 0$
@@ -926,7 +922,7 @@ to determine whether two graphs, $G_{1}$ and $G_{2}$, are isomorphic, i.e., $G_{
   \cong G_{2}$. The graph isomorphism problem is closely related to graph drawing. Drawing a graph in a way that reveals its symmetry is at least as difficult as the graph isomorphism problem~\citep{eades1984heuristic}. Indeed, if we can
 draw two graphs $G_{1}$ and $G_{2}$ in the same way, it becomes evident that $G
     _{1}\cong G_{2}$. See \cref{fig:iso} for reference. When we relax it to a continuous
-optimization problem on Riemannian manifolds~\citep{klusContinuousOptimizationMethods2023},
+optimization problem on Riemannian manifolds~\citep{klusContinuousOptimizationMethods2025},
 we might be able to apply the stochastic coordinate descent or coordinate Newton
 direction to this problem as well. Investigating the variant of our proposed
 algorithm for these problems constitutes one of the future research directions.
@@ -938,6 +934,18 @@ In this study, we proposed a new initial placement with the coordinate Newton
 direction for the FR force model. The obtained initial placements have fewer twists than the random initialization, leading to faster convergence and better visualization.
 Numerical experiments revealed that the proposed method is effective across various graphs, extending the applicability of the preprocessing step.
 The proposed method may advance the graph drawing of the FR force model, and we also hope it highlights the potential of the stochastic coordinate descent and its variants for addressing a broader range of graph-related optimization problems.
+
+\section{Acknowledgment}
+
+We want to express our sincere gratitude to PL Poirion and Andi Han
+for their insightful discussions, which have greatly inspired and influenced this research. We also thank the developers of NetworkX and Graphviz. Their excellent work has been a great help in conducting this research.
+
+This work was partially supported by JSPS KAKENHI (23H03351, 24K23853) and JST ERATO (JPMJER1903).
+
+\bibliographystyle{abbrvurl}
+\bibliography{FruchtermanReingoldByRandomSubspace}
+
+\appendix
 
 \section{NetworkX Implementation}
 \label{sec:algToProb1}
@@ -1022,8 +1030,8 @@ is the center of the expected layout bounding box.
 Based on \cref{sec:preliminaries}, let us define the sum of terms associated with the vertex $x_{i}$ be $f_{i}$, which
 is explicitly given by
 \begin{equation*}
-  f_{i}(x_{i}) \coloneqq \sum_{j \in V \setminus \{i\}}\left( E_{i,j}(\norm{x_{i}- x_{j}}
-  ) + E_{j,i}(\norm{x_{j}- x_{i}}) \right).
+  f_{i}(x_{i}) \coloneqq \sum_{j \in V \setminus \{i\}}\left( U_{i,j}(\norm{x_{i}- x_{j}}
+  ) + U_{j,i}(\norm{x_{j}- x_{i}}) \right).
 \end{equation*}
 The $i$-th row of the gradient $\nabla f(X) \in \mathbb{R}^{2 \times n}$ is
 \begin{align*}
@@ -1049,13 +1057,4 @@ Further implementation details and experimental results are available in
 \href{https://github.com/networkx/networkx/pull/7889}{our merged pull request}
 to the NetworkX.
 
-\section{Acknowledgment}
-
-We want to express our sincere gratitude to PL Poirion and Andi Han
-for their insightful discussions, which have greatly inspired and influenced this research. We also thank the developers of NetworkX and Graphviz. Their excellent work has been a great help in conducting this research.
-
-This work was partially supported by JSPS KAKENHI (23H03351, 24K23853) and JST ERATO (JPMJER1903).
-
-\bibliographystyle{abbrvurl}
-\bibliography{FruchtermanReingoldByRandomSubspace}
 \end{document}

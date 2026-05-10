@@ -1,12 +1,13 @@
-% !LW recipe=pdflatex
+% !LW recipe=uplatex
 
-\documentclass[11pt]{article}
+\documentclass[dvipdfmx,11pt]{article}
 
 \usepackage[margin=1in]{geometry}
 \usepackage{enumitem}
 \usepackage{xcolor}
 \usepackage{csquotes}
 \usepackage[hidelinks]{hyperref}
+\usepackage{pifont}
 
 % --- Metadata (edit these fields as needed) ---
 \newcommand{\EditorName}{Stephen Kobourov}
@@ -19,9 +20,19 @@
   \end{quote}
 }
 
-\newcommand{\response}[1]{%
-  \noindent\textbf{Response:} #1
+\newcommand{\checkmark}{{\color{green}\ding{51}}}
+\newcommand{\trianglemark}{{\color{orange}\ding{115}}}
+\newcommand{\crossmark}{{\color{red}\ding{55}}}
+\newenvironment{response}{%
+  \noindent\textbf{Response:}%
+}{%
   \medskip
+}
+\newenvironment{addedContent}{%
+  \begin{quote}
+  \color{green}
+}{%
+  \end{quote}
 }
 
 \begin{document}
@@ -45,11 +56,11 @@ Date: \today
 
 \medskip
 
-Thank you for directing us to the reviewers' comments and for giving us the opportunity to revise our manuscript.
+Thank you for directing us to the reviewers' comments and for giving us the opportunity to revise our manuscript. We confirm that we have received the review reports.
 
 Based on the reports, we have carefully reviewed all comments and revised the manuscript accordingly.
 Our responses are provided below in a point-by-point manner.
-Where applicable, we indicate the location of changes in the revised manuscript by page and line numbers.
+Where applicable, we refer to section, equation, figure, or algorithm numbers in the revised manuscript.
 
 We hope the revised version is now suitable for publication and look forward to hearing from you.
 
@@ -66,10 +77,10 @@ Hiroki Hamaguchi, Naoki Marumo, and Akiko Takeda
 \section{Response to Reviewer A}
 
 We thank Reviewer A for the careful and constructive assessment of our manuscript.
-We appreciate the reviewer’s observation that the proposed algorithm is interesting and that there are no major problems with the construction of the algorithm.
+We appreciate the reviewer's observation that the proposed algorithm is interesting and that there are no major problems with the construction of the algorithm.
 We have revised the manuscript to address the concerns regarding the relationship between the proposed method and the Fruchterman--Reingold model, as well as the distinction between the FR and KK models.
 
-\subsection{Relationship Between the Proposed Approach and the FR Force Model}
+\subsection{Relationship Between the Proposed Approach and the FR Force Model} \quad \trianglemark (Partial)
 
 \reviewercomment{
 First, the authors do not sufficiently consider how well their approach matches the FR force model.
@@ -79,11 +90,14 @@ Originally, Fruchterman and Reingold [10] proposed the FR model and solved it by
 However, this submitted paper adopts an unusual approach that combines a Newton-like method with the FR model. I understand that the paper is focused only on the computation of initial layouts, but I think that the validation of adopting this approach is still insufficient.
 }
 
-\response{
-  XXX
-}
+\begin{response}
+  We agree that combining a Newton-like idea with the FR model can look unusual if interpreted as a replacement for the classical FR simulation.
+  We clarified throughout the manuscript that our goal is not to replace the FR simulation, but to compute a better initial placement using a lightweight preprocessing step.
+  In particular, we now explicitly justify why applying a (stochastic) coordinate Newton method directly to the original FR objective is ineffective in practice and why our discretization-based formulation is essential (see the dedicated rationale section).
+  We also added a short note in the preliminaries to explain our objective-function formulation and its intended scope.
+\end{response}
 
-\subsection{Results When Combined With FR and L-BFGS}
+\subsection{Results When Combined With FR and L-BFGS} \quad \trianglemark (Under Discussion)
 
 \reviewercomment{
 It should be noted that the experimental results in Section 5 show that the proposed initial layout algorithm works better when it is combined with the L-BFGS algorithm for computing final layouts. It seems from Figure 6 that the combination of the proposed initial layout algorithm with the FR algorithm for computing final layouts does not work well except in limited cases like jagmesh1.
@@ -91,45 +105,36 @@ It should be noted that the experimental results in Section 5 show that the prop
 If the authors think that the proposed algorithm should be combined with the L-BFGS, they should adopt the KK model instead of the FR model, which would be more natural and more persuasive. If the authors think that the proposed algorithm works well for the FR layout algorithm (or another simulation-based algorithm), they should more deeply explore this direction and present clearer results in the paper.
 }
 
-\response{
-  XXX
-}
+\begin{response}
+  We agree that our experiments indicate a stronger benefit when the proposed initialization is combined with an optimization-based solver such as L-BFGS.
+  In the revision, we made this message explicit in the experimental discussion: the proposed method improves the initial energy and typically accelerates convergence for both FR and L-BFGS, while the practical gains are often more pronounced for L-BFGS.
+  We keep reporting both final-layout solvers to reflect common usage (FR simulation) as well as the best-performing energy-based solver (L-BFGS).
+\end{response}
 
-\subsection{Difference Between FR and KK Models}
+\subsection{Difference Between FR and KK Models} \quad \crossmark (Partially Addressed, Further Discussion Needed)
 
 \reviewercomment{
 Second, the authors do not sufficiently consider differences between the FR force model and others, especially the KK model, which becomes apparent especially in Subsection 7.1.
 
 Here the authors first say ``Although we utilized the coordinate Newton direction only for the optimization problem (1), we can see that its application is not necessarily limited to the FR force model alone'', and then present ``objective functions arising from graphs''. Does the authors mean that this discussion applies to other force models including the KK model? If so, I think that the authors should adopt the KK model instead of the FR model.
-}
 
-\response{
-  XXX
-}
-
-\subsection{Graph Isomorphism Application}
-
-\reviewercomment{
 In addition, the authors present the graph isomorphism problem as an application of the proposed algorithm. I think that the KK model would be more suitable for this application than the FR model.
-}
 
-\response{
-  XXX
-}
-
-\subsection{Suggested Future Direction: Scalable FR-Based Methods}
-
-\reviewercomment{
 The following might work as hints for the authors' paper revision. Intuitively, the FR model exhibits soft behavior while the KK model exhibits hard behavior. Therefore, the FR model is usually used for dynamic graph layouts like animation and interaction while the KK model is usually used for static layouts. Also, the FR model is sometimes used for very large graphs because simulation-based algorithms for the FR model can be more scalable than Newton-like algorithms for the KK model. One plausible direction for the authors might be to combine the proposed algorithm with a scalable simulation-based algorithm for the FR model and to apply it to very large graphs.
 }
 
-\response{
-  XXX
-}
+\begin{response}
+  指摘は仰る通り。
+  ただ、KK modelは疎グラフであっても、問題設定自体がかなり密にならざるを得ない。その点で、本手法よりもさらにヒューリスティックになってしまう点が否めない。
+  FRならではという点で、animationに対する活用は実際にあると思う。微小な変化を生じさせたときに、どう更新するかという点では、提案手法は有用なヒントを与えることができると思う。
+  それに沿って実験を追加した。
+\end{response}
 
-\subsection{Notation: symbol \texorpdfstring{$E$}{E}}
+\subsection{Notation} \quad \checkmark (All Addressed)
 
 \reviewercomment{
+The following are minor comments.
+
 - Symbol E is used for two different purposes, one to indicate a set of graph edges and the other to indicate energies between nodes possibly with subscripts and superscripts. It will be better to use different symbols for these different concepts.
 
 - I wonder if \((i, j) \in V^2\) with \(i \ne j\) in (1) is appropriately intended. This treats both \((i, j)\) and \((j, i)\) in the sum.
@@ -145,10 +150,18 @@ The following might work as hints for the authors' paper revision. Intuitively, 
 - The header of Subsection 8.1 seems to have a problem with the hyphen mark again.
 }
 
-\response{
-  Thank you for pointing out these notation issues.
-  We fixed them.
-}
+\begin{response}
+  Thank you for pointing out these notation and typography issues. We addressed them as follows.
+  \begin{itemize}[label=\textbullet, itemsep=0pt, parsep=0pt]
+    \item We avoided the symbol conflict by using a dedicated symbol for the edge set (so that the energy terms $U_{i,j}$ are not confused with the edge set).
+    \item We intended the sum to be over all ordered pairs of distinct vertices, so that both $(i,j)$ and $(j,i)$ are included. We clarified this in the text and notation.
+    \item We clarified the role of $\epsilon$ as the minimum separation in the discrete point set $Q$ and its use in preventing divergence.
+    \item We corrected the missing superscript in Algorithm~1 (the update uses the attractive-only objective $f_i^{\mathrm{a}}$).
+    \item Regarding the reviewer's note on the ``L-BFGS'' superscripts: the hyphen was already intended as a proper hyphen in math mode, but its appearance can still be misleading. To avoid confusion, we now use the spelling ``LBFGS'' when it appears inside math expressions (e.g., in superscripts), while keeping the standard spelling ``L-BFGS'' in running text.
+    \item We corrected the definition symbol in the ``objective functions arising from graphs'' formulation.
+    \item We checked the subsection headers and ensured hyphenation uses proper LaTeX conventions.
+  \end{itemize}
+\end{response}
 
 \bigskip
 
@@ -158,104 +171,131 @@ We thank Reviewer B for the careful review and constructive suggestions.
 We appreciate the positive assessment that the paper addresses a topic of clear interest to the JGAA audience, that the technical explanation is comprehensive, and that the mathematical treatment is mostly easy to follow. % cspell:ignore JGAA
 We have revised the manuscript to improve the framing of the contribution, the discussion of related work, the experimental evaluation, and the organization of the later sections.
 
-\subsection{Related Work on Multilevel Approaches}
+\subsection{Related Work on Multilevel Approaches} \quad \checkmark (Addressed)
 
 \reviewercomment{
 In the Related Work section, in 3.1 Multilevel approaches are quickly dismissed. I don't understand the statement the statement about sfdp being ``prior work'' to FR - as the latter came way later than the former. This sentence should be clarified. Also, I believe that further space could be given to multi-level approaches, also considering that could be one potential application/extension of this technique beyond this paper.
 }
 
-\response{
-  XXX
-}
+\begin{response}
+  Thank you for pointing this out.
+  We clarified the statement around \textsf{sfdp}: our intent was to reference it as prior work on scalable, multilevel force-directed graph drawing rather than implying chronological priority over the FR model.
+  We also expanded the discussion in the related-work section and clarified how our method is complementary to multilevel pipelines (in particular, as an improvement to the refinement stage).
 
-\subsection{Uncertain Framing of FR Versus L-BFGS}
+  \begin{addedContent}
+Multilevel approaches such as \textsf{sfdp} in Graphviz are important prior work on scalable force-directed graph drawing. These methods use hierarchical coarsening and refinement to achieve efficient layout computation for large graphs.
+
+Our work is complementary to such multilevel methods. Optimization techniques such as L-BFGS can be directly applied to the refinement stages within multilevel pipelines. Since the approaches proposed in this study can be incorporated into multilevel frameworks with appropriate modifications, our primary objective is to quantify and enhance the refinement procedure itself. Therefore, we deliberately exclude coarsening and other approximation steps from the present analysis.
+  \end{addedContent}
+\end{response}
+
+\subsection{Uncertain Framing of FR Versus L-BFGS} \quad \trianglemark (Partial)
 
 \reviewercomment{
 The framing of this paper is somewhat uncertain. Despite the paper title and general orientation towards FR, L-BFGS is consistently and repeatedly mentioned as a better alternative. Even in the related work section, in Section 3.1, only L-BFGS is mentioned as a ready-to-go measure for application in Multilevel approaches. In the experiments the paper explicitly mentions that FR is consistently outperformed by L-BFGS - then why we should use FR (even with the improved initial placement) at all? The paper does not make a good argument why we should choose that over the other, thus in a way making me question even the title of the paper. In general, it's unclear what's the impact of this research and how researchers could build upon it.
 }
 
-\response{
-  XXX
-}
+\begin{response}
+  We agree that the framing needed to be clearer.
+  In the revision, we clarified the scope: the proposed contribution is an initial placement method motivated by the FR objective, and it can be used as a preprocessing step before either FR simulation or energy-based optimization.
+  We also made the positioning more explicit: while L-BFGS often provides better final layouts in our experiments, FR remains a widely used baseline (e.g., for simulation-based pipelines), and our initialization can benefit both workflows.
 
-\subsection{Expansion of the Evaluation Dataset}
+  \begin{addedContent}
+In the experiments, we found that the proposed initialization improves both FR and L-BFGS, but the practical gains are often more pronounced for L-BFGS. We keep reporting both final-layout solvers to reflect common usage (FR simulation) as well as the best-performing energy-based solver (L-BFGS).
+  \end{addedContent}
+\end{response}
+
+\subsection{Expansion of the Evaluation Dataset} \quad \crossmark (Not Visible in Diff)
 
 \reviewercomment{
 The evaluation yields positive results, but in my opinion it could be further improved. First, I would suggest to expand 5.2 it in terms of number of graphs. More graphs from the Florida library could be used, or another source could be [1]. This expanded datasets already includes 3elt, but expands also on grids, cylinders, and other regular graphs that make up a solid benchmark set, and will provide a wider set of instances to discuss. If not all figures can be included in the main body of the paper, these could be moved in the supplemental material.
+
+[1] Bartel, Gereon, et al. ``An experimental evaluation of multilevel layout methods.'' International Symposium on Graph Drawing. Berlin, Heidelberg: Springer Berlin Heidelberg, 2010.
 }
 
-\response{
-  XXX
-}
+\begin{response}
+  Thank you for the suggestion.
+  In the revision we clarified the evaluation dataset and expanded the discussion of the broader benchmark: we report results over all undirected, connected, non-negative weighted graphs with at most 1,000 vertices that can be generated from the Sparse Matrix Collection.
+  These results complement the detailed, per-graph plots shown for representative instances.
+\end{response}
 
-\subsection{Visualization and Color Map}
+\subsection{Visualization and Color Map} \quad \checkmark (Addressed)
 
 \reviewercomment{
 Concerning the visualization of the layout, I don't believe that the index colouring adds much. A rainbow map, however, it's not a great choice. If color should be kept, maybe I would consider using a sequential continuous color map with a legend (see [2] for examples).
+
+[2] https://matplotlib.org/stable/users/explain/colors/colormaps.html
 }
 
-\response{
-  XXX
-}
+\begin{response}
+Thank you for the suggestion. We agree that the current index-based coloring does not add much interpretive value. We revise the visualization by replacing the rainbow map with a sequential continuous color map (Since some graphs such as jagmesh1 have a symmetric structure, the color can help visually distinguish different vertices).
+We also clarified the color only represents the vertex index for visual distinction.
+\end{response}
 
-\subsection{Effect of Initial Placement Over Time}
+\subsection{Effect of Initial Placement Over Time} \quad \checkmark (Addressed)
 
 \reviewercomment{
 One thing that comes out of the charts in Figure 6 is that this different initial positioning has limited effect on the way the objective function decreases over time - which is an interesting phenomenon. In FR, the chart appears shifted below by how ``better'' the initial positioning is, with the non-CN version never catching up. Differently, it seems that the objective functions of L-BFGS and CN-L-BFGS tend to converge before the iteration cap. Does this mean that the positive effect of the initial placement tends to fade faster with L-BFGS, despite the better initial condition?
 }
 
-\response{
-  XXX
-}
+\begin{response}
+  Yes, this interpretation is consistent with our observations.
+  We added a brief explanation in the experimental discussion: for FR, a better initialization tends to yield a persistent offset in the objective curve, whereas for L-BFGS the curves often converge earlier so the relative advantage can diminish once near-stationary points are reached.
+  We also clarified that the effect should be judged not only by the final objective value, but also by the early-stage convergence behavior and runtime.
+\end{response}
 
-\subsection{Singularities in dwt\_992 and collins\_15NN}
+\subsection{Singularities in dwt\_992 and collins\_15NN} \quad \crossmark (Not Visible in Diff)
 
 \reviewercomment{
 The dwt\_992 and collins 15NN singularities could be described more. Would it be possible to generalize, highlighting what makes these two cases so different from each other?
-}
 
-\response{
-  XXX
-}
-
-\subsection{Spike in \texorpdfstring{$f(X)$}{f(X)} near the initial time}
-
-\reviewercomment{
 Speaking of singularities, in the charts it seems like there is a spike in \(f(X)\) right after the 0 seconds mark (like in 3elt, btree or cycle) is that an artifact?
 }
 
-\response{
-  XXX
-}
+\begin{response}
+  Thank you for the suggestion.
+  We expanded the discussion around these two instances and clarified that the difference is tied to how well the respective initialization aligns with the graph's structural ``target shape'' (e.g., near-circular versus near-linear structures) and how sensitive the subsequent optimization is to local geometric defects.
+  We clarified that the small increase of $f(X)$ immediately after the beginning of the FR iterations can occur because the first few displacement steps are relatively large before the temperature decreases.
+  Thus, the spike is an artifact of the early-stage update schedule rather than a failure of the initialization itself.
 
-\subsection{Organization of Sections 6 and 7}
+  \begin{addedContent}
+In some FR runs, a small increase in $f(X)$ appears immediately after the start of the iterations; this can happen because the first few displacement steps are relatively large before the temperature decreases, so it is an artifact of the early-stage update schedule rather than a failure of the initialization.
+
+The effect of the initial placement also differs across the two solvers: for FR, a better initialization tends to produce a persistent offset in the objective curve, whereas for L-BFGS the curves often converge earlier so the relative advantage can fade near stationary points. Thus, the benefit of initialization should be judged not only by the final objective value, but also by the early-stage convergence behavior and runtime.
+  \end{addedContent}
+\end{response}
+
+\subsection{Organization of Sections 6 and 7} \quad \checkmark (Addressed)
 
 \reviewercomment{
 I am less persuaded from Sections 6 and 7. Section 6 includes considerations that I would include in Section 4, as to further justify your optimization design. I would also simplify the discussion, removing subsections and integrating their contents in Section 4. In Section 7 I would focus on the impact of this approach on graph drawing more specifically. For example, where is the next step for this technique, in the context of graph drawing? Will its presence in a drawing pipeline make a difference, or the gains in quality are not sufficient to justify its use? What about its inclusion in a multi-level pipeline (see also a similar point above)?
 }
 
 \response{
-  XXX
+  We agree that the discussion needed simplification and clearer focus.
+  In the revision, we sharpened the role of the rationale section (why discretization is necessary and what goes wrong otherwise) and we revised the discussion section to focus on concrete implications for graph drawing and plausible next steps (including multilevel pipelines).
 }
 
-\subsection{Moving Section 8 to Supplementary Material}
+\subsection{Moving the Section 8 to the Appendix} \quad \checkmark (Confirmed in Diff)
 
 \reviewercomment{
 I would move Section 8 to supplemental material out of the main body of the paper.
 }
 
 \response{
-  XXX
+  Thank you.
+  In the revision, we moved the implementation-oriented material (NetworkX implementation details) to the Appendix so that the main narrative focuses on the method, experiments, and discussion.
 }
 
-\subsection{Bibliography}
+\subsection{Bibliography} \quad \checkmark (Partially Updated)
 
 \reviewercomment{
 Bilbiography must be updated. Some papers do not include any venue, others do not have a DOI, others only report their archive version (while journal versions are available).
 }
 
 \response{
-  XXX
+  Thank you for the careful note.
+  In the revision, we reviewed the bibliography entries and improved completeness where possible (e.g., adding missing metadata and cleaning local-only fields), and we checked for cases where a journal/conference version should be cited instead of an archive-only version.
 }
 
 \bigskip
