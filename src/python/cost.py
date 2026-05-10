@@ -1,21 +1,27 @@
+from typing import Union
+
 import numpy as np
 import scipy.sparse
-from typing import Union
 
 
 def calcCost(
     pos: np.ndarray, A: Union[np.ndarray, scipy.sparse.csr_matrix], k: float
 ) -> float:
-    assert pos.shape[0] == A.shape[0] == A.shape[1]
+    shape = A.shape
+    assert shape is not None
+    nrows, ncols = shape
+    assert nrows is not None and ncols is not None
+    assert pos.shape[0] == nrows == ncols
     delta = pos[:, np.newaxis, :] - pos[np.newaxis, :, :]
     distance = np.linalg.norm(delta, axis=-1)
     EPS = 1e-10
-    if type(A) == np.ndarray:
+    if isinstance(A, np.ndarray):
         return np.sum(A * distance**3 / (3 * k) - (k**2) * np.log(distance + EPS))
-    else:
+    if scipy.sparse.issparse(A):
         return np.sum(
             A.multiply(distance**3) / (3 * k) - (k**2) * np.log(distance + EPS)
         )
+    raise TypeError("A must be either np.ndarray or scipy.sparse.csr_matrix")
 
 
 if __name__ == "__main__":

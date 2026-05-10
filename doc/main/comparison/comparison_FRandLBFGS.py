@@ -1,4 +1,3 @@
-from src.python.vis.visGraph import visGraph
 import networkx as nx
 import numpy as np
 
@@ -46,9 +45,6 @@ def main():
     posInit = np.array(posInit)
     posLBFGS = np.array(posLBFGS)
     posFR = np.array(posFR)
-
-    dirLBFGS = posInit - posLBFGS
-    dirFR = posInit - posFR
 
     grad = np.zeros((6, 2))
     for i in range(6):

@@ -1,8 +1,6 @@
-import numpy as np
-import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
-
 import matplotlib
+import matplotlib.pyplot as plt
+import numpy as np
 
 matplotlib.use("agg")
 
@@ -45,7 +43,7 @@ ax.set_xlabel("$x_{i,1}$", fontsize=20)
 ax.set_ylabel("$x_{i,2}$", fontsize=20)
 ax.set_zlabel("$E_{i,j}(\\| x_i - x_j \\|)$", fontsize=20)
 ax.set_zlim(0, 4)
-ax.set_zticks([1, 2, 3, 4])
+ax.set(zticks=[1, 2, 3, 4])
 
 # plt.show()
 plt.tight_layout()

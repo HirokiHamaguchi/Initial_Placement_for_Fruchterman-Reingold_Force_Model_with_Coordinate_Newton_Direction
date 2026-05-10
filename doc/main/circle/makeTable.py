@@ -13,11 +13,11 @@ info = {
 
 
 def generate_latex_code(matrixNames):
-    latex_code = f"""
-\\begin{{figure*}}[btp]
+    latex_code = """
+\\begin{figure*}[btp]
   \\centering
-  \\addtolength{{\\tabcolsep}}{{-0.5em}}
-  \\begin{{tabular}}{{ccccc}}"""
+  \\addtolength{\\tabcolsep}{-0.5em}
+  \\begin{tabular}{ccccc}"""
 
     for matrixName in matrixNames:
         n, m, density = info[matrixName]
@@ -35,11 +35,11 @@ def generate_latex_code(matrixNames):
     \\makecell{{\\small{{\\textsf{{CN-FR}}}}\\\\[-0.2em]\\includegraphics[width=0.27\\columnwidth]{{individual/vis/{matrixName}_CN_FR.{extension}}}}} &
     \\makecell{{\\small{{\\textsf{{CN-L-BFGS}}}}\\\\[-0.2em]\\includegraphics[width=0.27\\columnwidth]{{individual/vis/{matrixName}_CN_L_BFGS.{extension}}}}} \\\\"""
 
-    latex_code += f"""
-  \\end{{tabular}}
-  \\caption{{Numerical experiment results for various graphs.  Please refer Sec.~\\ref{{ssec:exprDetail}} for details.}}
-  \\label{{fig:individual}}
-\\end{{figure*}}
+    latex_code += """
+  \\end{tabular}
+  \\caption{Numerical experiment results for various graphs.  Please refer Sec.~\\ref{ssec:exprDetail} for details.}
+  \\label{fig:individual}
+\\end{figure*}
 """
     return latex_code
 

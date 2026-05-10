@@ -5,6 +5,7 @@ import networkx as nx
 import numpy as np
 import PIL
 from packaging import version
+from PIL import Image
 from tqdm.auto import tqdm
 
 from src.python.vis.visGraph import visGraph
@@ -40,8 +41,8 @@ def visAnimate(G: nx.Graph, optResults: np.ndarray, matrixName: str, methodName:
             "https://pillow.readthedocs.io/en/latest/releasenotes/3.4.0.html#append-images-to-gif",
         )
     else:
-        files = sorted(glob.glob(f"temp/*.png"))
-        images = [PIL.Image.open(file) for file in files]
+        files = sorted(glob.glob("temp/*.png"))
+        images = [Image.open(file) for file in files]
         images[0].save(
             f"movie/{matrixName}_{methodName}.gif",
             save_all=True,

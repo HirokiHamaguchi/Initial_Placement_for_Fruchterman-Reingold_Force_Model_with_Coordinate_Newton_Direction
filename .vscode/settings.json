@@ -99,7 +99,6 @@
         "SCCG",
         "setdiag",
         "sfdp",
-        "Shanno",
         "Softw",
         "ssget",
         "ssgetpy",
@@ -222,5 +221,5 @@
         "format": "cpp",
         "semaphore": "cpp",
         "csignal": "cpp"
-    },
+    }
 }

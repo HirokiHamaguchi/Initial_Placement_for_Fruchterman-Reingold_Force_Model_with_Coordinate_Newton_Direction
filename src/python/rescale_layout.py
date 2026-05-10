@@ -1,5 +1,3 @@
-import networkx as nx
-from networkx.utils import np_random_state
 
 
 # Copied from networkx.drawing.layout.py

@@ -5,7 +5,6 @@
       "label": "g++ build active file",
       "command": "/usr/bin/g++-10",
       "args": [
-        // "-g",
         "${fileBasename}",
         "-o",
         "${fileBasenameNoExtension}.out",
@@ -31,7 +30,7 @@
       "group": {
         "kind": "build",
         "isDefault": true
-      },
+      }
     }
   ],
   "version": "2.0.0"

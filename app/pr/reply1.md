@@ -88,7 +88,7 @@ Adding a "Notes" section sounds like a great idea! Would something like the foll
 +    -----
 +    method="FR" supports negative edge weights and uses only attractive and repulsive forces.
 +    method="L-BFGS" uses absolute edge weights and additional forces per connected component,
-+    making graph drawing a well-defined optimization problem. This enables the use of the 
++    making graph drawing a well-defined optimization problem. This enables the use of the
 +    efficient optimization algorithm: Limited-memory Broyden-Fletcher-Goldfarb-Shanno (L-BFGS).
 +    You can see the differences in the [Gallery](todo???).
 

@@ -1,7 +1,6 @@
 import math
 import random
 
-import matplotlib.pyplot as plt
 import networkx as nx
 import numpy as np
 
@@ -44,7 +43,7 @@ def main():
 
     print("\\begin{document}")
     print("\\begin{tikzpicture}")
-    print(f"\\foreach ", end="")
+    print("\\foreach ", end="")
     for cIdx in range(10):
         c = chr(ord("a") + cIdx)
         print(f"\\x{c}/\\y{c}/", end="")

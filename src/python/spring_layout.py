@@ -1,8 +1,7 @@
 import networkx as nx
 from networkx.utils import np_random_state
-from src.python.rescale_layout import rescale_layout
+
 from src.python._process_params import _process_params
-from src.python._fr import _fruchterman_reingold
 from src.python._sparse_fr import _sparse_fruchterman_reingold
 
 
@@ -124,7 +123,8 @@ def spring_layout(
         dom_size = max(coord for pos_tup in pos.values() for coord in pos_tup)
         if dom_size == 0:
             dom_size = 1
-        pos_arr = seed.rand(len(G), dim) * dom_size + center
+        rng = seed if seed is not None else np.random
+        pos_arr = rng.rand(len(G), dim) * dom_size + center
 
         for i, n in enumerate(G):
             if n in pos:

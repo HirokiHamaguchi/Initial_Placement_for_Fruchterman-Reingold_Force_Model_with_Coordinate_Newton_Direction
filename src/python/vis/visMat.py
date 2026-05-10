@@ -1,13 +1,15 @@
+from typing import Union
+
+import matplotlib.pyplot as plt
 import numpy as np
 import scipy.sparse
-import matplotlib.pyplot as plt
-from typing import Union
 
 
 def visMat(mat: Union[np.ndarray, scipy.sparse.coo_matrix]) -> None:
     plt.figure(figsize=(10, 10))
     if scipy.sparse.issparse(mat):
-        matVis = mat.toarray().astype(float)
+        mat_sparse = scipy.sparse.coo_matrix(mat)
+        matVis = mat_sparse.toarray().astype(float)
     else:
         matVis = mat.copy().astype(float)
     matVis[matVis == 0] = np.nan

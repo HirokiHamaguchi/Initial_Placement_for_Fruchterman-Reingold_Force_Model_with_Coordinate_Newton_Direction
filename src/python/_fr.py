@@ -27,7 +27,8 @@ def _fruchterman_reingold(
 
     if pos is None:
         # random initial positions
-        pos = np.asarray(seed.rand(nnodes, dim), dtype=A.dtype)
+        rng = seed if seed is not None else np.random
+        pos = np.asarray(rng.rand(nnodes, dim), dtype=A.dtype)
     else:
         # make sure positions are of same type as matrix
         pos = pos.astype(A.dtype)

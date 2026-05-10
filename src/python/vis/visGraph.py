@@ -1,32 +1,51 @@
+from typing import Optional, Union
+
+import matplotlib.pyplot as plt
 import networkx as nx
 import numpy as np
-import matplotlib.pyplot as plt
-from typing import Union
+from matplotlib.colors import Normalize
 
 
 def visGraph(
     G: Union[nx.Graph, nx.DiGraph, nx.MultiGraph, nx.MultiDiGraph],
     pos: dict,
-    _dirs: np.ndarray = None,
-    title: str = None,
-    savePath: str = None,
+    _dirs: Optional[np.ndarray] = None,
+    title: Optional[str] = None,
+    savePath: Optional[str] = None,
     node_size: int = 50,
     width: float = 1,
 ) -> None:
     plt.figure(figsize=(8, 8))
     plt.axis("equal")
-    cmap = plt.get_cmap("jet")
     n = G.number_of_nodes()
-    colorMap = np.array([cmap(i / (n - 1)) for i in range(n)])
-    nx.draw(G, pos, node_size=node_size, node_color=colorMap, width=width)
+    nodes = list(G.nodes())
+    cmap = plt.get_cmap("viridis")
+    norm = Normalize(vmin=0, vmax=max(n - 1, 1))
+    nodeIndices = np.arange(n)
+    colorMap = cmap(norm(nodeIndices))
+    nx.draw(
+        G,
+        pos,
+        nodelist=nodes,
+        node_size=node_size,
+        node_color=colorMap,
+        width=width,
+    )
+
+    scalarMappable = plt.cm.ScalarMappable(norm=norm, cmap=cmap)
+    scalarMappable.set_array([])
+    colorbar = plt.colorbar(scalarMappable, ax=plt.gca(), fraction=0.046, pad=0.04)
+    colorbar.set_label("Vertex index")
+    colorbar.set_ticks([0, max(n - 1, 1)])
+    posNp = np.array([pos[node] for node in nodes])
     if _dirs is not None and np.any(_dirs != 0.0):
         dirs = _dirs.copy()
-        assert pos.shape == (n, 2)
+        assert posNp.shape == (n, 2)
         assert dirs.shape == (n, 2)
         for i in range(n):
             plt.arrow(
-                pos[i][0],
-                pos[i][1],
+                posNp[i][0],
+                posNp[i][1],
                 dirs[i, 0],
                 dirs[i, 1],
                 head_width=0.05,
@@ -34,7 +53,6 @@ def visGraph(
                 fc="k",
                 ec="k",
             )
-    posNp = np.array(list(pos.values()))
     minX = np.min(posNp[:, 0])
     maxX = np.max(posNp[:, 0])
     minY = np.min(posNp[:, 1])

@@ -1,9 +1,10 @@
-import os
 import glob
+import os
+from typing import Generator, Union
+
 import numpy as np
 import scipy.io
 import scipy.sparse
-from typing import Union, Generator
 
 
 def getMatrixByName(
@@ -17,9 +18,13 @@ def getMatrixByName(
     path = path + name + ".mtx"
     assert os.path.exists(path), f"Matrix({name}) not found"
     matrix = scipy.io.mmread(path)
-    if asDense:
-        matrix = matrix.toarray()
-    return matrix
+    if scipy.sparse.issparse(matrix):
+        matrix_sparse = scipy.sparse.coo_matrix(matrix)
+        if asDense:
+            return matrix_sparse.toarray()
+        return matrix_sparse
+    matrix_dense = np.asarray(matrix)
+    return matrix_dense
 
 
 def getMatrixes(
@@ -35,5 +40,7 @@ if __name__ == "__main__":
     os.chdir(os.path.dirname(os.path.abspath(__file__)))
     print(getMatrixByName("jagmesh1"))
     for mat in getMatrixes():
-        print(mat.shape)
-        assert mat.shape[0] == mat.shape[1]
+        shape = mat.shape
+        assert shape is not None
+        print(shape)
+        assert shape[0] == shape[1]

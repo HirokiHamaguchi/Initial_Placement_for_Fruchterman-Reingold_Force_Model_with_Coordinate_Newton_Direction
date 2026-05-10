@@ -1,9 +1,7 @@
-from matplotlib.pylab import f
 import networkx as nx
 from networkx.utils import np_random_state
+
 from src.python.cost import calcCost
-from tqdm.auto import tqdm
-import time
 
 
 # Copied from networkx.drawing.layout.py
@@ -25,7 +23,6 @@ def _sparse_fruchterman_reingold(
     # Sparse version
     import numpy as np
     import scipy as sp
-    from scipy.optimize import minimize
 
     try:
         nnodes, _ = A.shape
@@ -35,7 +32,8 @@ def _sparse_fruchterman_reingold(
 
     if pos is None:
         # random initial positions
-        pos = np.asarray(seed.rand(nnodes, dim), dtype=A.dtype)
+        rng = seed if seed is not None else np.random
+        pos = np.asarray(rng.rand(nnodes, dim), dtype=A.dtype)
     else:
         # make sure positions are of same type as matrix
         pos = pos.astype(A.dtype)
@@ -222,10 +220,11 @@ def _sparse_fruchterman_reingold(
 if __name__ == "__main__":
     import numpy as np
     import scipy.sparse
+
     from src.python.spring_layout import spring_layout
 
     mat = np.array([[0, 1, 2], [1, 0, -1], [2, -1, 0]])
     mat = scipy.sparse.csr_matrix(mat)
-    G = nx.Graph(mat)
+    G = nx.from_scipy_sparse_array(mat)
     pos = spring_layout(G, iterations=50, seed=0, method="BFGS")
     print(pos)
