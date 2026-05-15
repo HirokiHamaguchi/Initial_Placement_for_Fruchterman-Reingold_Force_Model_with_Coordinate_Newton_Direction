@@ -39,10 +39,10 @@ struct Problem {
     // if is1, then all edge weights are set to 1
 
     std::string curPath = std::filesystem::current_path().string();
-    size_t folderPathSize = curPath.find("FruchtermanReingoldByRandomSubspace");
+    size_t folderPathSize = curPath.find("Initial_Placement_for_FR");
     assert(folderPathSize != std::string::npos);
     curPath = curPath.substr(
-        0, folderPathSize + std::string("FruchtermanReingoldByRandomSubspace").size());
+        0, folderPathSize + std::string("Initial_Placement_for_FR").size());
     std::string path = curPath + "/data/" + matrixName + ".mtx";
     assert(std::filesystem::exists(path));
 

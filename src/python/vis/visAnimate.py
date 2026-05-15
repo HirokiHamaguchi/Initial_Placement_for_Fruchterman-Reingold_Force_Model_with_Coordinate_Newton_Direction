@@ -12,7 +12,7 @@ from src.python.vis.visGraph import visGraph
 
 
 def visAnimate(G: nx.Graph, optResults: np.ndarray, matrixName: str, methodName: str):
-    folderName = "FruchtermanReingoldByRandomSubspace"
+    folderName = "Initial_Placement_for_FR"
     assert os.getcwd().find(folderName) != -1
     cwd = os.getcwd()
     pathToFolder = os.getcwd().split(folderName)[0] + folderName

@@ -4,11 +4,16 @@
             "name": "Linux",
             "includePath": [
                 "${workspaceFolder}/**",
+                "${workspaceFolder}/src/cpp/include",
                 "/usr/include/eigen3"
             ],
-            "defines": [],
-            "compilerPath": "/usr/bin/gcc",
-            "cStandard": "c17"
+            "defines": [
+                "hari64",
+                "DBG_MACRO_NO_WARNING"
+            ],
+            "compilerPath": "/usr/bin/g++",
+            "cStandard": "c17",
+            "cppStandard": "c++17"
         }
     ],
     "version": 4

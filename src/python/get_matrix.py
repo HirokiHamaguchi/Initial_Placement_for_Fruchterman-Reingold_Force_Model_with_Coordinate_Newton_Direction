@@ -7,13 +7,13 @@ import scipy.io
 import scipy.sparse
 
 
-def getMatrixByName(
+def get_matrix_by_name(
     name: str, asDense: bool = False
 ) -> Union[np.ndarray, scipy.sparse.coo_matrix]:
-    assert os.getcwd().count("FruchtermanReingoldByRandomSubspace") == 1
+    assert os.getcwd().count("Initial_Placement_for_FR") == 1
     path = (
-        os.getcwd().split("FruchtermanReingoldByRandomSubspace")[0]
-        + "FruchtermanReingoldByRandomSubspace/data/"
+        os.getcwd().split("Initial_Placement_for_FR")[0]
+        + "Initial_Placement_for_FR/data/"
     )
     path = path + name + ".mtx"
     assert os.path.exists(path), f"Matrix({name}) not found"
@@ -27,19 +27,19 @@ def getMatrixByName(
     return matrix_dense
 
 
-def getMatrixes(
+def get_matrixes(
     asDense: bool = False,
 ) -> Generator[Union[np.ndarray, scipy.sparse.coo_matrix], None, None]:
     assert os.path.exists("../../data"), "Data folder not found"
     names = glob.glob("../../data/*.mtx")
     for name in names:
-        yield getMatrixByName(name[11:-4], asDense)
+        yield get_matrix_by_name(name[11:-4], asDense)
 
 
 if __name__ == "__main__":
     os.chdir(os.path.dirname(os.path.abspath(__file__)))
-    print(getMatrixByName("jagmesh1"))
-    for mat in getMatrixes():
+    print(get_matrix_by_name("jagmesh1"))
+    for mat in get_matrixes():
         shape = mat.shape
         assert shape is not None
         print(shape)

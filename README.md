@@ -14,6 +14,13 @@ You can install the required packages by running the following command:
 pip install -r requirements.txt
 ```
 
+You can download the matrices used in this project by running the following command:
+
+```bash
+uv run src/python/get_matrix.py
+uv run src/python/make_matrix.py
+```
+
 ### C++
 
 You can compile the C++ code by running the following command:

@@ -34,3 +34,11 @@ repos:
       - id: mixed-line-ending
       - id: trailing-whitespace
         args: [--markdown-linebreak-ext=md]
+
+  - repo: https://github.com/kynan/nbstripout
+    rev: 0.8.1
+    hooks:
+      - id: nbstripout
+        name: nbstripout (strip notebook outputs)
+        description: "Strip output cells and large embedded content from Jupyter notebooks (.ipynb)"
+        files: \.ipynb$

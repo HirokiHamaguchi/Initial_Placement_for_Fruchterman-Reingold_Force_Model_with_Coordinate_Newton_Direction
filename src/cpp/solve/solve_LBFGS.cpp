@@ -1,6 +1,6 @@
 #pragma once
 
-#include <LBFGS.h>
+#include "../include/LBFGS.h"
 
 #include <Eigen/Core>
 #include <iostream>

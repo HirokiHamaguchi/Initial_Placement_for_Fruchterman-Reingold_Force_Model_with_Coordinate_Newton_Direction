@@ -1,7 +1,6 @@
 # convert mtx file to dot file
 
 import sys
-import os
 
 
 def mtx2dot(mtx_file, dot_file):
@@ -9,8 +8,6 @@ def mtx2dot(mtx_file, dot_file):
         lines = f.readlines()
         while lines[0].startswith("%"):
             lines.pop(0)
-        n = int(lines[0].split()[0])
-        m = int(lines[0].split()[1])
         with open(dot_file, "w") as f:
             f.write("graph {\n")
             for i in range(1, len(lines)):
