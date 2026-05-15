@@ -246,7 +246,7 @@ For further details on multilevel approaches, the reader is referred to~\citep{h
 \subsection{Optimization Approach}
 \label{sec:optimization_approach}
 
-As noted in \cref{sec:introduction}, optimization-based methods for graph drawing have been actively investigated. Representative approaches include GPU acceleration~\citep{gajdosParallelFruchtermanReingold2016}, machine learning techniques~\citep{tiezziGraphNeuralNetworks2024}, and multi-objective formulations~\citep{ahmedMulticriteriaScalableGraph2021}. Among optimization-based approaches, our attention is on the underlying optimization algorithms itself.
+As noted in \cref{sec:introduction}, optimization-based methods for graph drawing have been actively investigated. Representative approaches include GPU acceleration~\citep{gajdosParallelFruchtermanReingold2016}, machine learning techniques~\citep{tiezziGraphNeuralNetworks2024}, and multi-objective formulations~\citep{ahmedMulticriteriaScalableGraph2022a}. Among optimization-based approaches, our attention is on the underlying optimization algorithms itself.
 We review Stochastic Gradient Descent in \cref{sec:rationale}. In this section, we review the L-BFGS algorithm.
 
 The L-BFGS algorithm, a renowned and widely used optimization
@@ -335,7 +335,7 @@ compute $\nabla^{2}g_{i}(x_{i})^{-1}\nabla g_{i}(x_{i})$ where $g_{i}$ is a
 restricted function of $g$ to $x_{i}$. Since the coordinate Newton direction computation
 is much cheaper than that of the Newton direction, we can repeat this
 procedure many times. In general, this idea is known as stochastic coordinate
-descent~\citep{recht-wright} or Randomized Subspace Newton~\citep{NEURIPS2019_bc6dc48b}
+descent~\citep{wright2022optimization} or Randomized Subspace Newton~\citep{NEURIPS2019_bc6dc48b}
 in a broader context.
 
 In particular, this coordinate Newton direction has an apparent natural affinity
@@ -797,7 +797,7 @@ By contrast, our discretization-based formulation allows us to circumvent these 
 
 One natural idea for solving problem~\eqref{eq:fr} is to apply existing optimization algorithms such as Stochastic Gradient Descent (SGD) or Stochastic Coordinate Descent.
 
-Applying SGD to graph drawing, particularly to the Kamada–Kawai (KK) layout~\citep{kamadaAlgorithmDrawingGeneral1989}, has been a notable direction~\citep{zhengGraphDrawingStochastic2019,ahmedMulticriteriaScalableGraph2021}. The KK model determines the layout by minimizing a stress-like energy $U_{i,j}^{\mathrm{KK}}$ defined for all vertex pairs. SGD corresponds to randomly selecting an edge ${i,j}$ and updating $x_i$ and $x_j$ using the gradient of $U_{i,j}^{\mathrm{KK}}$. This stochastic treatment reduces per-iteration complexity while retaining structural information, as $U_{i,j}^{\mathrm{KK}}$ is defined in terms of graph distance.
+Applying SGD to graph drawing, particularly to the Kamada–Kawai (KK) layout~\citep{kamadaAlgorithmDrawingGeneral1989}, has been a notable direction~\citep{zhengGraphDrawingStochastic2019,ahmedMulticriteriaScalableGraph2022a}. The KK model determines the layout by minimizing a stress-like energy $U_{i,j}^{\mathrm{KK}}$ defined for all vertex pairs. SGD corresponds to randomly selecting an edge ${i,j}$ and updating $x_i$ and $x_j$ using the gradient of $U_{i,j}^{\mathrm{KK}}$. This stochastic treatment reduces per-iteration complexity while retaining structural information, as $U_{i,j}^{\mathrm{KK}}$ is defined in terms of graph distance.
 
 In contrast, applying SGD directly to the FR model is ineffective. When $a_{i,j}=0$, the energy term reduces to $U_{i,j}=-k^{2}\log d$, which depends only on Euclidean distance and ignores the graph structure. Consequently, gradients from a single sampled pair often fail to provide meaningful information for optimization.
 
@@ -898,7 +898,7 @@ We briefly discuss and explore the potential applicability of stochastic coordin
 Although we utilized the coordinate Newton direction only for the optimization problem~\eqref{eq:fr}, we can see that its application is not necessarily limited to the FR force model alone.
 
 In general, the optimization problem~\eqref{eq:fr} is more broadly treated as
-``objective functions arising from graphs''~\citep{recht-wright}:
+``objective functions arising from graphs''~\citep{wright2022optimization}:
 \begin{mini*}
   {X \in \bbR^{2 \times n}} {f(X) \defeq \sum_{\{i,j\}\in E} f_{i,j}(x_i, x_j)+\lambda \sum_{i=1}^{n} \Omega_i(x_i),}
   {} {}
@@ -956,8 +956,7 @@ At the time of writing, NetworkX, an open-source library for graph analysis in P
 \subsection{Fruchterman--Reingold Algorithm}
 \label{ssec:frAlgorithm}
 
-\begin{algorithm}
-  [t]
+\begin{algorithm}[H]
   \caption{Fruchterman--Reingold algorithm}
   \label{alg:fr} \KwIn{Graph $G = (V, E)$, Weights $(a_{i,j})_{\{i,j\} \in E}$, Parameters $N_{\mathrm{iter}}^{\mathsf{FR}}\in \bbN$, $t_{0}> 0$, and Initial~placement~$X = (x_{1}, \dots, x_{n})$}
   \KwOut{Final placement $X$}
