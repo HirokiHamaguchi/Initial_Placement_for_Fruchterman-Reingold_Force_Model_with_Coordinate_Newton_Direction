@@ -36,12 +36,12 @@ int main() {
     double score = hist.back().first;
     histStr += "Score: " + std::to_string(score) + "\n";
     std::cout << "Score: " << score << std::endl;
-    problem.printOutput(positions, "out/" + problem.matrixName + "_" +
+    problem.printOutput(positions, "doc/main/circle/out/" + problem.matrixName + "_" +
                                        MethodStr[method] + "_" +
                                        std::to_string(default_ITER) + ".out");
   }
 
-  std::string fileName = "hist2_" + std::to_string(default_ITER) + ".txt";
+  std::string fileName = "doc/main/circle/hist2_" + std::to_string(default_ITER) + ".txt";
   auto [histPath, fileForHist] = openFile(fileName);
   fileForHist << histStr;
   fileForHist.close();

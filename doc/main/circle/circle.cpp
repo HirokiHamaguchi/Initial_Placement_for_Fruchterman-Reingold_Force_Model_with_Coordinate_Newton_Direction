@@ -1,7 +1,7 @@
 #include "../../../src/cpp/solve/solve.cpp"
 
 int main() {
-  std::string matrixNamesPath = "../../../data/_matrixNames.txt";
+  std::string matrixNamesPath = "data/_matrixNames.txt";
   std::ifstream matrixNamesFile(matrixNamesPath);
   assert(matrixNamesFile.is_open());
   std::vector<std::string> matrixNames;
@@ -34,14 +34,14 @@ int main() {
           histStr += "Score: " + std::to_string(score) + "\n";
           std::cout << "Score: " << score << std::endl;
           if (seed == 1)
-            problem.printOutput(positions, "out/" + problem.matrixName + "_" +
+            problem.printOutput(positions, "doc/main/circle/out/" + problem.matrixName + "_" +
                                                MethodStr[method] + "_" +
                                                std::to_string(default_ITER) + ".out");
         }
       }
     }
 
-    std::string fileName = "hist_" + std::to_string(default_ITER) + ".txt";
+    std::string fileName = "doc/main/circle/hist_" + std::to_string(default_ITER) + ".txt";
     auto [histPath, fileForHist] = openFile(fileName);
     fileForHist << histStr;
     fileForHist.close();
