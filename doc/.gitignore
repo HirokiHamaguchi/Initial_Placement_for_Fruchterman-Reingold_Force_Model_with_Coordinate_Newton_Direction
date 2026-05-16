@@ -3,11 +3,11 @@ hidden/*
 *.aux
 *.bbl
 *.blg
+*.out
 *.idx
 *.ind
 *.lof
 *.lot
-*.out
 *.toc
 *.acn
 *.acr
@@ -22,3 +22,5 @@ hidden/*
 *.dvi
 *.synctex.gz
 *.synctex(busy)
+
+!doc/main/individual/out/*
