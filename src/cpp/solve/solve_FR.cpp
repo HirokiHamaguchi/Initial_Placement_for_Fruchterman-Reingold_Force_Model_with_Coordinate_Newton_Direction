@@ -1,6 +1,5 @@
 #pragma once
 
-#include <cmath>
 #include <Eigen/Core>
 #include <cassert>
 #include <filesystem>
@@ -14,35 +13,6 @@
 
 #include "../util/dbg.h"
 #include "../util/problem.hpp"
-
-static double calcFRScoreMatrix(const Problem& problem, const Eigen::MatrixXf& pos) {
-  double score = 0.0;
-  const double k2 = problem.k * problem.k;
-
-  for (size_t u = 0; u < problem.n; ++u) {
-    for (size_t v = u + 1; v < problem.n; ++v) {
-      double dx = static_cast<double>(pos(0, u) - pos(0, v));
-      double dy = static_cast<double>(pos(1, u) - pos(1, v));
-      double d = std::hypot(dx, dy);
-      d = std::max(d, 1e-9);
-      score -= k2 * std::log(d);
-    }
-  }
-
-  for (size_t i = 0; i < problem.m; ++i) {
-    size_t u = problem.row[i];
-    size_t v = problem.col[i];
-
-    double a = problem.data[i];
-    double dx = static_cast<double>(pos(0, u) - pos(0, v));
-    double dy = static_cast<double>(pos(1, u) - pos(1, v));
-    double d = std::hypot(dx, dy);
-
-    score += a * d * d * d / (3.0 * problem.k);
-  }
-
-  return score;
-}
 
 void solve_FR(const Problem& problem, std::vector<Eigen::VectorXf>& positions,
               std::vector<std::pair<double, double>>& hist, Timer& timer,
@@ -87,27 +57,7 @@ void solve_FR(const Problem& problem, std::vector<Eigen::VectorXf>& positions,
 
     Eigen::RowVectorXf length = displacement.colwise().norm();
     length = length.unaryExpr([](float l) { return std::max(l, 0.1f); });
-
-    Eigen::MatrixXf direction = displacement.array().rowwise() / length.array();
-
-    if (iteration == 0) {
-      const double current_score = calcFRScoreMatrix(problem, pos);
-
-      while (true) {
-        Eigen::MatrixXf trial_pos = pos + direction * static_cast<float>(t);
-        double trial_score = calcFRScoreMatrix(problem, trial_pos);
-
-        if (trial_score <= current_score || t <= 1e-5) {
-          break;
-        }
-
-        t *= 0.5;
-      }
-
-      dt = t / (iterations + 1);
-    }
-
-    Eigen::MatrixXf delta_pos = direction * static_cast<float>(t);
+    Eigen::MatrixXf delta_pos = displacement.array().rowwise() * (t / length.array());
 
     pos += delta_pos;
     t -= dt;
