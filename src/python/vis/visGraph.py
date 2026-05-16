@@ -34,9 +34,6 @@ def visGraph(
 
     scalarMappable = plt.cm.ScalarMappable(norm=norm, cmap=cmap)
     scalarMappable.set_array([])
-    colorbar = plt.colorbar(scalarMappable, ax=plt.gca(), fraction=0.046, pad=0.04)
-    colorbar.set_label("Vertex index")
-    colorbar.set_ticks([0, max(n - 1, 1)])
     posNp = np.array([pos[node] for node in nodes])
     if _dirs is not None and np.any(_dirs != 0.0):
         dirs = _dirs.copy()
