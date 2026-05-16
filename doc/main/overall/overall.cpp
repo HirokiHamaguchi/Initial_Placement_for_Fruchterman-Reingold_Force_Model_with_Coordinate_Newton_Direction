@@ -1,7 +1,7 @@
 #include "../../../src/cpp/solve/solve.cpp"
 
 int main() {
-  std::string matrixNamesPath = "matrixNames.txt";
+  std::string matrixNamesPath = "../../../data/_matrixNames.txt";
   std::ifstream matrixNamesFile(matrixNamesPath);
   assert(matrixNamesFile.is_open());
   std::vector<std::string> matrixNames;

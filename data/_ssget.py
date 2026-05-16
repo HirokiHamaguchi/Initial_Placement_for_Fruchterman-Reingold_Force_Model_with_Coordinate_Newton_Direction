@@ -9,7 +9,7 @@ import ssgetpy
 
 DATA_DIR = Path(__file__).resolve().parent
 PROJECT_ROOT = DATA_DIR.parent
-MATRIX_NAMES_PATH = PROJECT_ROOT / "doc/main/overall/matrixNames.txt"
+MATRIX_NAMES_PATH = PROJECT_ROOT / "data/_matrixNames.txt"
 
 
 def load_matrix(mat):
@@ -26,16 +26,20 @@ def make_graph(A):
     return nx.from_scipy_sparse_array(A)
 
 
-def process_matrix(mat):
+def process_matrix(mat, force=False):
     if mat.rows!=mat.cols:
         return None
 
     A = load_matrix(mat).tocoo() # type: ignore
+    if not force and np.any(A.data<0):
+        return None
     A.data = np.abs(A.data)
+
+    if not force and not np.allclose((A-A.T).data, 0):
+        return None
     A = ((A + A.T) / 2).tocoo()
 
     G = make_graph(A)
-    # assert nx.is_connected(G)
     if  not nx.is_connected(G):
         return None
 
@@ -67,7 +71,7 @@ def main1():
 
     for name in manual_names:
         mat = ssgetpy.search(name)[0]
-        result = process_matrix(mat)
+        result = process_matrix(mat, force=True)
         assert result is not None, f"{name} failed processing"
         # don't add these names to MATRIX_NAMES_PATH
         # since the experiments to be run are different.
