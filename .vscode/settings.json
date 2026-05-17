@@ -4,6 +4,7 @@
         "solve": "core"
     },
     "cSpell.words": [
+        "'enyi",
         "Akiko",
         "allclose",
         "amax",
@@ -85,9 +86,11 @@
         "numpy",
         "nzbounds",
         "optresult",
+        "pdflatex",
         "Poirion",
         "Polak",
         "popleft",
+        "R",
         "randn",
         "Raphson",
         "Reingold",
@@ -103,8 +106,10 @@
         "setdiag",
         "sfdp",
         "Softw",
+        "Spectro",
         "ssget",
         "ssgetpy",
+        "stepsizes",
         "Sugiyama",
         "Takahashi",
         "Takeda",
@@ -114,6 +119,7 @@
         "tolil",
         "tqdm",
         "Tutte",
+        "unboundedness",
         "viridis",
         "warnflag",
         "whitegrid",
@@ -224,5 +230,8 @@
         "format": "cpp",
         "semaphore": "cpp",
         "csignal": "cpp"
-    }
+    },
+    "latexlint.userDefinedRules": [
+        "FR force model"
+    ]
 }

@@ -92,13 +92,29 @@ If the authors think that the proposed algorithm should be combined with the L-B
 }
 
 \begin{response}
-ご指摘に感謝いたします。原稿では確かになぜ我々が FR モデルに焦点を当てたのかを十分に正当化できていませんでした。
+ご指摘に感謝いたします。原稿では確かになぜ我々が FR モデルに焦点を当てたのかを十分に正当化できていませんでした。このご指摘に対し、我々は次の2点を明確にすることで、FRモデルに焦点を当てることの正当性を示したいと思います。
 
-重要なのは次の2点です。
-まず、1点目として提案手法は確かにKKモデルなどの対象についても適用可能であると考えており、その適用方法については新しいsectionを
+まず、1点目。本研究の焦点は、Prob. (1)に対して、どのようにすればより効率的な最適化手法を開発できるか、という点にあります。恐らく、本論文の動機や主結果を誤解されていると思うので、そこを明確にします。
+確かにHosobeの結果はFRモデルよりもKKモデルの方がL-BFGSに適していることを示唆しています。
+L-BFGSはKKモデルとの方が親和性が良いというは、はっきりとした事実であると思います。
+しかし、だからこそ我々はFRモデルに着目していると言えます。
+ご存じの通り、グラフ描画を行うとは、すなわちFR モデル(Prob. (1))に対する最適化を行うことを意味します。
+元々提案されていたFR algorithmはこのProb. (1)に対する最急降下法として解釈できます。
+一方で、Hosobeらの主張は、このProb. (1)に対してL-BFGS法を適用することで、最急降下法よりも改善は出来るが、KKモデル程の改善ではない、というものでした。
+そして本提案は、このProb. (1)に対して、Coordinate Newton direction+L-BFGSという最適化手法を用いれば、より大きな改善が得られることを示すものです。L-BFGSがFRにあまり適していないというのは、FRモデルの問題点であるというよりも、はるかにL-BFGSがFRモデルに固有の構造を活かして最適化できていないということを示唆するものになっています。
+なので、L-BFGSがFRモデルに向いていないというご指摘は、むしろ、我々の提案の重要性を強調するものであると言えます。
+この枠組みは、sec.3でより明確に示しました。
+
+Section 5の実験結果については、確かに、提案手法とFRアルゴリズムの組み合わせは、L-BFGSとの組み合わせほどの改善を示さないことが多いです。しかし、それは我々の主張と矛盾していません。
+なぜなら、我々の最終的な主張は、$\mathrm{FR}<\mathrm{L-BFGS} \approx \mathrm{CN+FR} < \mathrm{CN+L-BFGS}$ の順でより効率的になっている、というものであって、必ずしもFRアルゴリズムがL-BFGSよりも優れているということを主張するものではないからです。
+
+1点目の結論としては、FRモデルに対してL-BFGSはあまり適していない、だからこそ我々はそれを改善したのだ、ということになります。
+
+続いて、2点目。ご指摘の通り、今回の枠組みは、より広くとらえれば、KKモデルなどの他の力学モデルにも適用可能なものになっています。この点については、従来の書き方は過度に限定してしまっており、そこは大きな改善を行いました。KKモデルに対しても、同様の手法を適用することで、より効率的な最適化が可能になることを示す実験も追加しました。
+
+その上で、FRモデルはKKモデルと比較すると、グラフの疎性が活かしやすいという特徴があります。それが、今回FRモデルに着目したもう一つの理由です。
 
 \end{response}
-
 
 \subsection{Difference Between FR and KK Models}
 
@@ -114,12 +130,11 @@ The following might work as hints for the authors' paper revision. Intuitively, 
 
 \begin{response}
 示唆に富むご指摘に感謝いたします。
-大まかには、First の点で述べたことと重なる部分もありますが、一般化は可能であり、それを基に議論しました。
+大まかには、先ほど述べた通りではありますが、実際にKK layoutへの一般化は可能であるため、その点を明確にしたsectionと実験の追加を行いました。
 
-graph isomorphism への応用に関するご指摘にも同意いたします。この応用は FR モデルに特に自然なものとは言い難く、本論文の主たる貢献から読者の注意を逸らす可能性があるため、改訂稿ではこの議論を削除します。
+graph isomorphism への応用に関するご指摘にも同意いたします。この応用は FR モデルに特に自然なものとは言い難く、本論文の主たる貢献から読者の注意を逸らす可能性があるため、改訂稿ではこの議論を削除しました。
 
-一方で、FR モデルの soft behavior に関する査読者のご指摘は、本研究の位置づけを明確化する上で非常に有益であると考えています。改訂稿では、提案手法の重要な応用として、dynamic または animation-like なグラフ描画シナリオに関する議論を強化します。
-具体的には、動的グラフにおける各時刻のレイアウト更新を、変更後の FR objective に対する再最適化のための初期配置問題として捉えます。このような設定では、すでに安定したレイアウトが得られており、そこに少数の頂点や辺が追加される場合、あるいはレイアウトやグラフ構造に小さな摂動が加えられる場合に、提案する座標ごとの手法によって、改善された初期レイアウトを効率的に計算できます。この利用場面は FR モデルの soft behavior とよく整合しており、また査読者が示唆された scalability-oriented な方向性とも整合しています。したがって、この側面を示すために、大規模かつ animation-like なグラフ描画シナリオに関する新しい実験を追加します。
+また、animationやインタラクションのような動的なグラフ描画シナリオにおいて、FRモデルのsoft behaviorが特に適していることは、非常に重要な観点だと思っています。
 \end{response}
 
 \subsection{Notation}
@@ -166,19 +181,21 @@ We have revised the manuscript to improve the framing of the contribution, the d
 \subsection{Related Work on Multilevel Approaches}
 
 \reviewercomment{
-In the Related Work section, in 3.1 Multilevel approaches are quickly dismissed. I don't understand the statement the statement about sfdp being ``prior work'' to FR - as the latter came way later than the former. This sentence should be clarified. Also, I believe that further space could be given to multi-level approaches, also considering that could be one potential application/extension of this technique beyond this paper.
+In the Related Work section, in 3.1 Multilevel approaches are quickly dismissed. I don't understand the statement the statement about sfdp being ``prior work'' to FR - as the latter came way later than the former. This sentence should be clarified.
 }
 
 \begin{response}
   Thank you for pointing this out.
-  We clarified the statement around \textsf{sfdp}: our intent was to reference it as prior work on scalable, multilevel force-directed graph drawing rather than implying chronological priority over the FR model.
-  We also expanded the discussion in the related-work section and clarified how our method is complementary to multilevel pipelines (in particular, as an improvement to the refinement stage).
+  これについては、FRという語が、頂点間で引力や斥力などを定めているforce modelなのか、あるいはその平衡点を求める為のアルゴリズムなのか、という点で誤解が生じやすい表現になっていました。
+  元原稿では前者をFR force modelと呼び、後者をFR algorithmと呼んでいましたが、その誤解しやすさを鑑み、出来る限りFR force modelはthe force model of the FR algorithmやthe problem (1)などのように置き換えました。また、その区別をしているということを、section 2の段階で明確にし、該当箇所についても説明を追加しました。
+\end{response}
 
-  \begin{addedContent}
-Multilevel approaches such as \textsf{sfdp} in Graphviz are important prior work on scalable force-directed graph drawing. These methods use hierarchical coarsening and refinement to achieve efficient layout computation for large graphs.
+\subsection{Discussion of Multilevel Approaches and Potential Applications}
 
-Our work is complementary to such multilevel methods. Optimization techniques such as L-BFGS can be directly applied to the refinement stages within multilevel pipelines. Since the approaches proposed in this study can be incorporated into multilevel frameworks with appropriate modifications, our primary objective is to quantify and enhance the refinement procedure itself. Therefore, we deliberately exclude coarsening and other approximation steps from the present analysis.
-  \end{addedContent}
+\reviewercomment{Also, I believe that further space could be given to multi-level approaches, also considering that could be one potential application/extension of this technique beyond this paper.}
+
+\begin{response}
+  Thank you for the suggestion. We expanded the discussion of multilevel approaches in the related work section, and we also added a new experiment on a large graph to demonstrate the potential benefits of our method in a multilevel context.
 \end{response}
 
 \subsection{Uncertain Framing of FR Versus L-BFGS}
@@ -213,8 +230,7 @@ Concerning the visualization of the layout, I don't believe that the index colou
 }
 
 \begin{response}
-Thank you for the suggestion. We agree that the current index-based coloring does not add much interpretive value. We revise the visualization by replacing the rainbow map with a sequential continuous color map (Since some graphs such as jagmesh1 have a symmetric structure, the color can help visually distinguish different vertices).
-We also clarified the color only represents the vertex index for visual distinction.
+Thank you for the suggestion. We agree that the current index-based coloring does not add much interpretive value. We revise the visualization by replacing the rainbow map with a sequential continuous color map, ``viridis''.
 \end{response}
 
 \subsection{Effect of Initial Placement Over Time}
