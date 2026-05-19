@@ -1,5 +1,4 @@
 #include "../include/LBFGS.h"
-#include "../util/function.hpp"
 #include "../util/problem.hpp"
 #include "../util/timer.hpp"
 #include "solve_FR.cpp"
@@ -50,7 +49,7 @@ std::pair<std::vector<std::pair<double, double>>, std::vector<Eigen::VectorXf>> 
 
   if (method == L_BFGS || method == CN_L_BFGS || method == SA_L_BFGS)
   {
-    solve_LBFGS<FunctionFR>(problem, positions, hist, timer, MAX_ITER);
+    solve_LBFGS(problem, positions, hist, timer, MAX_ITER);
   }
   else
   {

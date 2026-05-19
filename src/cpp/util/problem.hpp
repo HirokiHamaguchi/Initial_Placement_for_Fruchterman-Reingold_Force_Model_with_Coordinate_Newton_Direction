@@ -1,7 +1,9 @@
 #pragma once
 
 #include <Eigen/Core>
+#include <algorithm>
 #include <cassert>
+#include <cmath>
 #include <filesystem>
 #include <fstream>
 #include <iostream>
@@ -203,6 +205,51 @@ struct Problem
       double w = data[i];
       double d = (position.segment<2>(2 * u) - position.segment<2>(2 * v)).norm();
       score += w * std::pow(d, 3) / (3.0 * k);
+    }
+
+    return score;
+  }
+
+  double calc_score_and_grad(const Eigen::VectorXf &x, Eigen::VectorXf &grad) const
+  {
+    double score = 0.0;
+    grad.setZero();
+
+    const double k2 = std::pow(k, 2);
+    for (size_t u = 0; u < n; ++u)
+    {
+      for (size_t v = u + 1; v < n; ++v)
+      {
+        double dx = x[2 * u] - x[2 * v];
+        double dy = x[2 * u + 1] - x[2 * v + 1];
+        double d = std::hypot(dx, dy);
+        assert(d > 1e-9);
+        score -= k2 * std::log(d);
+
+        double g = -k2 / std::pow(d, 2);
+        grad[2 * u] += g * dx;
+        grad[2 * u + 1] += g * dy;
+        grad[2 * v] -= g * dx;
+        grad[2 * v + 1] -= g * dy;
+      }
+    }
+
+    for (size_t i = 0; i < m; ++i)
+    {
+      size_t u = row[i];
+      size_t v = col[i];
+      assert(u < v);
+      double a = data[i];
+      double dx = x[2 * u] - x[2 * v];
+      double dy = x[2 * u + 1] - x[2 * v + 1];
+      double d = std::hypot(dx, dy);
+      score += a * std::pow(d, 3) / (3.0 * k);
+
+      double g = a * d / k;
+      grad[2 * u] += g * dx;
+      grad[2 * u + 1] += g * dy;
+      grad[2 * v] -= g * dx;
+      grad[2 * v + 1] -= g * dy;
     }
 
     return score;

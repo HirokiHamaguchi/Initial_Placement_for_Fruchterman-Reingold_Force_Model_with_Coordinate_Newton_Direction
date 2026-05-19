@@ -8,8 +8,20 @@
 #include "../util/problem.hpp"
 #include "../util/timer.hpp"
 
-template <typename MyFunction>
-void solve_LBFGS(const Problem &problem, std::vector<Eigen::VectorXf> &positions,
+template <typename ProblemT>
+struct LBFGSFunction
+{
+  const ProblemT &problem;
+  explicit LBFGSFunction(const ProblemT &problem) : problem(problem) {}
+
+  float operator()(const Eigen::VectorXf &x, Eigen::VectorXf &grad) const
+  {
+    return static_cast<float>(problem.calc_score_and_grad(x, grad));
+  }
+};
+
+template <typename ProblemT>
+void solve_LBFGS(const ProblemT &problem, std::vector<Eigen::VectorXf> &positions,
                  std::vector<std::pair<double, double>> &hist, Timer &timer,
                  const int MAX_ITER)
 {
@@ -21,7 +33,7 @@ void solve_LBFGS(const Problem &problem, std::vector<Eigen::VectorXf> &positions
   param.epsilon_rel = 1e-4; // to avoid line search failure
   LBFGSpp::LBFGSSolver<float> solver(param);
 
-  MyFunction fun(problem);
+  LBFGSFunction<ProblemT> fun(problem);
   assert(!positions.empty());
   Eigen::VectorXf x = positions.back();
   float fx;
