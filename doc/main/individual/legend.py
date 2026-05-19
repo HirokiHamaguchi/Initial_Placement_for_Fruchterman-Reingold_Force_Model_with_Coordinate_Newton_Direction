@@ -7,7 +7,7 @@ import numpy as np
 
 def create_legend() -> None:
     plt.rcParams["font.family"] = "Serif"
-    plt.rcParams["font.size"] = 80
+    plt.rcParams["font.size"] = 70
     plt.rcParams["text.usetex"] = True
 
     cmap = matplotlib.colormaps.get_cmap("viridis")
@@ -30,7 +30,7 @@ def create_legend() -> None:
     # 左ラベル
     ax.text(
         0.95,
-        0.5,
+        0.45,
         "$1$",
         ha="right",
         va="center",
@@ -40,7 +40,7 @@ def create_legend() -> None:
     # 右ラベル
     ax.text(
         2.05,
-        0.5,
+        0.45,
         "$n$",
         ha="left",
         va="center",
@@ -50,7 +50,7 @@ def create_legend() -> None:
     # 説明テキスト
     ax.text(
         0.7,
-        0.5,
+        0.45,
         "vertex indices:",
         ha="right",
         va="center",
