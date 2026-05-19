@@ -17,12 +17,11 @@ struct Grid
   size_t n;       // number of vertices
   size_t n2;      // length of the side of the hexagon
   size_t arraySz; // size of the array
-  double k;
   std::vector<Hex> points;
   std::vector<int> array;
 
 public:
-  Grid(int n, double k, int seed) : n(n), n2(0), k(k)
+  Grid(int n, int seed) : n(n), n2(0)
   {
     size_t hexSize = 2 * n;
     while (3 * n2 * n2 + 3 * n2 + 1 < hexSize)

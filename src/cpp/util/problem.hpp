@@ -12,10 +12,21 @@
 #include <string>
 #include <utility>
 #include <vector>
+#include <memory>
 
 #include "dbg.h"
 #include "openFile.hpp"
+#include "forceModel.hpp"
+#include "frModel.hpp"
+#include "hcModel.hpp"
+#include "eadesModel.hpp"
 
+enum class ForceModelType
+{
+  FR,
+  HC,
+  Eades
+};
 struct Problem
 {
   size_t n;                                                // number of vertices
@@ -26,20 +37,26 @@ struct Problem
   std::vector<double> data;                                // edge weight
   std::vector<std::vector<std::pair<size_t, double>>> adj; // adjacency list
   std::string matrixName = "test";                         // matrix name
+  std::unique_ptr<ForceModel> model;                       // force model implementation
+  ForceModelType modelType;                                // which model in use
 
-  Problem() : n(0), m(0), k(0.0) {}
+  Problem() : n(0), m(0), k(0.0), modelType(ForceModelType::FR) {}
   Problem(size_t n, size_t m, double k, std::vector<size_t> &row,
-          std::vector<size_t> &col, std::vector<double> &data)
-      : n(n), m(m), k(k), row(row), col(col), data(data)
+          std::vector<size_t> &col, std::vector<double> &data,
+          ForceModelType _modelType = ForceModelType::FR)
+      : n(n), m(m), k(k), row(row), col(col), data(data), modelType(_modelType)
   {
     assert(row.size() == m);
     assert(col.size() == m);
     assert(data.size() == m);
     makeAdj();
+    createModel();
     assert(isConnected());
   }
 
-  Problem(const std::string matrixName, bool is1 = false) : matrixName(matrixName)
+  Problem(const std::string matrixName, bool is1 = false,
+          ForceModelType _modelType = ForceModelType::FR)
+      : matrixName(matrixName), modelType(_modelType)
   {
     // if is1, then all edge weights are set to 1
 
@@ -131,7 +148,24 @@ struct Problem
 
     k = 1.0 / std::sqrt(n);
     makeAdj();
+    createModel();
     assert(isConnected());
+  }
+
+  void createModel()
+  {
+    switch (modelType)
+    {
+    case ForceModelType::FR:
+      model = std::make_unique<FRModel>(n, m, k, row, col, data);
+      break;
+    case ForceModelType::HC:
+      model = std::make_unique<HCModel>(n, m, row, col, data);
+      break;
+    case ForceModelType::Eades:
+      model = std::make_unique<EadesModel>(n, m, row, col, data);
+      break;
+    }
   }
 
   void makeAdj()
@@ -182,101 +216,22 @@ struct Problem
   double calcScore(const Eigen::VectorXf &position,
                    bool includeRepulsive = true) const
   {
-    double score = 0.0;
-
-    if (includeRepulsive)
-    {
-      double k2 = std::pow(k, 2);
-      for (size_t u = 0; u < n; ++u)
-      {
-        for (size_t v = u + 1; v < n; ++v)
-        {
-          float d = std::max(1e-10f, (position.segment<2>(2 * u) - position.segment<2>(2 * v)).norm());
-          score -= k2 * std::log(d);
-        }
-      }
-    }
-
-    for (size_t i = 0; i < m; ++i)
-    {
-      size_t u = row[i];
-      size_t v = col[i];
-      assert(u < v);
-      double w = data[i];
-      double d = (position.segment<2>(2 * u) - position.segment<2>(2 * v)).norm();
-      score += w * std::pow(d, 3) / (3.0 * k);
-    }
-
-    return score;
+    return model->calcScore(position, includeRepulsive);
   }
 
   double calc_score_and_grad(const Eigen::VectorXf &x, Eigen::VectorXf &grad) const
   {
-    double score = 0.0;
-    grad.setZero();
-
-    const double k2 = std::pow(k, 2);
-    for (size_t u = 0; u < n; ++u)
-    {
-      for (size_t v = u + 1; v < n; ++v)
-      {
-        double dx = x[2 * u] - x[2 * v];
-        double dy = x[2 * u + 1] - x[2 * v + 1];
-        double d = std::hypot(dx, dy);
-        assert(d > 1e-9);
-        score -= k2 * std::log(d);
-
-        double g = -k2 / std::pow(d, 2);
-        grad[2 * u] += g * dx;
-        grad[2 * u + 1] += g * dy;
-        grad[2 * v] -= g * dx;
-        grad[2 * v + 1] -= g * dy;
-      }
-    }
-
-    for (size_t i = 0; i < m; ++i)
-    {
-      size_t u = row[i];
-      size_t v = col[i];
-      assert(u < v);
-      double a = data[i];
-      double dx = x[2 * u] - x[2 * v];
-      double dy = x[2 * u + 1] - x[2 * v + 1];
-      double d = std::hypot(dx, dy);
-      score += a * std::pow(d, 3) / (3.0 * k);
-
-      double g = a * d / k;
-      grad[2 * u] += g * dx;
-      grad[2 * u + 1] += g * dy;
-      grad[2 * v] -= g * dx;
-      grad[2 * v + 1] -= g * dy;
-    }
-
-    return score;
+    return model->calc_score_and_grad(x, grad);
   }
 
   void calc_grad_hess(float dist, float dx, float dy, float w, float &gx, float &gy, float &hxx,
                       float &hxy, float &hyy) const
   {
-    // Only use attractive force
-    float coeff1 = w * dist / k;
-    float coeff2 = w / (dist * k);
-    gx += coeff1 * dx;
-    gy += coeff1 * dy;
-    hxx += coeff1 + coeff2 * dx * dx;
-    hxy += coeff2 * dx * dy;
-    hyy += coeff1 + coeff2 * dy * dy;
+    model->calc_grad_hess(dist, dx, dy, w, gx, gy, hxx, hxy, hyy);
   }
 
   void optimalScaling(Eigen::VectorXf &position) const
   {
-    // Minimize_x x^3 score_a - k^2 n(n-1)/2 \log(x)
-    // where score_a = \sum_{i < j} w_{ij} d_{ij}^3 / (3k)
-    // Minimize f(x) = x^3 score_a - coeff_r \log(x) : convex
-    // f'(x) = 3x^2 score_a - coeff_r / x
-    double score_a = calcScore(position, false);
-    double coeff_r = std::pow(k, 2) * n * (n - 1) / 2;
-    double xStar = std::pow(coeff_r / (3 * score_a), 1.0 / 3);
-    position *= xStar;
+    model->optimalScaling(position);
   }
 };

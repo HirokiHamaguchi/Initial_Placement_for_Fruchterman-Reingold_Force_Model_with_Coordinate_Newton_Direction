@@ -28,7 +28,7 @@ void solve_init(const Problem &problem, const bool measureTime, const int seed,
 {
   timer.start();
 
-  Grid grid(problem.n, problem.k, seed);
+  Grid grid(problem.n, seed);
 
   // initialize random number generator
   std::mt19937 gen(seed);
@@ -58,7 +58,7 @@ void solve_init(const Problem &problem, const bool measureTime, const int seed,
     }
 
     // if local minimum, continue
-    if ((gx * gx + gy * gy) * grid.k * grid.k < 1e-9)
+    if ((gx * gx + gy * gy) < 1e-9)
     {
       addVis(grid, positions, it, measureTime, ITERATIONS);
       continue;
