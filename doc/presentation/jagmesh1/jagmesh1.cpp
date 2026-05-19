@@ -1,6 +1,7 @@
 #include "../../../src/cpp/solve/solve.cpp"
 
-int main() {
+int main()
+{
   const int MAX_ITER = 100;
   std::string matrixName = "jagmesh1";
   Problem problem(matrixName);
@@ -8,7 +9,7 @@ int main() {
   int seed = 1;
 
   auto [hist, positions] = solve(method, problem, false, seed, MAX_ITER);
-  problem.printOutput(positions, "result.out");
+  problem.printOutput(positions, "doc/presentation/jagmesh1/result");
 
   return 0;
 }

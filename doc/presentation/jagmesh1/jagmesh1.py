@@ -1,5 +1,7 @@
 import os
+
 import networkx as nx
+
 from src.python.vis.visGraph import visGraph
 
 
@@ -43,7 +45,7 @@ def read_file(file_path):
     return Gs
 
 
-Gs = read_file("doc/presentation/jagmesh1/result.out")
+Gs = read_file("doc/presentation/jagmesh1/result")
 
 method = "CN-L-BFGS"
 os.makedirs(f"doc/presentation/jagmesh1/{method}", exist_ok=True)

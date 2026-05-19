@@ -158,6 +158,25 @@ struct Problem
                        { return v; });
   }
 
+  void printOutput(const std::vector<Eigen::VectorXf> &positions,
+                   std::string _path) const
+  {
+    auto [path, file] = openFile(_path);
+
+    file << n << " " << m << " " << k << "\n";
+    for (size_t i = 0; i < m; ++i)
+    {
+      file << row[i] << " " << col[i] << " " << data[i] << "\n";
+    }
+    file << positions.size() << "\n";
+    for (auto &position : positions)
+      for (size_t i = 0; i < n; ++i)
+        file << position[2 * i] << " " << position[2 * i + 1] << "\n";
+    file.close();
+
+    std::cout << "Output path: " << path << "\n";
+  }
+
   double calcScore(const Eigen::VectorXf &position,
                    bool includeRepulsive = true) const
   {
@@ -189,6 +208,19 @@ struct Problem
     return score;
   }
 
+  void calc_grad_hess(float dist, float dx, float dy, float w, float &gx, float &gy, float &hxx,
+                      float &hxy, float &hyy) const
+  {
+    // Only use attractive force
+    float coeff1 = w * dist / k;
+    float coeff2 = w / (dist * k);
+    gx += coeff1 * dx;
+    gy += coeff1 * dy;
+    hxx += coeff1 + coeff2 * dx * dx;
+    hxy += coeff2 * dx * dy;
+    hyy += coeff1 + coeff2 * dy * dy;
+  }
+
   void optimalScaling(Eigen::VectorXf &position) const
   {
     // Minimize_x x^3 score_a - k^2 n(n-1)/2 \log(x)
@@ -199,24 +231,5 @@ struct Problem
     double coeff_r = std::pow(k, 2) * n * (n - 1) / 2;
     double xStar = std::pow(coeff_r / (3 * score_a), 1.0 / 3);
     position *= xStar;
-  }
-
-  void printOutput(const std::vector<Eigen::VectorXf> &positions,
-                   std::string _path) const
-  {
-    auto [path, file] = openFile(_path);
-
-    file << n << " " << m << " " << k << "\n";
-    for (size_t i = 0; i < m; ++i)
-    {
-      file << row[i] << " " << col[i] << " " << data[i] << "\n";
-    }
-    file << positions.size() << "\n";
-    for (auto &position : positions)
-      for (size_t i = 0; i < n; ++i)
-        file << position[2 * i] << " " << position[2 * i + 1] << "\n";
-    file.close();
-
-    std::cout << "Output path: " << path << "\n";
   }
 };

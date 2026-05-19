@@ -5,7 +5,8 @@
 #include <utility>
 
 std::pair<float, float> computeDxDy(float gx, float gy, float hxx, float hxy, float hyy,
-                                    [[maybe_unused]] float k) {
+                                    [[maybe_unused]] float k)
+{
   // constant step size
   // if (false) {
   //   float stepSizeCoeff = k / std::hypot(gx, gy);

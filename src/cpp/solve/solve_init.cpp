@@ -13,15 +13,19 @@
 #include "../util/problem.hpp"
 #include "../util/timer.hpp"
 
-void addVis(const Grid& grid, std::vector<Eigen::VectorXf>& positions, int it,
-            bool measureTime, const int ITERATIONS) {
-  if (measureTime) return;
-  if (it % (ITERATIONS / 10) != 0) return;
+void addVis(const Grid &grid, std::vector<Eigen::VectorXf> &positions, int it,
+            bool measureTime, const int ITERATIONS)
+{
+  if (measureTime)
+    return;
+  if (it % (ITERATIONS / 10) != 0)
+    return;
   positions.push_back(grid.toPosition());
 }
 
-void solve_init(const Problem& problem, const bool measureTime, const int seed,
-                std::vector<Eigen::VectorXf>& positions, Timer& timer) {
+void solve_init(const Problem &problem, const bool measureTime, const int seed,
+                std::vector<Eigen::VectorXf> &positions, Timer &timer)
+{
   timer.start();
 
   Grid grid(problem.n, problem.k, seed);
@@ -37,7 +41,8 @@ void solve_init(const Problem& problem, const bool measureTime, const int seed,
   const double T0 = +1.5;
   const double T1 = +0;
 
-  for (int it = 0; it < ITERATIONS; it++) {
+  for (int it = 0; it < ITERATIONS; it++)
+  {
     // randomly select a vertex
     const size_t i = distVertex(gen);
     const Hex hexI = grid.points[i];
@@ -45,14 +50,16 @@ void solve_init(const Problem& problem, const bool measureTime, const int seed,
     // calculate gradient and Hessian
     float gx = 0.0, gy = 0.0;
     float hxx = 0.0, hxy = 0.0, hyy = 0.0;
-    for (auto [j, w] : problem.adj[i]) {
+    for (auto [j, w] : problem.adj[i])
+    {
       int dq = hexI.q - grid.points[j].q;
       int dr = hexI.r - grid.points[j].r;
-      grid.calc_grad_hess(dq, dr, w, gx, gy, hxx, hxy, hyy);
+      grid.calc_grad_hess(problem, dq, dr, w, gx, gy, hxx, hxy, hyy);
     }
 
     // if local minimum, continue
-    if ((gx * gx + gy * gy) * grid.k * grid.k < 1e-9) {
+    if ((gx * gx + gy * gy) * grid.k * grid.k < 1e-9)
+    {
       addVis(grid, positions, it, measureTime, ITERATIONS);
       continue;
     }
@@ -68,7 +75,8 @@ void solve_init(const Problem& problem, const bool measureTime, const int seed,
     const Hex hexJ = grid.xy2hex(x + dx + dxr, y + dy + dyr);
 
     // swap position
-    if (grid.isInside(hexJ) && hexI != hexJ) grid.swap(i, hexI, hexJ);
+    if (grid.isInside(hexJ) && hexI != hexJ)
+      grid.swap(i, hexI, hexJ);
 
     addVis(grid, positions, it, measureTime, ITERATIONS);
 

@@ -3,6 +3,7 @@
     "material-icon-theme.folders.associations": {
         "solve": "core"
     },
+    "editor.formatOnSave": true,
     "cSpell.words": [
         "'enyi",
         "Akiko",
