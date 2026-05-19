@@ -566,7 +566,7 @@ Similar objective functions arise from other force models, such as ... are as fo
 \begin{mini*}
   {X \in \bbR^{2 \times n}} {
   \Phi_{\mathrm{HC}}(X) =
-\sum_{(i,j)\in E \land j>i}
+\sum_{(i,j)\in E}
 \frac{k_1(\lVert x_{i} - x_{j} \rVert - a_{ij})^2}{2}
 +
 \sum_{\substack{(i,j) \in V^2 \\ i \neq j}}
@@ -583,14 +583,16 @@ k_1 \lVert x_{i} - x_{j} \rVert
 \sum_{\substack{(i,j) \in V^2 \\ i \neq j}}
 \frac{k_2}{\lVert x_{i} - x_{j} \rVert + \epsilon^{\mathrm{r}}}}{}{}
 \end{mini*}
-Clearly, these objective functions are also non-convex and have a similar structure to $\Phi_{\mathrm{FR}}(X)$, which consists of a sum of terms associated with edges and a sum of terms associated with all pairs of vertices. The coordinate Newton direction can be computed for each vertex in these models as well, and the stochastic coordinate descent approach can be applied to optimize the layout efficiently.
+Clearly, these objective functions are also non-convex and have a similar structure to $\Phi_{\mathrm{FR}}(X)$, which consists of a sum of terms associated with edges and a sum of terms associated with all pairs of vertices.
+
+The coordinate Newton direction can be computed for each vertex in these models as well, and the stochastic coordinate descent approach can be applied to optimize the layout efficiently.
 
 % なお、より広い枠組みとして、stochastic coordinate descentは、グラフから生じる目的関数に対して、各頂点の位置を座標ブロックとして取ることで適用できます~\citep{wright2022optimization}。
 % それ故にKK modelに対しても同様のアプローチが可能であると考えられます。
 % しかし、提案手法をそのままapplyすることは難しいと考えています。
 % KK modelの目的関数は、以下の通りです。
 \begin{mini*}
-  {X \in \bbR^{2 \times n}} {\Phi_{\mathrm{KK}}(X) \coloneqq \sum_{\substack{(i,j) \in V^2 \\ i \neq j}}  \frac{(\lVert p_{ij} \rVert - l_{ij})^2}{2 l_{ij}^2}}
+  {X \in \bbR^{2 \times n}} {\Phi_{\mathrm{KK}}(X) \coloneqq \sum_{\substack{(i,j) \in V^2 \\ i \neq j}}  \frac{(\lVert x_{i} - x_{j} \rVert - l_{ij})^2}{2 l_{ij}^2}}
   {} {}
 \end{mini*}
 % 実際、これは先ほどまでにあげた目的関数と同様の構造を持っていますが、KK modelの目的関数は、すべての頂点ペアに対して項が存在するため、計算コストが高くなります。
@@ -755,12 +757,8 @@ As a side note, regardless of \textsf{CN} or non-\textsf{CN}, the algorithms wit
 This finding is consistent with prior research~\citep{6183577} and providing solid evidence for the effectiveness of L-BFGS.
 
 
-\red{
-
-TODO: add more
-
-\citep{bartelExperimentalEvaluationMultilevel2011}
-}
+\red{TODO: add more
+\citep{bartelExperimentalEvaluationMultilevel2011}}
 
 
 \subsection{Comparison with Other Initializations} % LLDisable
