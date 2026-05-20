@@ -233,6 +233,7 @@
         "csignal": "cpp"
     },
     "latexlint.userDefinedRules": [
-        "FR force model"
+        "FR force model",
+        "FR model"
     ]
 }

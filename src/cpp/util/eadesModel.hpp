@@ -8,7 +8,7 @@
 
 /**
  * Eades force model
- * Energy: sum(k1 * d_ij * (log(d_ij / a_ij) - 1)) + sum(k2 / (d_ij + eps))
+ * Energy: sum(k1 * d_ij * (log(d_ij / a_ij) - 1)) + sum(k2 / (d_ij))
  * Generally more stable than HC model
  */
 class EadesModel : public ForceModel
@@ -36,14 +36,14 @@ public:
 
     if (includeRepulsive)
     {
-      // Repulsive: sum(k2 / (d_ij + epsilon_r))
+      // Repulsive: sum(k2 / (d_ij))
       for (size_t u = 0; u < n; ++u)
       {
         for (size_t v = u + 1; v < n; ++v)
         {
           float d = std::max((float)epsilon_r,
                              (position.segment<2>(2 * u) - position.segment<2>(2 * v)).norm());
-          score += k2 / (d + epsilon_r);
+          score += k2 / d;
         }
       }
     }
@@ -53,9 +53,9 @@ public:
     {
       size_t u = row[i];
       size_t v = col[i];
-      double a = data[i]; // target distance
+      double a = std::max(epsilon_r, data[i]); // target distance
       double d = (position.segment<2>(2 * u) - position.segment<2>(2 * v)).norm();
-      d = std::max((double)epsilon_r, d);
+      d = std::max(epsilon_r, d);
       score += k1 * d * (std::log(d / a) - 1.0);
     }
 
@@ -75,14 +75,11 @@ public:
       {
         double dx = x[2 * u] - x[2 * v];
         double dy = x[2 * u + 1] - x[2 * v + 1];
-        double d = std::hypot(dx, dy);
-        d = std::max((double)epsilon_r, d);
+        double d = std::max(epsilon_r, std::hypot(dx, dy));
+        score += k2 / d;
 
-        // score: k2 / (d + eps)
-        score += k2 / (d + epsilon_r);
-
-        // gradient: -k2 / (d + eps)^2 * du/dx_i = -k2 / (d + eps)^2 * (x_i - x_j) / d
-        double g = -k2 / std::pow(d + epsilon_r, 2);
+        // gradient: -k2 / d^2 * (x_i - x_j) / d = -k2 * (x_i - x_j) / d^3
+        double g = -k2 / std::pow(d, 2);
         grad[2 * u] += g * dx / d;
         grad[2 * u + 1] += g * dy / d;
         grad[2 * v] -= g * dx / d;
@@ -95,17 +92,17 @@ public:
     {
       size_t u = row[i];
       size_t v = col[i];
-      double a = data[i]; // target distance
       double dx = x[2 * u] - x[2 * v];
       double dy = x[2 * u + 1] - x[2 * v + 1];
-      double d = std::hypot(dx, dy);
-      d = std::max((double)epsilon_r, d);
+      double a = std::max(epsilon_r, data[i]); // target distance
+      double d = std::max(epsilon_r, std::hypot(dx, dy));
+      double log_da = std::log(d / a);
 
       // score: k1 * d * (log(d / a) - 1)
-      score += k1 * d * (std::log(d / a) - 1.0);
+      score += k1 * d * (log_da - 1.0);
 
       // gradient: k1 * log(d / a) * (x_i - x_j) / d
-      double g = k1 * std::log(d / a);
+      double g = k1 * log_da;
       grad[2 * u] += g * dx / d;
       grad[2 * u + 1] += g * dy / d;
       grad[2 * v] -= g * dx / d;
@@ -119,24 +116,18 @@ public:
                       float &gy, float &hxx, float &hxy, float &hyy) const override
   {
     // Attractive force (discrete phase)
-    // gradient: k1 * log(d / a) * u_ij
-    // Approximate Hessian: use stabilized version or damped
-
+    // gradient: k1 * log(d / a) * (x_i - x_j) / d
     float d = std::max((float)epsilon_r, dist);
     float log_ratio = std::log(d / a);
     float coeff_g = k1 * log_ratio / d;
-
     gx += coeff_g * dx;
     gy += coeff_g * dy;
 
-    // Simplified Hessian: approximate with diagonal dominance for stability
-    // Full: H = k1 * [log(d/a) * (I - u*u^T) + 1/d * u*u^T]
-    // Stabilized: H ≈ k1 * (log(d/a) / d + 1/d) * I (diagonal)
-    // But we need Gauss-Newton-like form: u*u^T
+    // H = k1/d * (log(d/a) * I + (1 - log(d/a)) * (x_i - x_j)(x_i - x_j)^T / d^2)
     float coeff_h = k1 / d;
-    hxx += coeff_h * dx * dx;
-    hxy += coeff_h * dx * dy;
-    hyy += coeff_h * dy * dy;
+    hxx += coeff_h * (log_ratio + (1.0f - log_ratio) * (dx * dx) / (d * d));
+    hxy += coeff_h * ((1.0f - log_ratio) * (dx * dy) / (d * d));
+    hyy += coeff_h * (log_ratio + (1.0f - log_ratio) * (dy * dy) / (d * d));
   }
 
   void optimalScaling(Eigen::VectorXf &position) const override
@@ -159,16 +150,16 @@ public:
       const size_t u = row[i];
       const size_t v = col[i];
       const double a = data[i];
-      const double d = (position.segment<2>(2 * u) - position.segment<2>(2 * v)).norm();
+      const double d = std::max((float)epsilon_r, (position.segment<2>(2 * u) - position.segment<2>(2 * v)).norm());
       Cql += k1 * d;
-      C1 += k1 * d * (std::log(d) - std::log(a) - 1.0);
+      C1 += k1 * d * (std::log(d / a) - 1.0);
     }
     for (size_t u = 0; u < n; ++u)
     {
       for (size_t v = u + 1; v < n; ++v)
       {
-        const double d = (position.segment<2>(2 * u) - position.segment<2>(2 * v)).norm();
-        Cm1 += k2 / std::max((double)epsilon_r, d);
+        const double d = std::max((float)epsilon_r, (position.segment<2>(2 * u) - position.segment<2>(2 * v)).norm());
+        Cm1 += k2 / d;
       }
     }
 

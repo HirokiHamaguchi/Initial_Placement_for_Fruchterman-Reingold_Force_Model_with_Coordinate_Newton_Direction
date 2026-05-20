@@ -8,7 +8,7 @@
 
 /**
  * Hooke-Coulomb force model
- * Energy: sum(k1/2 * (d_ij - a_ij)^2) + sum(k2 / (d_ij + epsilon_r))
+ * Energy: sum(k1/2 * (d_ij - a_ij)^2) + sum(k2 / d_ij)
  * Uses Gauss-Newton Hessian for numerical stability
  */
 class HCModel : public ForceModel
@@ -36,14 +36,14 @@ public:
 
     if (includeRepulsive)
     {
-      // Repulsive: sum(k2 / (d_ij + epsilon_r))
+      // Repulsive: sum(k2 / (d_ij))
       for (size_t u = 0; u < n; ++u)
       {
         for (size_t v = u + 1; v < n; ++v)
         {
           float d = std::max((float)epsilon_r,
                              (position.segment<2>(2 * u) - position.segment<2>(2 * v)).norm());
-          score += k2 / (d + epsilon_r);
+          score += k2 / std::max((float)epsilon_r, d);
         }
       }
     }
@@ -81,18 +81,15 @@ public:
           double d = std::hypot(dx, dy);
           d = std::max((double)epsilon_r, d);
 
-          // score: k2 / (d + eps)
-          score += k2 / (d + epsilon_r);
+          // score: k2 / d
+          score += k2 / d;
 
-          // gradient of k2 / (d + eps) w.r.t. d is -k2 / (d + eps)^2
-          double g = -k2 / std::pow(d + epsilon_r, 2);
-          if (d > epsilon_r)
-          {
-            grad[2 * u] += g * dx / d;
-            grad[2 * u + 1] += g * dy / d;
-            grad[2 * v] -= g * dx / d;
-            grad[2 * v + 1] -= g * dy / d;
-          }
+          // gradient of k2 / d w.r.t. d is -k2 / d^2
+          double g = -k2 / std::pow(d, 2);
+          grad[2 * u] += g * dx / d;
+          grad[2 * u + 1] += g * dy / d;
+          grad[2 * v] -= g * dx / d;
+          grad[2 * v + 1] -= g * dy / d;
         }
       }
     }
@@ -112,15 +109,12 @@ public:
       double diff = d - a;
       score += k1 * 0.5 * diff * diff;
 
-      // gradient: k1 * (d - a) * u_ij where u_ij = (x_i - x_j) / d
+      // gradient: k1 * (d - a) * (x_i - x_j) / d
       double g = k1 * diff;
-      if (d > epsilon_r)
-      {
-        grad[2 * u] += g * dx / d;
-        grad[2 * u + 1] += g * dy / d;
-        grad[2 * v] -= g * dx / d;
-        grad[2 * v + 1] -= g * dy / d;
-      }
+      grad[2 * u] += g * dx / d;
+      grad[2 * u + 1] += g * dy / d;
+      grad[2 * v] -= g * dx / d;
+      grad[2 * v + 1] -= g * dy / d;
     }
 
     return score;
@@ -130,19 +124,17 @@ public:
                       float &gy, float &hxx, float &hxy, float &hyy) const override
   {
     // Attractive force only (for discrete phase)
-    // gradient: k1 * (dist - a) * u_ij
-    // Gauss-Newton Hessian: k1 * u_ij * u_ij^T
-
+    // gradient: k1 * (d - a) * (x_i - x_j) / d
+    // Hessian: k1/d * ((d - a) * I + a * (x_i - x_j)(x_i - x_j)^T / d^2)
     float d = std::max((float)epsilon_r, dist);
     float diff = d - a;
-    float coeff_g = k1 * diff / d; // gradient coefficient
-    float coeff_h = k1 / d;        // Hessian coefficient (Gauss-Newton)
-
+    float coeff_g = k1 * diff / d;
+    float coeff_h = k1 / d;
     gx += coeff_g * dx;
     gy += coeff_g * dy;
-    hxx += coeff_h * dx * dx;
-    hxy += coeff_h * dx * dy;
-    hyy += coeff_h * dy * dy;
+    hxx += coeff_h * (diff + a * (dx * dx / (d * d)));
+    hxy += coeff_h * (a * (dx * dy / (d * d)));
+    hyy += coeff_h * (diff + a * (dy * dy / (d * d)));
   }
 
   void optimalScaling(Eigen::VectorXf &position) const override
