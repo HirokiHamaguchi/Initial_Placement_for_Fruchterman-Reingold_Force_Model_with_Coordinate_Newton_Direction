@@ -95,7 +95,7 @@ struct Circle
 };
 
 void solve_circle(const Problem &problem, const int seed,
-                  std::vector<Eigen::VectorXf> &positions)
+                  std::vector<Eigen::VectorXd> &positions)
 {
   std::vector<std::vector<size_t>> adj(problem.n);
   for (size_t j = 0; j < problem.m; j++)
@@ -140,7 +140,7 @@ void solve_circle(const Problem &problem, const int seed,
     }
   }
 
-  Eigen::VectorXf finalPos(2 * bestIndices.size());
+  Eigen::VectorXd finalPos(2 * bestIndices.size());
   for (size_t i = 0; i < bestIndices.size(); ++i)
   {
     double theta = 2.0 * M_PI * bestIndices[i] / bestIndices.size();

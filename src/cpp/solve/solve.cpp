@@ -18,12 +18,12 @@ enum Method
 
 std::string MethodStr[6] = {"FR", "L-BFGS", "CN-FR", "CN-L-BFGS", "SA-FR", "SA-L-BFGS"};
 
-std::pair<std::vector<std::pair<double, double>>, std::vector<Eigen::VectorXf>> solve(
+std::pair<std::vector<std::pair<double, double>>, std::vector<Eigen::VectorXd>> solve(
     const Method method, const Problem &problem, const bool measureTime, const int seed,
     const int MAX_ITER)
 {
   Timer timer;
-  std::vector<Eigen::VectorXf> positions;
+  std::vector<Eigen::VectorXd> positions;
 
   timer.start();
   if (method == CN_FR || method == CN_L_BFGS)
@@ -37,7 +37,7 @@ std::pair<std::vector<std::pair<double, double>>, std::vector<Eigen::VectorXf>> 
   else
   {
     std::srand(seed);
-    Eigen::VectorXf position = Eigen::VectorXf::Random(2 * problem.n);
+    Eigen::VectorXd position = Eigen::VectorXd::Random(2 * problem.n);
     for (int i = 0; i < int(position.size()); i++)
       position[i] = std::abs(position[i]);
     positions.push_back(position);

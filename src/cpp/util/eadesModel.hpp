@@ -30,7 +30,7 @@ public:
     makeAdj();
   }
 
-  double calcScore(const Eigen::VectorXf &position,
+  double calcScore(const Eigen::VectorXd &position,
                    bool includeRepulsive = true) const override
   {
     double score = 0.0;
@@ -42,8 +42,8 @@ public:
       {
         for (size_t v = u + 1; v < n; ++v)
         {
-          float d = std::max((float)epsilon_r,
-                             (position.segment<2>(2 * u) - position.segment<2>(2 * v)).norm());
+          double d = std::max(epsilon_r,
+                              (position.segment<2>(2 * u) - position.segment<2>(2 * v)).norm());
           score += k2 / d;
         }
       }
@@ -63,8 +63,8 @@ public:
     return score;
   }
 
-  double calc_score_and_grad(const Eigen::VectorXf &x,
-                             Eigen::VectorXf &grad) const override
+  double calc_score_and_grad(const Eigen::VectorXd &x,
+                             Eigen::VectorXd &grad) const override
   {
     double score = 0.0;
     grad.setZero();
@@ -113,34 +113,44 @@ public:
     return score;
   }
 
-  void calc_grad_hess(float dist, float dx, float dy, float a, float &gx,
-                      float &gy, float &hxx, float &hxy, float &hyy) const override
+  void calc_grad_hess(double dist, double dx, double dy, double a, double &gx,
+                      double &gy, double &hxx, double &hxy, double &hyy) const override
   {
     // Attractive force (discrete phase)
     // gradient: k1 * log(d / a) * (x_i - x_j) / d
-    float d = std::max((float)epsilon_r, dist);
-    float log_ratio = std::log(d / a);
-    float coeff_g = k1 * log_ratio / d;
+    double d = std::max(epsilon_r, dist);
+    double log_ratio = std::log(d / a);
+    double coeff_g = k1 * log_ratio / d;
     gx += coeff_g * dx;
     gy += coeff_g * dy;
 
     // H = k1/d * (log(d/a) * I + (1 - log(d/a)) * (x_i - x_j)(x_i - x_j)^T / d^2)
-    float coeff_h = k1 / d;
-    hxx += coeff_h * (log_ratio + (1.0f - log_ratio) * (dx * dx) / (d * d));
-    hxy += coeff_h * ((1.0f - log_ratio) * (dx * dy) / (d * d));
-    hyy += coeff_h * (log_ratio + (1.0f - log_ratio) * (dy * dy) / (d * d));
+    double coeff_h = k1 / d;
+    hxx += coeff_h * (log_ratio + (1.0 - log_ratio) * (dx * dx) / (d * d));
+    hxy += coeff_h * ((1.0 - log_ratio) * (dx * dy) / (d * d));
+    hyy += coeff_h * (log_ratio + (1.0 - log_ratio) * (dy * dy) / (d * d));
   }
 
-  double optimalScaling(Eigen::VectorXf &position) const override
+  double optimalScaling(Eigen::VectorXd &position) const override
   {
     // We minimize:
     //   phi(s) = sum k1 * s*d_ij * (log(s*d_ij / a_ij) - 1) + sum k2 / (s*d_ij)
     //          = Cql * s log s + C1 * s + Cm1 / s
-    // where Cql = k1 * sum d, C1 = k1 * sum d * (log(d/a) - 1), Cm1 = k2 * sum 1/d
-
+    //
+    // Let s = exp(t), then:
+    //
+    //   psi(t) = phi(exp(t))
+    //          = Cql * exp(t) * t + C1 * exp(t) + Cm1 * exp(-t)
+    //
     // Derivatives:
-    //   phi'(s) = Cql * (log(s) + 1) + C1 - Cm1 / s^2
-    //   phi''(s) = Cql / s + 2 Cm1 / s^3
+    //
+    //   psi'(t)  = Cql * exp(t) * (t + 1)
+    //             + C1 * exp(t)
+    //             - Cm1 * exp(-t)
+    //
+    //   psi''(t) = Cql * exp(t) * (t + 2)
+    //             + C1 * exp(t)
+    //             + Cm1 * exp(-t)
 
     double Cql = 0.0;
     double C1 = 0.0;
@@ -151,36 +161,58 @@ public:
       const size_t u = row[i];
       const size_t v = col[i];
       const double a = data[i];
-      const double d = std::max((float)epsilon_r, (position.segment<2>(2 * u) - position.segment<2>(2 * v)).norm());
+      const double d = std::max(
+          epsilon_r,
+          (position.segment<2>(2 * u) - position.segment<2>(2 * v)).norm());
+
       Cql += d;
       C1 += d * (std::log(d / a) - 1.0);
     }
+
     Cql *= k1;
     C1 *= k1;
+
     for (size_t u = 0; u < n; ++u)
     {
       for (size_t v = u + 1; v < n; ++v)
       {
-        const double d = std::max((float)epsilon_r, (position.segment<2>(2 * u) - position.segment<2>(2 * v)).norm());
+        const double d = std::max(
+            epsilon_r,
+            (position.segment<2>(2 * u) - position.segment<2>(2 * v)).norm());
+
         Cm1 += k2 / d;
       }
     }
 
-    double s = 1.0;
+    dbg(Cql, C1, Cm1);
+
+    // Optimize in log-space: s = exp(t)
+    double t = std::log(0.1);
+
     for (int iter = 0; iter < 20; ++iter)
     {
-      const double grad = Cql * (std::log(s) + 1.0) + C1 - Cm1 / (s * s);
-      const double hess = Cql / s + 2.0 * Cm1 / (s * s * s);
+      const double et = std::exp(t);
+      const double emt = 1.0 / et;
+
+      const double grad =
+          Cql * et * (t + 1.0) + C1 * et - Cm1 * emt;
+
+      const double hess =
+          Cql * et * (t + 2.0) + C1 * et + Cm1 * emt;
+
       const double step = grad / hess;
-      double s_new = s - step;
-      s_new = std::max(1e-8, s_new);
-      if (std::abs(s_new - s) < 1e-8)
+      const double t_new = t - step;
+
+      if (std::abs(t_new - t) < 1e-8)
       {
-        s = s_new;
+        t = t_new;
         break;
       }
-      s = s_new;
+
+      t = t_new;
     }
+
+    const double s = std::exp(t);
 
     position *= s;
     return s;

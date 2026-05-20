@@ -13,7 +13,7 @@
 #include "../util/problem.hpp"
 #include "../util/timer.hpp"
 
-void addVis(const Grid &grid, std::vector<Eigen::VectorXf> &positions, int it,
+void addVis(const Grid &grid, std::vector<Eigen::VectorXd> &positions, int it,
             bool measureTime, const int ITERATIONS)
 {
   if (measureTime)
@@ -24,12 +24,11 @@ void addVis(const Grid &grid, std::vector<Eigen::VectorXf> &positions, int it,
 }
 
 void solve_init(const Problem &problem, const bool measureTime, const int seed,
-                std::vector<Eigen::VectorXf> &positions)
+                std::vector<Eigen::VectorXd> &positions)
 {
   Grid grid(problem.n, seed);
   auto firstPos = grid.toPosition();
   double initScaling = problem.optimalScaling(firstPos);
-  dbg(initScaling);
   grid.scale(initScaling);
 
   // initialize random number generator
@@ -50,8 +49,8 @@ void solve_init(const Problem &problem, const bool measureTime, const int seed,
     const Hex hexI = grid.points[i];
 
     // calculate gradient and Hessian
-    float gx = 0.0, gy = 0.0;
-    float hxx = 0.0, hxy = 0.0, hyy = 0.0;
+    double gx = 0.0, gy = 0.0;
+    double hxx = 0.0, hxy = 0.0, hyy = 0.0;
     for (auto [j, w] : problem.adj[i])
     {
       int dq = hexI.q - grid.points[j].q;
@@ -71,9 +70,9 @@ void solve_init(const Problem &problem, const bool measureTime, const int seed,
 
     // select random neighbor of (x + dx, y + dy) with randomness
     const auto [x, y] = grid.hex2xy(hexI.q, hexI.r);
-    float T = T0 + (T1 - T0) * it / ITERATIONS;
-    float r = T * distHexR(gen), theta = distHexTheta(gen);
-    float dxr = r * std::cos(theta), dyr = r * std::sin(theta);
+    double T = T0 + (T1 - T0) * it / ITERATIONS;
+    double r = T * distHexR(gen), theta = distHexTheta(gen);
+    double dxr = r * std::cos(theta), dyr = r * std::sin(theta);
     const Hex hexJ = grid.xy2hex(x + dx + dxr, y + dy + dyr);
 
     // swap position

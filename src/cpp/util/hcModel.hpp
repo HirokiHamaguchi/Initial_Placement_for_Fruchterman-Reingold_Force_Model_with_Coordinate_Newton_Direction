@@ -29,7 +29,7 @@ public:
     makeAdj();
   }
 
-  double calcScore(const Eigen::VectorXf &position,
+  double calcScore(const Eigen::VectorXd &position,
                    bool includeRepulsive = true) const override
   {
     double score = 0.0;
@@ -41,9 +41,9 @@ public:
       {
         for (size_t v = u + 1; v < n; ++v)
         {
-          float d = std::max((float)epsilon_r,
-                             (position.segment<2>(2 * u) - position.segment<2>(2 * v)).norm());
-          score += k2 / std::max((float)epsilon_r, d);
+          double d = std::max(epsilon_r,
+                              (position.segment<2>(2 * u) - position.segment<2>(2 * v)).norm());
+          score += k2 / std::max(epsilon_r, d);
         }
       }
     }
@@ -63,8 +63,8 @@ public:
     return score;
   }
 
-  double calc_score_and_grad(const Eigen::VectorXf &x,
-                             Eigen::VectorXf &grad) const override
+  double calc_score_and_grad(const Eigen::VectorXd &x,
+                             Eigen::VectorXd &grad) const override
   {
     double score = 0.0;
     grad.setZero();
@@ -79,7 +79,7 @@ public:
           double dx = x[2 * u] - x[2 * v];
           double dy = x[2 * u + 1] - x[2 * v + 1];
           double d = std::hypot(dx, dy);
-          d = std::max((double)epsilon_r, d);
+          d = std::max(epsilon_r, d);
 
           // score: k2 / d
           score += k2 / d;
@@ -103,7 +103,7 @@ public:
       double dx = x[2 * u] - x[2 * v];
       double dy = x[2 * u + 1] - x[2 * v + 1];
       double d = std::hypot(dx, dy);
-      d = std::max((double)epsilon_r, d);
+      d = std::max(epsilon_r, d);
 
       // score: k1/2 * (d - a)^2
       double diff = d - a;
@@ -120,16 +120,16 @@ public:
     return score;
   }
 
-  void calc_grad_hess(float dist, float dx, float dy, float a, float &gx,
-                      float &gy, float &hxx, float &hxy, float &hyy) const override
+  void calc_grad_hess(double dist, double dx, double dy, double a, double &gx,
+                      double &gy, double &hxx, double &hxy, double &hyy) const override
   {
     // Attractive force only (for discrete phase)
     // gradient: k1 * (d - a) * (x_i - x_j) / d
     // Hessian: k1/d * ((d - a) * I + a * (x_i - x_j)(x_i - x_j)^T / d^2)
-    float d = std::max((float)epsilon_r, dist);
-    float diff = d - a;
-    float coeff_g = k1 * diff / d;
-    float coeff_h = k1 / d;
+    double d = std::max(epsilon_r, dist);
+    double diff = d - a;
+    double coeff_g = k1 * diff / d;
+    double coeff_h = k1 / d;
     gx += coeff_g * dx;
     gy += coeff_g * dy;
     hxx += coeff_h * (diff + a * (dx * dx / (d * d)));
@@ -137,7 +137,7 @@ public:
     hyy += coeff_h * (diff + a * (dy * dy / (d * d)));
   }
 
-  double optimalScaling(Eigen::VectorXf &position) const override
+  double optimalScaling(Eigen::VectorXd &position) const override
   {
     //
     // We minimize:
@@ -168,7 +168,7 @@ public:
       {
         const double d =
             (position.segment<2>(2 * u) - position.segment<2>(2 * v)).norm();
-        Cm1 += k2 / std::max((double)epsilon_r, d);
+        Cm1 += k2 / std::max(epsilon_r, d);
       }
     }
 

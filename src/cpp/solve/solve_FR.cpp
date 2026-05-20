@@ -14,7 +14,7 @@
 #include "../util/problem.hpp"
 #include "../util/timer.hpp"
 
-static double calcFRScoreMatrix(const Problem &problem, const Eigen::MatrixXf &pos)
+static double calcFRScoreMatrix(const Problem &problem, const Eigen::MatrixXd &pos)
 {
   double score = 0.0;
   const double k2 = problem.k * problem.k;
@@ -46,7 +46,7 @@ static double calcFRScoreMatrix(const Problem &problem, const Eigen::MatrixXf &p
   return score;
 }
 
-void solve_FR(const Problem &problem, std::vector<Eigen::VectorXf> &positions,
+void solve_FR(const Problem &problem, std::vector<Eigen::VectorXd> &positions,
               std::vector<std::pair<double, double>> &hist, Timer &timer,
               const int MAX_ITER)
 {
@@ -59,29 +59,29 @@ void solve_FR(const Problem &problem, std::vector<Eigen::VectorXf> &positions,
   double threshold = 1e-5; // changed from 1e-3
   assert(!positions.empty());
 
-  Eigen::VectorXf posVec = positions.back();
+  Eigen::VectorXd posVec = positions.back();
   problem.optimalScaling(posVec);
-  Eigen::MatrixXf pos =
-      Eigen::Map<const Eigen::MatrixXf>(posVec.data(), dim, nnodes);
+  Eigen::MatrixXd pos =
+      Eigen::Map<const Eigen::MatrixXd>(posVec.data(), dim, nnodes);
 
   const double k = problem.k;
-  const float scaling = pos.array().abs().maxCoeff();
+  const double scaling = pos.array().abs().maxCoeff();
   double t = 0.1 * scaling;
   double dt = t / (iterations + 1);
 
-  Eigen::MatrixXf displacement = Eigen::MatrixXf::Zero(dim, nnodes);
+  Eigen::MatrixXd displacement = Eigen::MatrixXd::Zero(dim, nnodes);
   for (int iteration = 0; iteration < iterations; ++iteration)
   {
     displacement.setZero();
 
     for (size_t i = 0; i < nnodes; ++i)
     {
-      Eigen::MatrixXf delta = pos.col(i).replicate(1, nnodes) - pos;
-      Eigen::RowVectorXf distance2 = delta.colwise().squaredNorm();
+      Eigen::MatrixXd delta = pos.col(i).replicate(1, nnodes) - pos;
+      Eigen::RowVectorXd distance2 = delta.colwise().squaredNorm();
       distance2 =
-          distance2.unaryExpr([scaling](float d)
-                              { return std::max(d, 0.01f * 0.01f * scaling * scaling); });
-      Eigen::RowVectorXf distance = distance2.array().sqrt();
+          distance2.unaryExpr([scaling](double d)
+                              { return std::max(d, 0.01 * 0.01 * scaling * scaling); });
+      Eigen::RowVectorXd distance = distance2.array().sqrt();
       displacement.col(i) += (delta.array().rowwise() * (k * k / distance2.array()))
                                  .rowwise()
                                  .sum()
@@ -90,17 +90,17 @@ void solve_FR(const Problem &problem, std::vector<Eigen::VectorXf> &positions,
         displacement.col(i) -= delta.col(j) * (w * distance[j] / k);
     }
 
-    Eigen::RowVectorXf length = displacement.colwise().norm();
-    length = length.unaryExpr([scaling](float l)
-                              { return std::max(l, 0.1f * scaling); });
-    Eigen::MatrixXf direction = displacement.array().rowwise() / length.array();
+    Eigen::RowVectorXd length = displacement.colwise().norm();
+    length = length.unaryExpr([scaling](double l)
+                              { return std::max(l, 0.1 * scaling); });
+    Eigen::MatrixXd direction = displacement.array().rowwise() / length.array();
 
     if (iteration == 0)
     {
       const double current_score = calcFRScoreMatrix(problem, pos);
       while (true)
       {
-        Eigen::MatrixXf trial_pos = pos + direction * static_cast<float>(t);
+        Eigen::MatrixXd trial_pos = pos + direction * static_cast<double>(t);
         double trial_score = calcFRScoreMatrix(problem, trial_pos);
         if (trial_score <= current_score || t <= 1e-2 * scaling)
           break;
@@ -109,13 +109,13 @@ void solve_FR(const Problem &problem, std::vector<Eigen::VectorXf> &positions,
       dt = t / (iterations + 1);
     }
 
-    Eigen::MatrixXf delta_pos = direction * static_cast<float>(t);
+    Eigen::MatrixXd delta_pos = direction * static_cast<double>(t);
 
     pos += delta_pos;
     t -= dt;
 
     timer.stop();
-    positions.push_back(Eigen::Map<Eigen::VectorXf>(pos.data(), pos.size()));
+    positions.push_back(Eigen::Map<Eigen::VectorXd>(pos.data(), pos.size()));
     hist.emplace_back(problem.calcScore(positions.back()), timer.sec());
     timer.start();
 

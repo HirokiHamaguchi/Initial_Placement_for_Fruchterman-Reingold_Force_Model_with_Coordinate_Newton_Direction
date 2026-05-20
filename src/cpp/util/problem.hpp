@@ -195,7 +195,7 @@ struct Problem
                        { return v; });
   }
 
-  void printOutput(const std::vector<Eigen::VectorXf> &positions,
+  void printOutput(const std::vector<Eigen::VectorXd> &positions,
                    std::string _path) const
   {
     auto [path, file] = openFile(_path);
@@ -214,24 +214,24 @@ struct Problem
     std::cout << "Output path: " << path << "\n";
   }
 
-  double calcScore(const Eigen::VectorXf &position,
+  double calcScore(const Eigen::VectorXd &position,
                    bool includeRepulsive = true) const
   {
     return model->calcScore(position, includeRepulsive);
   }
 
-  double calc_score_and_grad(const Eigen::VectorXf &x, Eigen::VectorXf &grad) const
+  double calc_score_and_grad(const Eigen::VectorXd &x, Eigen::VectorXd &grad) const
   {
     return model->calc_score_and_grad(x, grad);
   }
 
-  void calc_grad_hess(float dist, float dx, float dy, float w, float &gx, float &gy, float &hxx,
-                      float &hxy, float &hyy) const
+  void calc_grad_hess(double dist, double dx, double dy, double w, double &gx, double &gy, double &hxx,
+                      double &hxy, double &hyy) const
   {
     model->calc_grad_hess(dist, dx, dy, w, gx, gy, hxx, hxy, hyy);
   }
 
-  double optimalScaling(Eigen::VectorXf &position) const
+  double optimalScaling(Eigen::VectorXd &position) const
   {
     return model->optimalScaling(position);
   }

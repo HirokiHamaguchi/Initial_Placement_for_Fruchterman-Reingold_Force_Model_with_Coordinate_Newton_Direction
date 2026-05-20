@@ -18,7 +18,7 @@ int main()
   std::vector<ForceModelType> models = {
       // ForceModelType::FR,
       ForceModelType::Eades,
-      ForceModelType::HC,
+      // ForceModelType::HC,
   };
 
   const int MAX_ITER = 200;

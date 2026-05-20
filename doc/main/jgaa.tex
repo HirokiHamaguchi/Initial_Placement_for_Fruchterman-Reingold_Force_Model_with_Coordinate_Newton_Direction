@@ -124,9 +124,9 @@
 \begin{abstract}
   The Fruchterman--Reingold (FR) force model is widely used in force-directed graph drawing, and multilevel approaches such as \textsf{sfdp} in Graphviz scale these methods effectively. A crucial step in multilevel schemes is refinement, which improves the graph layout typically performed with the FR algorithm. For this refinement, optimization-based methods, such as L-BFGS, often yield better layouts by exploiting past gradient information. However, they suffer from high per-iteration costs for large graphs and difficulty in handling highly twisted graphs.
 
-    In this research, we propose a new initial placement based on the stochastic coordinate descent to accelerate the optimization process. We first reformulate the problem as a discrete optimization problem using a hexagonal lattice and then iteratively update a randomly selected vertex along the coordinate Newton direction with low per-iteration costs.
+  In this research, we propose a new initial placement based on the stochastic coordinate descent to accelerate the optimization process. We first reformulate the problem as a discrete optimization problem using a hexagonal lattice and then iteratively update a randomly selected vertex along the coordinate Newton direction with low per-iteration costs.
 
-    We demonstrate the effectiveness of our method through numerical experiments, showing that our initial placement leads to faster convergence and higher-quality layouts compared to naive optimization approaches. We also discuss how the coordinate Newton direction can be applied to other graph-related problems from an optimization perspective.
+  We demonstrate the effectiveness of our method through numerical experiments, showing that our initial placement leads to faster convergence and higher-quality layouts compared to naive optimization approaches. We also discuss how the coordinate Newton direction can be applied to other graph-related problems from an optimization perspective.
 \end{abstract}
 
 \section{Introduction}
@@ -142,26 +142,27 @@
 Graph drawing is a fundamental task in information visualization, and force-directed methods are among the most widely used approaches. In these methods, vertices are treated as particles subject to forces, and the resulting equilibrium layouts are regarded as desirable visualizations.
 Among established force models~\citep{eades1984heuristic,kamadaAlgorithmDrawingGeneral1989}, the Fruchterman--Reingold (FR) force model~\citep{fruchtermanGraphDrawingForcedirected1991} is particularly prominent for its intuitive formulation, flexibility, and simplicity. It is implemented in libraries such as NetworkX~\citep{hagbergExploringNetworkStructure2008}, Graphviz~\citep{ellsonGraphvizOpenSource2002}, and igraph~\citep{csardiIgraphSoftwarePackage2006}.
 
-\red{Obtaining the equilibrium layout of the force models has been a subject of extensive research.} The FR algorithm~\citep{fruchtermanGraphDrawingForcedirected1991} is an original iterative method that simulates the forces to find an equilibrium, but it struggles with its scalability.
+Obtaining the equilibrium layout of the force models has been a subject of extensive research. The FR algorithm~\citep{fruchtermanGraphDrawingForcedirected1991} is an original iterative method that simulates the forces to find an equilibrium, but it struggles with its scalability.
 Its convergence becomes prohibitively slow on large graphs, prompting the development of multilevel coarsen-refine schemes such as the Scalable Force-Directed Placement (\textsf{sfdp}) method in Graphviz~\citep{Hu2006EfficientHF,ellsonGraphvizOpenSource2002}. While these frameworks extend the applicability, their refinement stage still relies heavily on the FR algorithm, leaving room for improvement.
 
 The critical issue in the refinement step is that the twist slows down the force simulation. The term twist refers to unnecessary folded and tangled structures in the visualized graph~\cite{veldhuizenDynamicMultilevelGraph2007,cheongSnapshotVisualizationComplex2018}. The results in \cref{fig:fig1} highlight these twist issues. Even if a graph has a simple structure, twists often occur, which cancel out the forces and lead to stagnation and suboptimal visualization outcomes.
 
-\red{To address the twist problem and obtain better equilibrium layouts, we utilize continuous optimization techniques.}
+\red{To address the twist issue and obtain better equilibrium layouts, we can utilize continuous optimization techniques.}
 The L-BFGS algorithm~\citep{liuLimitedMemoryBFGS1989a} is a general purpose optimization algorithm and more practical approach~\citep{6183577}, \red{achieving better results for several force models including the FR force model and the Kamada--Kawai (KK) model~\citep{kamadaAlgorithmDrawingGeneral1989}.} % LLDisable
-While L-BFGS algorithm can partially address the twist problem, it can require many iterations with high per-iteration cost.
+While L-BFGS algorithm can partially address the twist issue, it can require many iterations with high per-iteration cost.
 It may fail to achieve optimal visualization within a limited number of iterations as shown in \cref{fig:fig1}.
 A Stochastic Gradient Descent (SGD)-based method, which updates the positions of two vertices at a time based on a single edge, has recently been proposed for the KK layout.~\citep{zhengGraphDrawingStochastic2019,kamadaAlgorithmDrawingGeneral1989}.
 While it is highly regarded, applying it to the force model in the FR algorithm is challenging due to its relatively complex structure.
 Refer to \cref{sec:rationale} for more details.
 
-Pre-processing to find a better initial placement is another optimization-based approach to solve the twist problem. A pre-processing step with Simulated Annealing (SA) is known to be effective since SA, the optimization method, can avoid getting stuck in local optima and leads to a better visualization combined with the FR algorithm~\cite{ghassemitoosiSimulatedAnnealingPreProcessing2016}. Still, as discussed in \cref{ssec:preprocessing}, this work focuses only on unweighted, simple-structured, and small-scale graphs.
+Pre-processing to find a better initial placement is another optimization-based approach to solve the twist issue. A pre-processing step with Simulated Annealing (SA) is known to be effective since SA, the optimization method, can avoid getting stuck in local optima and leads to a better visualization combined with the FR algorithm~\cite{ghassemitoosiSimulatedAnnealingPreProcessing2016}. Still, as discussed in \cref{ssec:preprocessing}, this work focuses only on unweighted, simple-structured, and small-scale graphs.
 
-In this paper, we propose a new initial placement for the force model in the FR algorithm. We provide an initial placement with fewer twists than random placement within a short time, accelerating the subsequent optimization process. We can use both FR and L-BFGS algorithms to obtain the final placement. This work extends the applicability of the initial placement idea to larger-scale, weighted, and complicated structured graphs. To achieve this, we optimize the position of vertices one by one with the coordinate Newton direction, leveraging the inherent structure and the sparsity of graphs. We also demonstrate its effectiveness through various experiments.
+\red{In this paper, we propose a new initial placement to quickly obtain the equilibrium layout of the FR force model.}
+We provide an initial placement with fewer twists than random placement within a short time, accelerating the subsequent optimization process. We can use both FR and L-BFGS algorithms to obtain the final placement. This work extends the applicability of the initial placement idea to larger-scale, weighted, and complicated structured graphs. To achieve this, we optimize the position of vertices one by one with the coordinate Newton direction, leveraging the inherent structure and the sparsity of graphs. We also demonstrate its effectiveness through various experiments.
 
 The remainder of the paper is organized as follows.
 \begin{enumerate}[label=\textbullet, itemsep=0pt, parsep=0pt]
-  \item In \cref{sec:preliminaries}, we provide the technical definitions of the FR force model. % LLDisable
+  \item In \cref{sec:preliminaries}, we provide the technical definitions of the problem.
 
   \item In \cref{sec:related_work}, we review some related work.
 
@@ -177,11 +178,7 @@ The remainder of the paper is organized as follows.
 \section{Preliminaries}
 \label{sec:preliminaries}
 
-Fruchterman and Reingold~\citep{fruchtermanGraphDrawingForcedirected1991}
-proposed the FR algorithm with its force model for graph drawing based on the physical analogy of the system of particles. \red{Note that we distinguish between the FR algorithm and the FR model. The former is an iterative method that simulates the forces, while the latter is a mathematical formulation of the forces.}
-Through the simulation of these forces, the FR algorithm seeks equilibrium positions.
-In contrast to this ordinary approach, energy-based methods seek equilibrium.
-A local minimum of the energy function $\Phi$ yields an equilibrium position since $\nabla \Phi(X)$ corresponds to the forces. In this sense, the force-based and energy-based perspectives are equivalent as both capture equilibrium, illustrated in \cref{fig:frLayout}.
+\red{In this study, we adopt an energy-based optimization approach for graph drawing. While Fruchterman and Reingold~\citep{fruchtermanGraphDrawingForcedirected1991} originally proposed the force-directed FR algorithm based on a physical particle system simulation, energy-based methods achieve the same goal by directly minimizing an energy function $\Phi$.} These two perspectives are fundamentally equivalent because a local minimum of the energy function, $\nabla \Phi(X)$, corresponds directly to the physical forces acting on the system. Consequently, optimizing the energy function allows us to effectively capture the desired equilibrium layout, as illustrated in \cref{fig:frLayout}.
 
 \begin{figure}[t]
   \centering
@@ -192,12 +189,12 @@ A local minimum of the energy function $\Phi$ yields an equilibrium position sin
   \label{fig:frLayout}
 \end{figure}
 
-Let us formally define the optimization problem for obtaining the equilibrium layout.
-Let $G = (V, E)$ be an undirected graph with vertex set $V = \{1, \dots, n\}$ and edge set $E$. Each edge $\{i,j\} \in E$ has positive weight $a_{i,j} = a_{j,i} \in \mathbb{R}$.
+\red{Let us formally define the energy-minimization problem.}
+Let $G = (V, E)$ be an undirected graph with vertex set $V = \{1, \dots, n\}$ and edge set $E$.
+Each edge $\{i,j\} \in E$ has positive weight $a_{i,j} = a_{j,i} \in \mathbb{R}$.
 For convenience, we set $a_{i,j}=0$ for $\{i, j\} \notin E$.
-The force model in the FR algorithm assumes forces between vertices. For vertices $i$ and $j$ with distance
-$d > 0$, an attractive force $F_{i,j}^{\mathrm{a}}(d)$ and a
-repulsive force $F^{\mathrm{r}}(d)$ are defined as
+\red{In this problem, the force model} assumes forces between vertices.
+For vertices $i$ and $j$ with distance $d > 0$, an attractive force $F_{i,j}^{\mathrm{a}}(d)$ and a repulsive force $F^{\mathrm{r}}(d)$ are defined as
 \begin{equation*}
   F_{i,j}^{\mathrm{a}}(d) \coloneqq \frac{a_{i,j}d^{2}}{k}, \quad F^{\mathrm{r}}
   (d) \coloneqq -\frac{k^{2}}{d},
@@ -205,11 +202,9 @@ repulsive force $F^{\mathrm{r}}(d)$ are defined as
 where $k > 0$ is a constant parameter, often set to $1/\sqrt{n}$~\citep{fruchtermanGraphDrawingForcedirected1991}.
 The scalar potentials of these forces~\citep{6183577} are given by
 \begin{gather*}
-  \color{red}
-  \Phi^{\mathrm{a}}_{i,j}(d) \coloneqq \int_{0}^{d}F_{i,j}^{\mathrm{a}}(r) \dd{r}= \frac{a_{i,j}d^{3}}{3k}, \quad
-  \Phi^{\mathrm{r}}(d) \coloneqq \int_{1}^{d}F^{\mathrm{r}} (r) \dd{r}= -k^{2}\log{d}, \\
-  \color{red}
-  \Phi_{i,j}(d) \coloneqq \Phi_{i,j}^{\mathrm{a}}(d) + \Phi^{\mathrm{r}}(d).
+  \red{\Phi}^{\mathrm{a}}_{i,j}(d) \coloneqq \int_{0}^{d}F_{i,j}^{\mathrm{a}}(r) \dd{r}= \frac{a_{i,j}d^{3}}{3k}, \quad
+  \red{\Phi}^{\mathrm{r}}(d) \coloneqq \int_{1}^{d}F^{\mathrm{r}} (r) \dd{r}= -k^{2}\log{d}, \\
+  \red{\Phi}_{i,j}(d) \coloneqq \red{\Phi}_{i,j}^{\mathrm{a}}(d) + \red{\Phi}^{\mathrm{r}}(d).
 \end{gather*}
 For simplicity, we define $\Phi_{i,j}(0)=\infty$.%
 \footnote{We can also use $-k^{2}\log(d + \epsilon^{\mathrm{r}})$ for $\Phi^{\mathrm{r}}
@@ -217,12 +212,9 @@ For simplicity, we define $\Phi_{i,j}(0)=\infty$.%
 Let $\norm{\cdot}$ denote the Euclidean norm in $\mathbb{R}^{2}$. Then, the problem is to minimize the energy with
 $X \coloneqq (x_{1}, \dots, x_{n}) \in \mathbb{R}^{2 \times n}$:
 \begin{mini}
-  {X \in \mathbb{R}^{2 \times n}} {\Phi(X) \coloneqq \sum_{\substack{(i,j) \in V^2 \\ i \neq j}} \Phi_{i,j}(\norm{x_i - x_j}).}
+  {X \in \mathbb{R}^{2 \times n}} {\Phi(X) \coloneqq \sum_{i < j} \Phi_{i,j}(\norm{x_i - x_j}).}
   {\label{prob:fr}} {}
 \end{mini}
-{\color{red} Note that the summation is taken over ordered pairs $(i,j)$.
-For undirected graphs, this includes both $(i,j)$ and $(j,i)$ and therefore only scales the objective value by a constant factor.
-We keep this form since it extends naturally to directed or asymmetric weights.}
 
 While the energy function $\Phi_{i,j}(d)$ is convex and minimized when
 $d = k/\sqrt[3]{a_{i,j}}$ for a positive $a_{i,j}$, a function $x_{i}\mapsto \Phi_{i,j}
@@ -256,7 +248,7 @@ and layout quality~\citep{6183577}. It uses the function value and the gradient 
 The $i$-th column of the gradient $\nabla \Phi(X) \in \mathbb{R}^{2 \times n}$ is
 \begin{align*}
   (\nabla \Phi(X))_{i} & \defeq \nabla \Phi_{i}(x_{i}) = \sum_{j \in V \setminus \{i\}}\left(\frac{(a_{i,j}+a_{j,i})\norm{ x_{i}- x_{j}}}{k}- \frac{2k^{2}}{\norm{ x_{i}- x_{j}}^{2}}\right) (x_{i}- x_{j}) \\
-                    & = 2 \sum_{j \in V \setminus \{i\}}\left(\frac{a_{i,j}\norm{ x_{i}- x_{j}}}{k}- \frac{k^{2}}{\norm{ x_{i}- x_{j}}^{2}}\right) (x_{i}- x_{j}).
+                       & = 2 \sum_{j \in V \setminus \{i\}}\left(\frac{a_{i,j}\norm{ x_{i}- x_{j}}}{k}- \frac{k^{2}}{\norm{ x_{i}- x_{j}}^{2}}\right) (x_{i}- x_{j}).
 \end{align*}
 The graph layout can be obtained as the result of optimization using the L-BFGS solver with the gradient described above. A common choice for the initial solution is a random placement of nodes within the bounding box
 $\{(x_{i}^{(1)},x_{i}^{(2)}) \mathrel\mid 0 \leq x_{i}^{(1)}\leq 1, 0 \leq x_{i}
@@ -448,9 +440,9 @@ $\Phi^{\mathrm{a}}_{i}(x_{i})$ be
 \end{equation*}
 Its gradient and Hessian matrix are
 \begin{align*}
-  \nabla \Phi^{\mathrm{a}}_{i}(x_{i})    & = \sum_{j \in V \setminus \{i\}}\frac{a_{i,j}\norm{x_i - x_j}}{k}(x_{i}- x_{j}),                                        \\
-  \nabla^{2}\Phi^{\mathrm{a}}_{i}(x_{i}) & = \sum_{j \in V \setminus \{i\}}\frac{a_{i,j}\norm{x_i - x_j}}{k}\mqty(1                                            & 0 \\
-  0                                   & 1) + \sum_{j \in V \setminus \{i\}}\frac{a_{i,j}}{k\norm{x_i - x_j}}(x_{i}- x_{j})(x_{i}- x_{j})^{\top}.
+  \nabla \Phi^{\mathrm{a}}_{i}(x_{i})    & = \sum_{j \in V \setminus \{i\}}\frac{a_{i,j}\norm{x_i - x_j}}{k}(x_{i}- x_{j}),                             \\
+  \nabla^{2}\Phi^{\mathrm{a}}_{i}(x_{i}) & = \sum_{j \in V \setminus \{i\}}\frac{a_{i,j}\norm{x_i - x_j}}{k}\mqty(1                                 & 0 \\
+  0                                      & 1) + \sum_{j \in V \setminus \{i\}}\frac{a_{i,j}}{k\norm{x_i - x_j}}(x_{i}- x_{j})(x_{i}- x_{j})^{\top}.
 \end{align*}
 This means $\Phi^{\mathrm{a}}_{i}$ is strictly convex, assuring the Hessian matrix
 $\nabla^{2}\Phi^{\mathrm{a}}_{i}(x_{i})$ is positive definite. This is a large
@@ -525,14 +517,14 @@ by $s^{*}$.
   \KwOut{Initial placement $X = (x_{1}, \dots, x_{n})$} $t \gets t_{0}$\;
   Sample $x_{i}\in Q^{\mathrm{hex}}$ for all $i \in V$ without replacement\;
   \For{$m \gets 0$ \KwTo $N_{\mathrm{iter}}^{\mathsf{CN}}$}{
-    Select vertex $i \in V$ randomly\;
-    Draw $r \in \bbR^{2}$ randomly from a unit circle\;
-    $x_{i}^{\mathrm{new}}\gets \mathrm{round}(x_{i}- \nabla^{2}\Phi_{i}^{\mathrm{a}}(x_{i})^{-1}\nabla \Phi_{i}^{\mathrm{a}}(x_{i}) + t \cdot r)$\;
-    \If{$\exists j \in V$ such that $x_{j}= x_{i}^{\mathrm{new}}$}{
-      % Swap $x_i$ and $x_j$\;
-      $x_{j}\gets x_{i}$\;
-    }
-    $x_{i}\gets x_{i}^{\mathrm{new}}$\; $t \gets t - t_{0}/ N_{\mathrm{iter}}^{\mathsf{CN}}$\;
+  Select vertex $i \in V$ randomly\;
+  Draw $r \in \bbR^{2}$ randomly from a unit circle\;
+  $x_{i}^{\mathrm{new}}\gets \mathrm{round}(x_{i}- \nabla^{2}\Phi_{i}^{\mathrm{a}}(x_{i})^{-1}\nabla \Phi_{i}^{\mathrm{a}}(x_{i}) + t \cdot r)$\;
+  \If{$\exists j \in V$ such that $x_{j}= x_{i}^{\mathrm{new}}$}{
+    % Swap $x_i$ and $x_j$\;
+    $x_{j}\gets x_{i}$\;
+  }
+  $x_{i}\gets x_{i}^{\mathrm{new}}$\; $t \gets t - t_{0}/ N_{\mathrm{iter}}^{\mathsf{CN}}$\;
   }
   $x_{i}\gets s^{*}x_{i}$ for all $i \in V$ with $s^{*}$ given by \cref{eq:scaling}\;
   \Return $X$
@@ -549,54 +541,54 @@ The optimal assignment for $\{x_{i}\}_{i \in V}$ to $Q^{\mathrm{hex}}$ is
 computable by a Hungarian algorithm in $\order*{\abs{V}^3}$ time or some
 heuristic.
 
-{
-  \color{red}
+  {
+    \color{red}
 
-  \subsection{Application to Other Force Models}
+    \subsection{Application to Other Force Models}
 
-We briefly discuss and explore the potential applicability of stochastic coordinate descent to a broader range of problems.
-Although we utilized the coordinate Newton direction only for the optimization problem~\eqref{prob:fr}, we can see that its application is not necessarily limited to the FR force model, the problem~\eqref{prob:fr}. % LLDisable
+    We briefly discuss and explore the potential applicability of stochastic coordinate descent to a broader range of problems.
+    Although we utilized the coordinate Newton direction only for the optimization problem~\eqref{prob:fr}, we can see that its application is not necessarily limited to the FR force model, the problem~\eqref{prob:fr}. % LLDisable
 
-Recall that Our optimization problem~\eqref{prob:fr} can be rewritten as
-\begin{mini*}
-  {X \in \bbR^{2 \times n}} {\Phi_{\mathrm{FR}}(X) = \sum_{(i,j)\in E} \frac{a_{i,j}\norm{x_{i} - x_{j}}^{3}}{3k} - \sum_{\substack{(i,j) \in V^2 \\ i \neq j}} k^2\log{(\epsilon^{\mathrm{r}} + \norm{x_{i} - x_{j}})}.}
-  {} {}
-\end{mini*}
-Similar objective functions arise from other force models, such as ... are as follows:
-\begin{mini*}
-  {X \in \bbR^{2 \times n}} {
-  \Phi_{\mathrm{HC}}(X) =
-\sum_{(i,j)\in E}
-\frac{k_1(\lVert x_{i} - x_{j} \rVert - a_{ij})^2}{2}
-+
-\sum_{\substack{(i,j) \in V^2 \\ i \neq j}}
-\frac{k_2}{\lVert x_{i} - x_{j} \rVert + \epsilon^{\mathrm{r}}}}{}{}
-\end{mini*}
-\begin{mini*}
-  {X \in \bbR^{2 \times n}} {\Phi_{\mathrm{Eades}}(X) =
-\sum_{(i,j)\in E}
-k_1 \lVert x_{i} - x_{j} \rVert
-\left(
-\log \frac{\lVert x_{i} - x_{j} \rVert}{a_{ij}} - 1
-\right)
-+
-\sum_{\substack{(i,j) \in V^2 \\ i \neq j}}
-\frac{k_2}{\lVert x_{i} - x_{j} \rVert + \epsilon^{\mathrm{r}}}}{}{}
-\end{mini*}
-Clearly, these objective functions are also non-convex and have a similar structure to $\Phi_{\mathrm{FR}}(X)$, which consists of a sum of terms associated with edges and a sum of terms associated with all pairs of vertices.
+    Recall that Our optimization problem~\eqref{prob:fr} can be rewritten as
+    \begin{mini*}
+      {X \in \bbR^{2 \times n}} {\Phi_{\mathrm{FR}}(X) = \sum_{(i,j)\in E} \frac{a_{i,j}\norm{x_{i} - x_{j}}^{3}}{3k} - \sum_{\substack{(i,j) \in V^2 \\ i \neq j}} k^2\log{(\epsilon^{\mathrm{r}} + \norm{x_{i} - x_{j}})}.}
+      {} {}
+    \end{mini*}
+    Similar objective functions arise from other force models, such as ... are as follows:
+    \begin{mini*}
+      {X \in \bbR^{2 \times n}} {
+        \Phi_{\mathrm{HC}}(X) =
+        \sum_{(i,j)\in E}
+        \frac{k_1(\lVert x_{i} - x_{j} \rVert - a_{ij})^2}{2}
+        +
+        \sum_{\substack{(i,j) \in V^2 \\ i \neq j}}
+        \frac{k_2}{\lVert x_{i} - x_{j} \rVert + \epsilon^{\mathrm{r}}}}{}{}
+    \end{mini*}
+    \begin{mini*}
+      {X \in \bbR^{2 \times n}} {\Phi_{\mathrm{Eades}}(X) =
+        \sum_{(i,j)\in E}
+        k_1 \lVert x_{i} - x_{j} \rVert
+        \left(
+        \log \frac{\lVert x_{i} - x_{j} \rVert}{a_{ij}} - 1
+        \right)
+        +
+        \sum_{\substack{(i,j) \in V^2 \\ i \neq j}}
+        \frac{k_2}{\lVert x_{i} - x_{j} \rVert + \epsilon^{\mathrm{r}}}}{}{}
+    \end{mini*}
+    Clearly, these objective functions are also non-convex and have a similar structure to $\Phi_{\mathrm{FR}}(X)$, which consists of a sum of terms associated with edges and a sum of terms associated with all pairs of vertices.
 
-The coordinate Newton direction can be computed for each vertex in these models as well, and the stochastic coordinate descent approach can be applied to optimize the layout efficiently.
+    The coordinate Newton direction can be computed for each vertex in these models as well, and the stochastic coordinate descent approach can be applied to optimize the layout efficiently.
 
-% なお、より広い枠組みとして、stochastic coordinate descentは、グラフから生じる目的関数に対して、各頂点の位置を座標ブロックとして取ることで適用できます~\citep{wright2022optimization}。
-% それ故にKK modelに対しても同様のアプローチが可能であると考えられます。
-% しかし、提案手法をそのままapplyすることは難しいと考えています。
-% KK modelの目的関数は、以下の通りです。
-\begin{mini*}
-  {X \in \bbR^{2 \times n}} {\Phi_{\mathrm{KK}}(X) \coloneqq \sum_{\substack{(i,j) \in V^2 \\ i \neq j}}  \frac{(\lVert x_{i} - x_{j} \rVert - l_{ij})^2}{2 l_{ij}^2}}
-  {} {}
-\end{mini*}
-% 実際、これは先ほどまでにあげた目的関数と同様の構造を持っていますが、KK modelの目的関数は、すべての頂点ペアに対して項が存在するため、計算コストが高くなります。
-}
+    % なお、より広い枠組みとして、stochastic coordinate descentは、グラフから生じる目的関数に対して、各頂点の位置を座標ブロックとして取ることで適用できます~\citep{wright2022optimization}。
+    % それ故にKK modelに対しても同様のアプローチが可能であると考えられます。
+    % しかし、提案手法をそのままapplyすることは難しいと考えています。
+    % KK modelの目的関数は、以下の通りです。
+    \begin{mini*}
+      {X \in \bbR^{2 \times n}} {\Phi_{\mathrm{KK}}(X) \coloneqq \sum_{\substack{(i,j) \in V^2 \\ i \neq j}}  \frac{(\lVert x_{i} - x_{j} \rVert - l_{ij})^2}{2 l_{ij}^2}}
+      {} {}
+    \end{mini*}
+    % 実際、これは先ほどまでにあげた目的関数と同様の構造を持っていますが、KK modelの目的関数は、すべての頂点ペアに対して項が存在するため、計算コストが高くなります。
+  }
 
 \section{Numerical Experiment}
 \label{sec:experiment}
@@ -737,7 +729,7 @@ All the codes are available at GitHub~\citep{ThisPaperGitHub}.
 We first show the plots and visualizations of the algorithms in \cref{fig:individual}.
 The experiment details are as follows. We fixed the maximum number of iterations
 of the FR and L-BFGS algorithms as $N_{\mathrm{iter}}^{\mathsf{FR}}= N_{\mathrm{iter}}
-  ^{\mathsf{LBFGS}}= 200$. We tested with 7 graphs: \texttt{cycle300}, \texttt{jagmesh1},
+    ^{\mathsf{LBFGS}}= 200$. We tested with 7 graphs: \texttt{cycle300}, \texttt{jagmesh1},
 \texttt{dwt\_1005}, \texttt{btree9}, \texttt{1138\_bus}, \texttt{dwt\_2680}, and
 \texttt{3elt}. Here \texttt{cycle300} is a cycle graph with 300 vertices, and \texttt{btree9}
 is a perfect binary tree with $2^{9+1}-1=1023$ vertices.
@@ -758,7 +750,7 @@ This finding is consistent with prior research~\citep{6183577} and providing sol
 
 
 \red{TODO: add more
-\citep{bartelExperimentalEvaluationMultilevel2011}}
+  \citep{bartelExperimentalEvaluationMultilevel2011}}
 
 
 \subsection{Comparison with Other Initializations} % LLDisable
@@ -838,7 +830,8 @@ One natural idea for solving problem~\eqref{prob:fr} is to apply existing optimi
 
 Applying SGD to graph drawing, particularly to the Kamada–Kawai (KK) layout~\citep{kamadaAlgorithmDrawingGeneral1989}, has been a notable direction~\citep{zhengGraphDrawingStochastic2019,ahmedMulticriteriaScalableGraph2022a}. The KK model determines the layout by minimizing a stress-like energy $\Phi_{i,j}^{\mathrm{KK}}$ defined for all vertex pairs. SGD corresponds to randomly selecting an edge ${i,j}$ and updating $x_i$ and $x_j$ using the gradient of $\Phi_{i,j}^{\mathrm{KK}}$. This stochastic treatment reduces per-iteration complexity while retaining structural information, as $\Phi_{i,j}^{\mathrm{KK}}$ is defined in terms of graph distance.
 
-In contrast, applying SGD directly to the FR model is ineffective. When $a_{i,j}=0$, the energy term reduces to $\Phi_{i,j}=-k^{2}\log d$, which depends only on Euclidean distance and ignores the graph structure. Consequently, gradients from a single sampled pair often fail to provide meaningful information for optimization.
+In contrast, applying SGD directly to the FR force model is ineffective. % LLDisable
+When $a_{i,j}=0$, the energy term reduces to $\Phi_{i,j}=-k^{2}\log d$, which depends only on Euclidean distance and ignores the graph structure. Consequently, gradients from a single sampled pair often fail to provide meaningful information for optimization.
 
 Another approach is to use Stochastic Coordinate Descent, which resembles Randomized Subspace Newton methods~\citep{NEURIPS2019_bc6dc48b, fujiTheoreticalAnalysisRandomized2025, cartisRandomisedSubspaceMethods2022, nozawaRandomizedSubspaceGradient2023, higuchiFastConvergenceSecondOrder2024}.
 For each vertex $i$, define the local energy
@@ -1023,12 +1016,12 @@ Based on \cref{sec:preliminaries}, let us define the sum of terms associated wit
 is explicitly given by
 \begin{equation*}
   \Phi_{i}(x_{i}) \coloneqq \sum_{j \in V \setminus \{i\}}\left( \Phi_{i,j}(\norm{x_{i}- x_{j}}
-  ) + \Phi_{j,i}(\norm{x_{j}- x_{i}}) \right).
+    ) + \Phi_{j,i}(\norm{x_{j}- x_{i}}) \right).
 \end{equation*}
 The $i$-th row of the gradient $\nabla \Phi(X) \in \mathbb{R}^{2 \times n}$ is
 \begin{align*}
   (\nabla \Phi(X))_{i}^{\top} & = \nabla \Phi_{i}(x_{i}) = \sum_{j \in V \setminus \{i\}}\left(\frac{(a_{i,j}+a_{j,i})\norm{ x_{i}- x_{j}}}{k}- \frac{2k^{2}}{\norm{ x_{i}- x_{j}}^{2}}\right) (x_{i}- x_{j}) \\
-                           & = 2 \sum_{j \in V \setminus \{i\}}\left(\frac{a_{i,j}\norm{ x_{i}- x_{j}}}{k}- \frac{k^{2}}{\norm{ x_{i}- x_{j}}^{2}}\right) (x_{i}- x_{j}).
+                              & = 2 \sum_{j \in V \setminus \{i\}}\left(\frac{a_{i,j}\norm{ x_{i}- x_{j}}}{k}- \frac{k^{2}}{\norm{ x_{i}- x_{j}}^{2}}\right) (x_{i}- x_{j}).
 \end{align*}
 To obtain the final layout while preventing the divergence, we need to
 minimize $\Phi(X) + f_{\mathrm{g}}(X)$, where $f_{\mathrm{g}}(X)$ is the additional

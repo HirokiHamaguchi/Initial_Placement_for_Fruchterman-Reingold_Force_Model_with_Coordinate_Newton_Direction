@@ -19,10 +19,10 @@ struct Grid
   size_t arraySz; // size of the array
   std::vector<Hex> points;
   std::vector<int> array;
-  float grid_size;
+  double grid_size;
 
 public:
-  Grid(int n, int seed) : n(n), n2(0), grid_size(1.0f)
+  Grid(int n, int seed) : n(n), n2(0), grid_size(1.0)
   {
     size_t hexSize = 2 * n;
     while (3 * n2 * n2 + 3 * n2 + 1 < hexSize)
@@ -48,36 +48,36 @@ public:
       array[to1DIndex(points[i].q, points[i].r)] = i;
   }
 
-  inline std::pair<float, float> hex2xy(double q, double r) const
+  inline std::pair<double, double> hex2xy(double q, double r) const
   {
     return {(q + r / 2.0) * grid_size, (r * std::sqrt(3) / 2.0) * grid_size};
   }
-  inline std::pair<float, float> hex2xy(size_t i) const
+  inline std::pair<double, double> hex2xy(size_t i) const
   {
     return hex2xy(points[i].q, points[i].r);
   }
-  Hex xy2hex(float x, float y)
+  Hex xy2hex(double x, double y)
   {
     x /= grid_size;
     y /= grid_size;
-    float r = y * 2.0 / std::sqrt(3);
-    float q = x - r / 2.0;
+    double r = y * 2.0 / std::sqrt(3);
+    double q = x - r / 2.0;
     return Hex::round(q, r, -q - r);
   }
 
-  void calc_grad_hess(const Problem &problem, int dq, int dr, float w, float &gx, float &gy, float &hxx,
-                      float &hxy, float &hyy) const
+  void calc_grad_hess(const Problem &problem, int dq, int dr, double w, double &gx, double &gy, double &hxx,
+                      double &hxy, double &hyy) const
   {
     auto delta = hex2xy(dq, dr);
-    float dist = std::hypot(delta.first, delta.second);
+    double dist = std::hypot(delta.first, delta.second);
     assert(dist > 1e-9);
     problem.calc_grad_hess(dist, delta.first, delta.second, w, gx, gy, hxx, hxy, hyy);
   }
 
-  Eigen::VectorXf toPosition() const
+  Eigen::VectorXd toPosition() const
   {
     // assert(isCorrectState());
-    Eigen::VectorXf position(2 * n);
+    Eigen::VectorXd position(2 * n);
     for (size_t i = 0; i < n; ++i)
       std::tie(position[2 * i], position[2 * i + 1]) = hex2xy(i);
     return position;
@@ -120,7 +120,7 @@ public:
     return cnt == int(points.size());
   }
 
-  void scale(float factor)
+  void scale(double factor)
   {
     grid_size *= factor;
   }

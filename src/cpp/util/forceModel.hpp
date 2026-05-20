@@ -24,7 +24,7 @@ public:
    * @param includeRepulsive If false, compute only attractive energy
    * @return Energy value
    */
-  virtual double calcScore(const Eigen::VectorXf &position,
+  virtual double calcScore(const Eigen::VectorXd &position,
                            bool includeRepulsive = true) const = 0;
 
   /**
@@ -33,8 +33,8 @@ public:
    * @param grad Output: gradient vector (2*n)
    * @return Energy value
    */
-  virtual double calc_score_and_grad(const Eigen::VectorXf &x,
-                                     Eigen::VectorXf &grad) const = 0;
+  virtual double calc_score_and_grad(const Eigen::VectorXd &x,
+                                     Eigen::VectorXd &grad) const = 0;
 
   /**
    * Calculate gradient and Hessian for coordinate update
@@ -45,9 +45,9 @@ public:
    * @param gx, gy Output: gradient components
    * @param hxx, hxy, hyy Output: Hessian elements (upper triangle)
    */
-  virtual void calc_grad_hess(float dist, float dx, float dy, float w,
-                              float &gx, float &gy, float &hxx, float &hxy,
-                              float &hyy) const = 0;
+  virtual void calc_grad_hess(double dist, double dx, double dy, double w,
+                              double &gx, double &gy, double &hxx, double &hxy,
+                              double &hyy) const = 0;
 
   /**
    * Optimal global scaling of positions
@@ -55,7 +55,7 @@ public:
    * @param position Node positions (modified in place)
    * @return Optimal scaling factor
    */
-  virtual double optimalScaling(Eigen::VectorXf &position) const = 0;
+  virtual double optimalScaling(Eigen::VectorXd &position) const = 0;
 
 protected:
   size_t n;                                                // number of vertices

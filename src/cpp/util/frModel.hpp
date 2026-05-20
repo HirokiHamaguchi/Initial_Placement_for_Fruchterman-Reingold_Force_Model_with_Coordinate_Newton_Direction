@@ -27,7 +27,7 @@ public:
     makeAdj();
   }
 
-  double calcScore(const Eigen::VectorXf &position,
+  double calcScore(const Eigen::VectorXd &position,
                    bool includeRepulsive = true) const override
   {
     double score = 0.0;
@@ -39,7 +39,7 @@ public:
       {
         for (size_t v = u + 1; v < n; ++v)
         {
-          float d = std::max(1e-10f, (position.segment<2>(2 * u) - position.segment<2>(2 * v)).norm());
+          double d = std::max(1e-10, (position.segment<2>(2 * u) - position.segment<2>(2 * v)).norm());
           score -= k2 * std::log(d);
         }
       }
@@ -58,8 +58,8 @@ public:
     return score;
   }
 
-  double calc_score_and_grad(const Eigen::VectorXf &x,
-                             Eigen::VectorXf &grad) const override
+  double calc_score_and_grad(const Eigen::VectorXd &x,
+                             Eigen::VectorXd &grad) const override
   {
     double score = 0.0;
     grad.setZero();
@@ -104,12 +104,12 @@ public:
     return score;
   }
 
-  void calc_grad_hess(float dist, float dx, float dy, float w, float &gx,
-                      float &gy, float &hxx, float &hxy, float &hyy) const override
+  void calc_grad_hess(double dist, double dx, double dy, double w, double &gx,
+                      double &gy, double &hxx, double &hxy, double &hyy) const override
   {
     // Only use attractive force
-    float coeff1 = w * dist / k;
-    float coeff2 = w / (dist * k);
+    double coeff1 = w * dist / k;
+    double coeff2 = w / (dist * k);
     gx += coeff1 * dx;
     gy += coeff1 * dy;
     hxx += coeff1 + coeff2 * dx * dx;
@@ -117,7 +117,7 @@ public:
     hyy += coeff1 + coeff2 * dy * dy;
   }
 
-  double optimalScaling(Eigen::VectorXf &position) const override
+  double optimalScaling(Eigen::VectorXd &position) const override
   {
     // Minimize_x x^3 score_a - k^2 n(n-1)/2 \log(x)
     // where score_a = \sum_{i < j} w_{ij} d_{ij}^3 / (3k)
