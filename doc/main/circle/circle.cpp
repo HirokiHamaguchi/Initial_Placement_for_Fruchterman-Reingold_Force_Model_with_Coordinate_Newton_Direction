@@ -1,32 +1,38 @@
 #include "../../../src/cpp/solve/solve.cpp"
 
-int main() {
+int main()
+{
   std::string matrixNamesPath = "data/_matrixNames.txt";
   std::ifstream matrixNamesFile(matrixNamesPath);
   assert(matrixNamesFile.is_open());
   std::vector<std::string> matrixNames;
   std::string matrixName;
-  while (std::getline(matrixNamesFile, matrixName)) matrixNames.push_back(matrixName);
+  while (std::getline(matrixNamesFile, matrixName))
+    matrixNames.push_back(matrixName);
   matrixNamesFile.close();
 
   std::vector<Method> methods = {SA_FR, CN_FR, SA_L_BFGS, CN_L_BFGS};
 
-  for (auto default_ITER : {50}) {
+  for (auto default_ITER : {50})
+  {
     std::string histStr = std::to_string(matrixNames.size()) + " " +
                           std::to_string(methods.size()) + "\n";
 
-    for (std::string matrixName : matrixNames) {
-      Problem problem(matrixName, true);
+    for (std::string matrixName : matrixNames)
+    {
+      Problem problem(matrixName, ForceModelType::FR, true);
 
       histStr += matrixName + "\n";
       std::cout << matrixName << std::endl;
-      for (auto& method : methods) {
-        int MAX_ITER = default_ITER;  // since both using Initial placement
+      for (auto &method : methods)
+      {
+        int MAX_ITER = default_ITER; // since both using Initial placement
         histStr += MethodStr[method] + "\n";
         std::cout << MethodStr[method] << std::endl;
         // Solve by each method
         // https://stackoverflow.com/questions/8049556/what-s-the-difference-between-srand1-and-srand0
-        for (int seed = 1; seed <= 10; seed++) {
+        for (int seed = 1; seed <= 10; seed++)
+        {
           auto [hist, positions] = solve(method, problem, false, seed, MAX_ITER);
           // Output
           assert(!hist.empty());
