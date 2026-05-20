@@ -53,8 +53,9 @@ public:
    * Optimal global scaling of positions
    * Minimizes energy over scale factor s: phi(s) = Phi(s*X)
    * @param position Node positions (modified in place)
+   * @return Optimal scaling factor
    */
-  virtual void optimalScaling(Eigen::VectorXf &position) const = 0;
+  virtual double optimalScaling(Eigen::VectorXf &position) const = 0;
 
 protected:
   size_t n;                                                // number of vertices

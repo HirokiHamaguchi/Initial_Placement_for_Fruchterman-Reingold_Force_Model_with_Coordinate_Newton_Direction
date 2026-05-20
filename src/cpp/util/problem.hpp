@@ -231,8 +231,8 @@ struct Problem
     model->calc_grad_hess(dist, dx, dy, w, gx, gy, hxx, hxy, hyy);
   }
 
-  void optimalScaling(Eigen::VectorXf &position) const
+  double optimalScaling(Eigen::VectorXf &position) const
   {
-    model->optimalScaling(position);
+    return model->optimalScaling(position);
   }
 };

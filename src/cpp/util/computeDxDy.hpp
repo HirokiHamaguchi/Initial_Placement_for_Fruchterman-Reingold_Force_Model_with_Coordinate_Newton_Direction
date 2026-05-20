@@ -10,27 +10,20 @@ std::pair<float, float> computeDxDy(float gx,
                                     float hxx,
                                     float hxy,
                                     float hyy,
-                                    [[maybe_unused]] float k)
+                                    float grid_size)
 {
   // H = [ hxx hxy ]
   //     [ hxy hyy ]
-  // (H + lambda I) dx = -g
   float a = hxx, b = hxy, c = hyy, det = a * c - b * b;
 
+  if (det < 1e-9f)
   {
-    constexpr float eps = 1e-6f;
-    float lambda = 1e-6f;
-    while ((a <= eps || det <= eps) && lambda < 1e6f)
-    {
-      a = hxx + lambda;
-      b = hxy;
-      c = hyy + lambda;
-      det = a * c - b * b;
-      lambda *= 10.0f;
-    }
-    // Final safeguard. Fallback to gradient descent direction.
-    if (!(det > eps))
-      return {-gx * 1e-3f, -gy * 1e-3f};
+    // If Hessian is nearly singular, use gradient descent with a small step size
+    float norm_g = std::sqrt(gx * gx + gy * gy);
+    if (norm_g < 1e-9f)
+      return {0.0f, 0.0f};
+    float step_size = 2.0f * grid_size / norm_g;
+    return {-step_size * gx, -step_size * gy};
   }
 
   float inv_det = 1.0f / det;

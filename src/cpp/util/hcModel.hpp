@@ -137,7 +137,7 @@ public:
     hyy += coeff_h * (diff + a * (dy * dy / (d * d)));
   }
 
-  void optimalScaling(Eigen::VectorXf &position) const override
+  double optimalScaling(Eigen::VectorXf &position) const override
   {
     //
     // We minimize:
@@ -191,6 +191,7 @@ public:
     }
 
     position *= s;
+    return s;
   }
 
 private:

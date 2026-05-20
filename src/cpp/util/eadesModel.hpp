@@ -5,6 +5,7 @@
 #include <cassert>
 #include <cmath>
 #include <algorithm>
+#include "dbg.h"
 
 /**
  * Eades force model
@@ -130,12 +131,12 @@ public:
     hyy += coeff_h * (log_ratio + (1.0f - log_ratio) * (dy * dy) / (d * d));
   }
 
-  void optimalScaling(Eigen::VectorXf &position) const override
+  double optimalScaling(Eigen::VectorXf &position) const override
   {
     // We minimize:
     //   phi(s) = sum k1 * s*d_ij * (log(s*d_ij / a_ij) - 1) + sum k2 / (s*d_ij)
     //          = Cql * s log s + C1 * s + Cm1 / s
-    // where Cql = k1 * sum d, C1 = k1 * sum d * (log(d) - log(a) - 1), Cm1 = k2 * sum 1/d
+    // where Cql = k1 * sum d, C1 = k1 * sum d * (log(d/a) - 1), Cm1 = k2 * sum 1/d
 
     // Derivatives:
     //   phi'(s) = Cql * (log(s) + 1) + C1 - Cm1 / s^2
@@ -151,9 +152,11 @@ public:
       const size_t v = col[i];
       const double a = data[i];
       const double d = std::max((float)epsilon_r, (position.segment<2>(2 * u) - position.segment<2>(2 * v)).norm());
-      Cql += k1 * d;
-      C1 += k1 * d * (std::log(d / a) - 1.0);
+      Cql += d;
+      C1 += d * (std::log(d / a) - 1.0);
     }
+    Cql *= k1;
+    C1 *= k1;
     for (size_t u = 0; u < n; ++u)
     {
       for (size_t v = u + 1; v < n; ++v)
@@ -180,6 +183,7 @@ public:
     }
 
     position *= s;
+    return s;
   }
 
 private:

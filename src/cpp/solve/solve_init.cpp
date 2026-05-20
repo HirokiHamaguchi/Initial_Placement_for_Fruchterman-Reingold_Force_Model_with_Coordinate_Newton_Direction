@@ -27,6 +27,10 @@ void solve_init(const Problem &problem, const bool measureTime, const int seed,
                 std::vector<Eigen::VectorXf> &positions)
 {
   Grid grid(problem.n, seed);
+  auto firstPos = grid.toPosition();
+  double initScaling = problem.optimalScaling(firstPos);
+  dbg(initScaling);
+  grid.scale(initScaling);
 
   // initialize random number generator
   std::mt19937 gen(seed);
@@ -63,7 +67,7 @@ void solve_init(const Problem &problem, const bool measureTime, const int seed,
     }
 
     // compute Newton's direction (Hess^{-1} @ (-grad))
-    const auto [dx, dy] = computeDxDy(gx, gy, hxx, hxy, hyy, problem.k);
+    const auto [dx, dy] = computeDxDy(gx, gy, hxx, hxy, hyy, grid.grid_size);
 
     // select random neighbor of (x + dx, y + dy) with randomness
     const auto [x, y] = grid.hex2xy(hexI.q, hexI.r);
@@ -78,10 +82,11 @@ void solve_init(const Problem &problem, const bool measureTime, const int seed,
 
     addVis(grid, positions, it, measureTime, ITERATIONS);
 
-    // assert(grid.isCorrectState());  // ! For debug
+    // assert(grid.isCorrectState()); // ! For debug
   }
 
   auto finalPos = grid.toPosition();
-  problem.optimalScaling(finalPos);
+  double finalScaling = problem.optimalScaling(finalPos);
+  dbg(finalScaling);
   positions.push_back(finalPos);
 }

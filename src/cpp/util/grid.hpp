@@ -19,9 +19,10 @@ struct Grid
   size_t arraySz; // size of the array
   std::vector<Hex> points;
   std::vector<int> array;
+  float grid_size;
 
 public:
-  Grid(int n, int seed) : n(n), n2(0)
+  Grid(int n, int seed) : n(n), n2(0), grid_size(1.0f)
   {
     size_t hexSize = 2 * n;
     while (3 * n2 * n2 + 3 * n2 + 1 < hexSize)
@@ -49,7 +50,7 @@ public:
 
   inline std::pair<float, float> hex2xy(double q, double r) const
   {
-    return {q + r / 2.0, r * std::sqrt(3) / 2.0};
+    return {(q + r / 2.0) * grid_size, (r * std::sqrt(3) / 2.0) * grid_size};
   }
   inline std::pair<float, float> hex2xy(size_t i) const
   {
@@ -57,6 +58,8 @@ public:
   }
   Hex xy2hex(float x, float y)
   {
+    x /= grid_size;
+    y /= grid_size;
     float r = y * 2.0 / std::sqrt(3);
     float q = x - r / 2.0;
     return Hex::round(q, r, -q - r);
@@ -115,6 +118,11 @@ public:
     int cnt = std::count_if(array.begin(), array.end(), [](int x)
                             { return x != -1; });
     return cnt == int(points.size());
+  }
+
+  void scale(float factor)
+  {
+    grid_size *= factor;
   }
 
 private:

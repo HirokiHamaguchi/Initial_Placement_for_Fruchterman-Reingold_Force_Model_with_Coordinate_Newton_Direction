@@ -117,7 +117,7 @@ public:
     hyy += coeff1 + coeff2 * dy * dy;
   }
 
-  void optimalScaling(Eigen::VectorXf &position) const override
+  double optimalScaling(Eigen::VectorXf &position) const override
   {
     // Minimize_x x^3 score_a - k^2 n(n-1)/2 \log(x)
     // where score_a = \sum_{i < j} w_{ij} d_{ij}^3 / (3k)
@@ -127,6 +127,7 @@ public:
     double coeff_r = std::pow(k, 2) * n * (n - 1) / 2;
     double xStar = std::pow(coeff_r / (3 * score_a), 1.0 / 3);
     position *= xStar;
+    return xStar;
   }
 
 private:

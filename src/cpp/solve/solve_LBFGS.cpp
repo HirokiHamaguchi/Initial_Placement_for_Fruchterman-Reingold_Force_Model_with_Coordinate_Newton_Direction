@@ -29,8 +29,10 @@ void solve_LBFGS(const ProblemT &problem, std::vector<Eigen::VectorXf> &position
   LBFGSpp::LBFGSParam<float> param;
   param.m = 10;
   param.max_iterations = MAX_ITER;
-  param.epsilon = 1e-4;     // to avoid line search failure
-  param.epsilon_rel = 1e-4; // to avoid line search failure
+  if (problem.modelType != ForceModelType::FR)
+    param.max_iterations = 2 * MAX_ITER; // since non-FR models are harder to optimize, we allow more iterations
+  param.epsilon = 1e-4;                  // to avoid line search failure
+  param.epsilon_rel = 1e-4;              // to avoid line search failure
   LBFGSpp::LBFGSSolver<float> solver(param);
 
   LBFGSFunction<ProblemT> fun(problem);
