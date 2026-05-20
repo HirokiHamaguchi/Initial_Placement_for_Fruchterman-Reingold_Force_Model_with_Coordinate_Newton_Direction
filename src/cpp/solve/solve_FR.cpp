@@ -50,6 +50,7 @@ void solve_FR(const Problem &problem, std::vector<Eigen::VectorXf> &positions,
               std::vector<std::pair<double, double>> &hist, Timer &timer,
               const int MAX_ITER)
 {
+  assert(problem.modelType == ForceModelType::FR);
   timer.start();
 
   size_t nnodes = problem.n;

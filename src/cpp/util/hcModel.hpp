@@ -8,7 +8,7 @@
 
 /**
  * Hooke-Coulomb force model
- * Energy (attractive): sum(k1/2 * (d_ij - a_ij)^2) where a_ij = data[i]
+ * Energy: sum(k1/2 * (d_ij - a_ij)^2) + sum(k2 / (d_ij + epsilon_r))
  * Uses Gauss-Newton Hessian for numerical stability
  */
 class HCModel : public ForceModel
@@ -53,9 +53,10 @@ public:
     {
       size_t u = row[i];
       size_t v = col[i];
-      double a = data[i]; // target distance
+      assert(u < v);
+      double w = data[i]; // target distance
       double d = (position.segment<2>(2 * u) - position.segment<2>(2 * v)).norm();
-      double diff = d - a;
+      double diff = d - w;
       score += k1 * 0.5 * diff * diff;
     }
 
@@ -146,66 +147,54 @@ public:
 
   void optimalScaling(Eigen::VectorXf &position) const override
   {
-    // phi(s) = sum(k1/2 * (s*d_ij - a_ij)^2) + sum(k2 / (s*d_ij + eps))
-    // phi'(s) = k1 * sum(d_ij * (s*d_ij - a_ij)) - k2 * sum(d_ij / (s*d_ij + eps)^2)
-    // Solve phi'(s) = 0 numerically using Newton's method
+    //
+    // We minimize:
+    //   phi(s) = sum_{E}  k1/2 * (s d_ij - a_ij)^2 + sum_{u<v}  k2 / (s d_ij)
+    //          = C2 * s^2 + C1 * s + Cm1 / s + const
+    // with C2 = (k1/2) * sum d^2, C1 = -k1 * sum d a, Cm1 = k2 * sum 1/d
+    //
+    // The derivatives are:
+    //   phi'(s) = 2 C2 s + C1 - Cm1 / s^2
+    //   phi''(s) = 2 C2 + 2 Cm1 / s^3
 
-    double s = 1.0;
-    double score_r = 0.0;
+    double C2 = 0.0;
+    double C1 = 0.0;
+    double Cm1 = 0.0;
 
-    // Compute repulsive energy contribution
+    for (size_t i = 0; i < m; ++i)
+    {
+      size_t u = row[i];
+      size_t v = col[i];
+      const double a = data[i];
+      const double d = (position.segment<2>(2 * u) - position.segment<2>(2 * v)).norm();
+      C2 += 0.5 * k1 * d * d;
+      C1 += -k1 * d * a;
+    }
     for (size_t u = 0; u < n; ++u)
     {
       for (size_t v = u + 1; v < n; ++v)
       {
-        float d = std::max((float)epsilon_r,
-                           (position.segment<2>(2 * u) - position.segment<2>(2 * v)).norm());
-        score_r += k2 / (d + epsilon_r);
+        const double d =
+            (position.segment<2>(2 * u) - position.segment<2>(2 * v)).norm();
+        Cm1 += k2 / std::max((double)epsilon_r, d);
       }
     }
 
-    // Newton's method: s_{n+1} = s_n - f(s_n) / f'(s_n)
-    for (int iter = 0; iter < 10; ++iter)
+    // Newton optimization
+    double s = 1.0;
+
+    for (int iter = 0; iter < 20; ++iter)
     {
-      double phi = 0.0, phi_prime = 0.0;
-
-      // Attractive contribution
-      for (size_t i = 0; i < m; ++i)
+      const double grad = 2.0 * C2 * s + C1 - Cm1 / (s * s);
+      const double hess = 2.0 * C2 + 2.0 * Cm1 / (s * s * s);
+      const double step = grad / hess;
+      double s_new = s - step;
+      s_new = std::max(1e-8, s_new);
+      if (std::abs(s_new - s) < 1e-8)
       {
-        size_t u = row[i];
-        size_t v = col[i];
-        double a = data[i];
-        double d = (position.segment<2>(2 * u) - position.segment<2>(2 * v)).norm();
-        d = std::max((double)epsilon_r, d);
-        double sd = s * d;
-        double diff = sd - a;
-        phi += k1 * 0.5 * diff * diff;
-        phi_prime += k1 * d * diff;
-      }
-
-      // Repulsive contribution
-      for (size_t u = 0; u < n; ++u)
-      {
-        for (size_t v = u + 1; v < n; ++v)
-        {
-          double d = (position.segment<2>(2 * u) - position.segment<2>(2 * v)).norm();
-          d = std::max(epsilon_r, d);
-          double sd = s * d;
-
-          phi += k2 / (sd + epsilon_r);
-          phi_prime -= k2 * d / std::pow(sd + epsilon_r, 2);
-        }
-      }
-
-      if (std::abs(phi_prime) < 1e-12)
+        s = s_new;
         break;
-
-      double s_new = s - phi / phi_prime;
-      s_new = std::max(0.1, std::min(10.0, s_new)); // bound to avoid numerical issues
-
-      if (std::abs(s_new - s) < 1e-6)
-        break;
-
+      }
       s = s_new;
     }
 

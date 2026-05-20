@@ -18,15 +18,18 @@
 // + \sum_{e \in adj2} (|\angle (x_{e.u} - x_{e.v})|)
 // using Simulated Annealing (SA)
 
-struct Circle {
-  Circle(size_t n, int seed, std::vector<std::vector<size_t>>& adj)
-      : adj1(adj), adj2(n) {
+struct Circle
+{
+  Circle(size_t n, int seed, std::vector<std::vector<size_t>> &adj)
+      : adj1(adj), adj2(n)
+  {
     std::mt19937 g(seed);
     indices.resize(n);
     std::iota(indices.begin(), indices.end(), 0);
     std::shuffle(indices.begin(), indices.end(), g);
 
-    for (size_t i = 0; i < n; ++i) {
+    for (size_t i = 0; i < n; ++i)
+    {
       for (size_t j : adj1[i])
         for (size_t k : adj1[j])
           if (i != k && std::find(adj1[i].begin(), adj1[i].end(), k) == adj1[i].end())
@@ -36,32 +39,43 @@ struct Circle {
     }
   }
 
-  int angle(int indU, int indV) const {
+  int angle(int indU, int indV) const
+  {
     int diff = indU - indV;
-    if (diff < 0) diff += indices.size();
+    if (diff < 0)
+      diff += indices.size();
     assert(0 <= diff && diff < int(indices.size()));
-    if (diff > int(indices.size()) / 2) diff = indices.size() - diff;
+    if (diff > int(indices.size()) / 2)
+      diff = indices.size() - diff;
     assert(0 <= diff && diff <= int(indices.size()) / 2);
     return diff;
   }
 
-  double calcScoreForCircle() {
+  double calcScoreForCircle()
+  {
     double score = 0;
-    for (size_t i = 0; i < indices.size(); ++i) {
-      for (size_t j : adj1[i]) score += angle(indices[i], indices[j]);
-      for (size_t j : adj2[i]) score += angle(indices[i], indices[j]);
+    for (size_t i = 0; i < indices.size(); ++i)
+    {
+      for (size_t j : adj1[i])
+        score += angle(indices[i], indices[j]);
+      for (size_t j : adj2[i])
+        score += angle(indices[i], indices[j]);
     }
     return score / 2;
   }
 
   // swap indices[u] and indices[v]
-  double calcDiff(int u, int v) {
+  double calcDiff(int u, int v)
+  {
     assert(u != v);
     double diffScore = 0;
 
-    auto updateDiffScore = [&](const std::vector<size_t>& adjList, size_t a, size_t b) {
-      for (size_t i : adjList) {
-        if (i == b) continue;
+    auto updateDiffScore = [&](const std::vector<size_t> &adjList, size_t a, size_t b)
+    {
+      for (size_t i : adjList)
+      {
+        if (i == b)
+          continue;
         diffScore -= angle(indices[a], indices[i]);
         diffScore += angle(indices[b], indices[i]);
       }
@@ -76,16 +90,16 @@ struct Circle {
   }
 
   std::vector<int> indices;
-  std::vector<std::vector<size_t>> adj1;  // theoretical distance = 1
-  std::vector<std::vector<size_t>> adj2;  // theoretical distance = 2
+  std::vector<std::vector<size_t>> adj1; // theoretical distance = 1
+  std::vector<std::vector<size_t>> adj2; // theoretical distance = 2
 };
 
-void solve_circle(const Problem& problem, const int seed,
-                  std::vector<Eigen::VectorXf>& positions, Timer& timer) {
-  timer.start();
-
+void solve_circle(const Problem &problem, const int seed,
+                  std::vector<Eigen::VectorXf> &positions)
+{
   std::vector<std::vector<size_t>> adj(problem.n);
-  for (size_t j = 0; j < problem.m; j++) {
+  for (size_t j = 0; j < problem.m; j++)
+  {
     size_t u = problem.row[j], v = problem.col[j];
     adj[u].push_back(v);
     adj[v].push_back(u);
@@ -104,37 +118,44 @@ void solve_circle(const Problem& problem, const int seed,
   std::uniform_int_distribution<int> distVertex(0, problem.n - 1);
   std::uniform_real_distribution<double> distSA(0, 1);
 
-  for (int it = 0; it < ITERATIONS; it++) {
+  for (int it = 0; it < ITERATIONS; it++)
+  {
     double T = std::pow(10, T0 + (T1 - T0) * it / ITERATIONS);
 
     int u = distVertex(g), v = distVertex(g);
-    if (u == v) continue;
+    if (u == v)
+      continue;
 
     double diffScore = circle.calcDiff(u, v);
-    if (diffScore <= 0 || distSA(g) < std::exp(-diffScore / T)) {
+    if (diffScore <= 0 || distSA(g) < std::exp(-diffScore / T))
+    {
       std::swap(circle.indices[u], circle.indices[v]);
       score += diffScore;
     }
 
-    if (score < bestScore) {
+    if (score < bestScore)
+    {
       bestScore = score;
       bestIndices = circle.indices;
     }
   }
 
   Eigen::VectorXf finalPos(2 * bestIndices.size());
-  for (size_t i = 0; i < bestIndices.size(); ++i) {
+  for (size_t i = 0; i < bestIndices.size(); ++i)
+  {
     double theta = 2.0 * M_PI * bestIndices[i] / bestIndices.size();
     finalPos[2 * i] = std::cos(theta);
     finalPos[2 * i + 1] = std::sin(theta);
   }
 
   positions.push_back(finalPos);
-  timer.stop();
 
-  double finalScore = circle.calcScoreForCircle();
-  circle.indices = bestIndices;
-  double bestScore2 = circle.calcScoreForCircle();
-  assert(std::abs(finalScore - score) < 1e-5);
-  assert(std::abs(bestScore - bestScore2) < 1e-5);
+  // debug
+  {
+    double finalScore = circle.calcScoreForCircle();
+    circle.indices = bestIndices;
+    double bestScore2 = circle.calcScoreForCircle();
+    assert(std::abs(finalScore - score) < 1e-5);
+    assert(std::abs(bestScore - bestScore2) < 1e-5);
+  }
 }

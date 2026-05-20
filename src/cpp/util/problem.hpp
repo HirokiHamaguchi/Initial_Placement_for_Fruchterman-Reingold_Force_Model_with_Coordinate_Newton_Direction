@@ -54,8 +54,9 @@ struct Problem
     assert(isConnected());
   }
 
-  Problem(const std::string matrixName, bool is1 = false,
-          ForceModelType _modelType = ForceModelType::FR)
+  Problem(const std::string matrixName,
+          ForceModelType _modelType = ForceModelType::FR,
+          bool is1 = false)
       : matrixName(matrixName), modelType(_modelType)
   {
     // if is1, then all edge weights are set to 1

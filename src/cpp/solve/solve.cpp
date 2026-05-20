@@ -25,24 +25,25 @@ std::pair<std::vector<std::pair<double, double>>, std::vector<Eigen::VectorXf>> 
   Timer timer;
   std::vector<Eigen::VectorXf> positions;
 
+  timer.start();
   if (method == CN_FR || method == CN_L_BFGS)
   {
-    solve_init(problem, measureTime, seed, positions, timer);
+    solve_init(problem, measureTime, seed, positions);
   }
   else if (method == SA_FR || method == SA_L_BFGS)
   {
-    solve_circle(problem, seed, positions, timer);
+    solve_circle(problem, seed, positions);
   }
   else
   {
-    timer.start();
     std::srand(seed);
     Eigen::VectorXf position = Eigen::VectorXf::Random(2 * problem.n);
     for (int i = 0; i < int(position.size()); i++)
       position[i] = std::abs(position[i]);
     positions.push_back(position);
-    timer.stop();
   }
+  timer.stop();
+
   assert(!measureTime || positions.size() == 1);
   std::vector<std::pair<double, double>> hist;
   hist.emplace_back(problem.calcScore(positions.back(), true), timer.sec());

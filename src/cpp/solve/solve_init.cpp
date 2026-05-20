@@ -24,10 +24,8 @@ void addVis(const Grid &grid, std::vector<Eigen::VectorXf> &positions, int it,
 }
 
 void solve_init(const Problem &problem, const bool measureTime, const int seed,
-                std::vector<Eigen::VectorXf> &positions, Timer &timer)
+                std::vector<Eigen::VectorXf> &positions)
 {
-  timer.start();
-
   Grid grid(problem.n, seed);
 
   // initialize random number generator
@@ -86,6 +84,4 @@ void solve_init(const Problem &problem, const bool measureTime, const int seed,
   auto finalPos = grid.toPosition();
   problem.optimalScaling(finalPos);
   positions.push_back(finalPos);
-
-  timer.stop();
 }

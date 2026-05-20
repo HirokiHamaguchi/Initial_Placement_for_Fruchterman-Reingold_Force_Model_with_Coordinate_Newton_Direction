@@ -8,7 +8,7 @@
 
 /**
  * Eades force model
- * Energy (attractive): sum(k1 * d_ij * (log(d_ij / a_ij) - 1)) where a_ij = data[i]
+ * Energy: sum(k1 * d_ij * (log(d_ij / a_ij) - 1)) + sum(k2 / (d_ij + eps))
  * Generally more stable than HC model
  */
 class EadesModel : public ForceModel
@@ -141,54 +141,50 @@ public:
 
   void optimalScaling(Eigen::VectorXf &position) const override
   {
-    // phi(s) = sum(k1 * s*d_ij * (log(s*d_ij / a_ij) - 1)) + sum(k2 / (s*d_ij + eps))
-    // phi'(s) = k1 * sum(d_ij * (log(s*d_ij / a_ij))) - k2 * sum(d_ij / (s*d_ij + eps)^2)
-    // Solve numerically using Newton's method
+    // We minimize:
+    //   phi(s) = sum k1 * s*d_ij * (log(s*d_ij / a_ij) - 1) + sum k2 / (s*d_ij)
+    //          = Cql * s log s + C1 * s + Cm1 / s
+    // where Cql = k1 * sum d, C1 = k1 * sum d * (log(d) - log(a) - 1), Cm1 = k2 * sum 1/d
+
+    // Derivatives:
+    //   phi'(s) = Cql * (log(s) + 1) + C1 - Cm1 / s^2
+    //   phi''(s) = Cql / s + 2 Cm1 / s^3
+
+    double Cql = 0.0;
+    double C1 = 0.0;
+    double Cm1 = 0.0;
+
+    for (size_t i = 0; i < m; ++i)
+    {
+      const size_t u = row[i];
+      const size_t v = col[i];
+      const double a = data[i];
+      const double d = (position.segment<2>(2 * u) - position.segment<2>(2 * v)).norm();
+      Cql += k1 * d;
+      C1 += k1 * d * (std::log(d) - std::log(a) - 1.0);
+    }
+    for (size_t u = 0; u < n; ++u)
+    {
+      for (size_t v = u + 1; v < n; ++v)
+      {
+        const double d = (position.segment<2>(2 * u) - position.segment<2>(2 * v)).norm();
+        Cm1 += k2 / std::max((double)epsilon_r, d);
+      }
+    }
 
     double s = 1.0;
-
-    for (int iter = 0; iter < 10; ++iter)
+    for (int iter = 0; iter < 20; ++iter)
     {
-      double phi = 0.0, phi_prime = 0.0;
-
-      // Attractive contribution
-      for (size_t i = 0; i < m; ++i)
+      const double grad = Cql * (std::log(s) + 1.0) + C1 - Cm1 / (s * s);
+      const double hess = Cql / s + 2.0 * Cm1 / (s * s * s);
+      const double step = grad / hess;
+      double s_new = s - step;
+      s_new = std::max(1e-8, s_new);
+      if (std::abs(s_new - s) < 1e-8)
       {
-        size_t u = row[i];
-        size_t v = col[i];
-        double a = data[i];
-        double d = (position.segment<2>(2 * u) - position.segment<2>(2 * v)).norm();
-        d = std::max((double)epsilon_r, d);
-
-        double sd = s * d;
-        double log_ratio = std::log(sd / a);
-        phi += k1 * sd * (log_ratio - 1.0);
-        phi_prime += k1 * d * log_ratio;
-      }
-
-      // Repulsive contribution
-      for (size_t u = 0; u < n; ++u)
-      {
-        for (size_t v = u + 1; v < n; ++v)
-        {
-          double d = (position.segment<2>(2 * u) - position.segment<2>(2 * v)).norm();
-          d = std::max((double)epsilon_r, d);
-          double sd = s * d;
-
-          phi += k2 / (sd + epsilon_r);
-          phi_prime -= k2 * d / std::pow(sd + epsilon_r, 2);
-        }
-      }
-
-      if (std::abs(phi_prime) < 1e-12)
+        s = s_new;
         break;
-
-      double s_new = s - phi / phi_prime;
-      s_new = std::max(0.1, std::min(10.0, s_new)); // bound to avoid numerical issues
-
-      if (std::abs(s_new - s) < 1e-6)
-        break;
-
+      }
       s = s_new;
     }
 
