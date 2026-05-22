@@ -35,10 +35,10 @@
 \begin{document}
 
 \begin{center}
-{\Large Revision Report / Response to Reviewers}\\[0.75em]
-{\large \emph{Initial Placement for Fruchterman--Reingold Force Model\\ With Coordinate Newton Direction}}\\[0.5em]
-Hiroki Hamaguchi, Naoki Marumo, and Akiko Takeda\\
-Date: \today
+  {\Large Revision Report / Response to Reviewers}\\[0.75em]
+  {\large \emph{Initial Placement for Fruchterman--Reingold Force Model\\ With Coordinate Newton Direction}}\\[0.5em]
+  Hiroki Hamaguchi, Naoki Marumo, and Akiko Takeda\\
+  Date: \today
 \end{center}
 
 \bigskip
@@ -80,81 +80,80 @@ We have revised the manuscript to address the concerns regarding the relationshi
 \subsection{Relationship Between the Proposed Approach and the FR Force Model}
 
 \reviewercomment{
-First, the authors do not sufficiently consider how well their approach matches the FR force model.
+  First, the authors do not sufficiently consider how well their approach matches the FR force model.
 
-Originally, Fruchterman and Reingold [10] proposed the FR model and solved it by using a pseudo-physical simulation-based algorithm (by following Eades' spring embedder method [8]). By contrast, Kamada and Kawai [21] proposed the KK force model and solved it by a Newton-like method. Also, many succeeding studies followed these approaches, i.e., either by combining simulation-based algorithms with the FR model or by combining Newton-like methods with the KK model. Although Hosobe [19] showed that both models could be solved with a Newton-like method called L-BFGS, the results still suggested that the KK model was more suitable for L-BFGS than the FR model.
+  Originally, Fruchterman and Reingold [10] proposed the FR model and solved it by using a pseudo-physical simulation-based algorithm (by following Eades' spring embedder method [8]). By contrast, Kamada and Kawai [21] proposed the KK force model and solved it by a Newton-like method. Also, many succeeding studies followed these approaches, i.e., either by combining simulation-based algorithms with the FR model or by combining Newton-like methods with the KK model. Although Hosobe [19] showed that both models could be solved with a Newton-like method called L-BFGS, the results still suggested that the KK model was more suitable for L-BFGS than the FR model.
 
-However, this submitted paper adopts an unusual approach that combines a Newton-like method with the FR model. I understand that the paper is focused only on the computation of initial layouts, but I think that the validation of adopting this approach is still insufficient.
+  However, this submitted paper adopts an unusual approach that combines a Newton-like method with the FR model. I understand that the paper is focused only on the computation of initial layouts, but I think that the validation of adopting this approach is still insufficient.
 
-It should be noted that the experimental results in Section 5 show that the proposed initial layout algorithm works better when it is combined with the L-BFGS algorithm for computing final layouts. It seems from Figure 6 that the combination of the proposed initial layout algorithm with the FR algorithm for computing final layouts does not work well except in limited cases like jagmesh1.
+  It should be noted that the experimental results in Section 5 show that the proposed initial layout algorithm works better when it is combined with the L-BFGS algorithm for computing final layouts. It seems from Figure 6 that the combination of the proposed initial layout algorithm with the FR algorithm for computing final layouts does not work well except in limited cases like jagmesh1.
 
-If the authors think that the proposed algorithm should be combined with the L-BFGS, they should adopt the KK model instead of the FR model, which would be more natural and more persuasive. If the authors think that the proposed algorithm works well for the FR layout algorithm (or another simulation-based algorithm), they should more deeply explore this direction and present clearer results in the paper.
+  If the authors think that the proposed algorithm should be combined with the L-BFGS, they should adopt the KK model instead of the FR model, which would be more natural and more persuasive. If the authors think that the proposed algorithm works well for the FR layout algorithm (or another simulation-based algorithm), they should more deeply explore this direction and present clearer results in the paper.
 }
 
 \begin{response}
-ご指摘に感謝いたします。原稿では確かになぜ我々が FR モデルに焦点を当てたのかを十分に正当化できていませんでした。このご指摘に対し、我々は次の2点を明確にすることで、FRモデルに焦点を当てることの正当性を示したいと思います。
+  ご指摘に感謝いたします。原稿では確かになぜ我々が FR モデルに焦点を当てたのかを十分に正当化できていませんでした。このご指摘に対し、我々は次の2点を明確にすることで、FRモデルに焦点を当てることの正当性を示したいと思います。
 
-まず、1点目。本研究の焦点は、Prob. (1)に対して、どのようにすればより効率的な最適化手法を開発できるか、という点にあります。恐らく、本論文の動機や主結果を誤解されていると思うので、そこを明確にします。
-確かにHosobeの結果はFRモデルよりもKKモデルの方がL-BFGSに適していることを示唆しています。
-L-BFGSはKKモデルとの方が親和性が良いというは、はっきりとした事実であると思います。
-しかし、だからこそ我々はFRモデルに着目していると言えます。
-ご存じの通り、グラフ描画を行うとは、すなわちFR モデル(Prob. (1))に対する最適化を行うことを意味します。
-元々提案されていたFR algorithmはこのProb. (1)に対する最急降下法として解釈できます。
-一方で、Hosobeらの主張は、このProb. (1)に対してL-BFGS法を適用することで、最急降下法よりも改善は出来るが、KKモデル程の改善ではない、というものでした。
-そして本提案は、このProb. (1)に対して、Coordinate Newton direction+L-BFGSという最適化手法を用いれば、より大きな改善が得られることを示すものです。L-BFGSがFRにあまり適していないというのは、FRモデルの問題点であるというよりも、はるかにL-BFGSがFRモデルに固有の構造を活かして最適化できていないということを示唆するものになっています。
-なので、L-BFGSがFRモデルに向いていないというご指摘は、むしろ、我々の提案の重要性を強調するものであると言えます。
-この枠組みは、sec.3でより明確に示しました。
+  まず、1点目。本研究の焦点は、Prob. (1)に対して、どのようにすればより効率的な最適化手法を開発できるか、という点にあります。恐らく、本論文の動機や主結果を誤解されていると思うので、そこを明確にします。
+  確かにHosobeの結果はFRモデルよりもKKモデルの方がL-BFGSに適していることを示唆しています。
+  L-BFGSはKKモデルとの方が親和性が良いというは、はっきりとした事実であると思います。
+  しかし、だからこそ我々はFRモデルに着目していると言えます。
+  ご存じの通り、グラフ描画を行うとは、すなわちFR モデル(Prob. (1))に対する最適化を行うことを意味します。
+  元々提案されていたFR algorithmはこのProb. (1)に対する最急降下法として解釈できます。
+  一方で、Hosobeらの主張は、このProb. (1)に対してL-BFGS法を適用することで、最急降下法よりも改善は出来るが、KKモデル程の改善ではない、というものでした。
+  そして本提案は、このProb. (1)に対して、Coordinate Newton direction+L-BFGSという最適化手法を用いれば、より大きな改善が得られることを示すものです。L-BFGSがFR modelにあまり適していないというのは、FRモデルの問題点であるというよりも、はるかにL-BFGSがFRモデルに固有の構造を活かして最適化できていないということを示唆するものになっています。
+  なので、L-BFGSがFRモデルに向いていないというご指摘は、むしろ、我々の提案の重要性を強調するものであると言えます。
+  この枠組みは、sec.3でより明確に示しました。
 
-Section 5の実験結果については、確かに、提案手法とFRアルゴリズムの組み合わせは、L-BFGSとの組み合わせほどの改善を示さないことが多いです。しかし、それは我々の主張と矛盾していません。
-なぜなら、我々の最終的な主張は、$\mathrm{FR}<\mathrm{L-BFGS} \approx \mathrm{CN+FR} < \mathrm{CN+L-BFGS}$ の順でより効率的になっている、というものであって、必ずしもFRアルゴリズムがL-BFGSよりも優れているということを主張するものではないからです。
+  Section 5の実験結果については、確かに、提案手法とFRアルゴリズムの組み合わせは、L-BFGSとの組み合わせほどの改善を示さないことが多いです。しかし、それは我々の主張と矛盾していません。
+  なぜなら、我々の最終的な主張は、$\mathrm{FR}<\mathrm{L-BFGS} \approx \mathrm{CN+FR} < \mathrm{CN+L-BFGS}$ の順でより効率的になっている、というものであって、必ずしもFRアルゴリズムがL-BFGSよりも優れているということを主張するものではないからです。
 
-1点目の結論としては、FRモデルに対してL-BFGSはあまり適していない、だからこそ我々はそれを改善したのだ、ということになります。
+  1点目の結論としては、FRモデルに対してL-BFGSはあまり適していない、だからこそ我々はそれを改善したのだ、ということになります。
 
-続いて、2点目。ご指摘の通り、今回の枠組みは、より広くとらえれば、KKモデルなどの他の力学モデルにも適用可能なものになっています。この点については、従来の書き方は過度に限定してしまっており、そこは大きな改善を行いました。KKモデルに対しても、同様の手法を適用することで、より効率的な最適化が可能になることを示す実験も追加しました。
+  続いて、2点目。ご指摘の通り、今回の枠組みは、より広くとらえれば、KKモデルなどの他の力学モデルにも適用可能なものになっています。この点については、従来の書き方は過度に限定してしまっており、そこは大きな改善を行いました。KKモデルに対しても、同様の手法を適用することで、より効率的な最適化が可能になることを示す実験も追加しました。
 
-その上で、FRモデルはKKモデルと比較すると、グラフの疎性が活かしやすいという特徴があります。それが、今回FRモデルに着目したもう一つの理由です。
-
+  その上で、FRモデルはKKモデルと比較すると、グラフの疎性が活かしやすいという特徴があります。それが、今回FRモデルに着目したもう一つの理由です。
 \end{response}
 
 \subsection{Difference Between FR and KK Models}
 
 \reviewercomment{
-Second, the authors do not sufficiently consider differences between the FR force model and others, especially the KK model, which becomes apparent especially in Subsection 7.1.
+  Second, the authors do not sufficiently consider differences between the FR force model and others, especially the KK model, which becomes apparent especially in Subsection 7.1.
 
-Here the authors first say ``Although we utilized the coordinate Newton direction only for the optimization problem (1), we can see that its application is not necessarily limited to the FR force model alone'', and then present ``objective functions arising from graphs''. Does the authors mean that this discussion applies to other force models including the KK model? If so, I think that the authors should adopt the KK model instead of the FR model.
+  Here the authors first say ``Although we utilized the coordinate Newton direction only for the optimization problem (1), we can see that its application is not necessarily limited to the FR force model alone'', and then present ``objective functions arising from graphs''. Does the authors mean that this discussion applies to other force models including the KK model? If so, I think that the authors should adopt the KK model instead of the FR model.
 
-In addition, the authors present the graph isomorphism problem as an application of the proposed algorithm. I think that the KK model would be more suitable for this application than the FR model.
+  In addition, the authors present the graph isomorphism problem as an application of the proposed algorithm. I think that the KK model would be more suitable for this application than the FR model.
 
-The following might work as hints for the authors' paper revision. Intuitively, the FR model exhibits soft behavior while the KK model exhibits hard behavior. Therefore, the FR model is usually used for dynamic graph layouts like animation and interaction while the KK model is usually used for static layouts. Also, the FR model is sometimes used for very large graphs because simulation-based algorithms for the FR model can be more scalable than Newton-like algorithms for the KK model. One plausible direction for the authors might be to combine the proposed algorithm with a scalable simulation-based algorithm for the FR model and to apply it to very large graphs.
+  The following might work as hints for the authors' paper revision. Intuitively, the FR model exhibits soft behavior while the KK model exhibits hard behavior. Therefore, the FR model is usually used for dynamic graph layouts like animation and interaction while the KK model is usually used for static layouts. Also, the FR model is sometimes used for very large graphs because simulation-based algorithms for the FR model can be more scalable than Newton-like algorithms for the KK model. One plausible direction for the authors might be to combine the proposed algorithm with a scalable simulation-based algorithm for the FR model and to apply it to very large graphs.
 }
 
 \begin{response}
-示唆に富むご指摘に感謝いたします。
-大まかには、先ほど述べた通りではありますが、実際にKK layoutへの一般化は可能であるため、その点を明確にしたsectionと実験の追加を行いました。
+  示唆に富むご指摘に感謝いたします。
+  大まかには、先ほど述べた通りではありますが、実際にKK layoutへの一般化は可能であるため、その点を明確にしたsectionと実験の追加を行いました。
 
-graph isomorphism への応用に関するご指摘にも同意いたします。この応用は FR モデルに特に自然なものとは言い難く、本論文の主たる貢献から読者の注意を逸らす可能性があるため、改訂稿ではこの議論を削除しました。
+  graph isomorphism への応用に関するご指摘にも同意いたします。この応用は FR モデルに特に自然なものとは言い難く、本論文の主たる貢献から読者の注意を逸らす可能性があるため、改訂稿ではこの議論を削除しました。
 
-また、animationやインタラクションのような動的なグラフ描画シナリオにおいて、FRモデルのsoft behaviorが特に適していることは、非常に重要な観点だと思っています。
+  また、animationやインタラクションのような動的なグラフ描画シナリオにおいて、FRモデルのsoft behaviorが特に適していることは、非常に重要な観点だと思っています。section 6.1などでこの点に言及し、さらに、提案手法がこのようなシナリオにおいても有用である可能性について議論を追加しました。
 \end{response}
 
 \subsection{Notation}
 
 \reviewercomment{
-The following are minor comments.
+  The following are minor comments.
 
-- Symbol E is used for two different purposes, one to indicate a set of graph edges and the other to indicate energies between nodes possibly with subscripts and superscripts. It will be better to use different symbols for these different concepts.
+  - Symbol E is used for two different purposes, one to indicate a set of graph edges and the other to indicate energies between nodes possibly with subscripts and superscripts. It will be better to use different symbols for these different concepts.
 
-- I wonder if \((i, j) \in V^2\) with \(i \ne j\) in (1) is appropriately intended. This treats both \((i, j)\) and \((j, i)\) in the sum.
+  - I wonder if \((i, j) \in V^2\) with \(i \ne j\) in (1) is appropriately intended. This treats both \((i, j)\) and \((j, i)\) in the sum.
 
-- Symbol \(\epsilon\) appears only once in Subsection 4.4, which seems strange.
+  - Symbol \(\epsilon\) appears only once in Subsection 4.4, which seems strange.
 
-- Symbol \(f_i\) at line 6 of Algorithm 1 probably lacks the superscript ``a''.
+  - Symbol \(f_i\) at line 6 of Algorithm 1 probably lacks the superscript ``a''.
 
-- In Subsection 5.3, the word ``L-BFGS'' that appears as superscripts of \(N\) does not seem to be correctly specified. The hyphen mark looks too long.
+  - In Subsection 5.3, the word ``L-BFGS'' that appears as superscripts of \(N\) does not seem to be correctly specified. The hyphen mark looks too long.
 
-- In the optimization problem called ``objective functions arising from graphs'' in Subsection 7.1, ``='' probably should be ``:=''. % LLDisable
+  - In the optimization problem called ``objective functions arising from graphs'' in Subsection 7.1, ``='' probably should be ``:=''. % LLDisable
 
-- The header of Subsection 8.1 seems to have a problem with the hyphen mark again.
+  - The header of Subsection 8.1 seems to have a problem with the hyphen mark again.
 }
 
 \begin{response}
@@ -181,13 +180,13 @@ We have revised the manuscript to improve the framing of the contribution, the d
 \subsection{Related Work on Multilevel Approaches}
 
 \reviewercomment{
-In the Related Work section, in 3.1 Multilevel approaches are quickly dismissed. I don't understand the statement the statement about sfdp being ``prior work'' to FR - as the latter came way later than the former. This sentence should be clarified.
+  In the Related Work section, in 3.1 Multilevel approaches are quickly dismissed. I don't understand the statement the statement about sfdp being ``prior work'' to FR - as the latter came way later than the former. This sentence should be clarified.
 }
 
 \begin{response}
   Thank you for pointing this out.
   これについては、FRという語が、頂点間で引力や斥力などを定めているforce modelなのか、あるいはその平衡点を求める為のアルゴリズムなのか、という点で誤解が生じやすい表現になっていました。
-  元原稿では前者をFR force modelと呼び、後者をFR algorithmと呼んでいましたが、その誤解しやすさを鑑み、出来る限りFR force modelはthe force model of the FR algorithmやthe problem (1)などのように置き換えました。また、その区別をしているということを、section 2の段階で明確にし、該当箇所についても説明を追加しました。
+  元原稿では前者をFR force modelと呼び、後者をFR algorithmと呼んでいましたが、その誤解しやすさを鑑み、出来る限りFR force modelはthe force model of the FR algorithmやthe problem (1)などのように置き換えました。また、section 2の該当箇所についても説明を改め、誤解が生じないようにしました。
 \end{response}
 
 \subsection{Discussion of Multilevel Approaches and Potential Applications}
@@ -195,25 +194,29 @@ In the Related Work section, in 3.1 Multilevel approaches are quickly dismissed.
 \reviewercomment{Also, I believe that further space could be given to multi-level approaches, also considering that could be one potential application/extension of this technique beyond this paper.}
 
 \begin{response}
-  Thank you for the suggestion. We expanded the discussion of multilevel approaches in the related work section, and we also added a new experiment on a large graph to demonstrate the potential benefits of our method in a multilevel context.
+  Thank you for the suggestion.
+  新しくSec. 6.1 を設けて、そのことについての議論を追加しました。
+  (ここで、6.1の内容を簡単に説明する。)
 \end{response}
 
 \subsection{Uncertain Framing of FR Versus L-BFGS}
 
 \reviewercomment{
-The framing of this paper is somewhat uncertain. Despite the paper title and general orientation towards FR, L-BFGS is consistently and repeatedly mentioned as a better alternative. Even in the related work section, in Section 3.1, only L-BFGS is mentioned as a ready-to-go measure for application in Multilevel approaches. In the experiments the paper explicitly mentions that FR is consistently outperformed by L-BFGS - then why we should use FR (even with the improved initial placement) at all? The paper does not make a good argument why we should choose that over the other, thus in a way making me question even the title of the paper. In general, it's unclear what's the impact of this research and how researchers could build upon it.
+  The framing of this paper is somewhat uncertain. Despite the paper title and general orientation towards FR, L-BFGS is consistently and repeatedly mentioned as a better alternative. Even in the related work section, in Section 3.1, only L-BFGS is mentioned as a ready-to-go measure for application in Multilevel approaches. In the experiments the paper explicitly mentions that FR is consistently outperformed by L-BFGS - then why we should use FR (even with the improved initial placement) at all? The paper does not make a good argument why we should choose that over the other, thus in a way making me question even the title of the paper. In general, it's unclear what's the impact of this research and how researchers could build upon it.
 }
 
 \begin{response}
-  FRを使うべきと思われる状況は、例えば、動的グラフのレイアウト更新のようなシナリオであると考えています。動的グラフでは、各時刻のレイアウト更新を、変更後の FR objective に対する再最適化のための初期配置問題として捉えることができます。reviwerAでも指摘されたように、FR モデルの soft behavior はこのようなシナリオとよく整合しており、また reviewerB が示唆された scalability-oriented な方向性とも整合しています。したがって、この側面を示すために、大規模かつ animation-like なグラフ描画シナリオに関する新しい実験を追加します。
+  恐らく、この点についても、先述の誤解、つまり、FRアルゴリズムとFRモデルの混同が原因かと思われます。
+  この論文が対象としているのは、そのtitleも含めて、FR force model、つまり、the problem (1)に対する最適化問題であって、FR algorithmはその一つの解法に過ぎません。
+  先行研究でもこの問題自体はFR force modelと呼ばれているので、この語を完全になくしてしまうのは難しいのですが、慎重に表現を改め、またSec 3.1などにおいて、the problem (1)に対してアプローチしていくという表現に寄せることによって、framing等をより明確にしました。
 \end{response}
 
 \subsection{Expansion of the Evaluation Dataset}
 
 \reviewercomment{
-The evaluation yields positive results, but in my opinion it could be further improved. First, I would suggest to expand 5.2 it in terms of number of graphs. More graphs from the Florida library could be used, or another source could be [1]. This expanded datasets already includes 3elt, but expands also on grids, cylinders, and other regular graphs that make up a solid benchmark set, and will provide a wider set of instances to discuss. If not all figures can be included in the main body of the paper, these could be moved in the supplemental material.
+  The evaluation yields positive results, but in my opinion it could be further improved. First, I would suggest to expand 5.2 it in terms of number of graphs. More graphs from the Florida library could be used, or another source could be [1]. This expanded datasets already includes 3elt, but expands also on grids, cylinders, and other regular graphs that make up a solid benchmark set, and will provide a wider set of instances to discuss. If not all figures can be included in the main body of the paper, these could be moved in the supplemental material.
 
-[1] Bartel, Gereon, et al. ``An experimental evaluation of multilevel layout methods.'' International Symposium on Graph Drawing. Berlin, Heidelberg: Springer Berlin Heidelberg, 2010.
+    [1] Bartel, Gereon, et al. ``An experimental evaluation of multilevel layout methods.'' International Symposium on Graph Drawing. Berlin, Heidelberg: Springer Berlin Heidelberg, 2010.
 }
 
 \begin{response}
@@ -225,19 +228,19 @@ The evaluation yields positive results, but in my opinion it could be further im
 \subsection{Visualization and Color Map}
 
 \reviewercomment{
-Concerning the visualization of the layout, I don't believe that the index colouring adds much. A rainbow map, however, it's not a great choice. If color should be kept, maybe I would consider using a sequential continuous color map with a legend (see [2] for examples).
+  Concerning the visualization of the layout, I don't believe that the index colouring adds much. A rainbow map, however, it's not a great choice. If color should be kept, maybe I would consider using a sequential continuous color map with a legend (see [2] for examples).
 
-[2] https://matplotlib.org/stable/users/explain/colors/colormaps.html
+    [2] https://matplotlib.org/stable/users/explain/colors/colormaps.html
 }
 
 \begin{response}
-Thank you for the suggestion. We agree that the current index-based coloring does not add much interpretive value. We revise the visualization by replacing the rainbow map with a sequential continuous color map, ``viridis''.
+  Thank you for the suggestion. We agree that the current index-based coloring does not add much interpretive value. We revise the visualization by replacing the rainbow map with a sequential continuous color map, ``viridis''.
 \end{response}
 
 \subsection{Effect of Initial Placement Over Time}
 
 \reviewercomment{
-One thing that comes out of the charts in Figure 6 is that this different initial positioning has limited effect on the way the objective function decreases over time - which is an interesting phenomenon. In FR, the chart appears shifted below by how ``better'' the initial positioning is, with the non-CN version never catching up. Differently, it seems that the objective functions of L-BFGS and CN-L-BFGS tend to converge before the iteration cap. Does this mean that the positive effect of the initial placement tends to fade faster with L-BFGS, despite the better initial condition?
+  One thing that comes out of the charts in Figure 6 is that this different initial positioning has limited effect on the way the objective function decreases over time - which is an interesting phenomenon. In FR, the chart appears shifted below by how ``better'' the initial positioning is, with the non-CN version never catching up. Differently, it seems that the objective functions of L-BFGS and CN-L-BFGS tend to converge before the iteration cap. Does this mean that the positive effect of the initial placement tends to fade faster with L-BFGS, despite the better initial condition?
 }
 
 \begin{response}
@@ -249,25 +252,31 @@ One thing that comes out of the charts in Figure 6 is that this different initia
 \subsection{Singularities in dwt\_992 and collins\_15NN}
 
 \reviewercomment{
-The dwt\_992 and collins 15NN singularities could be described more. Would it be possible to generalize, highlighting what makes these two cases so different from each other?
-
-Speaking of singularities, in the charts it seems like there is a spike in \(f(X)\) right after the 0 seconds mark (like in 3elt, btree or cycle) is that an artifact?
+  The dwt\_992 and collins 15NN singularities could be described more. Would it be possible to generalize, highlighting what makes these two cases so different from each other?
 }
 
 \begin{response}
-  todo?
+  これは手つかず。
+\end{response}
 
-  \begin{addedContent}
-In some FR runs, a small increase in $f(X)$ appears immediately after the start of the iterations; this can happen because the first few displacement steps are relatively large before the temperature decreases, so it is an artifact of the early-stage update schedule rather than a failure of the initialization.
+\subsection{Spike in Objective Function at the Start of Optimization}
 
-The effect of the initial placement also differs across the two solvers: for FR, a better initialization tends to produce a persistent offset in the objective curve, whereas for L-BFGS the curves often converge earlier so the relative advantage can fade near stationary points. Thus, the benefit of initialization should be judged not only by the final objective value, but also by the early-stage convergence behavior and runtime.
-  \end{addedContent}
+\reviewercomment{
+  Speaking of singularities, in the charts it seems like there is a spike in \(f(X)\) right after the 0 seconds mark (like in 3elt, btree or cycle) is that an artifact?
+}
+
+\begin{response}
+  ご指摘ありがとうございます。
+  これに関しては、FR algorithmの初期段階では、stepsizeが大きすぎるために、解が振動するような現象が起きています。元々の意図としては、よりnaturalな数値実験となるように、NetworkXという外部ライブラリなどの実装と全く同じパラメータなどで実験をしていたため、意図された挙動ではありました。
+
+  しかし、確かにこれは誤解や疑問を生じやすく、またしっかりと説明をした上であるならば、この初期stepsizeの調整は、より安定した数値実験を行うための、自然な選択肢であるとも言えます。
+  そこで、改訂稿では、FR algorithmの初期段階でのstepsizeを調整して、振動を大きく抑えました。結果として、より分かりやすく提案手法の効果などが見えるようになったと思います。
 \end{response}
 
 \subsection{Organization of Sections 6 and 7}
 
 \reviewercomment{
-I am less persuaded from Sections 6 and 7. Section 6 includes considerations that I would include in Section 4, as to further justify your optimization design. I would also simplify the discussion, removing subsections and integrating their contents in Section 4. In Section 7 I would focus on the impact of this approach on graph drawing more specifically. For example, where is the next step for this technique, in the context of graph drawing? Will its presence in a drawing pipeline make a difference, or the gains in quality are not sufficient to justify its use? What about its inclusion in a multi-level pipeline (see also a similar point above)?
+  I am less persuaded from Sections 6 and 7. Section 6 includes considerations that I would include in Section 4, as to further justify your optimization design. I would also simplify the discussion, removing subsections and integrating their contents in Section 4. In Section 7 I would focus on the impact of this approach on graph drawing more specifically. For example, where is the next step for this technique, in the context of graph drawing? Will its presence in a drawing pipeline make a difference, or the gains in quality are not sufficient to justify its use? What about its inclusion in a multi-level pipeline (see also a similar point above)?
 }
 
 \response{
@@ -278,7 +287,7 @@ I am less persuaded from Sections 6 and 7. Section 6 includes considerations tha
 \subsection{Moving the Section 8 to the Appendix}
 
 \reviewercomment{
-I would move Section 8 to supplemental material out of the main body of the paper.
+  I would move Section 8 to supplemental material out of the main body of the paper.
 }
 
 \response{
@@ -289,11 +298,10 @@ I would move Section 8 to supplemental material out of the main body of the pape
 \subsection{Bibliography}
 
 \reviewercomment{
-Bilbiography must be updated. Some papers do not include any venue, others do not have a DOI, others only report their archive version (while journal versions are available).
+  Bilbiography must be updated. Some papers do not include any venue, others do not have a DOI, others only report their archive version (while journal versions are available).
 }
 
 \response{
-  これが断トツで自信がないが、対応が不完全。
   Thank you for the careful note.
   In the revision, we reviewed the bibliography entries and improved completeness where possible (e.g., adding missing metadata and cleaning local-only fields), and we checked for cases where a journal/conference version should be cited instead of an archive-only version.
 }
