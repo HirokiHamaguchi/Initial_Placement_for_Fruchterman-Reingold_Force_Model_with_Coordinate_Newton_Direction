@@ -108,68 +108,62 @@
 
 \begin{document}
 
-% \begin{figure*}[btp]
-  \centering
-  \addtolength{\tabcolsep}{-0.5em}
-  \begin{tabular}{cccccc}
-    \multicolumn{6}{c}{\Large \textbf{\texttt{cycle300}} $(\abs{V}=300, \abs{E}=300, \text{sparsity}=0.669\text{\%})$ \quad Figures are at 150 iterations.}     \\
-    \raisebox{-.5\height}{\includegraphics[width=0.55\columnwidth]{plot/cycle300.pdf}} &
-    \makecell{\small{\textsf{FR}}                                                                                                                        \\[-0.2em]\includegraphics[width=0.27\columnwidth]{vis/cycle300_FR.png}} &
-    \makecell{\small{\textsf{L-BFGS}}                                                                                                                    \\[-0.2em]\includegraphics[width=0.27\columnwidth]{vis/cycle300_L-BFGS.png}} &
-    \makecell{\small{\textsf{\textbf{CN}-FR}}                                                                                                            \\[-0.2em]\includegraphics[width=0.27\columnwidth]{vis/cycle300_CN-FR.png}} &
-    \makecell{\small{\textsf{\textbf{CN}-L-BFGS}}                                                                                                        \\[-0.2em]\includegraphics[width=0.27\columnwidth]{vis/cycle300_CN-L-BFGS.png}} &
-    \makecell{\small{\textsf{BEST}}                                                                                                                      \\[-0.2em]\includegraphics[width=0.27\columnwidth]{vis/opt_cycle300.png}} \\
+\begin{tabular}{cccccc}
+  \multicolumn{6}{c}{\large \textbf{\texttt{cycle300}} $(\abs{V}=300, \abs{E}=300, \text{sparsity}=0.669\text{\%})$ \quad Figures are at 150 iterations.}     \\
+  \raisebox{-.5\height}{\includegraphics[width=0.55\columnwidth]{plot/cycle300_FR.pdf}} &
+  \makecell{\textsf{RAND-FR}                                                                                                                                  \\[-0.2em]\includegraphics[width=0.27\columnwidth]{vis/cycle300_FR_FR.png}} &
+  \makecell{\textsf{\textbf{CN}-FR (proposed)}                                                                                                                \\[-0.2em]\includegraphics[width=0.27\columnwidth]{vis/cycle300_CN-FR_FR.png}} &
+  \makecell{\textsf{RAND-L-BFGS}                                                                                                                              \\[-0.2em]\includegraphics[width=0.27\columnwidth]{vis/cycle300_L-BFGS_FR.png}} &
+  \makecell{\textsf{\textbf{CN}-L-BFGS (proposed)}                                                                                                            \\[-0.2em]\includegraphics[width=0.27\columnwidth]{vis/cycle300_CN-L-BFGS_FR.png}} &
+  \makecell{\textsf{BEST}                                                                                                                                     \\[-0.2em]\includegraphics[width=0.27\columnwidth]{vis/opt_cycle300_FR.png}} \\
 
-    \multicolumn{6}{c}{\Large \textbf{\texttt{jagmesh1}} $(\abs{V}=936, \abs{E}=2664, \text{sparsity}=0.609\text{\%})$ \quad Figures are at 50 iterations.}     \\
-    \raisebox{-.5\height}{\includegraphics[width=0.55\columnwidth]{plot/jagmesh1.pdf}} &
-    \makecell{\small{\textsf{FR}}                                                                                                                        \\[-0.2em]\includegraphics[width=0.27\columnwidth]{vis/jagmesh1_FR.png}} &
-    \makecell{\small{\textsf{L-BFGS}}                                                                                                                    \\[-0.2em]\includegraphics[width=0.27\columnwidth]{vis/jagmesh1_L-BFGS.png}} &
-    \makecell{\small{\textsf{\textbf{CN}-FR}}                                                                                                            \\[-0.2em]\includegraphics[width=0.27\columnwidth]{vis/jagmesh1_CN-FR.png}} &
-    \makecell{\small{\textsf{\textbf{CN}-L-BFGS}}                                                                                                        \\[-0.2em]\includegraphics[width=0.27\columnwidth]{vis/jagmesh1_CN-L-BFGS.png}} &
-    \makecell{\small{\textsf{BEST}}                                                                                                                      \\[-0.2em]\includegraphics[width=0.27\columnwidth]{vis/opt_jagmesh1.png}} \\
+  \multicolumn{6}{c}{\large \textbf{\texttt{jagmesh1}} $(\abs{V}=936, \abs{E}=2664, \text{sparsity}=0.609\text{\%})$ \quad Figures are at 50 iterations.}     \\
+  \raisebox{-.5\height}{\includegraphics[width=0.55\columnwidth]{plot/jagmesh1_FR.pdf}} &
+  \makecell{\textsf{RAND-FR}                                                                                                                                  \\[-0.2em]\includegraphics[width=0.27\columnwidth]{vis/jagmesh1_FR_FR.png}} &
+  \makecell{\textsf{\textbf{CN}-FR (proposed)}                                                                                                                \\[-0.2em]\includegraphics[width=0.27\columnwidth]{vis/jagmesh1_CN-FR_FR.png}} &
+  \makecell{\textsf{RAND-L-BFGS}                                                                                                                              \\[-0.2em]\includegraphics[width=0.27\columnwidth]{vis/jagmesh1_L-BFGS_FR.png}} &
+  \makecell{\textsf{\textbf{CN}-L-BFGS (proposed)}                                                                                                            \\[-0.2em]\includegraphics[width=0.27\columnwidth]{vis/jagmesh1_CN-L-BFGS_FR.png}} &
+  \makecell{\textsf{BEST}                                                                                                                                     \\[-0.2em]\includegraphics[width=0.27\columnwidth]{vis/opt_jagmesh1_FR.png}} \\
 
-    \multicolumn{6}{c}{\Large \textbf{\texttt{dwt\_1005}} $(\abs{V}=1005, \abs{E}=3808, \text{sparsity}=0.755\text{\%})$ \quad Figures are at 100 iterations.}  \\
-    \raisebox{-.5\height}{\includegraphics[width=0.55\columnwidth]{plot/dwt_1005.pdf}} &
-    \makecell{\small{\textsf{FR}}                                                                                                                        \\[-0.2em]\includegraphics[width=0.27\columnwidth]{vis/dwt_1005_FR.png}} &
-    \makecell{\small{\textsf{L-BFGS}}                                                                                                                    \\[-0.2em]\includegraphics[width=0.27\columnwidth]{vis/dwt_1005_L-BFGS.png}} &
-    \makecell{\small{\textsf{\textbf{CN}-FR}}                                                                                                            \\[-0.2em]\includegraphics[width=0.27\columnwidth]{vis/dwt_1005_CN-FR.png}} &
-    \makecell{\small{\textsf{\textbf{CN}-L-BFGS}}                                                                                                        \\[-0.2em]\includegraphics[width=0.27\columnwidth]{vis/dwt_1005_CN-L-BFGS.png}} &
-    \makecell{\small{\textsf{BEST}}                                                                                                                      \\[-0.2em]\includegraphics[width=0.27\columnwidth]{vis/opt_dwt_1005.png}} \\
+  \multicolumn{6}{c}{\large \textbf{\texttt{dwt\_1005}} $(\abs{V}=1005, \abs{E}=3808, \text{sparsity}=0.755\text{\%})$ \quad Figures are at 100 iterations.}  \\
+  \raisebox{-.5\height}{\includegraphics[width=0.55\columnwidth]{plot/dwt_1005_FR.pdf}} &
+  \makecell{\textsf{RAND-FR}                                                                                                                                  \\[-0.2em]\includegraphics[width=0.27\columnwidth]{vis/dwt_1005_FR_FR.png}} &
+  \makecell{\textsf{\textbf{CN}-FR (proposed)}                                                                                                                \\[-0.2em]\includegraphics[width=0.27\columnwidth]{vis/dwt_1005_CN-FR_FR.png}} &
+  \makecell{\textsf{RAND-L-BFGS}                                                                                                                              \\[-0.2em]\includegraphics[width=0.27\columnwidth]{vis/dwt_1005_L-BFGS_FR.png}} &
+  \makecell{\textsf{\textbf{CN}-L-BFGS (proposed)}                                                                                                            \\[-0.2em]\includegraphics[width=0.27\columnwidth]{vis/dwt_1005_CN-L-BFGS_FR.png}} &
+  \makecell{\textsf{BEST}                                                                                                                                     \\[-0.2em]\includegraphics[width=0.27\columnwidth]{vis/opt_dwt_1005_FR.png}} \\
 
-    \multicolumn{6}{c}{\Large \textbf{\texttt{btree9}} $(\abs{V}=1023, \abs{E}=1022, \text{sparsity}=0.196\text{\%})$ \quad Figures are at 150 iterations.}     \\
-    \raisebox{-.5\height}{\includegraphics[width=0.55\columnwidth]{plot/btree9.pdf}}   &
-    \makecell{\small{\textsf{FR}}                                                                                                                        \\[-0.2em]\includegraphics[width=0.27\columnwidth]{vis/btree9_FR.png}} &
-    \makecell{\small{\textsf{L-BFGS}}                                                                                                                    \\[-0.2em]\includegraphics[width=0.27\columnwidth]{vis/btree9_L-BFGS.png}} &
-    \makecell{\small{\textsf{\textbf{CN}-FR}}                                                                                                            \\[-0.2em]\includegraphics[width=0.27\columnwidth]{vis/btree9_CN-FR.png}} &
-    \makecell{\small{\textsf{\textbf{CN}-L-BFGS}}                                                                                                        \\[-0.2em]\includegraphics[width=0.27\columnwidth]{vis/btree9_CN-L-BFGS.png}} &
-    \makecell{\small{\textsf{BEST}}                                                                                                                      \\[-0.2em]\includegraphics[width=0.27\columnwidth]{vis/opt_btree9.png}} \\
+  \multicolumn{6}{c}{\large \textbf{\texttt{btree9}} $(\abs{V}=1023, \abs{E}=1022, \text{sparsity}=0.196\text{\%})$ \quad Figures are at 150 iterations.}     \\
+  \raisebox{-.5\height}{\includegraphics[width=0.55\columnwidth]{plot/btree9_FR.pdf}}   &
+  \makecell{\textsf{RAND-FR}                                                                                                                                  \\[-0.2em]\includegraphics[width=0.27\columnwidth]{vis/btree9_FR_FR.png}} &
+  \makecell{\textsf{\textbf{CN}-FR (proposed)}                                                                                                                \\[-0.2em]\includegraphics[width=0.27\columnwidth]{vis/btree9_CN-FR_FR.png}} &
+  \makecell{\textsf{RAND-L-BFGS}                                                                                                                              \\[-0.2em]\includegraphics[width=0.27\columnwidth]{vis/btree9_L-BFGS_FR.png}} &
+  \makecell{\textsf{\textbf{CN}-L-BFGS (proposed)}                                                                                                            \\[-0.2em]\includegraphics[width=0.27\columnwidth]{vis/btree9_CN-L-BFGS_FR.png}} &
+  \makecell{\textsf{BEST}                                                                                                                                     \\[-0.2em]\includegraphics[width=0.27\columnwidth]{vis/opt_btree9_FR.png}} \\
 
-    \multicolumn{6}{c}{\Large \textbf{\texttt{1138\_bus}} $(\abs{V}=1138, \abs{E}=1458, \text{sparsity}=0.225\text{\%})$ \quad Figures are at 150 iterations.}  \\
-    \raisebox{-.5\height}{\includegraphics[width=0.55\columnwidth]{plot/1138_bus.pdf}} &
-    \makecell{\small{\textsf{FR}}                                                                                                                        \\[-0.2em]\includegraphics[width=0.27\columnwidth]{vis/1138_bus_FR.png}} &
-    \makecell{\small{\textsf{L-BFGS}}                                                                                                                    \\[-0.2em]\includegraphics[width=0.27\columnwidth]{vis/1138_bus_L-BFGS.png}} &
-    \makecell{\small{\textsf{\textbf{CN}-FR}}                                                                                                            \\[-0.2em]\includegraphics[width=0.27\columnwidth]{vis/1138_bus_CN-FR.png}} &
-    \makecell{\small{\textsf{\textbf{CN}-L-BFGS}}                                                                                                        \\[-0.2em]\includegraphics[width=0.27\columnwidth]{vis/1138_bus_CN-L-BFGS.png}} &
-    \makecell{\small{\textsf{BEST}}                                                                                                                      \\[-0.2em]\includegraphics[width=0.27\columnwidth]{vis/opt_1138_bus.png}} \\
+  \multicolumn{6}{c}{\large \textbf{\texttt{1138\_bus}} $(\abs{V}=1138, \abs{E}=1458, \text{sparsity}=0.225\text{\%})$ \quad Figures are at 150 iterations.}  \\
+  \raisebox{-.5\height}{\includegraphics[width=0.55\columnwidth]{plot/1138_bus_FR.pdf}} &
+  \makecell{\textsf{RAND-FR}                                                                                                                                  \\[-0.2em]\includegraphics[width=0.27\columnwidth]{vis/1138_bus_FR_FR.png}} &
+  \makecell{\textsf{\textbf{CN}-FR (proposed)}                                                                                                                \\[-0.2em]\includegraphics[width=0.27\columnwidth]{vis/1138_bus_CN-FR_FR.png}} &
+  \makecell{\textsf{RAND-L-BFGS}                                                                                                                              \\[-0.2em]\includegraphics[width=0.27\columnwidth]{vis/1138_bus_L-BFGS_FR.png}} &
+  \makecell{\textsf{\textbf{CN}-L-BFGS (proposed)}                                                                                                            \\[-0.2em]\includegraphics[width=0.27\columnwidth]{vis/1138_bus_CN-L-BFGS_FR.png}} &
+  \makecell{\textsf{BEST}                                                                                                                                     \\[-0.2em]\includegraphics[width=0.27\columnwidth]{vis/opt_1138_bus_FR.png}} \\
 
-    \multicolumn{6}{c}{\Large \textbf{\texttt{dwt\_2680}} $(\abs{V}=2680, \abs{E}=11173, \text{sparsity}=0.311\text{\%})$ \quad Figures are at 150 iterations.} \\
-    \raisebox{-.5\height}{\includegraphics[width=0.55\columnwidth]{plot/dwt_2680.pdf}} &
-    \makecell{\small{\textsf{FR}}                                                                                                                        \\[-0.2em]\includegraphics[width=0.27\columnwidth]{vis/dwt_2680_FR.png}} &
-    \makecell{\small{\textsf{L-BFGS}}                                                                                                                    \\[-0.2em]\includegraphics[width=0.27\columnwidth]{vis/dwt_2680_L-BFGS.png}} &
-    \makecell{\small{\textsf{\textbf{CN}-FR}}                                                                                                            \\[-0.2em]\includegraphics[width=0.27\columnwidth]{vis/dwt_2680_CN-FR.png}} &
-    \makecell{\small{\textsf{\textbf{CN}-L-BFGS}}                                                                                                        \\[-0.2em]\includegraphics[width=0.27\columnwidth]{vis/dwt_2680_CN-L-BFGS.png}} &
-    \makecell{\small{\textsf{BEST}}                                                                                                                      \\[-0.2em]\includegraphics[width=0.27\columnwidth]{vis/opt_dwt_2680.png}} \\
+  \multicolumn{6}{c}{\large \textbf{\texttt{dwt\_2680}} $(\abs{V}=2680, \abs{E}=11173, \text{sparsity}=0.311\text{\%})$ \quad Figures are at 150 iterations.} \\
+  \raisebox{-.5\height}{\includegraphics[width=0.55\columnwidth]{plot/dwt_2680_FR.pdf}} &
+  \makecell{\textsf{RAND-FR}                                                                                                                                  \\[-0.2em]\includegraphics[width=0.27\columnwidth]{vis/dwt_2680_FR_FR.png}} &
+  \makecell{\textsf{\textbf{CN}-FR (proposed)}                                                                                                                \\[-0.2em]\includegraphics[width=0.27\columnwidth]{vis/dwt_2680_CN-FR_FR.png}} &
+  \makecell{\textsf{RAND-L-BFGS}                                                                                                                              \\[-0.2em]\includegraphics[width=0.27\columnwidth]{vis/dwt_2680_L-BFGS_FR.png}} &
+  \makecell{\textsf{\textbf{CN}-L-BFGS (proposed)}                                                                                                            \\[-0.2em]\includegraphics[width=0.27\columnwidth]{vis/dwt_2680_CN-L-BFGS_FR.png}} &
+  \makecell{\textsf{BEST}                                                                                                                                     \\[-0.2em]\includegraphics[width=0.27\columnwidth]{vis/opt_dwt_2680_FR.png}} \\
 
-    \multicolumn{6}{c}{\Large \textbf{\texttt{3elt}} $(\abs{V}=4720, \abs{E}=13722, \text{sparsity}=0.123\text{\%})$ \quad Figures are at 150 iterations.}      \\
-    \raisebox{-.5\height}{\includegraphics[width=0.55\columnwidth]{plot/3elt.pdf}}     &
-    \makecell{\small{\textsf{FR}}                                                                                                                        \\[-0.2em]\includegraphics[width=0.27\columnwidth]{vis/3elt_FR.png}} &
-    \makecell{\small{\textsf{L-BFGS}}                                                                                                                    \\[-0.2em]\includegraphics[width=0.27\columnwidth]{vis/3elt_L-BFGS.png}} &
-    \makecell{\small{\textsf{\textbf{CN}-FR}}                                                                                                            \\[-0.2em]\includegraphics[width=0.27\columnwidth]{vis/3elt_CN-FR.png}} &
-    \makecell{\small{\textsf{\textbf{CN}-L-BFGS}}                                                                                                        \\[-0.2em]\includegraphics[width=0.27\columnwidth]{vis/3elt_CN-L-BFGS.png}} &
-    \makecell{\small{\textsf{BEST}}                                                                                                                      \\[-0.2em]\includegraphics[width=0.27\columnwidth]{vis/opt_3elt.png}} \\
-  \end{tabular}
-  % \caption{Experiment results for various graphs. \textsf{CN} denotes Coordinate Newton, representing our proposed methods. See \cref{ssec:exprDetail} for further details.}
-  % \label{fig:individual}
-% \end{figure*}
+  \multicolumn{6}{c}{\large \textbf{\texttt{3elt}} $(\abs{V}=4720, \abs{E}=13722, \text{sparsity}=0.123\text{\%})$ \quad Figures are at 150 iterations.}      \\
+  \raisebox{-.5\height}{\includegraphics[width=0.55\columnwidth]{plot/3elt_FR.pdf}}     &
+  \makecell{\textsf{RAND-FR}                                                                                                                                  \\[-0.2em]\includegraphics[width=0.27\columnwidth]{vis/3elt_FR_FR.png}} &
+  \makecell{\textsf{\textbf{CN}-FR (proposed)}                                                                                                                \\[-0.2em]\includegraphics[width=0.27\columnwidth]{vis/3elt_CN-FR_FR.png}} &
+  \makecell{\textsf{RAND-L-BFGS}                                                                                                                              \\[-0.2em]\includegraphics[width=0.27\columnwidth]{vis/3elt_L-BFGS_FR.png}} &
+  \makecell{\textsf{\textbf{CN}-L-BFGS (proposed)}                                                                                                            \\[-0.2em]\includegraphics[width=0.27\columnwidth]{vis/3elt_CN-L-BFGS_FR.png}} &
+  \makecell{\textsf{BEST}                                                                                                                                     \\[-0.2em]\includegraphics[width=0.27\columnwidth]{vis/opt_3elt_FR.png}} \\
+\end{tabular}
 
 \end{document}

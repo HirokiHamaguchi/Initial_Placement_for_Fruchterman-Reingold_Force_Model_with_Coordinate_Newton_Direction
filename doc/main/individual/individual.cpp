@@ -3,22 +3,22 @@
 
 int main()
 {
-  const int NUM_SEEDS = 3;
+  const int NUM_SEEDS = 2;
 
   std::vector<std::string> matrixNames = {
       "cycle300",
       "jagmesh1",
-      // "btree9",
-      // "1138_bus",
-      // "dwt_1005",
-      // "dwt_2680",
-      // "3elt",
+      "btree9",
+      "1138_bus",
+      "dwt_1005",
+      "dwt_2680",
+      "3elt",
   };
 
   std::vector<ForceModelType> models = {
-      // ForceModelType::FR,
+      ForceModelType::FR,
       ForceModelType::Eades,
-      // ForceModelType::HC,
+      ForceModelType::HC,
   };
 
   const int MAX_ITER = 200;

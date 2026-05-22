@@ -234,6 +234,7 @@
     },
     "latexlint.userDefinedRules": [
         "FR force model",
-        "FR model"
+        "FR model",
+        "Prob\\."
     ]
 }
