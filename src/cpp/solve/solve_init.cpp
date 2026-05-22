@@ -85,7 +85,6 @@ void solve_init(const Problem &problem, const bool measureTime, const int seed,
   }
 
   auto finalPos = grid.toPosition();
-  double finalScaling = problem.optimalScaling(finalPos);
-  dbg(finalScaling);
+  problem.optimalScaling(finalPos);
   positions.push_back(finalPos);
 }

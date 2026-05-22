@@ -184,8 +184,6 @@ public:
       }
     }
 
-    dbg(Cql, C1, Cm1);
-
     // Optimize in log-space: s = exp(t)
     double t = std::log(0.1);
 
