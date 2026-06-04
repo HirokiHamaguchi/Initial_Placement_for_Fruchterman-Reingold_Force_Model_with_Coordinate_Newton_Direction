@@ -6,22 +6,25 @@ int main()
   const int NUM_SEEDS = 2;
 
   std::vector<std::string> matrixNames = {
-      "cycle300",
-      "jagmesh1",
-      "btree9",
+      // "cycle300",
+      // "jagmesh1",
+      // "btree9",
       "1138_bus",
-      "dwt_1005",
-      "dwt_2680",
-      "3elt",
+      // "dwt_1005",
+      // "dwt_2680",
+      // "3elt",
   };
 
   std::vector<ForceModelType> models = {
-      ForceModelType::FR,
+      // ForceModelType::FR,
       ForceModelType::Eades,
       ForceModelType::HC,
   };
 
+  // Default max iterations
   const int MAX_ITER = 200;
+  // Compute the optimal solution with the seed 1
+  const int MAX_ITER_2 = 500;
 
   for (auto model : models)
   {
@@ -37,17 +40,16 @@ int main()
 
     for (auto matrixName : matrixNames)
     {
-      Problem problem(matrixName, model);
+      Problem problem(matrixName, model, false, true);
       histStr += matrixName + "\n";
       std::cout << matrixName << std::endl;
+
       for (auto &method : methods)
       {
         histStr += MethodStr[method] + "\n";
         std::cout << MethodStr[method] << std::endl;
 
-        // Since dwt_1005 can fail with seed 1, we slightly modify the seed
-        const int opt_seed = 1 + int(problem.matrixName == "dwt_1005");
-        dbg("opt_seed: " + std::to_string(opt_seed));
+        const int opt_seed = 1;
 
         // Solve by each method
         // https://stackoverflow.com/questions/8049556/what-s-the-difference-between-srand1-and-srand0
@@ -66,7 +68,6 @@ int main()
           histStr += "Score: " + std::to_string(score) + "\n";
           std::cout << "Elapsed time: " << time << " seconds" << std::endl;
           std::cout << "Score: " << score << std::endl;
-          // Output the result (Since dwt_1005 can fail with seed 1, we slightly modify)
           if (seed == opt_seed)
             problem.printOutput(positions,
                                 "doc/main/individual/out/" + problem.matrixName + "_" +
@@ -76,8 +77,6 @@ int main()
         if (method != CN_L_BFGS)
           continue;
 
-        // Compute the optimal solution with the seed 1
-        const int MAX_ITER_2 = 500;
         auto [_, medPos] = solve(method, problem, true, opt_seed, MAX_ITER_2);
         problem.printOutput(medPos, "doc/main/individual/out/opt_" + problem.matrixName + "_" + modelStr + ".out");
       }
