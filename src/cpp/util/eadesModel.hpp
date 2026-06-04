@@ -17,7 +17,9 @@ class EadesModel : public ForceModel
 public:
   EadesModel(size_t _n, size_t _m, std::vector<size_t> &_row,
              std::vector<size_t> &_col, std::vector<double> &_data)
-      : k1(1.0), k2(1.0), epsilon_r(1e-10)
+      : k1(2.0), k2(1.0), epsilon_r(1e-3)
+  // For values of k1 and k2, see Hosobe http://www.hosobe.org/wp-content/uploads/pvis2012.pdf
+  // and Eades https://www.cs.ubc.ca/~will/536E/papers/Eades1984.pdf
   {
     n = _n;
     m = _m;
@@ -42,8 +44,7 @@ public:
       {
         for (size_t v = u + 1; v < n; ++v)
         {
-          double d = std::max(epsilon_r,
-                              (position.segment<2>(2 * u) - position.segment<2>(2 * v)).norm());
+          double d = epsilon_r + (position.segment<2>(2 * u) - position.segment<2>(2 * v)).norm();
           score += k2 / d;
         }
       }
@@ -54,9 +55,8 @@ public:
     {
       size_t u = row[i];
       size_t v = col[i];
-      double a = std::max(epsilon_r, data[i]); // target distance
-      double d = (position.segment<2>(2 * u) - position.segment<2>(2 * v)).norm();
-      d = std::max(epsilon_r, d);
+      double a = data[i]; // target distance
+      double d = epsilon_r + (position.segment<2>(2 * u) - position.segment<2>(2 * v)).norm();
       score += k1 * d * (std::log(d / a) - 1.0);
     }
 
@@ -76,7 +76,7 @@ public:
       {
         double dx = x[2 * u] - x[2 * v];
         double dy = x[2 * u + 1] - x[2 * v + 1];
-        double d = std::max(epsilon_r, std::hypot(dx, dy));
+        double d = epsilon_r + std::hypot(dx, dy);
         score += k2 / d;
 
         // gradient: -k2 / d^2 * (x_i - x_j) / d = -k2 * (x_i - x_j) / d^3
@@ -95,8 +95,8 @@ public:
       size_t v = col[i];
       double dx = x[2 * u] - x[2 * v];
       double dy = x[2 * u + 1] - x[2 * v + 1];
-      double a = std::max(epsilon_r, data[i]); // target distance
-      double d = std::max(epsilon_r, std::hypot(dx, dy));
+      double a = data[i];
+      double d = epsilon_r + std::hypot(dx, dy);
       double log_da = std::log(d / a);
 
       // score: k1 * d * (log(d / a) - 1)
@@ -118,7 +118,7 @@ public:
   {
     // Attractive force (discrete phase)
     // gradient: k1 * log(d / a) * (x_i - x_j) / d
-    double d = std::max(epsilon_r, dist);
+    double d = epsilon_r + dist;
     double log_ratio = std::log(d / a);
     double coeff_g = k1 * log_ratio / d;
     gx += coeff_g * dx;
@@ -136,21 +136,11 @@ public:
     // We minimize:
     //   phi(s) = sum k1 * s*d_ij * (log(s*d_ij / a_ij) - 1) + sum k2 / (s*d_ij)
     //          = Cql * s log s + C1 * s + Cm1 / s
+    // with Cql = sum k1 * d_ij, C1 = sum k1 * d_ij * (log(d_ij / a_ij) - 1), Cm1 = sum k2 / d_ij
     //
-    // Let s = exp(t), then:
-    //
-    //   psi(t) = phi(exp(t))
-    //          = Cql * exp(t) * t + C1 * exp(t) + Cm1 * exp(-t)
-    //
-    // Derivatives:
-    //
-    //   psi'(t)  = Cql * exp(t) * (t + 1)
-    //             + C1 * exp(t)
-    //             - Cm1 * exp(-t)
-    //
-    //   psi''(t) = Cql * exp(t) * (t + 2)
-    //             + C1 * exp(t)
-    //             + Cm1 * exp(-t)
+    // The derivatives are:
+    //   phi'(s) = Cql * (log s + 1) + C1 - Cm1 / s^2
+    //   phi''(s) = Cql * (1/s) + 2 Cm1 / s^3
 
     double Cql = 0.0;
     double C1 = 0.0;
@@ -184,33 +174,36 @@ public:
       }
     }
 
-    // Optimize in log-space: s = exp(t)
-    double t = std::log(0.1);
+    double s = 1.0;
+    double bestScore = Cql * s * std::log(s) + C1 * s + Cm1 / s;
+    for (int s_exp = -50; s_exp <= 50; ++s_exp)
+    {
+      double s_test = std::pow(1.05, s_exp);
+      double testScore = Cql * s_test * std::log(s_test) + C1 * s_test + Cm1 / s_test;
+      if (testScore < bestScore)
+      {
+        bestScore = testScore;
+        s = s_test;
+      }
+    }
 
     for (int iter = 0; iter < 20; ++iter)
     {
-      const double et = std::exp(t);
-      const double emt = 1.0 / et;
-
-      const double grad =
-          Cql * et * (t + 1.0) + C1 * et - Cm1 * emt;
-
-      const double hess =
-          Cql * et * (t + 2.0) + C1 * et + Cm1 * emt;
-
+      const double grad = Cql * (std::log(s) + 1.0) + C1 - Cm1 / (s * s);
+      const double hess = Cql / s + 2 * Cm1 / (s * s * s);
       const double step = grad / hess;
-      const double t_new = t - step;
-
-      if (std::abs(t_new - t) < 1e-8)
+      double s_new = s - step;
+      s_new = std::max(1e-8, s_new);
+      if (std::abs(s_new - s) < 1e-8)
       {
-        t = t_new;
+        s = s_new;
         break;
       }
-
-      t = t_new;
+      s = s_new;
     }
 
-    const double s = std::exp(t);
+    double optimalScore = Cql * s * std::log(s) + C1 * s + Cm1 / s;
+    assert(optimalScore <= bestScore + 1e-6);
 
     position *= s;
     return s;

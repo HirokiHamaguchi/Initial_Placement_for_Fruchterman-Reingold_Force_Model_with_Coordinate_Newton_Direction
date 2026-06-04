@@ -28,13 +28,16 @@ void solve_init(const Problem &problem, const bool measureTime, const int seed,
 {
   Grid grid(problem.n, seed);
   auto firstPos = grid.toPosition();
-  double initScaling = problem.optimalScaling(firstPos);
-  grid.scale(initScaling);
+  if (problem.modelType == ForceModelType::HC || problem.modelType == ForceModelType::Eades)
+  {
+    double initScaling = problem.optimalScaling(firstPos);
+    grid.scale(initScaling);
+  }
 
   // initialize random number generator
   std::mt19937 gen(seed);
   std::uniform_int_distribution<int> distVertex(0, problem.n - 1);
-  std::uniform_real_distribution<double> distHexR(0, 1);
+  std::uniform_real_distribution<double> distHexR(0, grid.grid_size);
   std::uniform_real_distribution<double> distHexTheta(0, 2 * M_PI);
 
   // simulated annealing parameters

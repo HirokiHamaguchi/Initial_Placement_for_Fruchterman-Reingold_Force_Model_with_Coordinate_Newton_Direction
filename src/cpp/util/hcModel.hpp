@@ -16,7 +16,7 @@ class HCModel : public ForceModel
 public:
   HCModel(size_t _n, size_t _m, std::vector<size_t> &_row,
           std::vector<size_t> &_col, std::vector<double> &_data)
-      : k1(1.0), k2(1.0), epsilon_r(1e-10)
+      : k1(1.0), k2(1.0), epsilon_r(1e-3)
   {
     n = _n;
     m = _m;
@@ -41,9 +41,8 @@ public:
       {
         for (size_t v = u + 1; v < n; ++v)
         {
-          double d = std::max(epsilon_r,
-                              (position.segment<2>(2 * u) - position.segment<2>(2 * v)).norm());
-          score += k2 / std::max(epsilon_r, d);
+          double d = epsilon_r + (position.segment<2>(2 * u) - position.segment<2>(2 * v)).norm();
+          score += k2 / d;
         }
       }
     }
@@ -78,8 +77,7 @@ public:
         {
           double dx = x[2 * u] - x[2 * v];
           double dy = x[2 * u + 1] - x[2 * v + 1];
-          double d = std::hypot(dx, dy);
-          d = std::max(epsilon_r, d);
+          double d = epsilon_r + std::hypot(dx, dy);
 
           // score: k2 / d
           score += k2 / d;
@@ -102,8 +100,7 @@ public:
       double a = data[i]; // target distance
       double dx = x[2 * u] - x[2 * v];
       double dy = x[2 * u + 1] - x[2 * v + 1];
-      double d = std::hypot(dx, dy);
-      d = std::max(epsilon_r, d);
+      double d = epsilon_r + std::hypot(dx, dy);
 
       // score: k1/2 * (d - a)^2
       double diff = d - a;
@@ -126,7 +123,7 @@ public:
     // Attractive force only (for discrete phase)
     // gradient: k1 * (d - a) * (x_i - x_j) / d
     // Hessian: k1/d * ((d - a) * I + a * (x_i - x_j)(x_i - x_j)^T / d^2)
-    double d = std::max(epsilon_r, dist);
+    double d = epsilon_r + dist;
     double diff = d - a;
     double coeff_g = k1 * diff / d;
     double coeff_h = k1 / d;
@@ -174,6 +171,17 @@ public:
 
     // Newton optimization
     double s = 1.0;
+    double bestScore = C2 * s * s + C1 * s + Cm1 / s;
+    for (int s_exp = -50; s_exp <= 50; ++s_exp)
+    {
+      double s_test = std::pow(1.05, s_exp);
+      double testScore = C2 * s_test * s_test + C1 * s_test + Cm1 / s_test;
+      if (testScore < bestScore)
+      {
+        bestScore = testScore;
+        s = s_test;
+      }
+    }
 
     for (int iter = 0; iter < 20; ++iter)
     {
@@ -189,6 +197,9 @@ public:
       }
       s = s_new;
     }
+
+    double optimalScore = C2 * s * s + C1 * s + Cm1 / s;
+    assert(optimalScore <= bestScore + 1e-6);
 
     position *= s;
     return s;
