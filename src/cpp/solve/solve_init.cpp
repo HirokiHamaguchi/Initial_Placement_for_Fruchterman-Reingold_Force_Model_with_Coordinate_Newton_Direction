@@ -41,7 +41,8 @@ void solve_init(const Problem &problem, const bool measureTime, const int seed,
   std::uniform_real_distribution<double> distHexTheta(0, 2 * M_PI);
 
   // simulated annealing parameters
-  const int ITERATIONS = 2 * problem.n * (problem.n * problem.n / problem.m);
+  const int rawIterations = 2 * problem.n * (problem.n * problem.n / problem.m);
+  const int ITERATIONS = problem.n >= 300000 ? std::min(rawIterations, 100) : rawIterations;
   const double T0 = +1.5;
   const double T1 = +0;
 
