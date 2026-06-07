@@ -55,9 +55,7 @@ struct Problem
   }
 
   Problem(const std::string matrixName,
-          ForceModelType _modelType = ForceModelType::FR,
-          bool is1 = false,
-          bool clipWeight = false)
+          ForceModelType _modelType = ForceModelType::FR, bool is1 = false)
       : matrixName(matrixName), modelType(_modelType)
   {
     // if is1, then all edge weights are set to 1
@@ -126,8 +124,6 @@ struct Problem
         c--;
         if (r == c)
           continue;
-        if (clipWeight)
-          w = std::min(10.0, std::max(1e-1, w));
         edges[std::minmax(r, c)] += std::abs(w);
       }
     }
@@ -174,6 +170,7 @@ struct Problem
 
   void makeAdj()
   {
+    adj.clear();
     adj.resize(n);
     for (size_t i = 0; i < m; ++i)
     {
