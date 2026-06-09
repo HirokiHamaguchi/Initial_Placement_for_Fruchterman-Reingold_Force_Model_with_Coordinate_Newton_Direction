@@ -233,8 +233,9 @@
         "csignal": "cpp"
     },
     "latexlint.userDefinedRules": [
-        "FR force model",
-        "FR model",
-        "Prob\\."
+        "Prob\\.",
+        "problem~\\\\eqref\\{prob:fr\\}",
+        "cref\\{prob:fr\\}",
+        "[sS]imulation [bB]ased"
     ]
 }

@@ -8,6 +8,7 @@
 \usepackage{csquotes}
 \usepackage[hidelinks]{hyperref}
 \usepackage{pifont}
+\usepackage{physics}
 
 % --- Metadata (edit these fields as needed) ---
 \newcommand{\EditorName}{Stephen Kobourov}
@@ -24,12 +25,6 @@
   \noindent\textbf{Response:}%
 }{%
   \medskip
-}
-\newenvironment{addedContent}{%
-  \begin{quote}
-  \color{orange}
-}{%
-  \end{quote}
 }
 
 \begin{document}
@@ -90,46 +85,64 @@ We have revised the manuscript to address the concerns regarding the relationshi
 
   However, this submitted paper adopts an unusual approach that combines a Newton-like method with the FR model.
   I understand that the paper is focused only on the computation of initial layouts, but I think that the validation of adopting this approach is still insufficient.
+}
+\begin{response}
+  詳細にありがとうございます。これらの見解それ自体については、我々の方でも相違はありません。
+\end{response}
 
+
+\reviewercomment{
   It should be noted that the experimental results in Section 5 show that the proposed initial layout algorithm works better when it is combined with the L-BFGS algorithm for computing final layouts.
-  It seems from Figure 6 that the combination of the proposed initial layout algorithm with the FR algorithm for computing final layouts does not work well except in limited cases like jagmesh1.
+}
 
+\begin{response}
+  まず、我々は従来の原稿において、いくつか誤解を与えかねない表現があったと認識しており、申し訳なく思っています。
+
+  前提として、reviewer A氏のコメントは、FR algorithm vs. L-BFGSという、初期化後のアルゴリズムの比較について主に議論なさっていますが、我々が本当に主張したいのは、Random initialization vs. Coordinate Newton initialization、あるいは、SA-based initialization vs. Coordinate Newton initializationという、初期化の方法の比較です。なので、``the proposed initial layout algorithm works better when it is combined with the L-BFGS algorithm for computing final layouts''というのは提案手法以外に関する部分の優劣に起因しており、提案手法の優劣とは無関係です。
+
+  このご指摘について、我々の方でもどのように対応すべきか悩んだのですが、以下の2つの方向性で原稿を修正しています。
+
+  まず、一つ目が、先述の通り、ご指摘の点は単に先行研究の差であって、提案手法の優劣とは無関係である、ということを明確にすることです。
+  CN-LBFGSと題している結果が一番よい結果であり、かつCN-FRよりも優れているというは確かな実験結果から読み取れることです。しかし、それはあくまで先行研究部分の差であって、我々はそこに注力していません。
+  我々が本当に比較してほしいのは、RAND-FR vs. CN-FR、あるいはRAND-LBFGS vs. CN-LBFGSの差であって、そこに注目する価値がある、ということをSection 5において明確にしました。
+
+  そして、二つ目が、先述の誤解を生じさせる表現を改めることです。従来の原稿では、reviewer B氏にも指摘されていた通り、L-BFGSの優位性をintroductionなどでも言及していたために、L-BFGS自体も提案手法に含まれてしまうような印象を与えてしまっていました。しかし、Fig. 1などが示す通り、提案手法とL-BFGSは完全に独立した要素であって、もし読者がFR algorithmの方を使いたいのであれば、それを使っても構わず、寧ろFRと組み合わせた場合も提案手法の想定する範囲内です。それらが伝わるように、introなどでの表現を改め、論点を明確にしました。
+
+  (次のresponseに議論は続きます。)
+\end{response}
+
+\reviewercomment{
+  It seems from Figure 6 that the combination of the proposed initial layout algorithm with the FR algorithm for computing final layouts does not work well except in limited cases like jagmesh1.
+}
+
+\begin{response}
+  直前のコメントにも関連しますが、特にこの部分は明確に誤解に基づいていると考えており、proposed methodは、Figure 6ではjagmesh1以外の全てのケースで提案手法が優越しており、かつその差も数値的・視覚的に十分優意なレベルであると考えています。
+
+  恐らく、Figure 6の見方などに問題があったのではないかと考えています。
+  このような誤解を防ぐためにも、提案手法を太字にし、CNという我々の提案手法の方には明確に(proposed)という文言を加え、また列の並び替えをしてよりrandom initialization vs. proposed methodの比較が顕著に分かるように改善しました。また、本文でもその点を明確にclarifyしました。
+\end{response}
+
+\reviewercomment{
   If the authors think that the proposed algorithm should be combined with the L-BFGS, they should adopt the KK model instead of the FR model, which would be more natural and more persuasive.
+}
+
+\begin{response}
+  以上の説明からも分かる通り、我々はあくまで提案手法はFR algorithmと組み合わせても、L-BFGSと組み合わせても、どちらでも効果があると考えています。なので、``should be''と言う訳ではありません。
+
+  実際、Rand-FR vs. CN-FRの差の方が、Rand-LBFGS vs. CN-LBFGSの差よりも大きいケースも多く、寧ろFR algorithmと組み合わせた場合の方が、提案手法の効果が大きく出ているケースも多いです。
+  よって、KK modelを採用すべきだというご指摘には、この段階では特に明示的に対処していません。
+  (ただし、後述するように、他のforce modelとのcombinationの検討や、その一般化は、非常に価値のある議論だと感じており、別途subsectionを設けて議論を追加しました。この点については後ほどまた説明します。)
+
+  その上で、最終的に一番良い結果を得たい、という読者にとっては、提案手法とは完全に独立に、あくまで先行研究に基づく一般論として、FR algorithmよりもL-BFGSの方が最適化手法として優れているために、よい結果を得やすい、ということは確かに言えると思います。その点についても明確にすることで、本指摘に対して十分にお答えできていることを願っています。
+\end{response}
+
+\reviewercomment{
   If the authors think that the proposed algorithm works well for the FR layout algorithm (or another simulation-based algorithm), they should more deeply explore this direction and present clearer results in the paper.
 }
 
 \begin{response}
-  ご指摘に感謝いたします。
-  原稿では確かになぜ我々が FR モデルに焦点を当てたのかを十分に正当化できていませんでした。
-  このご指摘に対し、我々は次の2点を明確にすることで、FRモデルに焦点を当てることの正当性を示したいと思います。
-
-  まず、1点目。
-  本研究の焦点は、Prob. (1)に対して、どのようにすればより効率的な最適化手法を開発できるか、という点にあります。
-  恐らく、本論文の動機や主結果を誤解されていると思うので、そこを明確にします。
-  確かにHosobeの結果はFRモデルよりもKKモデルの方がL-BFGSに適していることを示唆しています。
-  L-BFGSはKKモデルとの方が親和性が良いというは、はっきりとした事実であると思います。
-  しかし、だからこそ我々はFRモデルに着目していると言えます。
-  ご存じの通り、グラフ描画を行うとは、すなわちFR モデル(Prob. (1))に対する最適化を行うことを意味します。
-  元々提案されていたFR algorithmはこのProb. (1)に対する最急降下法として解釈できます。
-  一方で、Hosobeらの主張は、このProb. (1)に対してL-BFGS法を適用することで、最急降下法よりも改善は出来るが、KKモデル程の改善ではない、というものでした。
-  そして本提案は、このProb. (1)に対して、Coordinate Newton direction+L-BFGSという最適化手法を用いれば、より大きな改善が得られることを示すものです。
-  L-BFGSがFR modelにあまり適していないというのは、FRモデルの問題点であるというよりも、はるかにL-BFGSがFRモデルに固有の構造を活かして最適化できていないということを示唆するものになっています。
-  なので、L-BFGSがFRモデルに向いていないというご指摘は、むしろ、我々の提案の重要性を強調するものであると言えます。
-  この枠組みは、sec.3でより明確に示しました。
-
-  Section 5の実験結果については、確かに、提案手法とFRアルゴリズムの組み合わせは、L-BFGSとの組み合わせほどの改善を示さないことが多いです。
-  しかし、それは我々の主張と矛盾していません。
-  なぜなら、我々の最終的な主張は、$\mathrm{FR}<\mathrm{L-BFGS} \approx \mathrm{CN+FR} < \mathrm{CN+L-BFGS}$ の順でより効率的になっている、というものであって、必ずしもFRアルゴリズムがL-BFGSよりも優れているということを主張するものではないからです。
-
-  1点目の結論としては、FRモデルに対してL-BFGSはあまり適していない、だからこそ我々はそれを改善したのだ、ということになります。
-
-  続いて、2点目。
-  ご指摘の通り、今回の枠組みは、より広くとらえれば、KKモデルなどの他の力学モデルにも適用可能なものになっています。
-  この点については、従来の書き方は過度に限定してしまっており、そこは大きな改善を行いました。
-  KKモデルに対しても、同様の手法を適用することで、より効率的な最適化が可能になることを示す実験も追加しました。
-
-  その上で、FRモデルはKKモデルと比較すると、グラフの疎性が活かしやすいという特徴があります。
-  それが、今回FRモデルに着目したもう一つの理由です。
+  繰り返しになりますが、我々の主張としては、FR algorithmと組み合わせるべき、L-BFGS algorithmと組み合わせるべき、ということではなく、両方ともがproposed algorithmとなります。
+  先述のように、この点について明確になるように原稿を修正しました。
 \end{response}
 
 \subsection{Difference Between FR and KK Models}
@@ -140,66 +153,119 @@ We have revised the manuscript to address the concerns regarding the relationshi
   Here the authors first say "Although we utilized the coordinate Newton direction only for the optimization problem (1), we can see that its application is not necessarily limited to the FR force model alone", and then present "objective functions arising from graphs".
   Does the authors mean that this discussion applies to other force models including the KK model?
   If so, I think that the authors should adopt the KK model instead of the FR model.
+}
 
+\begin{response}
+  示唆に富むご指摘に感謝いたします。この指摘に対する回答は2段階に分かれます。
+
+  一つ目は、ご指摘の通り、KK, HC, Eadesなどの他のforce modelに対しても、提案手法は適用可能です。
+  単にこの形の関数であれば同様にcoordinate Newton directionを定義できるためです。
+  二つ目は、しかしながら、KK modelに対しては、そのモデルの特性上、提案手法の効果が他modelほど顕著に出ない可能性がある、あるいは逆効果になり得る、ということです。
+
+  先に、HCやEadesと呼ばれるlayoutへの一般化について説明します。これらのforce modelは、Hosobe[19]の論文でも言及されているforce modelであって、実際に適用可能であり、かつその数値実験も行いました。結果として、本文で詳述する通り凸性の有無などの差もあるので、やや工夫などが必要にはなりますが、殆ど同様に提案手法が効果を発揮することが分かりました。これらの説明や数値実験結果を新たに本文やAppendixにも追加しています。なお、これらのmodelはFR modelと比較するとやや知名度が劣る為に、introでは示唆する程度の言及に留めており、また、本論文の題名についても変更を検討しましたが、このままにしようと考えています。
+
+  一方で、KK modelに対しては、提案手法の効果が他のモデルほど顕著に出ない可能性があると考えています。
+  これは、グラフの疎性を活かせるかどうかに大きく関係しています。提案手法は、頂点毎に、その頂点に接続する頂点を見ることで、その点にかかる力を計算し、それによって最適化していくことを旨としていました。
+  よって、問題において定義されているエネルギーの主要項が、高々$\order{\abs{E}}$個、つまり、辺の数に比例する数しかない場合には、愚直に計算する$\order{\abs{V}^2}$の他手法よりも遥かに高速に提案手法が動作する為、効果が顕著に出る可能性が高いと考えています。
+  これは、FR, HC, Eadesに共通する問題の特徴です。実際、``objective functions arising from graphs''の例も、このような形をしています。
+  しかし、KK modelにおいては、エネルギーの主要項が、全ての頂点ペアに対して定義されており、別途$\order{\abs{E}}$個の項が存在するような形ではありません。
+  これは、KK modelにおけるエネルギーの定義は、まず全点対のグラフ上の距離を計算し、その距離を基にエネルギー項を定義する、という形になっているためです。
+  そのため、頂点毎に力を計算したところで、大きな意味はなく、むしろ遅い収束の原因にもなりかねません。
+
+  なお、関連研究として、KK modelに対しては、SGDと呼ばれる別の最適化手法に基づく方法も従来提案されてきました([33] J. X. Zheng, S. Pawar, and D. F. M. Goodman, ``Graph Drawing by Stochastic Gradient Descent,'' IEEE Transactions on Visualization and Computer Graphics)。
+  これは、提案手法と対比的に、頂点毎に注目するのではなく、辺ごとに注目して、最適化を行う手法になっており、ある意味で本研究と補完的な関係にあると考えています。
+
+  これらの事情を踏まえて、Section 7.1はいったん削除し、代わりにSection 4.6などを中心にこの辺りをきちんと説明するように変更いたしました。
+\end{response}
+
+\reviewercomment{
   In addition, the authors present the graph isomorphism problem as an application of the proposed algorithm.
   I think that the KK model would be more suitable for this application than the FR model.
+}
+\begin{response}
+  ご指摘ありがとうございます。Graph isomorphismへの応用については、確かに仰る通りであり、我々の理解不足があったと認識しています。
+  この応用は FR モデルに特に自然なものとは言い難く、本論文の主たる貢献から読者の注意を逸らす可能性があるため、改訂稿ではこの議論を削除しました。
+\end{response}
 
+\reviewercomment{
   The following might work as hints for the authors' paper revision.
   Intuitively, the FR model exhibits soft behavior while the KK model exhibits hard behavior.
   Therefore, the FR model is usually used for dynamic graph layouts like animation and interaction while the KK model is usually used for static layouts.
   Also, the FR model is sometimes used for very large graphs because simulation-based algorithms for the FR model can be more scalable than Newton-like algorithms for the KK model.
   One plausible direction for the authors might be to combine the proposed algorithm with a scalable simulation-based algorithm for the FR model and to apply it to very large graphs.
 }
-
 \begin{response}
-  示唆に富むご指摘に感謝いたします。
-  大まかには、先ほど述べた通りではありますが、実際にKK layoutへの一般化は可能であるため、その点を明確にしたsectionと実験の追加を行いました。
-
-  graph isomorphism への応用に関するご指摘にも同意いたします。
-  この応用は FR モデルに特に自然なものとは言い難く、本論文の主たる貢献から読者の注意を逸らす可能性があるため、改訂稿ではこの議論を削除しました。
-
-  また、animationやインタラクションのような動的なグラフ描画シナリオにおいて、FRモデルのsoft behaviorが特に適していることは、非常に重要な観点だと思っています。
-  section 6.1などでこの点に言及し、さらに、提案手法がこのようなシナリオにおいても有用である可能性について議論を追加しました。
+  貴重なhintを提供して下さったことについて、心より感謝申し上げます。
+  animationやインタラクションのような動的なグラフ描画シナリオにおいて、FRモデルのsoft behaviorが特に適していることは、非常に重要な観点だと思っています。
+  我々もこの観点には非常に賛同しており、このような応用は我々が本研究に取り組むにあたってのモチベーションの一つでもありました。
+  \textcolor{red}{section ??}でもこの点に言及し、我々の提案した初期配置とも交えながら、この点について説明を加えました。
 \end{response}
 
 \subsection{Notation}
 
 \reviewercomment{
-  The following are minor comments.
-
-  - Symbol E is used for two different purposes, one to indicate a set of graph edges and the other to indicate energies between nodes possibly with subscripts and superscripts.
+  Symbol $E$ is used for two different purposes, one to indicate a set of graph edges and the other to indicate energies between nodes possibly with subscripts and superscripts.
   It will be better to use different symbols for these different concepts.
-
-  - I wonder if \((i, j) \in V^2\) with \(i \ne j\) in (1) is appropriately intended.
-  This treats both \((i, j)\) and \((j, i)\) in the sum.
-
-  - Symbol \(\epsilon\) appears only once in Subsection 4.4, which seems strange.
-
-  - Symbol \(f_i\) at line 6 of Algorithm 1 probably lacks the superscript ``a''.
-
-  - In Subsection 5.3, the word ``L-BFGS'' that appears as superscripts of \(N\) does not seem to be correctly specified.
-  The hyphen mark looks too long.
-
-  - In the optimization problem called ``objective functions arising from graphs'' in Subsection 7.1, ``='' probably should be ``:=''. % LLDisable
-
-  - The header of Subsection 8.1 seems to have a problem with the hyphen mark again.
 }
 
 \begin{response}
-  Thank you for pointing out these notation and typography issues.
-  We addressed them as follows.
-  \begin{itemize}[label=\textbullet, itemsep=0pt, parsep=0pt]
-    \item We avoided the symbol conflict by using a dedicated symbol for the edge set (so that the energy terms $U_{i,j}$ are not confused with the edge set).
-    \item We intended the sum to be over all ordered pairs of distinct vertices, so that both $(i,j)$ and $(j,i)$ are included.
-    We clarified this in the text and notation.
-    \item We clarified the role of $\epsilon$ as the minimum separation in the discrete point set $Q$ and its use in preventing divergence.
-    \item We corrected the missing superscript in Algorithm~1 (the update uses the attractive-only objective $f_i^{\mathrm{a}}$).
-    \item Regarding the reviewer's note on the ``L-BFGS'' superscripts: the hyphen was already intended as a proper hyphen in math mode, but its appearance can still be misleading.
-    To avoid confusion, we now use the spelling ``LBFGS'' when it appears inside math expressions (e.g., in superscripts), while keeping the standard spelling ``L-BFGS'' in running text.
-    \item We corrected the definition symbol in the ``objective functions arising from graphs'' formulation.
-    \item We checked the subsection headers and ensured hyphenation uses proper LaTeX conventions.
-  \end{itemize}
+  Thank you for pointing this out.
+  We avoided the symbol conflict by using a dedicated symbol for the edge set, so that the energy terms $U_{i,j}$ are not confused with the edge set.
 \end{response}
+
+\reviewercomment{
+  I wonder if $(i, j) \in V^2$ with $i \ne j$ in (1) is appropriately intended.
+  This treats both $(i, j)$ and $(j, i)$ in the sum.
+}
+
+\begin{response}
+  We intended the sum to be over all ordered pairs of distinct vertices, so that both $(i,j)$ and $(j,i)$ are included.
+  We clarified this in the text and notation.
+\end{response}
+
+\reviewercomment{
+  Symbol $\epsilon$ appears only once in Subsection 4.4, which seems strange.
+}
+
+\begin{response}
+  We clarified the role of $\epsilon$ as the minimum separation in the discrete point set $Q$ and its use in preventing divergence.
+\end{response}
+
+\reviewercomment{
+  Symbol $f_i$ at line 6 of Algorithm 1 probably lacks the superscript ``a''.
+}
+
+\begin{response}
+  We corrected the missing superscript in Algorithm~1.
+  The update now uses the attractive-only objective $f_i^{\mathrm{a}}$.
+\end{response}
+
+\reviewercomment{
+  In Subsection 5.3, the word ``L-BFGS'' that appears as superscripts of $N$ does not seem to be correctly specified.
+  The hyphen mark looks too long.
+}
+
+\begin{response}
+  Regarding the reviewer's note on the ``L-BFGS'' superscripts: the hyphen was already intended as a proper hyphen in math mode, but its appearance could still be misleading.
+  To avoid confusion, we now use the spelling ``LBFGS'' when it appears inside math expressions, for example in superscripts, while keeping the standard spelling ``L-BFGS'' in running text.
+\end{response}
+
+\reviewercomment{
+  In the optimization problem called ``objective functions arising from graphs'' in Subsection 7.1, ``='' probably should be ``:=''.
+}
+
+\begin{response}
+  We corrected the definition symbol in the ``objective functions arising from graphs'' formulation.
+\end{response}
+
+\reviewercomment{
+  The header of Subsection 8.1 seems to have a problem with the hyphen mark again.
+}
+
+\begin{response}
+  We checked the subsection headers and ensured that hyphenation uses proper LaTeX conventions.
+\end{response}
+
 
 \bigskip
 
@@ -300,10 +366,10 @@ We have revised the manuscript to improve the framing of the contribution, the d
   We also clarified that the effect should be judged not only by the final objective value, but also by the early-stage convergence behavior and runtime.
 \end{response}
 
-\subsection{Singularities in dwt_\\_992 and collins_15NN}
+\subsection{Singularities in dwt\_992 and collins\_15NN}
 
 \reviewercomment{
-  The dwt_\\_992 and collins 15NN singularities could be described more.
+  The dwt\_992 and collins\_15NN singularities could be described more.
   Would it be possible to generalize, highlighting what makes these two cases so different from each other?
 }
 
