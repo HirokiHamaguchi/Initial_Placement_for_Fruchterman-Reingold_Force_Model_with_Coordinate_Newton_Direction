@@ -175,7 +175,7 @@ We have revised the manuscript to address the concerns regarding the relationshi
   なお、関連研究として、KK modelに対しては、SGDと呼ばれる別の最適化手法に基づく方法も従来提案されてきました([33] J. X. Zheng, S. Pawar, and D. F. M. Goodman, ``Graph Drawing by Stochastic Gradient Descent,'' IEEE Transactions on Visualization and Computer Graphics)。
   これは、提案手法と対比的に、頂点毎に注目するのではなく、辺ごとに注目して、最適化を行う手法になっており、ある意味で本研究と補完的な関係にあると考えています。
 
-  これらの事情を踏まえて、Section 7.1はいったん削除し、代わりにSection 4.6などを中心にこの辺りをきちんと説明するように変更いたしました。
+  これらの事情を踏まえて、Section 7.1はいったん削除し、代わりにSection 4.5などを中心にこの辺りをきちんと説明するように変更いたしました。
 \end{response}
 
 \reviewercomment{
@@ -285,9 +285,19 @@ We have revised the manuscript to improve the framing of the contribution, the d
 
 \begin{response}
   Thank you for pointing this out.
-  これについては、FRという語が、頂点間で引力や斥力などを定めているforce modelなのか、あるいはその平衡点を求める為のアルゴリズムなのか、という点で誤解が生じやすい表現になっていました。
-  元原稿では前者をFR force modelと呼び、後者をFR algorithmと呼んでいましたが、その誤解しやすさを鑑み、出来る限りFR force modelはthe force model of the FR algorithmやthe problem (1)などのように置き換えました。
-  また、section 2の該当箇所についても説明を改め、誤解が生じないようにしました。
+  これについては、FRという語が、頂点間で引力や斥力などを定めているforce modelなのか、あるいはその平衡点を求める為のアルゴリズムなのか、という点で誤解が生じやすくなっており、かつその誤解に基づくコメントだと認識しております。
+  大事なのは、従来の原稿において、FR force modelとFR algorithmは全くの別物として扱われているということです。
+  非常に誤解を招きやすい表現であったことを申し訳なく思います。
+
+  我々は、このご指摘を受けて、全面的に表現を改め、その差異がきちんと伝わるようにしました。
+  force model自体、つまり原稿のProblem (1)にあたる内容は従来通りFR force modelと呼び(これがtitleにも登場する語です)、
+  後者の平衡点を求めるアルゴリズム、つまり、原稿のAlgorithm 3をFR algorithmと呼んでいたものを、simulation-based algorithmと呼ぶことにし、かつそれがどのようなものかを明確に説明をするようにしました。
+  (さらに、これは世間一般にFR algorithmと呼ばれることもあるので、その点についても、誤解に十分気を付けながら説明を加えました。)
+
+  よって、sfdpがFRのprior workである、という表現は、あくまでsfdpのアルゴリズム的側面を指して言及していたものであって、ご指摘の通りmodel的側面を指して言及していたものではありません。
+  関連箇所も含めて、原稿全体を丁寧に修正しました。
+
+  繰り返しになりますが、FR force modelという問題それ自体と、simulation-based algorithmというその問題に対する解法は、全くの別物となっています。
 \end{response}
 
 \subsection{Discussion of Multilevel Approaches and Potential Applications}
@@ -296,8 +306,8 @@ We have revised the manuscript to improve the framing of the contribution, the d
 
 \begin{response}
   Thank you for the suggestion.
+  ご指摘の通り、multilevel approachesは、提案手法の応用例の一つとして非常に有望な方向性であると考えています。
   新しくSec. 6.1 を設けて、そのことについての議論を追加しました。
-  (ここで、6.1の内容を簡単に説明する。)
 \end{response}
 
 \subsection{Uncertain Framing of FR Versus L-BFGS}
@@ -305,16 +315,48 @@ We have revised the manuscript to improve the framing of the contribution, the d
 \reviewercomment{
   The framing of this paper is somewhat uncertain.
   Despite the paper title and general orientation towards FR, L-BFGS is consistently and repeatedly mentioned as a better alternative.
+}
+
+\begin{response}
+  恐らく、この点についても、先述の誤解、つまり、FRアルゴリズムとFRモデルの混同が原因かと思われます。誤解を招きやすい表現であったことを申し訳なく思います。
+  論文のtitleはFR force model、つまりthe problem (1)などの定式化を指し、algorithmを指している訳ではありません。
+  よって、上記のご指摘で言及されている我々の文章は、本来simulation-based algorithmよりもL-BFGSの方が良い結果を出しやすい、ということを意図しています。
+  この論文が対象としているのは、そのtitleも含めて、FR force model、つまり、the problem (1)に対する最適化問題であって、FR algorithmはその一つの解法に過ぎません。
+
+  更に言えば、FR algorithmとL-BFGS algorithmのどちらが優れているか、という点は、あくまで先行研究の差であって、提案手法の優劣とは無関係である、ということも明確にする必要があると考えています。
+  従来の原稿では、reviewer A氏にも指摘されていた通り、L-BFGSの優位性をintroductionなどでも言及していたために、L-BFGS自体も提案手法に含まれてしまうような印象を与えてしまっていました。
+  しかし、Fig. 1などが示す通り、提案手法とL-BFGSは完全に独立した要素であって、もし読者がsimulation-based algorithmの方を使いたいのであれば、それを使っても構わず、寧ろsimulation-based algorithmと組み合わせた場合も提案手法の想定する範囲内です。
+  それらが伝わるように、introなどでの表現を改め、論点を明確にしました。
+\end{response}
+
+\reviewercomment{
   Even in the related work section, in Section 3.1, only L-BFGS is mentioned as a ready-to-go measure for application in Multilevel approaches.
+}
+\begin{response}
+  これについても説明不足に起因しており、simulation-based algorithmの方を使いたければ、それでも全く構いませんし、むしろsimulation-based algorithmと組み合わせた方が、提案手法はより効果を発揮しやすいという点についても強調する必要がありました。説明を改めました。
+\end{response}
+
+\reviewercomment{
   In the experiments the paper explicitly mentions that FR is consistently outperformed by L-BFGS - then why we should use FR (even with the improved initial placement) at all?
   The paper does not make a good argument why we should choose that over the other, thus in a way making me question even the title of the paper.
+}
+\begin{response}
+  これも、先述の誤解に起因していると考えており、解き方、つまりどのアルゴリズムを使うかによらず、FR force modelという定式化自体が様々な応用を持つ重要な問題だから、というのが答えになります。
+  繰り返しになりますが、simulation-based algorithm (上記のコメントにおけるFR algorithm)との違いにご注意下さい。
+\end{response}
+
+\reviewercomment{
   In general, it's unclear what's the impact of this research and how researchers could build upon it.
 }
 
 \begin{response}
-  恐らく、この点についても、先述の誤解、つまり、FRアルゴリズムとFRモデルの混同が原因かと思われます。
-  この論文が対象としているのは、そのtitleも含めて、FR force model、つまり、the problem (1)に対する最適化問題であって、FR algorithmはその一つの解法に過ぎません。
-  先行研究でもこの問題自体はFR force modelと呼ばれているので、この語を完全になくしてしまうのは難しいのですが、慎重に表現を改め、またSec 3.1などにおいて、the problem (1)に対してアプローチしていくという表現に寄せることによって、framing等をより明確にしました。
+  以上の議論をまとめて、この論文のimpactと、どのように他の研究者たちがこの研究を基にしてさらに発展させることができるか、という点について明確にすると、
+  \begin{itemize}
+    \item impact: FR force modelを用いて定式化される問題設定に対して、simulation-based algorithmを使う場合でも、L-BFGS algorithmを使う場合でも、任意の手法に対して有効になりうる初期配置という解き方を提案し、実際それが様々なケースで効果を発揮することを示したこと。(更に言えば、reviewer A氏からの指摘にも関連して、その他のグラフ描画の問題設定に対しても、同様のアイデアが適用可能であることを示したこと。)
+    \item building upon: 例えば、multilevel approachesのような、FR force modelという問題に対する他の解法と組み合わせたり、他の最適化手法という別の解法と組み合わせたりすることができること。グラフ描画を上手くする定式などとは無関係であり、そのような後続研究とは比較的独立しているということ
+  \end{itemize}
+  ということになります。
+  これらの点についても、introductionを中心に、丁寧に説明を加えるようにしました。
 \end{response}
 
 \subsection{Expansion of the Evaluation Dataset}
@@ -331,8 +373,15 @@ We have revised the manuscript to improve the framing of the contribution, the d
 
 \begin{response}
   Thank you for the suggestion.
-  引用を追加した上で、
-  実験を追加します。(Appendixなどで良さそう)
+  ご提示の通り、Appendixにおいて、さらに多くのグラフを含むデータセットを拡張しました。(また、他のコメント等も踏まえて、図のpresentationの仕方なども大幅に改稿しています。)
+  全体的な傾向として、提案手法の有効性を、より広い種類のグラフに対して示すことができるようになったと考えています。
+
+  なお、[1]の論文を拝読し、そのデータセット等を確認しましたが、残念ながら既にリンクが切れてしまっているなどして、データセットを入手することができませんでした。
+  Internet Archiveなども確認しましたが、ダウンロードリンクは機能しておらず、完全にそれらのデータを入手することは出来ませんでした。
+  また、[1]の論文において引用されていた論文において使われていたデータセットなどについても使用を検討し、実際、SNAP dataset(\url{https://snap.stanford.edu/data/index.html})などの一部については実験してみました。
+  ただ、頂点数が1万を超えてくると、提案手法は問題なく作動することが多かったのですが、simulation-based algorithmやL-BFGS algorithmという、提案手法を使った後に使うべき書く手法の反復が非常に重くなり、あまり現実的ではありませんでした。やはり、このような超大規模なグラフに対しては、multilevel approachesなどの、よりスケーラブルな手法と組み合わせることが必要になると考えており、今後の有望な展開の一つであると思います。
+
+  データセットとして、超大規模なグラフに対する適用は残念ながら断念したため、完全にsolidなベンチマークセットを提供しているとは言い切れないのですが、可能な限りにおいて、様々な種類のグラフを含むようにデータセットを拡張したことを、ここにご報告いたします。
 \end{response}
 
 \subsection{Visualization and Color Map}
@@ -356,14 +405,35 @@ We have revised the manuscript to improve the framing of the contribution, the d
 \reviewercomment{
   One thing that comes out of the charts in Figure 6 is that this different initial positioning has limited effect on the way the objective function decreases over time - which is an interesting phenomenon.
   In FR, the chart appears shifted below by how ``better'' the initial positioning is, with the non-CN version never catching up.
+}
+
+\begin{response}
+  これについては、FR algorithm (i.e., simulation-based algorithm)の収束の遅さに起因していると考えています。
+  まず、Figure6で使ったようなグラフに対しては、ほぼ完全な平衡状態というのが一意に存在するようであり、グラフ毎に同一の最善な目的関数値に向かって収束していく様子が見られます。(もちろん、initial placementや後続のalgorithmによって、どのような解を経由して目的関数値が減少していくかには差異があります。)いわば、一番きれいに見えるgraph描画結果へと、もし十分に長いiteration数を許すならば、全ての手法が収束していくような状況になっています。
+
+  よって、simulation-based algorithmの方で初期配置の差がずっと残る、というは若干不正確な観察であると我々は考えています。
+  もし非常に長いiteration数を許すならば、simulation-based algorithmでも、L-BFGS algorithmと同様に、初期配置の差が徐々に薄れ、最終的には同一の目的関数値に収束していく様子が見られると思います。
+  尤も、simulation-based algorithmの収束の遅さゆえに、非常に長いiteration数を許す必要が出てくるので、グラフが見づらくなるなどの理由から、その程度のiteration数で打ち切っています。
+  (次のresponseに続きます。)
+\end{response}
+
+\reviewercomment{
   Differently, it seems that the objective functions of L-BFGS and CN-L-BFGS tend to converge before the iteration cap.
   Does this mean that the positive effect of the initial placement tends to fade faster with L-BFGS, despite the better initial condition?
 }
 
 \begin{response}
-  Yes, this interpretation is consistent with our observations.
-  We added a brief explanation in the experimental discussion: for FR, a better initialization tends to yield a persistent offset in the objective curve, whereas for L-BFGS the curves often converge earlier so the relative advantage can diminish once near-stationary points are reached.
-  We also clarified that the effect should be judged not only by the final objective value, but also by the early-stage convergence behavior and runtime.
+  そして、この現象についても、同様のことが言えます。(重要なこととして、提案手法そのものの優劣とは関係なく、先行研究どうしの優劣として、)FR algorithmよりもL-BFGS algorithmの方が、収束が速い、つまり、最適解へと到達するスピードが速い、ということが言えると思います。
+  当然、ある最適解に殆ど収束してしまえば、その後はどれだけiteration数を増やしても殆ど同じグラフlayoutのまま、力どうしが均衡を保ったような状態がつづきます。
+  その最適状態というのがグラフに応じて一意であるならば、当然初期配置による最適状態の差はありません。
+  なので、初期配置の差というのは寧ろ、どれだけ速くその最適状態へと近づけるか、という点に関係していると考えています。
+  原稿では、これらの点を明確に説明するように改訂しました。
+
+  なお、chartで示している目的関数の値は、そのままグラフの見た目の良さと完全に対応しているわけではない、ということも明確にする必要があると思います。
+  例えば、完全にランダムな状態における目的関数とやや綺麗な状態における目的関数値の差の方が、やや綺麗な状態と完全に綺麗な状態における目的関数値の差に比べてはるかに大きい、ということもあり得ます。
+  (一般に、連続最適化では、最適な目的関数値$\Phi(x^*)$が分かっている場合には、現在の目的関数値との差 $\Phi(x) - \Phi(x^*)$について、log-scaleでプロットすることも多いです。今回の実験では、最適な目的関数値が分かっていないために、単に目的関数値をプロットしています。)
+  なので、確かに目的関数値の差が十分小さくみえるような場合であっても(つまり、RAND-LBFGSとCN-LBFGSの差が十分小さくみえるような場合であっても)、グラフの見た目の差は十分にある、ということもあり得ます。
+  これらの点についても説明を追加し、そのような疑問を持つであろう読者にとって、より有益かつ納得感のある議論へと説明を改訂しました。
 \end{response}
 
 \subsection{Singularities in dwt\_992 and collins\_15NN}
@@ -399,6 +469,18 @@ We have revised the manuscript to improve the framing of the contribution, the d
   I am less persuaded from Sections 6 and 7.
   Section 6 includes considerations that I would include in Section 4, as to further justify your optimization design.
   I would also simplify the discussion, removing subsections and integrating their contents in Section 4.
+}
+
+\response{
+  ご指摘ありがとうございます。節の構成などについても、再度真剣に我々の方でも検討し、より分かりやすい構成にするように改訂しました。
+  まず、Section 6の内容については、KK layoutなどの内容は確かにSection 4の方が適切であると考え、Section 4.5などを新たに設けて、そちらに移動しました。
+  これによって、問題の何に提案手法は着目しているのか、という点について、より明確に説明できるようになったと思います。
+  ただ、Section 6の全ての内容を移してしまうと、どうしても実験結果などより見せたい結果などが論文のあとの方に押し込まれてしまうことを懸念し、一部は検討の上でそのままにしています。
+  また、Section 4については、一部の冗長な内容を削除し、いくつかの点でsimpleにすることを心がけました。
+  もしかすると完全に意図された通りの改変をしてはいないかも知れませんが、全体として原稿の完成度を高めることが出来たのではないかと思っています。
+}
+
+\reviewercomment{
   In Section 7 I would focus on the impact of this approach on graph drawing more specifically.
   For example, where is the next step for this technique, in the context of graph drawing?
   Will its presence in a drawing pipeline make a difference, or the gains in quality are not sufficient to justify its use?
@@ -406,8 +488,10 @@ We have revised the manuscript to improve the framing of the contribution, the d
 }
 
 \response{
-  これは応用例のsectionをReviwerAで答えたのと被る。
-  応用例を消すか、増やすか、記述をもっと精緻化するか。
+  Section 7については、Reviewer Aの指摘にも関連して、一部を削除し、一部をsection 4に移動しました。
+  まず、Section 7.1は従来は漠然とした応用例への示唆にとどまっていましたが、HCやEadesと呼ばれるlayoutへの一般化について明確にSection 4.5などを中心に説明するように変更しました。
+  実際、提案手法がそのようなグラフ描画問題に対しても有効であり、かつ現在の手法が有効であるには問題がどのような性質を持つべきかということも含めて、より詳細かつ分かりやすい形で示すことができたものと思っています。
+  そして、やはりmultilevel approachesは、提案手法の応用例の一つとして非常に有望な方向性であると考えているため、新しくSec. 6.1 を設けて、そのことについての議論を追加しました。
 }
 
 \subsection{Moving the Section 8 to the Appendix}
