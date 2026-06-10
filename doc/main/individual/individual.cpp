@@ -7,10 +7,18 @@
 
 namespace
 {
-  const int NUM_SEEDS = 3;
-  const int MAX_ITER = 200;   // Default max iterations
-  const int MAX_ITER_2 = 500; // Compute the optimal solution with the seed 1
-  const int OPT_SEED = 1;
+  int getIterations(ForceModelType model)
+  {
+    switch (model)
+    {
+    case ForceModelType::HC:
+      return 300;
+    case ForceModelType::Eades:
+      return 300;
+    default:
+      return 150;
+    }
+  }
 
   std::string getModelStr(ForceModelType model)
   {
@@ -51,6 +59,7 @@ namespace
     ForceModelType model;
     std::string suffix;   // output file suffix
     std::string histName; // history file name
+    int num_seeds;
   };
 
   void appendHistory(
@@ -78,6 +87,7 @@ namespace
 
   void runExperiment(const ExperimentConfig &config)
   {
+    const auto MAX_ITER = getIterations(config.model);
     const auto modelStr = getModelStr(config.model);
     const auto methods = getMethods(config.model);
 
@@ -99,35 +109,18 @@ namespace
         histStr += MethodStr[method] + "\n";
         std::cout << MethodStr[method] << std::endl;
 
-        for (int seed = 1; seed <= NUM_SEEDS; seed++)
+        for (int seed = 1; seed <= config.num_seeds; seed++)
         {
           auto [hist, positions] = solve(method, problem, true, seed, MAX_ITER);
 
           appendHistory(histStr, hist);
 
-          if (seed == OPT_SEED)
+          if (seed == 1)
           {
-            problem.printOutput(
-                positions,
-                "doc/main/individual/out/" +
-                    problem.matrixName + "_" +
-                    MethodStr[method] +
-                    config.suffix +
-                    ".out");
+            std::string outputFile = "doc/main/individual/out/" + problem.matrixName + "_" + MethodStr[method] + config.suffix + ".out";
+            problem.printOutput(positions, outputFile);
           }
         }
-
-        if (method != Method::CN_L_BFGS)
-          continue;
-
-        auto [_, optPositions] = solve(method, problem, true, OPT_SEED, MAX_ITER_2);
-
-        problem.printOutput(
-            optPositions,
-            "doc/main/individual/out/opt_" +
-                problem.matrixName +
-                config.suffix +
-                ".out");
       }
     }
 
@@ -149,45 +142,49 @@ int main()
       "btree9",
       "1138_bus",
       "dwt_1005",
-      "dwt_2680",
-      "3elt",
+      // "dwt_2680",
+      // "3elt",
   };
 
   const std::vector<std::string> matrixNames2 = {
-      "jagmesh8",    // 1141
-      "bcsstk14",    // 1806 1766
-      "bcsstk15",    // 3948 3942
-      "bcsstk16",    // 4884 4810
-      "USpowerGrid", // 4941
-      "bcspwr10",    // 5300
-      "wiki-Vote",   // 8297 7066
+      "cylinder_30_30", //   900
+      "gr_30_30",       //   900
+      "sierpinski_06",  //  1095
+      "jagmesh8",       //  1141
+      "USpowerGrid",    //  4941
+      "wiki-Vote",      //  7066 (original: 8297)
+      "crack",          // 10240
   };
 
   const std::vector<ExperimentConfig> experiments = {
-      {
-          matrixNames1,
-          ForceModelType::FR,
-          "_FR",
-          "hist_FR.txt",
-      },
+      // {
+      //     matrixNames1,
+      //     ForceModelType::FR,
+      //     "_FR",
+      //     "hist_FR.txt",
+      //     5,
+      // },
       {
           matrixNames1,
           ForceModelType::Eades,
           "_Eades",
           "hist_Eades.txt",
+          1,
       },
       {
           matrixNames1,
           ForceModelType::HC,
           "_HC",
           "hist_HC.txt",
+          1,
       },
-      {
-          matrixNames2,
-          ForceModelType::FR,
-          "_2",
-          "hist_2.txt",
-      },
+      // {
+      //     matrixNames2,
+      //     ForceModelType::FR,
+      //     "_2",
+      //     "hist_2.txt",
+      //     5,
+      // },
   };
 
   for (const auto &experiment : experiments)
