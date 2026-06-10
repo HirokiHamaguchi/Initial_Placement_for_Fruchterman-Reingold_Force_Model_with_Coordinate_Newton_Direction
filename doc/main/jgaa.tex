@@ -1,6 +1,6 @@
-% !LW recipe=uplatex
+% !LW recipe=pdflatex
 
-\documentclass[11pt, dvipdfmx]{article}
+\documentclass[11pt]{article}
 
 \usepackage{hyperref} % \href{URL}{text}
 \hypersetup{colorlinks=true, linkcolor=blue, citecolor=blue, urlcolor=blue}
@@ -200,8 +200,8 @@ The remainder of the paper is organized as follows.
 
 \red{Let us formally define the energy-minimization problem.}
 Let $G = (V, E)$ be an undirected graph with vertex set $V = \{1, \dots, n\}$ and edge set $E$.
-Each edge $\{i,j\} \in E$ has positive weight $a_{i,j} = a_{j,i} \in \mathbb{R}$.
-For convenience, we set $a_{i,j}=0$ for $\{i, j\} \notin E$.
+Each edge $\red{(i,j)} \in E$ has positive weight $a_{i,j} = a_{j,i} \in \mathbb{R}$.
+For convenience, we set $a_{i,j}=0$ for $\red{(i, j)} \notin E$.
 \red{In this problem, the force model} assumes forces between vertices.
 For vertices $i$ and $j$ with distance $d > 0$, an attractive force $F_{i,j}^{\mathrm{a}}(d)$ and a repulsive force $F^{\mathrm{r}}(d)$ are defined as
 \begin{equation*}
@@ -219,7 +219,7 @@ For simplicity, we define $\Phi^{\mathrm{r}}_{i,j}(0)=\infty$.%
 Let $\norm{\cdot}$ denote the Euclidean norm in $\mathbb{R}^{2}$. Then, the problem is to minimize the energy with
 $X \coloneqq (x_{1}, \dots, x_{n}) \in \mathbb{R}^{2 \times n}$:
 \begin{mini}
-  {X \in \mathbb{R}^{2 \times n}} {\Phi(X) \coloneqq \red{\sum_{(i,j) \in E} \Phi_{i,j}^{\mathrm{r}}(\norm{x_i - x_j}) + \sum_{i<j} \Phi_{i,j}^{\mathrm{a}}(\norm{x_i - x_j})}.}
+  {X \in \mathbb{R}^{2 \times n}} {\Phi(X) \coloneqq \red{\sum_{(i,j) \in E} \Phi_{i,j}^{\mathrm{a}}(\norm{x_i - x_j}) + \sum_{i<j} \Phi_{i,j}^{\mathrm{r}}(\norm{x_i - x_j})}.}
   {\label{prob:fr}} {}
 \end{mini}
 \red{We will call Problem~\ref{prob:fr} as the energy-minimization problem for the FR force model.}
@@ -282,7 +282,7 @@ $E_{2}$ be a set of vertex pairs with a shortest path distance equal to 2. Let $
 points $a$ and $b$, measured in the interval $(-\pi, \pi]$. This study~\citep{ghassemitoosiSimulatedAnnealingPreProcessing2016}
 defines the problem for the preprocessing of graph drawing as follows:
 \begin{mini}
-  {X \in \bbR^{2 \times n}} {\sum_{\{i,j\}\in E \cup E_2} \abs{\angle(x_i, x_j)},}
+  {X \in \bbR^{2 \times n}} {\sum_{(i,j)\in E \cup E_2} \abs{\angle(x_i, x_j)},}
   {\label{eq:sa}} {} \addConstraint{x_i}{\in Q^\mathrm{circle} \quad}{\text{for $1 \leq i \leq n$}}
   \addConstraint{x_i}{\neq x_j \quad}{\text{for $1 \leq i < j \leq n$}.}
 \end{mini}
@@ -358,7 +358,7 @@ direction to propose our algorithm.
 Even at the expense of accuracy, obtaining an approximate solution quickly is crucial for the initial placement.
 To obtain it, we simplify the \red{energy minimization problem} into a more manageable and well-behaved discrete optimization problem:
 \begin{mini}
-  {X \in \bbR^{2 \times n}} {\Phi^\mathrm{a}(X) \defeq \sum_{\{i,j\}\in E} \frac{a_{i,j}\norm{x_i - x_j}^{3}}{3k},}
+  {X \in \bbR^{2 \times n}} {\Phi^\mathrm{a}(X) \defeq \sum_{\red{(i,j)}\in E} \frac{a_{i,j}\norm{x_i - x_j}^{3}}{3k},}
   {\label{eq:frApprox0}} {} \addConstraint{x_i}{\in Q^\mathrm{hex} \quad}{\text{for $1 \leq i \leq n$}}
   \addConstraint{x_i}{\neq x_j \quad}{\text{for $1 \leq i < j \leq n$},}
 \end{mini}
@@ -381,7 +381,7 @@ where
 \red{Let us explain the rationale for this formulation.}
 First, the \red{energy minimization Problem~\eqref{prob:fr}} is equivalent to the following:
 \begin{mini*}
-  {X \in \bbR^{2 \times n}} {\sum_{\{i,j\}\in E} \frac{a_{i,j}\norm{x_i - x_j}^{3}}{3k}- \sum_{i<j} k^2\log{\norm{x_i - x_j}}.}
+  {X \in \bbR^{2 \times n}} {\sum_{\red{(i,j)}\in E} \frac{a_{i,j}\norm{x_i - x_j}^{3}}{3k}- \sum_{i<j} k^2\log{\norm{x_i - x_j}}.}
   {} {}
 \end{mini*}
 This formulation separates the $\order{\abs{E}}$ terms from
@@ -394,7 +394,7 @@ Since $\Phi^{\mathrm{r}}(d)=-k^{2}\log{d}$ is a convex function such that it dec
 For too small $d$, we can prevent the divergence of the energy function by setting $\epsilon$.
 Thus, under this condition, we drop the second term and derive the problem as:
 \begin{mini*}
-  {X \in \bbR^{2 \times n}} {\sum_{\{i,j\}\in E} \frac{a_{i,j}\norm{x_i - x_j}^{3}}{3k},}
+  {X \in \bbR^{2 \times n}} {\sum_{\red{(i,j)}\in E} \frac{a_{i,j}\norm{x_i - x_j}^{3}}{3k},}
   {} {} \addConstraint{x_i}{\in Q \quad}{\text{for $1 \leq i \leq n$}}
   \addConstraint{x_i}{\neq x_j \quad}{\text{for $1 \leq i < j \leq n$}.}
 \end{mini*}
@@ -466,13 +466,13 @@ Let us formulate the optimization problem for the scaling factor $s > 0$.
 For an initial placement $X = (x_{1}, \dots, x_{n})$, we scale it as $x_{i}\gets s x_{i}$ for all $i$.
 The problem of minimizing $\Phi(X)$ through scaling is equivalent to minimizing $\phi(s)$ defined by
 \begin{align*}
-  \phi(s) \defeq{} & \sum_{\{i,j\} \in E}\frac{a_{i,j}(s \norm{x_i - x_j})^{3}}{3k}- k^{2}\sum_{i < j}\log(s \norm{x_i - x_j}), \\
-  \phi'(s) ={}     & \sum_{\{i,j\} \in E}\frac{a_{i,j}\norm{x_i - x_j}^{3}}{k}s^{2}- \frac{k^{2}n(n-1)}{2s}.
+  \phi(s) \defeq{} & \sum_{\red{(i,j)} \in E}\frac{a_{i,j}(s \norm{x_i - x_j})^{3}}{3k}- k^{2}\sum_{i < j}\log(s \norm{x_i - x_j}), \\
+  \phi'(s) ={}     & \sum_{\red{(i,j)} \in E}\frac{a_{i,j}\norm{x_i - x_j}^{3}}{k}s^{2}- \frac{k^{2}n(n-1)}{2s}.
 \end{align*}
 The function $\phi(s)$ is convex, and the optimal scaling factor $s^{*}$ satisfies $\phi'(s^{*}) = 0$:
 \begin{equation}
   \label{eq:scaling}
-  s^{*} = \qty(\frac{k^{3}n(n-1)}{2 \sum_{\{i,j\} \in E}a_{i,j}\norm{x_i - x_j}^{3}})^{1/3}.
+  s^{*} = \qty(\frac{k^{3}n(n-1)}{2 \sum_{\red{(i,j)} \in E}a_{i,j}\norm{x_i - x_j}^{3}})^{1/3}.
 \end{equation}
 This value can be computed in $\order{\abs{E}}$ complexity, enabling us to obtain a better initial placement.
 Notably, the optimal solution to Problem~\eqref{eq:frApprox0} is invariant
@@ -881,8 +881,8 @@ Although reasonable in spirit, this approach is also ineffective in practice. In
 
 One of the reasons it fails is the inaccuracy of the quadratic approximation; specifically, a particular issue arises when we restrict the optimization to a coordinate block.
 
-Let $G$ be a graph with $V = \{1, 2, 3, 4\}$ and $E = \{\{1, 2\}, \{2, 3\}, \{2
-  , 4\}\}$. Set $k = 1/2$ and assign all positive edge weights $a_{i,j}= 1$ for
+Let $G$ be a graph with $V = \{1, 2, 3, 4\}$ and $E = \{(1, 2), (2, 3), (2, 4)\}$.
+Set $k = 1/2$ and assign all positive edge weights $a_{i,j}= 1$ for
 every edge in $E$. The position of the vertices is
 \begin{equation*}
   X =
@@ -960,7 +960,7 @@ This work was partially supported by JSPS KAKENHI (26KJ0936, 23H03351, 24K23853)
 \red{
   We also conducted experiments on several additional graphs, and the results are shown in \cref{fig:individual_2}.
   For the choice of graphs, we referred to \citep{arleoDistributedMultilevelForceDirected2019,bartelExperimentalEvaluationMultilevel2011} and selected seven graphs:
-  ``cylinder_30_30'', ``gr_30_30'', ``sierpinski_06'', ``jagmesh8'', ``USpowerGrid'', ``wiki-Vote'', and ``crack''.
+  ``cylinder\_30\_30'', ``gr\_30\_30'', ``sierpinski\_06'', ``jagmesh8'', ``USpowerGrid'', ``wiki-Vote'', and ``crack''.
   The graph data were obtained from the SuiteSparse Matrix Collection~\citep{davisUniversityFloridaSparse2011} or generated by ourselves.}
 
 \red{We observe a trend similar to that in \cref{fig:individual}. The proposed method, \textsf{CN}, improves the results for both the simulation-based algorithm and L-BFGS.}
@@ -996,7 +996,7 @@ We note that our implemented L-BFGS algorithm (without the proposed initializati
 
 \begin{algorithm}[H]
   \caption{Simulation-Based (Fruchterman--Reingold) algorithm \citep{fruchtermanGraphDrawingForcedirected1991}}
-  \label{alg:fr} \KwIn{Graph $G = (V, E)$, Weights $(a_{i,j})_{\{i,j\} \in E}$, Parameters $N_{\mathrm{iter}}^{\mathsf{SIM}}\in \bbN$, $t_{0}> 0$, and Initial~placement~$X = (x_{1}, \dots, x_{n})$}
+  \label{alg:fr} \KwIn{Graph $G = (V, E)$, Weights $(a_{i,j})_{(i,j) \in E}$, Parameters $N_{\mathrm{iter}}^{\mathsf{SIM}}\in \bbN$, $t_{0}> 0$, and Initial~placement~$X = (x_{1}, \dots, x_{n})$}
   \KwOut{Final placement $X$}
 
   $t \gets t_{0}$\; \For{$m \gets 1$ \KwTo $N_{\mathrm{iter}}^{\mathsf{SIM}}$}{ $\text{compute gradient }\nabla \Phi_{i}(x_{i})$ for all $i \in V$\; $x_{i}^{\mathrm{new}}\gets x_{i}- t \frac{\nabla \Phi_{i}(x_{i})}{ \norm{\nabla \Phi_i(x_i)}}$ for all $i \in V$\; $x_{i}\gets x_{i}^{\mathrm{new}}$\; $t \gets t - t_{0}/ N_{\mathrm{iter}}^{\mathsf{SIM}}$\; \If{\text{convergence condition is satisfied}}{ \textbf{break}\; } }
