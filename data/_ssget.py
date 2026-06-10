@@ -168,19 +168,11 @@ def make_sierpinski(order: int) -> nx.Graph:
     return relabel_int(G)
 
 
-def make_grid(m: int, n: int) -> nx.Graph:
-    """
-    Ordinary m x n grid graph.
-    Added as a simple regular-graph baseline in response to the reviewer.
-    """
-    G = nx.grid_2d_graph(m, n)
-    return relabel_int(G)
-
-
 def main3():
     # additional graphs from SuiteSparse / Florida collection
     manual_names = [
         "jagmesh8",
+        "gr_30_30",
         "crack",
         "USpowerGrid",
         "wiki-Vote",
@@ -192,9 +184,8 @@ def main3():
         assert result is not None, f"{name} failed processing"
 
     generated_graphs = {
-        "cylinder_32_32.mtx": make_cylinder_grid(32, 32),
+        "cylinder_30_30.mtx": make_cylinder_grid(30, 30),
         "sierpinski_06.mtx": make_sierpinski(6),
-        "grid_32_32.mtx": make_grid(32, 32),
     }
 
     for filename, G in generated_graphs.items():
