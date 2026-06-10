@@ -7,7 +7,6 @@
 #include <iostream>
 #include <random>
 
-#include "../util/computeDxDy.hpp"
 #include "../util/grid.hpp"
 #include "../util/hex.hpp"
 #include "../util/problem.hpp"

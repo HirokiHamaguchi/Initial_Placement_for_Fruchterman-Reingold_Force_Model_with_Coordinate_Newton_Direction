@@ -98,11 +98,11 @@ void solve_FR(const Problem &problem, std::vector<Eigen::VectorXd> &positions,
     if (iteration == 0)
     {
       const double current_score = calcFRScoreMatrix(problem, pos);
-      while (true)
+      for (int _t_iter = 0; _t_iter < 5; ++_t_iter)
       {
         Eigen::MatrixXd trial_pos = pos + direction * static_cast<double>(t);
         double trial_score = calcFRScoreMatrix(problem, trial_pos);
-        if (trial_score <= current_score || t <= 1e-2 * scaling)
+        if (trial_score <= current_score)
           break;
         t *= 0.5;
       }

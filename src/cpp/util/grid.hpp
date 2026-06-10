@@ -65,6 +65,26 @@ public:
     return Hex::round(q, r, -q - r);
   }
 
+  std::pair<double, double> computeDxDy(double gx, double gy, double hxx, double hxy, double hyy) const
+  {
+    // H = [ hxx hxy ]
+    //     [ hxy hyy ]
+    double det = hxx * hyy - hxy * hxy;
+    if (det < 1e-9)
+    {
+      // If Hessian is not positive definite, we fall back to gradient descent with a small step size.
+      double norm_g = std::sqrt(gx * gx + gy * gy);
+      if (norm_g < 0.5 * grid_size)
+        return {0.0, 0.0};
+      double step_size = std::min(1.0, 3.0 * grid_size / norm_g);
+      return {-step_size * gx, -step_size * gy};
+    }
+    double inv_det = 1.0 / det;
+    double dx = inv_det * (-hyy * gx + hxy * gy);
+    double dy = inv_det * (-hxx * gy + hxy * gx);
+    return {dx, dy};
+  }
+
   void calc_grad_hess(const Problem &problem, int dq, int dr, double w, double &gx, double &gy, double &hxx,
                       double &hxy, double &hyy) const
   {

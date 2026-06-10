@@ -7,7 +7,6 @@
 #include <iostream>
 #include <random>
 
-#include "../util/computeDxDy.hpp"
 #include "../util/grid.hpp"
 #include "../util/hex.hpp"
 #include "../util/problem.hpp"
@@ -37,13 +36,13 @@ void solve_init(const Problem &problem, const bool measureTime, const int seed,
   // initialize random number generator
   std::mt19937 gen(seed);
   std::uniform_int_distribution<int> distVertex(0, problem.n - 1);
-  std::uniform_real_distribution<double> distHexR(0, grid.grid_size);
+  std::uniform_real_distribution<double> distHexR(0, 1.0);
   std::uniform_real_distribution<double> distHexTheta(0, 2 * M_PI);
 
-  // simulated annealing parameters
+  // Randomness parameters
   const int ITERATIONS = 2 * problem.n * (problem.n * problem.n / problem.m);
-  const double T0 = +1.5;
-  const double T1 = +0;
+  const double T0 = +1.0;
+  const double T1 = +0.5;
 
   for (int it = 0; it < ITERATIONS; it++)
   {
@@ -69,11 +68,22 @@ void solve_init(const Problem &problem, const bool measureTime, const int seed,
     }
 
     // compute Newton's direction (Hess^{-1} @ (-grad))
-    const auto [dx, dy] = computeDxDy(gx, gy, hxx, hxy, hyy, grid.grid_size);
+    auto [dx, dy] = grid.computeDxDy(gx, gy, hxx, hxy, hyy);
+    double norm_d = std::hypot(dx, dy);
+    if (problem.modelType == ForceModelType::HC || problem.modelType == ForceModelType::Eades)
+    {
+      // cap the step size to avoid instability
+      if (norm_d > 3.0 * grid.grid_size)
+      {
+        double scale = (3.0 * grid.grid_size) / norm_d;
+        dx *= scale;
+        dy *= scale;
+      }
+    }
 
     // select random neighbor of (x + dx, y + dy) with randomness
     const auto [x, y] = grid.hex2xy(hexI.q, hexI.r);
-    double T = T0 + (T1 - T0) * it / ITERATIONS;
+    double T = std::max((T0 + (T1 - T0) * it / ITERATIONS) * norm_d, 1.0 * grid.grid_size);
     double r = T * distHexR(gen), theta = distHexTheta(gen);
     double dxr = r * std::cos(theta), dyr = r * std::sin(theta);
     const Hex hexJ = grid.xy2hex(x + dx + dxr, y + dy + dyr);
