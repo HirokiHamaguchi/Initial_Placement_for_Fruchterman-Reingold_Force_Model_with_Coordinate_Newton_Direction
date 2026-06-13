@@ -116,7 +116,7 @@ We have revised the manuscript to address the concerns. The blue text below indi
   We therefore revised Fig.~6 and its explanation to make the comparison easier to interpret. Specifically, we emphasized the proposed method in bold, renamed several methods for clarity, reordered the columns, and added ruled lines so that the comparison between random initialization and the proposed method is easier to see.
   We also clarified this point in the main text.
 
-  In particular, the proposed method often shows a larger improvement when combined with the FR (simulation-based) algorithm than when combined with L-BFGS. In many cases, the difference between \textsf{RAND-SIM} and \textsf{CN-SIM} is larger than the difference between \textsf{RAND-LBFGS} and \textsf{CN-LBFGS}. In this sense, the effect of the proposed initialization method is often more pronounced when it is combined with the FR (simulation-based) algorithm.
+  In particular, the proposed method often shows a larger improvement when combined with the FR (simulation-based) algorithm than when combined with L-BFGS. In many cases, the difference of objective values between \textsf{RAND-SIM} and \textsf{CN-SIM} is larger than the difference of objective values between \textsf{RAND-LBFGS} and \textsf{CN-LBFGS}. In this sense, the effect of the proposed initialization method is often more pronounced when it is combined with the FR (simulation-based) algorithm.
 
   The impression that the proposed initialization method works better when combined with L-BFGS may come from the fact that the final objective values obtained by the FR algorithm are higher than those obtained by L-BFGS. However, this is a comparison between two existing optimization methods and is independent of the proposed initialization method itself. The contribution of the proposed method is that it provides a better initial layout than random initialization.
 
@@ -163,9 +163,8 @@ We have revised the manuscript to address the concerns. The blue text below indi
   These force models are also mentioned in Hosobe~[19], and the proposed method is indeed applicable to them.
   We also conducted additional numerical experiments.
   As described in detail in the revised manuscript, some additional care is required because of differences such as the presence or absence of convexity. Nevertheless, the proposed method was found to be effective in essentially the same way.
-  We added explanations and numerical results on these points to the main text and the Appendix.
-  Since these models are somewhat less widely known than the FR model, we mention them only briefly in the introduction.
-  We also considered changing the title of the paper, but decided to keep the current title.
+  We added explanations and numerical results on these points to the main text.
+  Since these models are somewhat less widely known than the FR model, we mention them only briefly in the abstract and introduction.
 
   Second, for the KK model, we believe that the proposed method cannot be applied in the same way as for the FR model. Even if one applies a variant of the proposed method to more general cases, it may not be effective for the KK model.
   This is closely related to the form of the objective function:
@@ -197,7 +196,7 @@ We have revised the manuscript to address the concerns. The blue text below indi
     {X \in \mathbb{R}^{2 \times n}} {\Phi_{\mathrm{KK}}(X) \coloneqq \sum_{\substack{(i,j) \in V^2 \\ i < j}}  \frac{(\lVert x_{i} - x_{j} \rVert - l_{ij})^2}{2 l_{ij}^2}}
     {} {}
   \end{mini*}
-  In the KK model, the main energy terms are defined over all vertex pairs, that is, over sums of the form $\sum_{\substack{(i,j) \in V^2 \ i < j}} \cdot$, rather than over edge pairs of the form $\sum_{(i,j) \in E} \cdot$.
+  In the KK model, the main energy terms are defined over all vertex pairs, that is, over sums of the form $\sum_{\substack{(i,j) \in V^2 \ i < j}} (\cdot)$, rather than over edge pairs of the form $\sum_{(i,j) \in E} (\cdot)$.
   This is because the KK energy is defined by first computing all-pairs graph distances and then defining energy terms based on those distances.
   Therefore, computing forces on a vertex-by-vertex basis does not provide the same advantage as in the FR, HC, and Eades models, and may even lead to slower convergence.
 
@@ -237,7 +236,7 @@ We have revised the manuscript to address the concerns. The blue text below indi
 
 \begin{response}
   Thank you for pointing this out.
-  We avoided the symbol conflict by using a dedicated symbol for the edge set, so that the energy terms $U_{i,j}$ are not confused with the edge set.
+  We avoided the symbol conflict by using a dedicated symbol for the edge set, so that the energy terms are not confused with the edge set.
 \end{response}
 
 \reviewercomment{
@@ -247,7 +246,7 @@ We have revised the manuscript to address the concerns. The blue text below indi
 
 \begin{response}
   We originally intended the sum to be over all ordered pairs of distinct vertices, but we understand that this may have caused confusion.
-  We revised the formulation to sum only over unordered pairs of distinct vertices, so that each pair is counted only once.
+  We revised the formulation to sum only over unordered pairs of distinct vertices, so that each pair is counted only once. We also fixed some notation issues related to this point.
 \end{response}
 
 \reviewercomment{
@@ -255,7 +254,7 @@ We have revised the manuscript to address the concerns. The blue text below indi
 }
 
 \begin{response}
-  We clarified the role of $\epsilon$ as the minimum separation in the discrete point set $Q$ and its use in preventing divergence.
+  We agree that the previous presentation of $\epsilon$ was not ideal. We revised the manuscript to remove $\epsilon$ and instead directly use $\norm{q_i - q_j} \geq 1$, and added an explanation of this point in the main text.
 \end{response}
 
 \reviewercomment{
@@ -263,8 +262,8 @@ We have revised the manuscript to address the concerns. The blue text below indi
 }
 
 \begin{response}
+  Thank you for pointing this out.
   We corrected the missing superscript in Algorithm~1.
-  The update now uses the attractive-only objective $f_i^{\mathrm{a}}$.
 \end{response}
 
 \reviewercomment{
@@ -273,7 +272,7 @@ We have revised the manuscript to address the concerns. The blue text below indi
 }
 
 \begin{response}
-  Regarding the reviewer's note on the ``L-BFGS'' superscripts: the hyphen was already intended as a proper hyphen in math mode, but its appearance could still be misleading.
+  Regarding the reviewer's note on the ``L-BFGS'' superscripts, the hyphen was already intended as a proper hyphen in math mode, but its appearance could still be misleading.
   To avoid confusion, we now use the spelling ``LBFGS'' when it appears inside math expressions, for example in superscripts, while keeping the standard spelling ``L-BFGS'' in running text.
 \end{response}
 
@@ -291,6 +290,8 @@ We have revised the manuscript to address the concerns. The blue text below indi
 
 \begin{response}
   We checked the subsection headers and ensured that hyphenation uses proper LaTeX conventions.
+
+  As the end of this subsection, we thank the reviewer again for these careful observations and suggestions, which helped us improve the clarity and presentation of the manuscript.
 \end{response}
 
 
@@ -313,9 +314,9 @@ We have revised the manuscript to improve the framing of the contribution, the d
   Thank you for pointing this out.
   We agree that the wording in the previous manuscript was ambiguous.
 
-  The source of the ambiguity was the use of the term FR. In the revised manuscript, we distinguish more carefully between the FR force model, which defines attractive and repulsive forces between vertices and corresponds to Problem~(1), and the simulation-based algorithm commonly associated with the Fruchterman--Reingold method for seeking an equilibrium of that model.
+  The source of the ambiguity was the use of the term FR. In the revised manuscript, we distinguish more carefully between the FR force model, which defines attractive and repulsive forces between vertices and corresponds to Problem~(1), and the FR algorithm (or in the current manuscript, the simulation-based algorithm) commonly associated with the FR force model for seeking an equilibrium of that model, presented as Algorithm~3 in the current manuscript.
 
-  The paper is concerned with the FR force model itself, as indicated by the title, whereas the simulation-based algorithm is only one possible method for optimizing the corresponding objective. To avoid confusion, we no longer refer to Algorithm~3 simply as the FR algorithm. Instead, we refer to it as a simulation-based algorithm and explain its relation to the classical FR algorithm.
+  The paper is concerned with the FR force model itself, as indicated by the title, whereas the simulation-based algorithm is only one possible method for optimizing the corresponding objective. To avoid confusion, we no longer refer to Algorithm~3 simply as the FR algorithm. Instead, we refer to it as a simulation-based algorithm and explain that it is the classical FR algorithm.
 
   The statement involving \textsf{sfdp} was intended to refer to prior algorithmic work on force-directed layout and multilevel optimization, not to the chronological relation between \textsf{sfdp} and the FR force model. We have revised the relevant passages to make this distinction explicit and to avoid the misleading implication that \textsf{sfdp} predates the FR force model.
 \end{response}
@@ -327,6 +328,8 @@ We have revised the manuscript to improve the framing of the contribution, the d
 \begin{response}
   Thank you for the suggestion.
   As the reviewer notes, we believe that multilevel approaches are a highly promising direction for applying the proposed method. We added a new Section 6.1 to discuss this point.
+
+  We also added more references to multilevel approaches, and revised the discussion to explain more clearly how the proposed method can be combined with multilevel pipelines.
 \end{response}
 
 \subsection{Uncertain Framing of FR Versus L-BFGS}
@@ -340,9 +343,13 @@ We have revised the manuscript to improve the framing of the contribution, the d
   Thank you for raising this important point.
   We have revised the manuscript to clarify that the title refers to the FR force model, namely the optimization problem in Problem~(1), and not to a particular algorithm for solving it.
 
-  In the previous manuscript, some statements may have suggested that L-BFGS was being presented as an alternative to the FR force model itself. This was not our intention. Rather, L-BFGS and the simulation-based algorithm are two possible methods for optimizing the same FR-based objective. The proposed method is an initial-placement method and is independent of the choice of subsequent optimizer. It can be combined with L-BFGS, with the simulation-based algorithm, or with other optimization procedures.
+  Furthermore, in the previous manuscript, some statements may have suggested that L-BFGS was being presented as an alternative to the simulation-based (FR) algorithm.
+  This was not our intention.
+  Rather, L-BFGS and the simulation-based algorithm are two possible methods for optimizing the same objective.
+  The proposed method is an initial-placement method and is independent of the choice of subsequent optimizer.
+  It can be combined with L-BFGS, with the simulation-based (FR) algorithm, or with other optimization procedures.
 
-  We have revised the introduction and related passages to make this separation clearer. In particular, we now emphasize that the contribution of the paper is not L-BFGS itself, but an initialization method for problems formulated using the FR force model.
+  We have revised the introduction and related passages to make this separation clearer.
 \end{response}
 
 \reviewercomment{
@@ -350,8 +357,7 @@ We have revised the manuscript to improve the framing of the contribution, the d
 }
 \begin{response}
   Thank you for pointing this out.
-  We agree that the previous explanation was too narrow.
-  The proposed method can also be used with the simulation-based algorithm, and in some cases its effect may be more visible there because the simulation-based algorithm converges more slowly and is therefore more sensitive to the initial placement.
+  We agree that the previous explanation was misleading.
 
   We have revised the discussion of multilevel approaches to explain that the proposed initialization can be combined with several types of subsequent optimization methods, including simulation-based algorithms, L-BFGS, and potentially other solvers used within multilevel pipelines.
 \end{response}
@@ -361,12 +367,15 @@ We have revised the manuscript to improve the framing of the contribution, the d
   The paper does not make a good argument why we should choose that over the other, thus in a way making me question even the title of the paper.
 }
 \begin{response}
-  We agree that the previous manuscript did not explain this point sufficiently.
-  The purpose of the paper is not to argue that the simulation-based algorithm should always be preferred over L-BFGS. Rather, the paper studies an initialization method for the FR force model, which remains an important graph drawing formulation regardless of which optimizer is used.
+  We hope that now this confusion is largely resolved by the revisions described above.
 
-  L-BFGS often converges faster and achieves better objective values than the simulation-based algorithm in our experiments. However, this comparison concerns the choice of optimizer, not the value of the proposed initialization method. The proposed method can improve the starting point for either optimizer. Therefore, the contribution is best understood as improving the optimization pipeline for FR-based graph drawing, rather than as advocating one particular solver.
+  We are not intending to argue that which algorithm is better, or which algorithm should be used. Rather, the proposed method is an initial-placement method that can be effective regardless of whether a simulation-based algorithm or L-BFGS is used afterward, and we demonstrate that it is effective in various cases.
 
-  We have revised the manuscript, especially the introduction and experimental discussion, to make this framing explicit.
+  If the reader prefers to use the FR (simulation-based) algorithm, especially for dynamic graph drawing scenarios such as animation and interaction (mentioned in Section 6.1), they can do so.
+  If the reader prefers to use L-BFGS, especially for obtaining a high-quality static layout, they can also do so.
+  The differences and motivations between these algorithms are independent of the proposed method, and they comes from the existing literature on optimization methods for the FR force model.
+
+  We revised the introduction and related passages to clarify these points.
 \end{response}
 
 \reviewercomment{
@@ -449,7 +458,10 @@ We have revised the manuscript to improve the framing of the contribution, the d
 \begin{response}
   The same interpretation applies to this phenomenon. Independently of the merit of the proposed method itself, and simply as a comparison between existing methods, L-BFGS converges faster than the FR algorithm; that is, it approaches an optimal solution more rapidly. Once a method has essentially converged to an optimum, increasing the number of iterations has little effect on the graph layout, because the forces remain nearly balanced. If this optimal state is unique for a given graph, then there is naturally no difference in the final optimum caused by the initial placement. Thus, the effect of the initial placement is more closely related to how quickly the method approaches the optimal state. We revised the manuscript to explain these points clearly.
 
-  We also believe it is important to clarify that the objective-function values plotted in the chart do not perfectly correspond to visual quality. For example, the difference in objective value between a completely random state and a moderately clean layout can be much larger than the difference between a moderately clean layout and a fully clean layout. In continuous optimization, when the optimal objective value \(\Phi(x^*)\) is known, it is common to plot the gap \(\Phi(x) - \Phi(x^*)\) on a logarithmic scale. In our experiments, the optimal objective value is not known, so we simply plot the objective value itself. Therefore, even when the difference in objective value appears sufficiently small---that is, when the difference between RAND-LBFGS and CN-LBFGS appears small---there may still be a sufficiently visible difference in the graph layouts. We added an explanation of these points so that the discussion is more useful and convincing to readers who may have such questions.
+  We also believe it is important to clarify that the objective-function values plotted in the chart do not perfectly correspond to visual quality. For example, the difference in objective value between a completely random state and a moderately clean layout can be much larger than the difference between a moderately clean layout and a fully clean layout. In continuous optimization, when the optimal objective value \(\Phi(x^*)\) is known, it is common to plot the gap \(\Phi(x) - \Phi(x^*)\) on a logarithmic scale.
+  In our experiments, the optimal objective value is not known, so we simply plot the objective value itself.
+  Therefore, even when the difference in objective value appears sufficiently small.
+  That is, when the difference between RAND-LBFGS and CN-LBFGS appears small, there may still be a sufficiently visible difference in the graph layouts. We added an explanation of these points so that the discussion is more useful and convincing to readers who may have such questions.
 \end{response}
 
 \subsection{Singularities in dwt\_992 and collins\_15NN}

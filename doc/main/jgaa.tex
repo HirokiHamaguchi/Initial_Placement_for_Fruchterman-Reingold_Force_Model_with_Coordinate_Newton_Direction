@@ -1,4 +1,4 @@
-% !LW recipe=pdflatex
+% !LW recipe=pdflatex&bibtex
 
 \documentclass[11pt]{article}
 
@@ -167,12 +167,12 @@ A pre-processing step based on Simulated Annealing (SA) has been shown to improv
 \red{However, the existing method assumes circular initial layouts and employs a relatively heuristic objective function, insufficiently grounded in the underlying force model.
   In addition, the method mainly targets unweighted, small-scale, and structurally simple graphs, limiting its applicability to more general graph drawing settings.}
 
-In this paper, we propose a new initial placement \red{to quickly obtain the equilibrium layout of the force models, especially} the FR force model. % LLDisable
+In this paper, we propose a new initial placement \red{to quickly obtain the equilibrium layout of the force models, especially} the FR force model.
 We provide an initial placement with fewer twists than random placement within a short time, accelerating the subsequent optimization process.
 We can use both the \red{simulation-based} and L-BFGS algorithms to obtain the final placement.
 This work extends the applicability of the initial placement idea to larger-scale, weighted, and complicated structured graphs.
 To achieve this, we optimize the position of vertices one by one with the coordinate Newton direction, leveraging the inherent structure and the sparsity of graphs.
-We also demonstrate its effectiveness through various experiments \red{and discuss its potential applications, such as drawing for HC (Hooke--Coulomb) \citep{atallahAlgorithmsTheoryComputation2009} and Eades \citep{eades1984heuristic} force models.}
+We also demonstrate its effectiveness through various experiments \red{and discuss its potential applications, such as drawing for the HC (Hooke--Coulomb) \citep{atallahAlgorithmsTheoryComputation2009} and Eades \citep{eades1984heuristic} force models.}
 
 The remainder of the paper is organized as follows.
 \begin{enumerate}[label=\textbullet, itemsep=0pt, parsep=0pt]
@@ -223,15 +223,15 @@ The scalar potentials \red{(or energies)} of these forces~\citep{6183577} are gi
   \red{\Phi}^{\mathrm{a}}_{i,j}(d) \coloneqq \int_{0}^{d}F_{i,j}^{\mathrm{a}}(r) \dd{r}= \frac{a_{i,j}d^{3}}{3k}, \quad
   \red{\Phi}^{\mathrm{r}}(d) \coloneqq \int_{1}^{d}F^{\mathrm{r}} (r) \dd{r}= -k^{2}\log{d}.
 \end{equation*}
-For simplicity, we define $\red{\Phi}^{\mathrm{r}}_{i,j}(0)=\infty$.%
+For simplicity, we define $\red{\Phi}^{\mathrm{r}}(0)=\infty$.%
 \footnote{We can also use $-k^{2}\log(d + \epsilon^{\mathrm{r}})$ to prevent divergence, where $\epsilon^{\mathrm{r}}$ is constant.}
 Let $\norm{\cdot}$ denote the Euclidean norm in $\mathbb{R}^{2}$.
 Then, the problem is to minimize the energy with $X \coloneqq (x_{1}, \dots, x_{n}) \in \mathbb{R}^{2 \times n}$:
 \begin{mini}
-  {X \in \mathbb{R}^{2 \times n}} {\Phi(X) \coloneqq \red{\sum_{(i,j) \in E} \Phi_{i,j}^{\mathrm{a}}(\norm{x_i - x_j}) + \sum_{i<j} \Phi_{i,j}^{\mathrm{r}}(\norm{x_i - x_j})}.}
+  {X \in \mathbb{R}^{2 \times n}} {\Phi(X) \coloneqq \red{\sum_{(i,j) \in E} \Phi_{i,j}^{\mathrm{a}}(\norm{x_i - x_j}) + \sum_{i<j} \Phi^{\mathrm{r}}(\norm{x_i - x_j})}.}
   {\label{prob:fr}} {}
 \end{mini}
-\red{We call Problem~\ref{prob:fr} as the energy minimization problem for the FR force model.}
+\red{We refer to Problem~\ref{prob:fr} as the energy minimization problem for the FR force model.}
 
 \red{We also define the vertex pairwise energy function $\red{\Phi}_{i,j}(d) \coloneqq \red{\Phi}_{i,j}^{\mathrm{a}}(d) + \red{\Phi}^{\mathrm{r}}(d)$ for convenience.
 Here, $\Phi_{i,j}(\cdot)=\Phi_{j,i}(\cdot)$ holds for all $i,j\in V$.
@@ -269,12 +269,12 @@ The $i$-th column of the gradient $\nabla \red{\Phi}(X)\in\mathbb{R}^{2\times n}
     (\nabla \Phi(X))_{i} \defeq \nabla \Phi_{i}(x_{i}) = \sum_{j \in V \setminus \{i\}}\left(\frac{a_{i,j}\norm{ x_{i}- x_{j}}}{k}- \frac{k^{2}}{\norm{ x_{i}- x_{j}}^{2}}\right) (x_{i}- x_{j}).
   \end{equation*}}
 \red{Since both the objective value and gradient are explicitly available, a variety of gradient-based optimization methods can be applied to solve the energy minimization problem.
-  The classical simulation-based algorithm (as known as the FR algorithm, presented in \cref{alg:fr}) may be interpreted as a steepest-descent-type method in which the step size is controlled by a cooling schedule.
+  The classical simulation-based algorithm (also known as the FR algorithm, presented in \cref{alg:fr}) may be interpreted as a steepest-descent-type method in which the step size is controlled by a cooling schedule.
   Indeed, $-(\nabla \Phi(X))_i$ corresponds to the force acting on vertex $i$.
-  The L-BFGS algorithm, a renowned and widely used optimization method, is another first-order gradient-based method that has been shown to consistently outperforms the original simulation-based algorithm in speed and layout quality~\citep{6183577}.}
+  The L-BFGS algorithm, a renowned and widely used optimization method, is another first-order gradient-based method that has been shown to consistently outperform the original simulation-based algorithm in speed and layout quality~\citep{6183577}.}
 A common choice for the initial solution is a random placement of nodes within the bounding box~\citep{2020SciPy-NMeth}.
 
-However, when the input is highly twisted or otherwise ill-conditioned, \red{both the simulation-based algorithm and the} L-BFGS algorithm can suffer from large computational costs. Each iteration operates on the full set of coordinates, which limits its ability to untangle local geometric defects, and the total number of iterations required to reach a good layout can be large.
+However, when the input is highly twisted or otherwise ill-conditioned, \red{both the simulation-based algorithm and the} L-BFGS algorithm can suffer from high computational costs. Each iteration operates on the full set of coordinates, which limits its ability to untangle local geometric defects, and the total number of iterations required to reach a good layout can be large.
 \red{Thus, to address these issues, we need an alternative optimization approach that differs from both the simulation-based algorithm and the L-BFGS algorithm.
   As such an approach, this study proposes stochastic coordinate descent with coordinate Newton directions, a second-order optimization method used as preprocessing for first-order gradient-based methods.}
 
@@ -332,14 +332,14 @@ where $x = x_{0}+ d$ is the minimizer of this approximation.
 Note that the Hessian matrix $\nabla^{2}g(x_{0})$ is positive definite since $g$ is strictly convex.
 Although the Newton direction is essential in various iterative methods, it requires the computation of the inverse Hessian $\nabla^{2}g(x_{0})^{-1}\in \bbR^{n \times n}$, posing a high computational cost for large-scale problems.
 
-Still, we can leverage the concept of the Newton direction in a different manner, the coordinate Newton direction.
+Still, we can leverage the concept of the Newton direction in a different manner: the coordinate Newton direction.
 Instead of computing the inverse Hessian $\nabla^{2}g(x_{0})^{-1}$ in the entire variable space $\bbR^{n}$, we restrict the variable $x$ to its coordinate block $x_{i}$ with fewer dimensions, and compute $\nabla^{2}g_{i}(x_{i})^{-1}\nabla g_{i}(x_{i})$ where $g_{i}$ is a restricted function of $g$ to $x_{i}$.
 Since the coordinate Newton direction computation is much cheaper than that of the Newton direction, we can repeat this procedure many times.
-In general, this idea is known as stochastic coordinate descent~\citep{wright2022optimization} or Randomized Subspace Newton~\citep{NEURIPS2019_bc6dc48b} in a broader context.
+In general, this idea is known as stochastic coordinate descent~\citep{wright2022optimization} or Randomized Subspace Newton~\citep{gowerRSNRandomizedSubspace2019a} in a broader context.
 
 In particular, this coordinate Newton direction has an apparent natural affinity to the \red{energy minimization problem}.
 We can compute the coordinate Newton direction by taking the position $x_{i}$ of the vertex $i$ as the coordinate block.
-Although directly applying this idea to the \red{energy minimization problem} is challenging as we will discuss in \cref{sec:rationale}, we leverage this coordinate Newton direction to propose our algorithm.
+Although directly applying this idea to the \red{energy minimization problem} is challenging, as we will discuss in \cref{sec:rationale}, we leverage this coordinate Newton direction to propose our algorithm.
 
 \subsection{Discrete Optimization Problem for Initial Placement}
 \label{ssec:reduction}
@@ -374,11 +374,11 @@ First, recall that the \red{energy minimization problem} is equivalent to the fo
   {} {}
 \end{mini*}
 This formulation separates the $\order{\abs{E}}$ terms from $\red{\Phi}^{\mathrm{a}}_{i,j}$ and the $\order*{\abs{V}^2}$ terms from $\red{\Phi}^{\mathrm{r}}$.
-Following previous research mentioned in \cref{ssec:preprocessing}, we fix the possible positions $x_{i}$ of each vertex $i$ to a discrete set of points $Q$, where $\abs{Q}\geq \abs{V}$.
-\red{We impose a condition on $Q$ such that $\norm{q_{i}- q_{j}}\geq \epsilon$ for all $q_{i}, q_{j}\in Q$ with $q_{i}\neq q_{j}$.}
+Following previous research mentioned in \cref{ssec:preprocessing}, we fix the possible positions $x_{i}$ of each vertex $i$ to a finite discrete set of points $Q$, where $\abs{Q}\geq \abs{V}$.
+\red{We also impose a condition on $Q$ such that $\norm{q_{i}- q_{j}}\geq 1$ for all $q_{i}, q_{j}\in Q$ with $q_{i}\neq q_{j}$.}
 \red{This makes the second $\order*{\abs{V}^2}$ terms from $\Phi^{\mathrm{r}}$ bounded by a constant.}
 \red{Since $\Phi^{\mathrm{r}}(d)=-k^{2}\log{d}$ is a convex function such that it decreases monotonically with respect to $d$, for sufficiently large $d$, the value of $-k^{2}\log{d}$ does not vary excessively.
-For too small $d$, we can prevent the divergence of the energy function by setting $\epsilon$.
+We can also prevent the divergence of the energy function by the condition $\norm{q_{i}- q_{j}}\geq 1$.
 Under these observations, we drop the second term and derive the problem as:}
 \begin{mini*}
   {X \in \bbR^{2 \times n}} {\sum_{\red{(i,j)}\in E} \frac{a_{i,j}\norm{x_i - x_j}^{3}}{3k},}
@@ -390,7 +390,12 @@ See \cref{fig:pi} for a visual explanation.
 
 In this study, we adopt a hexagonal lattice $Q^{\mathrm{hex}}$~\citep{patelHexagonalGrids2013,s22145179} defined by~\cref{eq:qHex} (see \cref{fig:pi}) as $Q$.
 When minimizing the objective function that arises from the attractive energy $\red{\Phi}^{\mathrm{a}}$, it is advantageous for the points to cluster as closely as possible.
-In this context, the hexagonal lattice is known for its densest packing structure in space with the least distance $\epsilon$ between points \citep{changSimpleProofThues2010} and offers computational simplicity.
+In this context, the hexagonal lattice is known for its densest packing structure in space \citep{changSimpleProofThues2010} and offers computational simplicity.
+
+\red{
+  We note that the scaling of the lattice structure does not affect the optimization process.
+  As we will see later, our algorithm is scale invariant, meaning that the distance between $\norm{q_{i}- q_{j}}$ does not affect the update.
+}
 
 \subsection{Newton Direction for Discrete Optimization}
 \label{ssec:newtonDirection}
@@ -408,17 +413,18 @@ Its gradient and Hessian matrix are
   0                                            & 1) + \sum_{j \in V \setminus \{i\}}\frac{a_{i,j}}{k\norm{x_i - x_j}}(x_{i}- x_{j})(x_{i}- x_{j})^{\top}.
 \end{align*}
 Note that $\red{\Phi}^{\mathrm{a}}_{i}$ is strictly convex, assuring the Hessian matrix $\nabla^{2}\red{\Phi}^{\mathrm{a}}_{i}(x_{i})$ is positive definite.
-\red{We also note that the coordinate Newton direction is scale invariant, meaning that the direction does not change when we scale the positions of all vertices by a positive factor. Thus, we do not need to consider the scaling at this stage.}
 
 The ordinary updated rule with the coordinate Newton direction is
 \begin{equation*}
   x_{i}^{\mathrm{new}}\gets x_{i}- \nabla^{2}\red{\Phi}^{\mathrm{a}}_{i}(x_{i})^{-1}\nabla
   \red{\Phi}^{\mathrm{a}}_{i}(x_{i}).
 \end{equation*}
+\red{Note that when we scale the lattice structure by a factor of $s > 0$, the gradient is scaled by $s^{2}$ and the Hessian matrix is scaled by $s$, resulting in the coordinate Newton direction being scaled by $s$.
+  Thus, the algorithm for the FR force model is scale invariant.}
 Since $x_{i}^{\mathrm{new}}$ may not be in the hexagonal lattice $Q^{\mathrm{hex}}$ in Problem~\eqref{eq:frApprox0}, we project this $x_{i}^{\mathrm{new}}$ onto the nearest point in $Q^{\mathrm{hex}}$.
 We also empirically found that adding a random noise vector to the direction is effective for the optimization process, a strategy similar to the SA in \cref{ssec:preprocessing}.
 This randomness can help to escape from local minima and to explore the solution space more effectively.
-In conclusion, the updated rule for the vertex $i$ is
+In conclusion, the update rule for the vertex $i$ is
 \begin{equation*}
   x_{i}^{\mathrm{new}}\gets \mathrm{round}\qty(x_{i}- \nabla^{2} \red{\Phi}^{\mathrm{a}}_{i}
   (x_{i})^{-1}\nabla \red{\Phi}^{\mathrm{a}}_{i}(x_{i}) + r),
@@ -470,7 +476,7 @@ We summarize the proposed algorithm in \cref{alg:proposed}.
   \red{Assign all vertices to distinct points in $Q^{\mathrm{hex}}$ randomly}\;
   \For{$m \gets 0$ \KwTo $N_{\mathrm{iter}}^{\mathsf{CN}}$}{
   Select vertex $i \in V$ randomly\;
-  $x_{i}^{\mathrm{new}}\gets \mathrm{round}(x_{i}- \nabla^{2}\red{\Phi}_{i}^{\mathrm{a}}(x_{i})^{-1}\nabla \red{\Phi}_{i}^{\mathrm{a}}(x_{i}) + r)$ \red{with $r$ being a random vector}\;
+  $x_{i}^{\mathrm{new}}\gets \mathrm{round}(x_{i}- \nabla^{2}\red{\Phi}_{i}^{\mathrm{\red{a}}}(x_{i})^{-1}\nabla \red{\Phi}_{i}^{\mathrm{\red{a}}}(x_{i}) + r)$ \red{with $r$ being a random vector}\;
   \If{$\exists j \in V$ such that $x_{j}= x_{i}^{\mathrm{new}}$}{
     $x_{j}\gets x_{i}$\;
   }
@@ -494,7 +500,7 @@ Recall that the energy minimization problem \eqref{prob:fr} is
   {} {}
 \end{mini*}
 where $\epsilon^{\mathrm{r}}$ is a small constant to prevent divergence.
-Similar objective functions arise from other force models, such as HC (Hooke--Coulomb) \citep{atallahAlgorithmsTheoryComputation2009} and Eades \citep{eades1984heuristic} force models, which are as follows:
+Similar objective functions arise from other force models, such as the HC (Hooke--Coulomb) \citep{atallahAlgorithmsTheoryComputation2009} and Eades \citep{eades1984heuristic} force models, which are as follows:
 \begin{mini*}
   {X \in \bbR^{2 \times n}} {
     \Phi_{\mathrm{HC}}(X) \defeq
@@ -569,9 +575,9 @@ As algorithms to solve the \red{energy minimization problem}, we used
 
   \item L-BFGS algorithm \red{(\textsf{LBFGS})}.
 \end{enumerate}
-\red{The key remark is that we slightly modified the original simulation-based algorithm (presented in \cref{alg:fr}) so that it automatically adjust the stepsize and isolate the effect of the initialization from that of the stepsize.
+\red{The key remark is that we slightly modified the original simulation-based algorithm (presented in \cref{alg:fr}) so that it automatically adjusts the stepsize and isolates the effect of the initialization from that of the stepsize.
   Specifically, we applied a simple backtracking line search at the first iteration to suppress overshooting.}
-The maximum number of iterations of the simulation-based and L-BFGS algorithms are $N_{\mathrm{iter}}^{\mathsf{\red{SIM}}}= N_{\mathrm{iter}}^{\mathsf{\red{LBFGS}}}= \red{150}$ for FR force model, \red{and $N_{\mathrm{iter}}^{\mathsf{\red{SIM}}}= N_{\mathrm{iter}}^{\mathsf{\red{LBFGS}}}= 300$ for HC and Eades force models.}
+The maximum number of iterations of the simulation-based and L-BFGS algorithms are $N_{\mathrm{iter}}^{\mathsf{\red{SIM}}}= N_{\mathrm{iter}}^{\mathsf{\red{LBFGS}}}= \red{150}$ for the FR force model, \red{and $N_{\mathrm{iter}}^{\mathsf{\red{SIM}}}= N_{\mathrm{iter}}^{\mathsf{\red{LBFGS}}}= 300$ for the HC and Eades force models.}
 
 As parameters, we set the number of iterations $N_{\mathrm{iter}}^{\mathsf{CN}}= 2 \abs{V}^{3}/ \abs{E}$ for~\cref{alg:proposed}, and we also set the total number of iterations of Simulated Annealing (\textsf{SA}) in~\cref{ssec:preprocessing} to the same value.
 \red{For a random vector $r$ in \cref{alg:proposed}, the magnitude is set to $1-0.5\cdot m / N_{\mathrm{iter}}^{\mathsf{CN}}$ for the $m$-th iteration, and its direction is uniformly distributed in $[0, 2\pi)$.}
@@ -599,15 +605,14 @@ All the codes are available at GitHub~\citep{ThisPaperGitHub}.
 We first show the plots and visualizations of the four algorithms in \cref{fig:individual}, \textsf{RAND-SIM}, \textsf{CN-SIM}, \textsf{RAND-LBFGS}, and \textsf{CN-LBFGS}.
 We tested with 7 graphs: \texttt{cycle300}, \texttt{jagmesh1}, \texttt{dwt\_1005}, \texttt{btree9}, \texttt{1138\_bus}, \texttt{dwt\_2680}, and \texttt{3elt}.
 Here \texttt{cycle300} is a cycle graph with 300 vertices, and \texttt{btree9} is a perfect binary tree with $2^{9+1}-1=1023$ vertices.
-Other graphs are from Sparse Matrix Collection~\citep{davisUniversityFloridaSparse2011}, and these choices are based on Ref.~\citep{zhengGraphDrawingStochastic2019}.
+Other graphs are from the Sparse Matrix Collection~\citep{davisUniversityFloridaSparse2011}, and these choices are based on Ref.~\citep{zhengGraphDrawingStochastic2019}.
 \red{We provide more visualization results for various graphs in \cref{app:large_graphs}.}
 
 In \cref{fig:individual}, the plots on the left illustrate the objective function values $\red{\Phi}(X)$, the average of the \red{five} trials for each algorithm.
-The graphs on the right are at \red{100}-th iteration of the simulation-based and L-BFGS algorithms, and the graph at the bottom right is at \red{1000}-th iteration of \textsf{CN-LBFGS} as a reference for the best solution.
+The graphs on the right are at the \red{100}th iteration of the simulation-based and L-BFGS algorithms, and the graph at the bottom right is at the \red{1000}th iteration of \textsf{CN-LBFGS} as a reference for the best solution.
 The vertices in the graphs are colored according to vertex indices.
 
 The observations and implications of \cref{fig:individual} are as follows.
-
 \red{First, the plots of the objective function values show that the proposed \textsf{CN} methods, represented by solid lines, start from substantially lower objective values.
   This indicates that they produce high-quality approximate solutions within at most a few seconds, which is the main contribution of the proposed initialization.
   Overall, the \textsf{CN} methods outperform their non-\textsf{CN} counterparts over the iterations.
@@ -619,6 +624,8 @@ The observations and implications of \cref{fig:individual} are as follows.
 
 \red{Second, the visualization results further support the effectiveness of the proposed initial placement.
   In most cases, \textsf{CN} produces layouts that better approximate the nearly optimal arrangement, with more structured and less cluttered placements than random initialization.
+  Note that the objective values do not always match the visual quality. The objective value can change much more between a random state and a moderately clean layout, and thus the subtle differences in the objective values can be visually significant.
+  Additionally, the plot shows averages of the trials, whereas each visualization comes from a single trial.
 }
 
 As a side note, regardless of \textsf{CN} or non-\textsf{CN}, the algorithms with \textsf{LBFGS} consistently outperform those with \textsf{SIM}.
@@ -641,22 +648,22 @@ This finding is consistent with prior research~\citep{6183577}.
 \end{figure*}
 
 \red{As we have mentioned in \cref{sec:otherForceModels}, the proposed algorithm can be applied to other force models, such as the HC and Eades models.
-  The main differences from the experimental setup for the FR model are three folds.
-  (i) The weight of the graphs are all set to one, since the models are quite sensitive to extreme edge weights.
-  (ii) The total number of iterations are 300 as mentioned in \cref{ssec:setup}.
+  The main differences from the experimental setup for the FR model are as follows.
+  (i) The graph weights are all set to one, since the models are quite sensitive to extreme edge weights.
+  (ii) The total number of iterations is 300 as mentioned in \cref{ssec:setup}.
   (iii) We only run the L-BFGS algorithm since the simulation-based algorithm was originally designed for the FR model and thus is not expected to perform well for these models.
 }
 
 \red{
   We showed the results for these models in \cref{fig:individual_HC_and_Eades}.
-  The proposed algorithm also performed better than random initialization for these models, and the differences of the graphs are quite expressive in some cases.
+  The proposed algorithm also performed better than random initialization for these models, and the differences in the graphs are quite expressive in some cases.
   This is because these force models are much more difficult to optimize than the FR model, and thus the quality of the initial placement has a more significant effect on the final solution.
 }
 
 \subsection{Comparison with Other Initializations} % LLDisable
 \label{ssec:exprAll}
 
-Next, we conducted experiments to evaluate the performance of the proposed algorithm (\textsf{CN-}) compared to random initialization \red{(\textsf{RAND-})} and SA initialization (\textsf{SA-}) with various graphs.
+Next, we conducted experiments to evaluate the performance of the proposed algorithm (\textsf{CN}) compared to random initialization \red{(\textsf{RAND})} and SA initialization (\textsf{SA}) with various graphs.
 We used all undirected, connected, non-negative weighted graphs with $1{,}000$ or fewer vertices, which can be generated using the matrices from the Sparse Matrix Collection~\citep{davisUniversityFloridaSparse2011} as adjacency matrices.
 \red{In total, we tested with 124 graphs.}
 For fairness, when we compare with \textsf{SA}, we set all the weights to one since the SA initialization was originally designed for unweighted graphs.
@@ -693,7 +700,7 @@ For the algorithms, we set $N_{\mathrm{iter}}^{\mathsf{\red{SIM}}} = N_{\mathrm{
     Comparison of \red{the initializations.
       The bins arranged along the x-axis correspond to the 124 graphs.
       The y-axis shows the difference in $\Phi(X)$ between \textsf{CN} and the baseline initialization method.
-      The above figures compare \textsf{CN} with \textsf{RAND}, whereas below figures compare \textsf{CN} with \textsf{SA}.
+      The top panels compare \textsf{CN} with \textsf{RAND}, whereas the bottom panels compare \textsf{CN} with \textsf{SA}.
       Blue ones show results obtained using \textsf{SIM}, whereas orange ones show results obtained using \textsf{LBFGS}.
       In almost all cases for \textsf{RAND} and in most cases for \textsf{SA}, the differences are negative, meaning that the proposed initialization produced better final layouts than the baseline initialization methods.}
   }
@@ -758,7 +765,7 @@ Although the proposed method uses a hexagonal lattice $Q^{\mathrm{hex}}$, altern
 
 Furthermore, although this is a case not considered in Ref.~\citep{ghassemitoosiSimulatedAnnealingPreProcessing2016}, we also conducted experiments with \textsf{CN} and \textsf{SA} for a case where the graph is weighted, i.e., the edge weight $a_{i,j}$ is not necessarily in $\qty{0,1}$.
 We generated a weighted graph with 100 vertices in three groups and 1000 edges randomly, and if the two vertices were in the same group, we set the edge weight to $1.0$; otherwise, we set it to $0.1$.
-The difference between the two initializations are shown in \cref{fig:weightedDense}.
+The difference between the two initializations is shown in \cref{fig:weightedDense}.
 When we ignore the edge weights and just solve Problem~\eqref{eq:sa}, the graph is just an Erd\H{o}s--R\'enyi graph, and thus \textsf{SA} cannot find any meaningful structure in the initial placement.
 In contrast, the proposed algorithm can identify the graph's structure, and we can observe that the left graph in \cref{fig:weightedDense} is separated into groups, as indicated by the node colors.
 This result suggests that our proposed algorithm is effective even for weighted graphs, extending the applicability of the preprocessing step.
@@ -792,7 +799,7 @@ Multilevel approaches, such as \textsf{sfdp}~\citep{Hu2006EfficientHF} in Graphv
 }
 
 \red{
-  The proposed approach may also be useful for dynamic graph layouts, including animation and interactive visualization. Such scenarios are the one of the most prominent applications of the FR force model \citep{ertenGraphAELGraphAnimations2004,frishmanOnlineDynamicGraph2008}.
+  The proposed approach may also be useful for dynamic graph layouts, including animation and interactive visualization. Such scenarios are among the most prominent applications of the FR force model \citep{ertenGraphAELGraphAnimations2004,frishmanOnlineDynamicGraph2008}.
   Since inexpensive updates are important in real-time large-graph settings, our algorithm's lower per-iteration cost than the standard FR algorithm may help initialize new vertices, improve local configurations, or accelerate refinement in scalable simulation-based dynamic layouts.
   Since temporal coherence is central in dynamic graph drawing, integration with dynamic layout algorithms requires careful investigation, which we leave for future work.
 }
@@ -810,7 +817,7 @@ In what follows, we clarify the limitations of the direct approach and explain h
 \subsubsection{Possible Alternatives}
 \label{ssec:possibleApproach}
 
-One natural idea for solving \red{the energy minimization problem is to apply stochastic coordinate descent}, which resembles Randomized Subspace Newton methods~\citep{NEURIPS2019_bc6dc48b, fujiTheoreticalAnalysisRandomized2025, cartisRandomisedSubspaceMethods2022, nozawaRandomizedSubspaceGradient2023, higuchiFastConvergenceSecondOrder2024}.
+One natural idea for solving \red{the energy minimization problem is to apply stochastic coordinate descent}, which resembles Randomized Subspace Newton methods~\citep{gowerRSNRandomizedSubspace2019a, fujiTheoreticalAnalysisRandomized2025, cartisRandomisedSubspaceMethods2022, nozawaRandomizedSubspaceGradient2023, higuchiFastConvergenceSecondOrder2024}.
 For each vertex $i$, define the local energy
 \begin{equation}\label{eq:fi}
   \red{\Phi}_{i}(x_{i}) \defeq \sum_{j \in V \setminus \{i\}} \red{\Phi}_{i,j}(\norm{x_i - x_j}),
@@ -892,8 +899,8 @@ Thus, ignoring the movements of other vertices can be a significant limitation o
 
 Our proposed method resolves issues in \Cref{ssec:inaccuracy,ssec:ignorance} by transforming Problem~\eqref{prob:fr} into Problem~\eqref{eq:frApprox0} in \cref{ssec:reduction}, and optimizing $\red{\Phi}^{\mathrm{a}}_{i}$ on $Q^{\mathrm{hex}}$.
 
-Regarding the issue in \cref{ssec:inaccuracy}, this transformation brings the convexity of the objective function as it treats the repulsive forces via a hexagonal lattice, making the quadratic approximation more accurate than the original problem.
-Regarding the issue in \Cref{ssec:ignorance}, the discrete point set $Q$ ensures that the stepsize is at least $\epsilon$, as each point is always separated by at least $\epsilon$.
+Regarding the issue in \cref{ssec:inaccuracy}, this transformation brings the convexity of the objective function, as it treats the repulsive forces via a hexagonal lattice, making the quadratic approximation more accurate than the original problem.
+Regarding the issue in \Cref{ssec:ignorance}, the discrete point set $Q$ ensures that the stepsize of any nonzero move is at least \red{one}, as each point is always separated by at least \red{one}.
 This \red{helps avoid very small coordinate updates and can improve exploration of the feasible set.}
 Furthermore, this transformation also brings the benefit of reducing computational complexity from $\order*{\abs{V}^2}$ to $\order{\abs{E}}$.
 
@@ -906,7 +913,7 @@ In this study, we proposed a new initial placement with the coordinate Newton
 direction for the FR force model, Problem~\eqref{prob:fr}. % LLDisable
 The obtained initial placements have fewer twists than the random initialization, leading to faster convergence and better visualization.
 Numerical experiments revealed that the proposed method is effective across various graphs, extending the applicability of the preprocessing step.
-The proposed method may advance the graph drawing, and we also hope it highlights the potential of stochastic coordinate descent and its variants for addressing a broader range of graph-related optimization problems.
+The proposed method may advance graph drawing, and we also hope it highlights the potential of stochastic coordinate descent and its variants for addressing a broader range of graph-related optimization problems.
 
 \section*{Acknowledgment}
 
@@ -933,13 +940,13 @@ This work was supported by JSPS KAKENHI Grant Numbers \red{JP26KJ0936}, JP23H033
 
 \red{
   We can observe a similar trend to that in \cref{fig:individual}.
-  For the simulation-based algorithm, the effect of the proposed method is significant and its visualization results well reflect the structure of the graph.
-  For L-BFGS algorithms, the positive effect is relatively smaller, but the objective function values in plots are generally outperformed in most of the cases.
+  For the simulation-based algorithm, the effect of the proposed method is significant, and its visualization results well reflect the structure of the graph.
+  For L-BFGS algorithms, the positive effect is relatively smaller, but the objective function values in the plots are generally outperformed in most of the cases.
 }
 
 \red{
   As a side note, for larger graphs, the computational cost of convergence for both simulation-based algorithms and L-BFGS becomes substantially higher, and even a single iteration can require a considerable amount of time.
-  For futther large-scale graphs with over ten thousand vertices, it will likely be necessary to combine the proposed method with a multilevel approach, as discussed in \cref{sec:application_like_multilevel}.
+  For further large-scale graphs with over ten thousand vertices, it will likely be necessary to combine the proposed method with a multilevel approach, as discussed in \cref{sec:application_like_multilevel}.
 }
 
 \begin{figure*}[p]
@@ -950,8 +957,8 @@ This work was supported by JSPS KAKENHI Grant Numbers \red{JP26KJ0936}, JP23H033
     }%
   }
   \caption{
-    \red{Additional experimental results for FR force model.
-      The objective function values at early state are generally improved for both simulation-based and L-BFGS algorithms, and the visual improvements by our proposed method \textsf{CN} are apparat for the simulation-based algorithms.}
+    \red{Additional experimental results for the FR force model.
+      The objective function values at early states are generally improved for both simulation-based and L-BFGS algorithms, and the visual improvements by our proposed method \textsf{CN} are apparent for the simulation-based algorithms.}
   }
   \label{fig:individual_2}
 \end{figure*}
@@ -1005,7 +1012,7 @@ As the temperature gradually decreases, the algorithm converges to a particular 
 Another approach is to leverage the L-BFGS algorithm~\citep{6183577}.
 Using only a few recent gradient vectors, the L-BFGS algorithm approximates the inverse Hessian of the objective function $\red{\Phi}$~\citep{liuLimitedMemoryBFGS1989a}.
 L-BFGS is known to be very efficient for large-scale optimization problems.
-We can apply the L-BFGS algorithm via flattening the matrix $X \in \bbR^{2 \times n}$ to a vector $\overline{X}\in \bbR^{2n}$.
+We can apply the L-BFGS algorithm by flattening the matrix $X \in \bbR^{2 \times n}$ to a vector $\overline{X}\in \bbR^{2n}$.
 Refer to \cref{fig:comparisonFRandLBFGS} for a comparison to the \red{simulation-based} algorithm.
 
 \subsection{NetworkX Implementation}
@@ -1034,7 +1041,7 @@ Other than that, the following differences exist:
 
 Under these settings, the \red{energy minimization problem}~\eqref{prob:fr} can be unbounded.
 It means that the optimal solution does not exist in a finite region.
-When edge weights are negative or the graph is disconnected, i.e., when it consists of $n_\mathrm{comp} >1$ connected components ($V=\bigcup_{j=1}^{n_\mathrm{comp}}V_{j}$), the solution may be unbounded, since the farther apart the vertices are, the lower the energy.
+When edge weights are negative, or the graph is disconnected, i.e., when it consists of $n_\mathrm{comp} >1$ connected components ($V=\bigcup_{j=1}^{n_\mathrm{comp}}V_{j}$), the solution may be unbounded, since the farther apart the vertices are, the lower the energy.
 
 To overcome this issue, we do the following suitable modifications.
 First, when the graph has negative edge weights, one may transform them into non-negative values, for example, by taking their absolute values.
@@ -1044,7 +1051,7 @@ Third, we add additional forces to the energy function to prevent the divergence
 In general, adding terms that attract each group to the center is a common approach to avoid unboundedness.
 We adopt this approach with the center $x_{\mathrm{center}}=(0.5, 0.5)^{\top}$, as it is the center of the expected layout bounding box.
 
-Based on \cref{sec:preliminaries}, let us define the sum of terms associated with the vertex $x_{i}$ be $\red{\Phi}_{i}$, which is explicitly given by
+Based on \cref{sec:preliminaries}, let us define the sum of terms associated with the vertex $x_{i}$ as $\red{\Phi}_{i}$, which is explicitly given by
 \begin{equation*}
   \red{\Phi}_{i}(x_{i}) \coloneqq \sum_{j \in V \setminus \{i\}}\left( \red{\Phi}_{i,j}(\norm{x_{i}- x_{j}}
     ) + \red{\Phi}_{j,i}(\norm{x_{j}- x_{i}}) \right).
@@ -1067,6 +1074,6 @@ with the gradient
   \text{where}\quad i \in V_{j}.
 \end{equation*}
 We can now apply the L-BFGS algorithm to these functions to derive the algorithm.
-Further implementation details and experimental results are available in \href{https://github.com/networkx/networkx/pull/7889}{our merged pull request} to the NetworkX.
+Further implementation details and experimental results are available in \href{https://github.com/networkx/networkx/pull/7889}{our merged pull request} to NetworkX.
 
 \end{document}
