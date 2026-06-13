@@ -8,6 +8,8 @@
 \usepackage[hidelinks]{hyperref}
 \usepackage{pifont}
 \usepackage{physics}
+\usepackage{optidef}
+\usepackage{amsmath, amssymb}
 
 % --- Metadata (edit these fields as needed) ---
 \newcommand{\EditorName}{Stephen Kobourov}
@@ -47,14 +49,13 @@
 
 \medskip
 
-Thank you for directing us to the reviewers' comments and for giving us the opportunity to revise our manuscript.
-We confirm that we have received the review reports.
+Thank you for directing us to the reviewers' comments and for giving us the opportunity to revise our manuscript, and we would like to express our deepest gratitude for your generous and flexible support regarding the situation with the system error.
 
 Based on the reports, we have carefully reviewed all comments and revised the manuscript accordingly.
 Our responses are provided below in a point-by-point manner.
-Where applicable, we refer to section, equation, figure, or algorithm numbers in the revised manuscript.
+This manuscript has been approved by all authors, and we agree to its submission.
 
-We hope the revised version is now suitable for publication and look forward to hearing from you.
+We hope the revised version is now suitable for the JGAA journal and look forward to hearing from you.
 
 \medskip
 
@@ -69,8 +70,7 @@ Hiroki Hamaguchi, Naoki Marumo, and Akiko Takeda
 \section{Response to Reviewer A}
 
 We thank Reviewer A for the careful and constructive assessment of our manuscript.
-We appreciate the reviewer's observation that the proposed algorithm is interesting and that there are no major problems with the construction of the algorithm.
-We have revised the manuscript to address the concerns regarding the relationship between the proposed method and the Fruchterman--Reingold model, as well as the distinction between the FR and KK models.
+We have revised the manuscript to address the concerns. The blue text below indicates the reviewer's comments, and our responses are provided in the following paragraphs.
 
 \subsection{Relationship Between the Proposed Approach and the FR Force Model}
 
@@ -81,41 +81,46 @@ We have revised the manuscript to address the concerns regarding the relationshi
   By contrast, Kamada and Kawai [21] proposed the KK force model and solved it by a Newton-like method.
   Also, many succeeding studies followed these approaches, i.e., either by combining simulation-based algorithms with the FR model or by combining Newton-like methods with the KK model.
   Although Hosobe [19] showed that both models could be solved with a Newton-like method called L-BFGS, the results still suggested that the KK model was more suitable for L-BFGS than the FR model.
+}
+\begin{response}
+  Thank you for the detailed comment. We agree with these observations.
+\end{response}
 
+\reviewercomment{
   However, this submitted paper adopts an unusual approach that combines a Newton-like method with the FR model.
   I understand that the paper is focused only on the computation of initial layouts, but I think that the validation of adopting this approach is still insufficient.
 }
-\begin{response}
-  Thank you for the detailed comment. We do not disagree with these observations themselves.
-\end{response}
 
+\begin{response}
+  We first acknowledge that several expressions in the previous version of the manuscript may have caused confusion, and we apologize for this.
+
+  The key point is that the proposed method is not tied to L-BFGS. Rather, the proposed method is an initial-layout method that can be combined with either the FR algorithm (simulation-based algorithm in the current manuscript), or with L-BFGS.
+  We did not intend to claim that the proposed method should specifically be combined with L-BFGS.
+  However, our previous wording may have given the impression that L-BFGS itself was part of the proposed method.
+  In the previous version, as Reviewer B also noted, we referred to the effectiveness of L-BFGS in the introduction and elsewhere. This may have suggested that L-BFGS was an essential component of the proposed method. However, as illustrated, for example, in Fig.~1, the proposed initialization method and the subsequent optimization method are independent components.
+
+  We carefully revised the manuscript to clarify this distinction.  If a reader wishes to use the FR algorithm after initialization, they may do so. Indeed, combining the proposed method with the FR algorithm is also within the intended scope of the method. We revised the introduction and related parts of the manuscript to communicate this point more clearly.
+
+  Our response continues below.
+\end{response}
 
 \reviewercomment{
   It should be noted that the experimental results in Section 5 show that the proposed initial layout algorithm works better when it is combined with the L-BFGS algorithm for computing final layouts.
-}
-
-\begin{response}
-  First, we recognize that the previous version of the manuscript contained several expressions that could have caused misunderstanding, and we apologize for this.
-
-  As a premise, Reviewer A's comment mainly concerns the comparison between algorithms used after initialization, namely the FR algorithm versus L-BFGS. However, what we truly intend to claim is a comparison of initialization methods: Random initialization versus Coordinate Newton initialization, or SA-based initialization versus Coordinate Newton initialization. Therefore, the observation that ``the proposed initial layout algorithm works better when it is combined with the L-BFGS algorithm for computing final layouts'' is attributable to the difference between the non-proposed components, and is not directly related to the superiority or inferiority of the proposed method itself.
-
-  We considered carefully how best to respond to this point, and revised the manuscript in two directions.
-
-  First, as stated above, we made it clear that the point raised concerns only the difference between existing post-initialization methods and is independent of the merit of the proposed method. It is true that the result labeled CN-LBFGS gives the best performance and is better than CN-FR. However, this reflects the difference between existing optimization methods, which is not the central focus of this paper. What we want readers to compare is the difference between RAND-FR and CN-FR, or between RAND-LBFGS and CN-LBFGS. We clarified in Section 5 that this is the comparison on which attention should be focused.
-
-  Second, we revised expressions that could have caused the misunderstanding above. In the previous manuscript, as Reviewer B also noted, we referred to the superiority of L-BFGS in the introduction and elsewhere, which may have given the impression that L-BFGS itself was part of the proposed method. However, as illustrated for example in Fig.~1, the proposed method and L-BFGS are completely independent components. If a reader wishes to use the FR algorithm, they may do so; indeed, using the proposed method in combination with FR is also within the intended scope of the method. We revised the wording in the introduction and related parts so that this distinction is communicated more clearly.
-
-  The discussion continues in the next response.
-\end{response}
-
-\reviewercomment{
   It seems from Figure 6 that the combination of the proposed initial layout algorithm with the FR algorithm for computing final layouts does not work well except in limited cases like jagmesh1.
 }
 
 \begin{response}
-  Related to the preceding comment, we believe that this particular point is based on a misunderstanding. In Figure 6, the proposed method outperforms the baseline in all cases except jagmesh1, and we believe that the differences are sufficiently significant both numerically and visually.
+  We apologize for the misleading presentation of the results, but we believe that this point was caused by the way the results were presented rather than by the actual numerical results.
+  In Fig.~6, the proposed method outperforms the baseline in almost all cases including jagmesh1, and the differences are sufficiently clear both numerically and visually.
 
-  We suspect that the way Figure 6 was presented may have made it difficult to interpret correctly. To prevent such misunderstandings, we emphasized the proposed method in bold, explicitly added the label ``(proposed)'' to the CN method, and reordered the columns so that the comparison between random initialization and the proposed method is easier to see. We also clarified this point in the main text.
+  We therefore revised Fig.~6 and its explanation to make the comparison easier to interpret. Specifically, we emphasized the proposed method in bold, renamed several methods for clarity, reordered the columns, and added ruled lines so that the comparison between random initialization and the proposed method is easier to see.
+  We also clarified this point in the main text.
+
+  In particular, the proposed method often shows a larger improvement when combined with the FR (simulation-based) algorithm than when combined with L-BFGS. In many cases, the difference between \textsf{RAND-SIM} and \textsf{CN-SIM} is larger than the difference between \textsf{RAND-LBFGS} and \textsf{CN-LBFGS}. In this sense, the effect of the proposed initialization method is often more pronounced when it is combined with the FR (simulation-based) algorithm.
+
+  The impression that the proposed initialization method works better when combined with L-BFGS may come from the fact that the final objective values obtained by the FR algorithm are higher than those obtained by L-BFGS. However, this is a comparison between two existing optimization methods and is independent of the proposed initialization method itself. The contribution of the proposed method is that it provides a better initial layout than random initialization.
+
+  We hope that the revised presentation and explanation adequately address the reviewer's concern.
 \end{response}
 
 \reviewercomment{
@@ -123,11 +128,11 @@ We have revised the manuscript to address the concerns regarding the relationshi
 }
 
 \begin{response}
-  As the explanation above indicates, our position is that the proposed method is effective whether it is combined with the FR algorithm or with L-BFGS. Therefore, we do not argue that it ``should be'' combined specifically with L-BFGS.
+  As the explanation above indicates, our position is that the proposed method is effective whether it is combined with the FR (simulation-based) algorithm or with the L-BFGS algorithm. Therefore, we do not argue that it ``should be'' combined specifically with L-BFGS.
 
-  In fact, in many cases the difference between Rand-FR and CN-FR is larger than the difference between Rand-LBFGS and CN-LBFGS. In this sense, the effect of the proposed method is often more pronounced when it is combined with the FR algorithm. Therefore, at this stage we have not explicitly adopted the suggestion that the KK model should be used instead. As discussed later, however, we regard combinations with other force models and generalizations in that direction as valuable topics, and we added a separate subsection to discuss them.
+  For this reason, we have not adopted the suggestion to replace the FR model with the KK model in the present manuscript. As discussed later, however, we regard combinations with other force models and generalizations in that direction as valuable topics, and we added a separate subsection to discuss them.
 
-  At the same time, for readers who simply want to obtain the best final result, it is fair to say as a general observation based on prior work, independently of the proposed method, that L-BFGS often gives better results than the FR algorithm as an optimization method. We hope that clarifying this point adequately addresses the reviewer's concern.
+  At the same time, for readers who simply want to obtain the best final layout, as a general observation based on prior work and independently of the proposed method, that L-BFGS often gives better results than the FR algorithm as an optimization method.
 \end{response}
 
 \reviewercomment{
@@ -135,7 +140,9 @@ We have revised the manuscript to address the concerns regarding the relationshi
 }
 
 \begin{response}
-  To reiterate, our claim is not that the proposed method should be combined with the FR algorithm or should be combined with L-BFGS. Rather, both combinations are within the scope of the proposed algorithm. As stated above, we revised the manuscript to make this point clear.
+  To reiterate, our claim is not that the proposed method should be combined with the FR (simulation-based) algorithm or should be combined with L-BFGS.
+  (Indeed, as we later discuss, we added further numerical experiment results for other force models such as HC and Eades, and the proposed method with L-BFGS also shows a clear improvement in those cases. Therefore, the proposed method is not limited to the FR (simulation-based) algorithm or to the FR model.)
+  Rather, both combinations are within the scope of the proposed algorithm. As stated above, we revised the manuscript to make this point clear.
 \end{response}
 
 \subsection{Difference Between FR and KK Models}
@@ -149,18 +156,53 @@ We have revised the manuscript to address the concerns regarding the relationshi
 }
 
 \begin{response}
-  Thank you for this insightful comment. Our response to this point has two parts.
+  Thank you for this insightful comment.
 
-  First, as the reviewer suggests, the proposed method is applicable to other force models such as KK, HC, and Eades. This is because the coordinate Newton direction can be defined in the same way for functions of this form.
-  Second, however, for the KK model, the effect of the proposed method may be less pronounced than for other models, or it may even be counterproductive, because of the specific characteristics of the KK model.
+  First, as the reviewer suggests, the proposed method is applicable to other force models such as HC and Eades.
+  We added a discussion on the generalization to the HC and Eades layouts in Section~4.5.
+  These force models are also mentioned in Hosobe~[19], and the proposed method is indeed applicable to them.
+  We also conducted additional numerical experiments.
+  As described in detail in the revised manuscript, some additional care is required because of differences such as the presence or absence of convexity. Nevertheless, the proposed method was found to be effective in essentially the same way.
+  We added explanations and numerical results on these points to the main text and the Appendix.
+  Since these models are somewhat less widely known than the FR model, we mention them only briefly in the introduction.
+  We also considered changing the title of the paper, but decided to keep the current title.
 
-  We first discuss the generalization to the HC and Eades layouts. These force models are also mentioned in Hosobe [19], and the proposed method is indeed applicable to them. We also conducted numerical experiments. As described in detail in the revised manuscript, some additional care is required because of differences such as the presence or absence of convexity, but the proposed method was found to be effective in essentially the same way. We added explanations and numerical results on these points to the main text and the Appendix. Since these models are somewhat less widely known than the FR model, we refer to them only briefly in the introduction. We also considered changing the title of the paper, but decided to keep it unchanged.
+  Second, for the KK model, we believe that the proposed method cannot be applied in the same way as for the FR model. Even if one applies a variant of the proposed method to more general cases, it may not be effective for the KK model.
+  This is closely related to the form of the objective function:
+  \begin{mini*}
+    {X \in \mathbb{R}^{2 \times n}} {\Phi_{\mathrm{FR}}(X) = \sum_{(i,j)\in E} \frac{a_{i,j}\norm{x_{i} - x_{j}}^{3}}{3k} - \sum_{\substack{(i,j) \in V^2 \\ i < j}} k^2\log{(\norm{x_{i} - x_{j}} + \epsilon^{\mathrm{r}})}.}
+    {} {}
+  \end{mini*}
+  \begin{mini*}
+    {X \in \mathbb{R}^{2 \times n}} {
+      \Phi_{\mathrm{HC}}(X) =
+      \sum_{(i,j)\in E}
+      \frac{k_1(\lVert x_{i} - x_{j} \rVert - a_{ij})^2}{2}
+      +
+      \sum_{\substack{(i,j) \in V^2 \\ i < j}}
+      \frac{k_2}{\lVert x_{i} - x_{j} \rVert + \epsilon^{\mathrm{r}}},}{}{}
+  \end{mini*}
+  \begin{mini*}
+    {X \in \mathbb{R}^{2 \times n}} {\Phi_{\mathrm{Eades}}(X) =
+      \sum_{(i,j)\in E}
+      k_1 \lVert x_{i} - x_{j} \rVert
+      \left(
+      \log \frac{\lVert x_{i} - x_{j} \rVert}{a_{ij}} - 1
+      \right)
+      +
+      \sum_{\substack{(i,j) \in V^2 \\ i < j}}
+      \frac{k_2}{\lVert x_{i} - x_{j} \rVert + \epsilon^{\mathrm{r}}}.}{}{}
+  \end{mini*}
+  \begin{mini*}
+    {X \in \mathbb{R}^{2 \times n}} {\Phi_{\mathrm{KK}}(X) \coloneqq \sum_{\substack{(i,j) \in V^2 \\ i < j}}  \frac{(\lVert x_{i} - x_{j} \rVert - l_{ij})^2}{2 l_{ij}^2}}
+    {} {}
+  \end{mini*}
+  In the KK model, the main energy terms are defined over all vertex pairs, that is, over sums of the form $\sum_{\substack{(i,j) \in V^2 \ i < j}} \cdot$, rather than over edge pairs of the form $\sum_{(i,j) \in E} \cdot$.
+  This is because the KK energy is defined by first computing all-pairs graph distances and then defining energy terms based on those distances.
+  Therefore, computing forces on a vertex-by-vertex basis does not provide the same advantage as in the FR, HC, and Eades models, and may even lead to slower convergence.
 
-  In contrast, for the KK model, we believe that the effect of the proposed method may be less apparent than for other models. This is closely related to whether the sparsity of the graph can be exploited. The proposed method is designed to compute the force on each vertex by looking at the vertices adjacent to it and to optimize the layout based on this computation. Therefore, when the main terms in the energy function are at most \(\order*{\abs{E}}\), that is, proportional to the number of edges, the proposed method can work much faster than naive methods requiring \(\order*{\abs{V}^2}\) computations, and its effect is likely to be significant. This is a common feature of the FR, HC, and Eades models. Indeed, the examples of ``objective functions arising from graphs'' also have this form.
-
-  In the KK model, however, the main energy terms are defined for all pairs of vertices, rather than as a separate set of \(\order*{\abs{E}}\) terms. This is because the energy in the KK model is defined by first computing all-pairs graph distances and then defining energy terms based on those distances. Therefore, computing forces on a vertex-by-vertex basis does not provide the same advantage and may even cause slower convergence.
-
-  As related work, a method based on another optimization approach called SGD has been proposed for the KK model: [33] J. X. Zheng, S. Pawar, and D. F. M. Goodman, ``Graph Drawing by Stochastic Gradient Descent,'' IEEE Transactions on Visualization and Computer Graphics. In contrast to the proposed method, that approach focuses on pairs rather than vertices when performing optimization, and in that sense it can be regarded as complementary to our work.
+  As related work, a method based on another optimization approach called SGD has been proposed for the KK model: J. X. Zheng, S. Pawar, and D. F. M. Goodman, ``Graph Drawing by Stochastic Gradient Descent,'' IEEE Transactions on Visualization and Computer Graphics.
+  In contrast to the proposed method, that approach focuses on pairs rather than vertices when performing optimization, and in that sense it can be regarded as complementary to our work. From the optimization perspective, such SGD-based methods are more suitable for the KK model than the proposed method, and we added a discussion of this point.
 
   Based on these considerations, we removed the previous Section 7.1 and instead revised the manuscript, especially around Section 4.5, to explain these issues more carefully.
 \end{response}
@@ -170,7 +212,7 @@ We have revised the manuscript to address the concerns regarding the relationshi
   I think that the KK model would be more suitable for this application than the FR model.
 }
 \begin{response}
-  Thank you for pointing this out. Regarding the application to graph isomorphism, we agree with the reviewer and recognize that our previous discussion reflected an insufficient understanding. This application is not particularly natural for the FR model and may distract readers from the main contribution of the paper. Therefore, we removed this discussion from the revised manuscript.
+  Thank you for pointing this out. Regarding the application to graph isomorphism, we agree with the reviewer and recognize that our previous discussion was not sufficiently well motivated. This application is not particularly natural for the FR model and may distract readers from the main contribution of the paper. Therefore, we removed this discussion from the revised manuscript.
 \end{response}
 
 \reviewercomment{
@@ -240,7 +282,7 @@ We have revised the manuscript to address the concerns regarding the relationshi
 }
 
 \begin{response}
-  We corrected the definition symbol in the ``objective functions arising from graphs'' formulation.
+  Since we removed the previous Section~7.1, this issue no longer appears in the revised manuscript.
 \end{response}
 
 \reviewercomment{
@@ -257,7 +299,6 @@ We have revised the manuscript to address the concerns regarding the relationshi
 \section{Response to Reviewer B}
 
 We thank Reviewer B for the careful review and constructive suggestions.
-We appreciate the positive assessment that the paper addresses a topic of clear interest to the JGAA audience, that the technical explanation is comprehensive, and that the mathematical treatment is mostly easy to follow.
 We have revised the manuscript to improve the framing of the contribution, the discussion of related work, the experimental evaluation, and the organization of the later sections.
 
 \subsection{Related Work on Multilevel Approaches}
@@ -270,13 +311,13 @@ We have revised the manuscript to improve the framing of the contribution, the d
 
 \begin{response}
   Thank you for pointing this out.
-  We understand this comment as arising from a possible ambiguity in the term FR: whether it refers to the force model, which defines attractive and repulsive forces between vertices, or to an algorithm for finding an equilibrium point of that model. It is important to emphasize that, in the previous manuscript, the FR force model and the FR algorithm were treated as entirely different concepts. We apologize that the wording was highly prone to misunderstanding.
+  We agree that the wording in the previous manuscript was ambiguous.
 
-  In response to this point, we revised the wording throughout the manuscript so that this distinction is conveyed clearly. We continue to refer to the force model itself, namely the formulation corresponding to Problem (1), as the FR force model, which is also the term used in the title. On the other hand, the algorithm used to find an equilibrium point of this model, previously called the FR algorithm in Algorithm 3, is now referred to as a simulation-based algorithm, and we explain clearly what this means. Since this algorithm is also commonly called the FR algorithm, we added an explanation while taking care to avoid confusion.
+  The source of the ambiguity was the use of the term FR. In the revised manuscript, we distinguish more carefully between the FR force model, which defines attractive and repulsive forces between vertices and corresponds to Problem~(1), and the simulation-based algorithm commonly associated with the Fruchterman--Reingold method for seeking an equilibrium of that model.
 
-  Thus, the statement that sfdp is prior work to FR was intended to refer only to the algorithmic aspect of sfdp, and not to the modeling aspect. As the reviewer points out, it was not intended to refer to the FR force model. We carefully revised the relevant passages and related parts of the manuscript.
+  The paper is concerned with the FR force model itself, as indicated by the title, whereas the simulation-based algorithm is only one possible method for optimizing the corresponding objective. To avoid confusion, we no longer refer to Algorithm~3 simply as the FR algorithm. Instead, we refer to it as a simulation-based algorithm and explain its relation to the classical FR algorithm.
 
-  To reiterate, the FR force model itself and the simulation-based algorithm used to solve it are entirely different objects.
+  The statement involving \textsf{sfdp} was intended to refer to prior algorithmic work on force-directed layout and multilevel optimization, not to the chronological relation between \textsf{sfdp} and the FR force model. We have revised the relevant passages to make this distinction explicit and to avoid the misleading implication that \textsf{sfdp} predates the FR force model.
 \end{response}
 
 \subsection{Discussion of Multilevel Approaches and Potential Applications}
@@ -296,16 +337,23 @@ We have revised the manuscript to improve the framing of the contribution, the d
 }
 
 \begin{response}
-  We believe that this point also stems from the ambiguity mentioned above, namely the possible confusion between the FR algorithm and the FR model. We apologize for the wording that may have caused this misunderstanding. The title of the paper refers to the FR force model, namely the formulation in Problem (1), and not to the algorithm. Therefore, the relevant statements in the previous manuscript were intended to mean that L-BFGS often gives better results than the simulation-based algorithm, not that it is a better alternative to the FR force model itself. The target of this paper, including its title, is the optimization problem defined by the FR force model; the FR algorithm is only one possible method for solving that problem.
+  Thank you for raising this important point.
+  We have revised the manuscript to clarify that the title refers to the FR force model, namely the optimization problem in Problem~(1), and not to a particular algorithm for solving it.
 
-  Moreover, whether the FR algorithm or L-BFGS is better is a difference between existing methods and is independent of the merit of the proposed method. In the previous manuscript, as Reviewer A also noted, our references to the superiority of L-BFGS in the introduction and elsewhere may have given the impression that L-BFGS itself was part of the proposed method. However, as shown for example in Fig.~1, the proposed method and L-BFGS are completely independent components. If a reader wishes to use the simulation-based algorithm, they may do so; indeed, combining the proposed method with the simulation-based algorithm is also within the intended scope of the method. We revised the introduction and related passages to make this distinction clearer.
+  In the previous manuscript, some statements may have suggested that L-BFGS was being presented as an alternative to the FR force model itself. This was not our intention. Rather, L-BFGS and the simulation-based algorithm are two possible methods for optimizing the same FR-based objective. The proposed method is an initial-placement method and is independent of the choice of subsequent optimizer. It can be combined with L-BFGS, with the simulation-based algorithm, or with other optimization procedures.
+
+  We have revised the introduction and related passages to make this separation clearer. In particular, we now emphasize that the contribution of the paper is not L-BFGS itself, but an initialization method for problems formulated using the FR force model.
 \end{response}
 
 \reviewercomment{
   Even in the related work section, in Section 3.1, only L-BFGS is mentioned as a ready-to-go measure for application in Multilevel approaches.
 }
 \begin{response}
-  This point was also caused by insufficient explanation. If one wishes to use the simulation-based algorithm instead, that is entirely possible. Moreover, the proposed method may even show its effect more clearly when combined with the simulation-based algorithm. We revised the explanation to emphasize this point.
+  Thank you for pointing this out.
+  We agree that the previous explanation was too narrow.
+  The proposed method can also be used with the simulation-based algorithm, and in some cases its effect may be more visible there because the simulation-based algorithm converges more slowly and is therefore more sensitive to the initial placement.
+
+  We have revised the discussion of multilevel approaches to explain that the proposed initialization can be combined with several types of subsequent optimization methods, including simulation-based algorithms, L-BFGS, and potentially other solvers used within multilevel pipelines.
 \end{response}
 
 \reviewercomment{
@@ -313,7 +361,12 @@ We have revised the manuscript to improve the framing of the contribution, the d
   The paper does not make a good argument why we should choose that over the other, thus in a way making me question even the title of the paper.
 }
 \begin{response}
-  We believe that this concern also arises from the same ambiguity. The answer is that, regardless of the algorithm used to solve it, the FR force model itself is an important formulation with various applications. Again, we distinguish the simulation-based algorithm, which corresponds to the ``FR algorithm'' in the comment above, from the FR force model.
+  We agree that the previous manuscript did not explain this point sufficiently.
+  The purpose of the paper is not to argue that the simulation-based algorithm should always be preferred over L-BFGS. Rather, the paper studies an initialization method for the FR force model, which remains an important graph drawing formulation regardless of which optimizer is used.
+
+  L-BFGS often converges faster and achieves better objective values than the simulation-based algorithm in our experiments. However, this comparison concerns the choice of optimizer, not the value of the proposed initialization method. The proposed method can improve the starting point for either optimizer. Therefore, the contribution is best understood as improving the optimization pipeline for FR-based graph drawing, rather than as advocating one particular solver.
+
+  We have revised the manuscript, especially the introduction and experimental discussion, to make this framing explicit.
 \end{response}
 
 \reviewercomment{
@@ -324,7 +377,7 @@ We have revised the manuscript to improve the framing of the contribution, the d
   Summarizing the discussion above, the impact of this paper and the ways in which other researchers can build upon it are as follows.
   \begin{itemize}
     \item Impact: For problems formulated using the FR force model, we propose an initial-placement method that can be effective regardless of whether a simulation-based algorithm or L-BFGS is used afterward, and we demonstrate that it is effective in various cases. Furthermore, in connection with Reviewer A's comments, we also show that a similar idea can be applied to other graph drawing formulations.
-    \item Building upon the work: The proposed method can be combined with other methods for solving problems based on the FR force model, such as multilevel approaches, or with other optimization methods. It is also relatively independent of subsequent studies on formulations for improving graph drawing quality.
+    \item Building upon the work: The proposed method can be combined with other methods for solving problems based on the FR force model, such as multilevel approaches, or with other optimization methods.
   \end{itemize}
   We added explanations of these points, especially in the introduction.
 \end{response}
@@ -343,11 +396,18 @@ We have revised the manuscript to improve the framing of the contribution, the d
 
 \begin{response}
   Thank you for the suggestion.
-  As suggested, we expanded the dataset in the Appendix to include additional graphs. We also substantially revised the presentation of the figures in response to this and other comments. Overall, we believe that the revised experiments demonstrate the effectiveness of the proposed method on a broader range of graphs.
+  As suggested, we expanded the dataset in the Appendix to include additional graphs and substantially revised the presentation of the figures.
 
-  We read the paper cited as [1] and examined the corresponding dataset. Unfortunately, the relevant links appear to be broken, and we were unable to obtain the dataset. We also checked the Internet Archive, but the download links were not functional, so we could not retrieve the full dataset. We also considered datasets used in papers cited by [1], and in fact experimented with some of them, including parts of the SNAP dataset (\url{https://snap.stanford.edu/data/index.html}). However, when the number of vertices exceeds ten thousand, the proposed method itself often still works without difficulty, but the subsequent iterations of the simulation-based algorithm or L-BFGS become very expensive and impractical. For such extremely large graphs, it seems necessary to combine the proposed method with more scalable methods such as multilevel approaches. We regard this as a promising direction for future work.
+  For the dataset suggested by the reviewer, we indeed added or created graphs such as \texttt{cylinder\_30\_30}, \texttt{gr\_30\_30}, \texttt{sierpinski\_06}, and some other graphs.
+  These graphs are ``grids, cylinders, and other regular graphs'' and are appeared in the paper cited as [1] in Reviewer B's comment or its citing papers.
+  Although the proposed method did not yield significant improvements for all of these graphs, especially when combined with L-BFGS, we observed improvements for the simulation-based algorithm in several cases. We believe that these additional experiments provide a more informative evaluation.
 
-  Although we ultimately decided not to include experiments on extremely large graphs and therefore cannot claim to provide a fully comprehensive benchmark set, we report that we expanded the dataset as much as possible to include a variety of graph types.
+  We also attempted to obtain more of the datasets used in the cited paper.
+  Unfortunately, some of the relevant links in the paper [1] appear to be broken, and we were unable to obtain some of the datasets. We also checked the Internet Archive, but the download links were not functional, so we could not retrieve the full dataset.
+  We also experimented with some of the datasets in the paper [1], including parts of the SNAP dataset (\url{https://snap.stanford.edu/data/index.html}). However, when the number of vertices exceeds ten thousand, the proposed method itself often still works without difficulty, but the subsequent iterations of the simulation-based algorithm or L-BFGS become very expensive and impractical.
+  For such large graphs, combining the proposed method with more scalable techniques, such as multilevel approaches, appears to be a promising direction for future work.
+
+  Although we cannot claim to provide a fully comprehensive benchmark set, we report that we expanded the dataset as much as possible to include a variety of graph types.
 \end{response}
 
 \subsection{Visualization and Color Map}
@@ -362,8 +422,8 @@ We have revised the manuscript to improve the framing of the contribution, the d
 
 \begin{response}
   Thank you for the suggestion.
-  We agree that the current index-based coloring does not add much interpretive value.
-  We revise the visualization by replacing the rainbow map with a sequential continuous color map, ``viridis''.
+  We agree that the previous index-based rainbow coloring did not add much interpretive value and could be visually misleading.
+  We revised the visualizations by replacing the rainbow map with the sequential continuous color map \texttt{viridis}, together with an appropriate legend where needed.
 \end{response}
 
 \subsection{Effect of Initial Placement Over Time}
@@ -376,7 +436,7 @@ We have revised the manuscript to improve the framing of the contribution, the d
 \begin{response}
   We believe that this behavior is caused by the slow convergence of the FR algorithm, i.e., the simulation-based algorithm. For the graphs used in Figure 6, there appears to be a nearly unique equilibrium state, and the methods appear to converge toward the same best objective value for each graph. Of course, the initial placement and the subsequent algorithm affect the path through which the objective function decreases. In other words, if sufficiently many iterations are allowed, all methods seem to converge toward the same visually clean graph layout.
 
-  Therefore, we believe that it is somewhat inaccurate to say that the difference due to the initial placement remains permanently in the simulation-based algorithm. If a very large number of iterations is allowed, then even for the simulation-based algorithm, as for L-BFGS, the difference due to initialization gradually fades and the methods eventually converge to the same objective value. However, because the simulation-based algorithm converges slowly, a very large number of iterations would be required, and we stopped the plots at the current range because showing such a long run would make the figures difficult to read.
+  Therefore, we believe that it is somewhat inaccurate to say that the difference due to the initial placement remains permanently in the simulation-based algorithm. If a very large number of iterations is allowed, then even for the simulation-based algorithm, as for L-BFGS, the difference due to initialization gradually fades, and the methods eventually converge to the same objective value. However, because the simulation-based algorithm converges slowly, a very large number of iterations would be required, and we stopped the plots at the current range because showing such a long run would make the figures difficult to read.
 
   The discussion continues in the next response.
 \end{response}
@@ -400,7 +460,14 @@ We have revised the manuscript to improve the framing of the contribution, the d
 }
 
 \begin{response}
-  \textcolor{red}{This point has not yet been addressed.}
+  Thank you for this suggestion. We agree that the cases of \texttt{dwt\_992} and \texttt{collins\_15NN} deserve a more detailed discussion.
+
+  We have added a discussion of these two cases in the revised manuscript. In particular, we explain that the main difference between them is not simply whether \textsf{CN} or \textsf{SA} gives a better initial objective value, but whether the initial layout induces a twisted configuration that is difficult for the subsequent optimization algorithm to resolve. In \texttt{dwt\_992}, the layout initialized by \textsf{CN} contains such a twist, and the subsequent optimization fails to remove it, so the final layout remains twisted. By contrast, in \texttt{collins\_15NN}, the \textsf{SA} initialization produces a twisted configuration, and the subsequent algorithm requires many iterations to untwist it, whereas the proposed initialization avoids this difficulty.
+
+  However, we also found it difficult to formulate a simple general rule that predicts, for an arbitrary graph, whether a given initialization will lead to such a twisted configuration. The final result depends on several interacting factors, including the graph structure, the positional constraints implicitly imposed by the initial layout, the behavior of the subsequent optimization algorithm, and the random seed.
+
+  Therefore, instead of claiming a definitive characterization, we revised the manuscript to describe these examples as representative cases showing that the quality of the final layout tends to improve when the initial layout is already close to a desirable final configuration.
+  We hope that this discussion provides a more useful and convincing explanation of the phenomena observed in these two cases.
 \end{response}
 
 \subsection{Spike in Objective Function at the Start of Optimization}

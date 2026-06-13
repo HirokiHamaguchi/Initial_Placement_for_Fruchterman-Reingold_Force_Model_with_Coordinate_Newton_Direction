@@ -93,44 +93,45 @@ namespace
 
     std::cout << "Model: " << modelStr << std::endl;
 
-    std::string histStr =
-        std::to_string(config.matrixNames.size()) + " " +
-        std::to_string(methods.size()) + "\n";
-
     for (const auto &matrixName : config.matrixNames)
     {
       Problem problem(matrixName, config.model, modelStr == "HC" || modelStr == "Eades");
 
-      histStr += matrixName + "\n";
       std::cout << matrixName << std::endl;
 
       for (const auto &method : methods)
       {
-        histStr += MethodStr[method] + "\n";
         std::cout << MethodStr[method] << std::endl;
+
+        // std::string histStr = std::to_string(config.num_seeds) + "\n";
 
         for (int seed = 1; seed <= config.num_seeds; seed++)
         {
-          auto [hist, positions] = solve(method, problem, true, seed, MAX_ITER);
+          // auto [hist, positions] = solve(method, problem, true, seed, MAX_ITER);
 
-          appendHistory(histStr, hist);
+          // appendHistory(histStr, hist);
 
           if (seed == 1)
           {
-            std::string outputFile = "doc/main/individual/out/" + problem.matrixName + "_" + MethodStr[method] + config.suffix + ".out";
-            problem.printOutput(positions, outputFile);
+            // std::string outputFile = "doc/main/individual/out/" + problem.matrixName + "_" + MethodStr[method] + config.suffix + ".out";
+            // problem.printOutput(positions, outputFile);
+
+            if (config.model == ForceModelType::FR && method == Method::CN_L_BFGS)
+            {
+              auto [hist_best, positions_best] = solve(method, problem, true, seed, 1000);
+              std::string outputFileBest = "doc/main/individual/out/" + problem.matrixName + "_BEST.out";
+              problem.printOutput(positions_best, outputFileBest);
+            }
           }
         }
+
+        // const std::string fileName = "doc/main/individual/hist/" + modelStr + "+" + matrixName + "+" + MethodStr[method] + ".txt";
+        // auto [histPath, fileForHist] = openFile(fileName);
+
+        // fileForHist << histStr;
+        // fileForHist.close();
       }
     }
-
-    const std::string fileName = "doc/main/individual/" + config.histName;
-    auto [histPath, fileForHist] = openFile(fileName);
-
-    fileForHist << histStr;
-    fileForHist.close();
-
-    std::cout << "Hist path: " << histPath << std::endl;
   }
 } // namespace
 
@@ -142,8 +143,8 @@ int main()
       "btree9",
       "1138_bus",
       "dwt_1005",
-      // "dwt_2680",
-      // "3elt",
+      "dwt_2680",
+      "3elt",
   };
 
   const std::vector<std::string> matrixNames2 = {
@@ -157,34 +158,34 @@ int main()
   };
 
   const std::vector<ExperimentConfig> experiments = {
-      // {
-      //     matrixNames1,
-      //     ForceModelType::FR,
-      //     "_FR",
-      //     "hist_FR.txt",
-      //     5,
-      // },
+      {
+          matrixNames1,
+          ForceModelType::FR,
+          "_FR",
+          "hist_FR.txt",
+          5,
+      },
       {
           matrixNames1,
           ForceModelType::Eades,
           "_Eades",
           "hist_Eades.txt",
-          1,
+          5,
       },
       {
           matrixNames1,
           ForceModelType::HC,
           "_HC",
           "hist_HC.txt",
-          1,
+          5,
       },
-      // {
-      //     matrixNames2,
-      //     ForceModelType::FR,
-      //     "_2",
-      //     "hist_2.txt",
-      //     5,
-      // },
+      {
+          matrixNames2,
+          ForceModelType::FR,
+          "_2",
+          "hist_2.txt",
+          5,
+      },
   };
 
   for (const auto &experiment : experiments)

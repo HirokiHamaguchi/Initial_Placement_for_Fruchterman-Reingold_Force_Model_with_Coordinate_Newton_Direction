@@ -22,5 +22,3 @@ hidden/*
 *.dvi
 *.synctex.gz
 *.synctex(busy)
-
-!doc/main/individual/out/*

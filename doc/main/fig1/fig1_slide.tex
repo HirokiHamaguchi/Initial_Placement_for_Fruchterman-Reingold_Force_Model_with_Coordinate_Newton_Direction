@@ -12,22 +12,22 @@
   \def\y{3}
 
   \node (A) at (-1.2*\y,0) {\includegraphics[width=3cm]{../individual/vis/fig1_init_random_FR.png}};
-  \node[above=0.1cm of A, scale=1.2] {\large{\textsf{Random}}};
+  \node[above=0.1cm of A, scale=1.2] {\Large{\textsf{Random}}};
 
   \node (B) at (-1.8*\y,-5) {\includegraphics[width=3cm]{../individual/vis/jagmesh1_FR_FR.png}};
-  \node[below=0.1cm of B, scale=1.2] {\large{\textsf{RAND-SIM}}};
+  \node[below=0.1cm of B, scale=1.2] {\Large{\textsf{RAND-SIM}}};
 
   \node (C) at (-0.6*\y,-5) {\includegraphics[width=3cm]{../individual/vis/jagmesh1_L-BFGS_FR.png}};
-  \node[below=0.1cm of C, scale=1.2] {\large{\textsf{RAND-LBFGS}}};
+  \node[below=0.1cm of C, scale=1.2] {\Large{\textsf{RAND-LBFGS}}};
 
-  \node (D) at (+1.2*\y, 0) {\includegraphics[width=3cm]{../individual/vis/fig1_init_CN_FR.png}};
-  \node[above=-0.1cm of D, scale=1.2] {\large{\textsf{Initial Placement}}};
+  \node (D) at (+1.2*\y, 0) {\includegraphics[width=3cm]{../individual/vis/jagmesh1_CN_FR.png}};
+  \node[above=-0.1cm of D, scale=1.2, align=center] {\large{\textsf{Initial Placement}}\\\large{\textsf{(\textbf{C}oordinate \textbf{N}ewton)}}};
 
   \node (E) at (+0.6*\y,-5) {\includegraphics[width=3cm]{../individual/vis/jagmesh1_CN-FR_FR.png}};
-  \node[below=0.1cm of E, scale=1.2] {\large{\textsf{\textbf{CN}-SIM}}};
+  \node[below=0.1cm of E, scale=1.2] {\Large{\textsf{\textbf{CN}-SIM}}};
 
   \node (F) at (+1.8*\y,-5) {\includegraphics[width=3cm]{../individual/vis/jagmesh1_CN-L-BFGS_FR.png}};
-  \node[below=0.1cm of F, scale=1.2] {\large{\textsf{\textbf{CN}-LBFGS}}};
+  \node[below=0.1cm of F, scale=1.2] {\Large{\textsf{\textbf{CN}-LBFGS}}};
 
   % Draw arrows with labels
   \draw[-{Stealth[length=2mm,width=3mm]},line width=0.07cm] (A) -- (B) node[midway, left=0.3cm,scale=1.2, align=center] {\large{\textsf{Force}}\\\large{\textsf{Simulation}}};

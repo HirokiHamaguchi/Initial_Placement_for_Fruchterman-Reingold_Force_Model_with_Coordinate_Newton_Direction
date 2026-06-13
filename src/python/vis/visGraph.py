@@ -1,9 +1,11 @@
+from io import BytesIO
 from typing import Optional, Union
 
 import matplotlib.pyplot as plt
 import networkx as nx
 import numpy as np
 from matplotlib.colors import Normalize
+from PIL import Image
 
 
 def visGraph(
@@ -14,6 +16,7 @@ def visGraph(
     savePath: Optional[str] = None,
     node_size: int = 50,
     width: float = 1,
+    _colorMap: Optional[np.ndarray] = None,
 ) -> None:
     plt.figure(figsize=(8, 8))
     plt.axis("equal")
@@ -22,7 +25,7 @@ def visGraph(
     cmap = plt.get_cmap("viridis")
     norm = Normalize(vmin=0, vmax=max(n - 1, 1))
     nodeIndices = np.arange(n)
-    colorMap = cmap(norm(nodeIndices))
+    colorMap = cmap(norm(nodeIndices)) if _colorMap is None else _colorMap
     nx.draw(
         G,
         pos,
@@ -65,7 +68,20 @@ def visGraph(
         plt.gca().set_axis_off()
         plt.subplots_adjust(top=1, bottom=0, right=1, left=0, hspace=0, wspace=0)
         plt.margins(0, 0)
-        plt.savefig(savePath)
+
+        ram = BytesIO()
+        plt.savefig(
+            ram, format="png", transparent=False, bbox_inches="tight", pad_inches=0
+        )
+        ram.seek(0)
+        im = Image.open(ram).convert("RGB")
+        im2 = im.quantize(
+            colors=32,
+            method=Image.Quantize.MEDIANCUT,
+            dither=Image.Dither.NONE,
+        )
+        im2.save(savePath, format="PNG", optimize=True, compress_level=9)
+
         plt.close()
     else:
         plt.show()

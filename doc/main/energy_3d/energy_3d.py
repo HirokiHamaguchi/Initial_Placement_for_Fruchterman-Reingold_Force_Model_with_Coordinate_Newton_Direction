@@ -41,7 +41,7 @@ ax.plot_surface(
 # Set plot labels and title
 ax.set_xlabel("$x_{i,1}$", fontsize=20)
 ax.set_ylabel("$x_{i,2}$", fontsize=20)
-ax.set_zlabel("$E_{i,j}(\\| x_i - x_j \\|)$", fontsize=20)
+ax.set_zlabel("$\\Phi_{i,j}(\\| x_i - x_j \\|)$", fontsize=20)
 ax.set_zlim(0, 4)
 ax.set(zticks=[1, 2, 3, 4])
 

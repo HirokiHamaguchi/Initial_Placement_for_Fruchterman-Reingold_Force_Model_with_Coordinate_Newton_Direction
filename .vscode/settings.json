@@ -242,6 +242,7 @@
         "problem~\\\\eqref\\{prob:fr\\}",
         "cref\\{prob:fr\\}",
         "[sS]imulation [bB]ased",
-        "todo"
+        "todo",
+        "the stochastic coordinate descent"
     ]
 }
