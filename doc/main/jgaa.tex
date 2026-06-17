@@ -234,8 +234,8 @@ Then, the problem is to minimize the energy with $X \coloneqq (x_{1}, \dots, x_{
 \red{We refer to Problem~\ref{prob:fr} as the energy minimization problem for the FR force model.}
 
 \red{We also define the vertex pairwise energy function $\red{\Phi}_{i,j}(d) \coloneqq \red{\Phi}_{i,j}^{\mathrm{a}}(d) + \red{\Phi}^{\mathrm{r}}(d)$ for convenience.
-Here, $\Phi_{i,j}(\cdot)=\Phi_{j,i}(\cdot)$ holds for all $i,j\in V$.
-While the energy function $\Phi_{i,j}(d)$} is convex and minimized when $d = k/\sqrt[3]{a_{i,j}}$ for a positive $a_{i,j}$, a function $x_{i}\mapsto \red{\Phi}_{i,j} (\norm{x_i - x_j})$ is non-convex for a fixed $x_{j}$.
+  Here, $\Phi_{i,j}(\cdot)=\Phi_{j,i}(\cdot)$ holds for all $i,j\in V$.
+  While the energy function $\Phi_{i,j}(d)$} is convex and minimized when $d = k/\sqrt[3]{a_{i,j}}$ for a positive $a_{i,j}$, a function $x_{i}\mapsto \red{\Phi}_{i,j} (\norm{x_i - x_j})$ is non-convex for a fixed $x_{j}$.
 Additionally, $\red{\Phi}_{i,j}$ is not Lipschitz continuous near $d=0$, as illustrated in \cref{fig:energy3d}.
 These properties highlight the difficulty of the optimization problem.
 
@@ -275,8 +275,8 @@ The $i$-th column of the gradient $\nabla \red{\Phi}(X)\in\mathbb{R}^{2\times n}
 A common choice for the initial solution is a random placement of nodes within the bounding box~\citep{2020SciPy-NMeth}.
 
 However, when the input is highly twisted or otherwise ill-conditioned, \red{both the simulation-based algorithm and the} L-BFGS algorithm can suffer from high computational costs. Each iteration operates on the full set of coordinates, which limits its ability to untangle local geometric defects, and the total number of iterations required to reach a good layout can be large.
-\red{Thus, to address these issues, we need an alternative optimization approach that differs from both the simulation-based algorithm and the L-BFGS algorithm.
-  As such an approach, this study proposes stochastic coordinate descent with coordinate Newton directions, a second-order optimization method used as preprocessing for first-order gradient-based methods.}
+\red{Thus, for pre-processing purposes, it is desirable to use inexpensive updates that move the layout toward a reasonably good configuration before applying the simulation-based algorithm or L-BFGS.
+  This study therefore proposes stochastic coordinate descent with coordinate Newton directions as a lightweight initial-placement method.}
 
 \subsection{Initial Placement Approach}
 \label{ssec:preprocessing}
@@ -335,7 +335,7 @@ Although the Newton direction is essential in various iterative methods, it requ
 Still, we can leverage the concept of the Newton direction in a different manner: the coordinate Newton direction.
 Instead of computing the inverse Hessian $\nabla^{2}g(x_{0})^{-1}$ in the entire variable space $\bbR^{n}$, we restrict the variable $x$ to its coordinate block $x_{i}$ with fewer dimensions, and compute $\nabla^{2}g_{i}(x_{i})^{-1}\nabla g_{i}(x_{i})$ where $g_{i}$ is a restricted function of $g$ to $x_{i}$.
 Since the coordinate Newton direction computation is much cheaper than that of the Newton direction, we can repeat this procedure many times.
-In general, this idea is known as stochastic coordinate descent~\citep{wright2022optimization} or Randomized Subspace Newton~\citep{gowerRSNRandomizedSubspace2019a} in a broader context.
+In general, this idea is known as stochastic coordinate descent~\citep{wright2022optimization} or Randomized Subspace Newton~\citep{3454287.3454343} in a broader context.
 
 In particular, this coordinate Newton direction has an apparent natural affinity to the \red{energy minimization problem}.
 We can compute the coordinate Newton direction by taking the position $x_{i}$ of the vertex $i$ as the coordinate block.
@@ -378,8 +378,8 @@ Following previous research mentioned in \cref{ssec:preprocessing}, we fix the p
 \red{We also impose a condition on $Q$ such that $\norm{q_{i}- q_{j}}\geq 1$ for all $q_{i}, q_{j}\in Q$ with $q_{i}\neq q_{j}$.}
 \red{This makes the second $\order*{\abs{V}^2}$ terms from $\Phi^{\mathrm{r}}$ bounded by a constant.}
 \red{Since $\Phi^{\mathrm{r}}(d)=-k^{2}\log{d}$ is a convex function such that it decreases monotonically with respect to $d$, for sufficiently large $d$, the value of $-k^{2}\log{d}$ does not vary excessively.
-We can also prevent the divergence of the energy function by the condition $\norm{q_{i}- q_{j}}\geq 1$.
-Under these observations, we drop the second term and derive the problem as:}
+  We can also prevent the divergence of the energy function by the condition $\norm{q_{i}- q_{j}}\geq 1$.
+  Under these observations, we drop the second term and derive the problem as:}
 \begin{mini*}
   {X \in \bbR^{2 \times n}} {\sum_{\red{(i,j)}\in E} \frac{a_{i,j}\norm{x_i - x_j}^{3}}{3k},}
   {} {} \addConstraint{x_i}{\in Q \quad}{\text{for $1 \leq i \leq n$}}
@@ -477,13 +477,13 @@ We summarize the proposed algorithm in \cref{alg:proposed}.
   \For{$m \gets 0$ \KwTo $N_{\mathrm{iter}}^{\mathsf{CN}}$}{
   Select vertex $i \in V$ randomly\;
   $x_{i}^{\mathrm{new}}\gets \mathrm{round}(x_{i}- \nabla^{2}\red{\Phi}_{i}^{\mathrm{\red{a}}}(x_{i})^{-1}\nabla \red{\Phi}_{i}^{\mathrm{\red{a}}}(x_{i}) + r)$ \red{with $r$ being a random vector}\;
-  \If{$\exists j \in V$ such that $x_{j}= x_{i}^{\mathrm{new}}$}{
-    $x_{j}\gets x_{i}$\;
-  }
-  $x_{i}\gets x_{i}^{\mathrm{new}}$\;
-  }
+    \If{$\exists j \in V$ such that $x_{j}= x_{i}^{\mathrm{new}}$}{
+      $x_{j}\gets x_{i}$\;
+    }
+    $x_{i}\gets x_{i}^{\mathrm{new}}$\;
+    }
   $x_{i}\gets s^{*}x_{i}$ for all $i \in V$ with $s^{*}$ given by \cref{eq:scaling}\;
-  \Return $X$
+    \Return $X$
 \end{algorithm}
 
 {
@@ -533,7 +533,7 @@ Another difference is that this direction depends on the scaling of $Q^{\mathrm{
 
 We emphasize that the proposed method is not suitable for all graph-derived objective functions. A representative example is the KK model~\citep{kamadaAlgorithmDrawingGeneral1989}, whose objective function is
 \begin{mini*}
-  {X \in \bbR^{2 \times n}} {\Phi_{\mathrm{KK}}(X) \coloneqq \sum_{\substack{(i,j) \in V^2 \\ i < j}}  \frac{(\lVert x_{i} - x_{j} \rVert - l_{ij})^2}{2 l_{ij}^2}}
+  {X \in \bbR^{2 \times n}} {\Phi_{\mathrm{KK}}(X) \coloneqq \sum_{\substack{(i,j) \in V^2 \\ i < j}}  \frac{(\lVert x_{i} - x_{j} \rVert - l_{ij})^2}{2 l_{ij}^2}.}
   {} {}
 \end{mini*}
 This objective differs from those considered above because it consists only of all-pairs terms and has no principal edge-based term.
@@ -624,12 +624,12 @@ The observations and implications of \cref{fig:individual} are as follows.
 
 \red{Second, the visualization results further support the effectiveness of the proposed initial placement.
   In most cases, \textsf{CN} produces layouts that better approximate the nearly optimal arrangement, with more structured and less cluttered placements than random initialization.
-  Note that the objective values do not always match the visual quality. The objective value can change much more between a random state and a moderately clean layout, and thus the subtle differences in the objective values can be visually significant.
+  Note that subtle differences in the objective values can still correspond to visible differences in the resulting layouts.
   Additionally, the plot shows averages of the trials, whereas each visualization comes from a single trial.
 }
 
-As a side note, regardless of \textsf{CN} or non-\textsf{CN}, the algorithms with \textsf{LBFGS} consistently outperform those with \textsf{SIM}.
-This finding is consistent with prior research~\citep{6183577}.
+\red{As a side note, regardless of \textsf{CN} or non-\textsf{CN}, the algorithms with \textsf{LBFGS} consistently outperform those with \textsf{SIM}.
+  This finding} is consistent with prior research~\citep{6183577}.
 
 \subsection{Other Force Models}
 
@@ -817,7 +817,7 @@ In what follows, we clarify the limitations of the direct approach and explain h
 \subsubsection{Possible Alternatives}
 \label{ssec:possibleApproach}
 
-One natural idea for solving \red{the energy minimization problem is to apply stochastic coordinate descent}, which resembles Randomized Subspace Newton methods~\citep{gowerRSNRandomizedSubspace2019a, fujiTheoreticalAnalysisRandomized2025, cartisRandomisedSubspaceMethods2022, nozawaRandomizedSubspaceGradient2023, higuchiFastConvergenceSecondOrder2024}.
+One natural idea for solving \red{the energy minimization problem is to apply stochastic coordinate descent}, which resembles Randomized Subspace Newton methods~\citep{3454287.3454343, fujiTheoreticalAnalysisRandomized2025, cartisRandomisedSubspaceMethods2022, nozawaRandomizedSubspaceGradient2023, higuchiImprovingConvergenceGuarantees2024}.
 For each vertex $i$, define the local energy
 \begin{equation}\label{eq:fi}
   \red{\Phi}_{i}(x_{i}) \defeq \sum_{j \in V \setminus \{i\}} \red{\Phi}_{i,j}(\norm{x_i - x_j}),

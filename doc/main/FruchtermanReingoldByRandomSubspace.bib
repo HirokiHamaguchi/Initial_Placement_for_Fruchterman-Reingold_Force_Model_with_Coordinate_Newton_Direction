@@ -21,6 +21,18 @@
   doi = {10.1038/s41592-019-0686-2}
 }
 
+@incollection{3454287.3454343,
+  title = {{{RSN}}: Randomized Subspace Newton},
+  booktitle = {Proceedings of the 33rd International Conference on Neural Information Processing Systems},
+  author = {Gower, Robert M. and Kovalev, Dmitry and Lieder, Felix and Richt{\'a}rik, Peter},
+  year = 2019,
+  publisher = {Curran Associates Inc.},
+  address = {Red Hook, NY, USA},
+  url = {https://dl.acm.org/doi/10.5555/3454287.3454343},
+  abstract = {We develop a randomized Newton method capable of solving learning problems with huge dimensional feature spaces, which is a common setting in applications such as medical imaging, genomics and seismology. Our method leverages randomized sketching in a new way, by finding the Newton direction constrained to the space spanned by a random sketch. We develop a simple global linear convergence theory that holds for practically all sketching techniques, which gives the practitioners the freedom to design custom sketching approaches suitable for particular applications. We perform numerical experiments which demonstrate the efficiency of our method as compared to accelerated gradient descent and the full Newton method. Our method can be seen as a refinement and randomized extension of the results of Karimireddy, Stich, and Jaggi [18].},
+  articleno = {56}
+}
+
 @inproceedings{6183577,
   title = {Numerical Optimization-Based Graph Drawing Revisited},
   booktitle = {2012 {{IEEE}} Pacific Visualization Symposium},
@@ -60,7 +72,6 @@
 }
 
 @article{ahmedMulticriteriaScalableGraph2022a,
-  title = {Multicriteria {{Scalable Graph Drawing}} via {{Stochastic Gradient Descent}}, ({{SGD}})2},
   author = {Ahmed, Reyan and De Luca, Felice and Devkota, Sabin and Kobourov, Stephen and Li, Mingwei},
   year = 2022,
   month = jun,
@@ -72,7 +83,8 @@
   doi = {10.1109/TVCG.2022.3155564},
   abstract = {Readability criteria, such as distance or neighborhood preservation, are often used to optimize node-link representations of graphs to enable the comprehension of the underlying data. With few exceptions, graph drawing algorithms typically optimize one such criterion, usually at the expense of others. We propose a layout approach, Multicriteria Scalable Graph Drawing via Stochastic Gradient Descent, (SGD)2, that can handle multiple readability criteria. (SGD)2 can optimize any criterion that can be described by a differentiable function. Our approach is flexible and can be used to optimize several criteria that have already been considered earlier (e.g., obtaining ideal edge lengths, stress, neighborhood preservation) as well as other criteria which have not yet been explicitly optimized in such fashion (e.g., node resolution, angular resolution, aspect ratio). The approach is scalable and can handle large graphs. A variation of the underlying approach can also be used to optimize many desirable properties in planar graphs, while maintaining planarity. Finally, we provide quantitative and qualitative evidence of the effectiveness of (SGD)2: we analyze the interactions between criteria, measure the quality of layouts generated from (SGD)2 as well as the runtime behavior, and analyze the impact of sample sizes. The source code is available on github and we also provide an interactive demo for small graphs.},
   langid = {english},
-  pmid = {35230951}
+  pmid = {35230951},
+  title = {Multicriteria {{Scalable Graph Drawing}} via {{Stochastic Gradient Descent}}, {$\mathrm{(SGD)}^2$}}
 }
 
 @article{arleoDistributedMultilevelForceDirected2019,
@@ -434,21 +446,6 @@
   file = {C:\Users\hirok\Zotero\storage\L6Q8MNGZ\Ghassemi Toosi et al. - 2016 - Simulated Annealing as a Pre-Processing Step for F.pdf}
 }
 
-@incollection{gowerRSNRandomizedSubspace2019a,
-  title = {{{RSN}}: Randomized Subspace Newton},
-  shorttitle = {{{RSN}}},
-  booktitle = {Proceedings of the 33rd {{International Conference}} on {{Neural Information Processing Systems}}},
-  author = {Gower, Robert M. and Kovalev, Dmitry and Lieder, Felix and Richt{\'a}rik, Peter},
-  year = 2019,
-  month = dec,
-  number = {56},
-  pages = {616--625},
-  publisher = {Curran Associates Inc.},
-  doi = {10.5555/3454287.3454343},
-  urldate = {2026-06-13},
-  abstract = {We develop a randomized Newton method capable of solving learning problems with huge dimensional feature spaces, which is a common setting in applications such as medical imaging, genomics and seismology. Our method leverages randomized sketching in a new way, by finding the Newton direction constrained to the space spanned by a random sketch. We develop a simple global linear convergence theory that holds for practically all sketching techniques, which gives the practitioners the freedom to design custom sketching approaches suitable for particular applications. We perform numerical experiments which demonstrate the efficiency of our method as compared to accelerated gradient descent and the full Newton method. Our method can be seen as a refinement and randomized extension of the results of Karimireddy, Stich, and Jaggi [18].}
-}
-
 @article{greengardFastAlgorithmParticle1987,
   title = {A Fast Algorithm for Particle Simulations},
   author = {Greengard, L and Rokhlin, V},
@@ -495,21 +492,17 @@
   file = {C:\Users\hirok\Zotero\storage\QRYDW2CJ\Harel and Koren - 2002 - A Fast Multi-Scale Method for Drawing Large Graphs.pdf}
 }
 
-@misc{higuchiFastConvergenceSecondOrder2024,
-  title = {Fast {{Convergence}} to {{Second-Order Stationary Point}} through {{Random Subspace Optimization}}},
+@inproceedings{higuchiImprovingConvergenceGuarantees2024,
+  title = {Improving {{Convergence Guarantees}} of {{Random Subspace Second-order Algorithm}} for {{Nonconvex Optimization}}},
+  booktitle = {The {{Thirteenth International Conference}} on {{Learning Representations}}},
   author = {Higuchi, Rei and Poirion, Pierre-Louis and Takeda, Akiko},
-  year = 2024,
-  month = jun,
-  number = {arXiv:2406.14337},
-  eprint = {2406.14337},
-  primaryclass = {math},
-  publisher = {arXiv},
-  doi = {10.48550/arXiv.2406.14337},
-  urldate = {2024-07-24},
-  abstract = {We propose the Random Subspace Homogenized Trust Region (RSHTR) method, which efficiently solves high-dimensional non-convex optimization problems by identifying descent directions within randomly selected subspaces. RSHTR provides the strongest theoretical guarantees among random subspace algorithms for non-convex optimization, achieving an \$\textbackslash varepsilon\$-approximate first-order stationary point in \$O(\textbackslash varepsilon\textasciicircum\textbraceleft -3/2\textbraceright )\$ iterations and converging locally at a linear rate. Furthermore, under rank-deficient conditions, RSHTR satisfies \$\textbackslash varepsilon\$-approximate second-order necessary condition in \$O(\textbackslash varepsilon\textasciicircum\textbraceleft -3/2\textbraceright )\$ iterations and exhibits a local quadratic convergence.},
-  archiveprefix = {arXiv},
-  keywords = {90C06 90C26 90C30,Mathematics - Optimization and Control},
-  file = {C\:\\Users\\hirok\\Zotero\\storage\\U3M7G37T\\Higuchi et al. - 2024 - Fast Convergence to Second-Order Stationary Point .pdf;C\:\\Users\\hirok\\Zotero\\storage\\REUWDATS\\2406.html}
+  year = 2025,
+  month = jan,
+  url = {https://openreview.net/forum?id=tuu4de7HL1},
+  urldate = {2026-06-17},
+  abstract = {In recent years, random subspace methods have been actively studied for large-dimensional nonconvex problems. Recent subspace methods have improved theoretical guarantees such as iteration complexity and local convergence rate while reducing computational costs by deriving descent directions in randomly selected low-dimensional subspaces. This paper proposes the Random Subspace Homogenized Trust Region (RSHTR) method with the best theoretical guarantees among random subspace algorithms for nonconvex optimization. RSHTR achieves an \$\textbackslash varepsilon\$-approximate first-order stationary point in \$O(\textbackslash varepsilon\textasciicircum\textbraceleft -3/2\textbraceright )\$ iterations, converging locally at a linear rate. Furthermore, under rank-deficient conditions, RSHTR satisfies \$\textbackslash varepsilon\$-approximate second-order necessary conditions in \$O(\textbackslash varepsilon\textasciicircum\textbraceleft -3/2\textbraceright )\$ iterations and exhibits a local quadratic convergence. Experiments on real-world datasets verify the benefits of RSHTR.},
+  langid = {english},
+  file = {C:\Users\hirok\Zotero\storage\MKNRMMC9\Higuchi et al. - 2025 - Improving Convergence Guarantees of Random Subspace Second-order Algorithm for Nonconvex Optimizatio.pdf}
 }
 
 @article{Hu2006EfficientHF,
