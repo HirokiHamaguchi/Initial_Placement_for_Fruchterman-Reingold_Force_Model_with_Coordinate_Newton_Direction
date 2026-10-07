@@ -322,18 +322,18 @@ By combining it with \red{the simulation-based algorithm and the L-BFGS algorith
 \label{ssec:introNewton}
 
 \red{Let us first explain the Newton direction and the coordinate Newton direction, the key concept in our algorithm.}
-Consider a strictly convex function $g \colon \bbR^{n}\to \bbR$ at $x_{0}$.
+Consider a twice continuously differentiable function $g \colon \bbR^{n} \to \bbR$ whose Hessian $\nabla^{2}g(x_{0})$ is positive definite.
 The Newton direction $d = -\nabla^{2}g(x_{0})^{-1}\nabla g(x_{0})$ is an optimal direction for the second-order approximation of $g$:
 \begin{equation*}
   g(x_{0}) + \nabla g(x_{0})^{\top}(x - x_{0}) + \frac{1}{2}(x - x_{0})^{\top}\nabla
   ^{2}g(x_{0}) (x - x_{0}),
 \end{equation*}
 where $x = x_{0}+ d$ is the minimizer of this approximation.
-Note that the Hessian matrix $\nabla^{2}g(x_{0})$ is positive definite since $g$ is strictly convex.
+The positive definiteness of $\nabla^{2}g(x_{0})$ ensures that this quadratic approximation has a unique minimizer.
 Although the Newton direction is essential in various iterative methods, it requires the computation of the inverse Hessian $\nabla^{2}g(x_{0})^{-1}\in \bbR^{n \times n}$, posing a high computational cost for large-scale problems.
 
 Still, we can leverage the concept of the Newton direction in a different manner: the coordinate Newton direction.
-Instead of computing the inverse Hessian $\nabla^{2}g(x_{0})^{-1}$ in the entire variable space $\bbR^{n}$, we restrict the variable $x$ to its coordinate block $x_{i}$ with fewer dimensions, and compute $\nabla^{2}g_{i}(x_{i})^{-1}\nabla g_{i}(x_{i})$ where $g_{i}$ is a restricted function of $g$ to $x_{i}$.
+Instead of computing the inverse Hessian $\nabla^{2}g(x_{0})^{-1}$ in the entire variable space $\bbR^{n}$, we restrict the variable $x$ to its coordinate block $x_{i}$ with fewer dimensions, and compute $-\nabla^{2}g_{i}(x_{i})^{-1}\nabla g_{i}(x_{i})$ where $g_{i}$ is a restricted function of $g$ to $x_{i}$.
 Since the coordinate Newton direction computation is much cheaper than that of the Newton direction, we can repeat this procedure many times.
 In general, this idea is known as stochastic coordinate descent~\citep{wright2022optimization} or Randomized Subspace Newton~\citep{3454287.3454343} in a broader context.
 
@@ -374,18 +374,18 @@ First, recall that the \red{energy minimization problem} is equivalent to the fo
   {} {}
 \end{mini*}
 This formulation separates the $\order{\abs{E}}$ terms from $\red{\Phi}^{\mathrm{a}}_{i,j}$ and the $\order*{\abs{V}^2}$ terms from $\red{\Phi}^{\mathrm{r}}$.
-Following previous research mentioned in \cref{ssec:preprocessing}, we fix the possible positions $x_{i}$ of each vertex $i$ to a finite discrete set of points $Q$, where $\abs{Q}\geq \abs{V}$.
+Following previous research mentioned in \cref{ssec:preprocessing}, we fix the possible positions $x_{i}$ of each vertex $i$ to a discrete set of points $Q$, where $\abs{Q}\geq \abs{V}$.
 \red{We also impose a condition on $Q$ such that $\norm{q_{i}- q_{j}}\geq 1$ for all $q_{i}, q_{j}\in Q$ with $q_{i}\neq q_{j}$.}
-\red{This makes the second $\order*{\abs{V}^2}$ terms from $\Phi^{\mathrm{r}}$ bounded by a constant.}
+\red{This makes the second $\order*{\abs{V}^2}$ terms from $\Phi^{\mathrm{r}}$ bounded above by zero.}
 \red{Since $\Phi^{\mathrm{r}}(d)=-k^{2}\log{d}$ is a convex function such that it decreases monotonically with respect to $d$, for sufficiently large $d$, the value of $-k^{2}\log{d}$ does not vary excessively.
-  We can also prevent the divergence of the energy function by the condition $\norm{q_{i}- q_{j}}\geq 1$.
+  We can also prevent the repulsive energy from diverging to positive infinity as vertices approach each other by imposing the condition $\norm{q_{i}- q_{j}}\geq 1$.
   Under these observations, we drop the second term and derive the problem as:}
 \begin{mini*}
   {X \in \bbR^{2 \times n}} {\sum_{\red{(i,j)}\in E} \frac{a_{i,j}\norm{x_i - x_j}^{3}}{3k},}
   {} {} \addConstraint{x_i}{\in Q \quad}{\text{for $1 \leq i \leq n$}}
   \addConstraint{x_i}{\neq x_j \quad}{\text{for $1 \leq i < j \leq n$}.}
 \end{mini*}
-\red{This means that we skip to consider the $\order*{\abs{V}^2}$ pairs} by fixing the possible point placement in advance, reducing the computational complexity to $\order{\abs{E}}$ and thus offering significant speedup.
+\red{This means that we avoid considering the $\order*{\abs{V}^2}$ pairs} by fixing the possible point placement in advance, reducing the computational complexity to $\order{\abs{E}}$ and thus offering significant speedup.
 See \cref{fig:pi} for a visual explanation.
 
 In this study, we adopt a hexagonal lattice $Q^{\mathrm{hex}}$~\citep{patelHexagonalGrids2013,s22145179} defined by~\cref{eq:qHex} (see \cref{fig:pi}) as $Q$.
@@ -394,7 +394,7 @@ In this context, the hexagonal lattice is known for its densest packing structur
 
 \red{
   We note that the scaling of the lattice structure does not affect the optimization process.
-  As we will see later, our algorithm is scale invariant, meaning that the distance between $\norm{q_{i}- q_{j}}$ does not affect the update.
+  As we will see later, our algorithm is scale invariant, meaning that the distance $\norm{q_{i}- q_{j}}$ does not affect the update.
 }
 
 \subsection{Newton Direction for Discrete Optimization}
@@ -412,9 +412,9 @@ Its gradient and Hessian matrix are
   \nabla^{2}\red{\Phi}^{\mathrm{a}}_{i}(x_{i}) & = \sum_{j \in V \setminus \{i\}}\frac{a_{i,j}\norm{x_i - x_j}}{k}\mqty(1                                 & 0 \\
   0                                            & 1) + \sum_{j \in V \setminus \{i\}}\frac{a_{i,j}}{k\norm{x_i - x_j}}(x_{i}- x_{j})(x_{i}- x_{j})^{\top}.
 \end{align*}
-Note that $\red{\Phi}^{\mathrm{a}}_{i}$ is strictly convex, assuring the Hessian matrix $\nabla^{2}\red{\Phi}^{\mathrm{a}}_{i}(x_{i})$ is positive definite.
+For distinct vertex positions, the above expression shows that $\nabla^{2}\red{\Phi}^{\mathrm{a}}_{i}(x_{i})$ is positive definite whenever vertex $i$ has at least one incident edge with positive weight.
 
-The ordinary updated rule with the coordinate Newton direction is
+The standard update rule with the coordinate Newton direction is
 \begin{equation*}
   x_{i}^{\mathrm{new}}\gets x_{i}- \nabla^{2}\red{\Phi}^{\mathrm{a}}_{i}(x_{i})^{-1}\nabla
   \red{\Phi}^{\mathrm{a}}_{i}(x_{i}).
@@ -429,7 +429,7 @@ In conclusion, the update rule for the vertex $i$ is
   x_{i}^{\mathrm{new}}\gets \mathrm{round}\qty(x_{i}- \nabla^{2} \red{\Phi}^{\mathrm{a}}_{i}
   (x_{i})^{-1}\nabla \red{\Phi}^{\mathrm{a}}_{i}(x_{i}) + r),
 \end{equation*}
-where $\mathrm{round}(\cdot)$ denotes the operation assigning a point in $\mathbb{R}^2$ to the nearest point in the hexagonal lattice $Q^{\mathrm{hex}}$, $r$ is a random vector with a \red{decreasing magnitude (we will detail in \cref{ssec:setup})}.
+where $\mathrm{round}(\cdot)$ denotes the operation assigning a point in $\mathbb{R}^2$ to the nearest point in the hexagonal lattice $Q^{\mathrm{hex}}$, and $r$ is a random vector with a \red{decreasing magnitude (we will detail in \cref{ssec:setup})}.
 
 \begin{figure}[t]
   \centering
@@ -492,7 +492,7 @@ We summarize the proposed algorithm in \cref{alg:proposed}.
 \subsection{Application to Other Force Models}
 \label{sec:otherForceModels}
 
-As the end of this section, we state the application of our proposed method to other force models.
+To conclude this section, we discuss the application of our proposed method to other force models.
 Although we have focused only on the FR force model so far, the concept of our approach can be applied to other models, as long as the objective function has a similar structure to $\Phi_{\mathrm{FR}}(X)$.
 Recall that the energy minimization problem \eqref{prob:fr} is
 \begin{mini*}
@@ -527,7 +527,8 @@ Clearly, these objective functions have a similar structure to $\Phi_{\mathrm{FR
 
 Thus, our proposed approach can be applied to these force models as well.
 In these models, however, the Hessian matrix for the coordinate Newton direction may be indefinite, so the resulting Newton direction is not necessarily a descent direction.
-This issue can be addressed by standard remedies in the optimization literature, such as adding a damping term \citep{nocedal1999numerical}, using regularization to ensure positive definiteness \citep{uedaRegularizedNewtonMethod2014a}, or clipping the maximum step size.
+This issue can be addressed by standard remedies in the optimization literature, such as adding a damping term \citep{nocedal1999numerical}, or using regularization to ensure positive definiteness \citep{uedaRegularizedNewtonMethod2014a}.
+Clipping the maximum step size can additionally prevent excessively large updates.
 Hence, the coordinate Newton direction can still be used in almost the same way as in the FR model.
 Another difference is that this direction depends on the scaling of $Q^{\mathrm{hex}}$; we therefore numerically optimized the scaling factor $s$ and applied this scaling before computing the initial placement.
 
@@ -577,27 +578,32 @@ As algorithms to solve the \red{energy minimization problem}, we used
 \end{enumerate}
 \red{The key remark is that we slightly modified the original simulation-based algorithm (presented in \cref{alg:fr}) so that it automatically adjusts the stepsize and isolates the effect of the initialization from that of the stepsize.
   Specifically, we applied a simple backtracking line search at the first iteration to suppress overshooting.}
-The maximum number of iterations of the simulation-based and L-BFGS algorithms are $N_{\mathrm{iter}}^{\mathsf{\red{SIM}}}= N_{\mathrm{iter}}^{\mathsf{\red{LBFGS}}}= \red{150}$ for the FR force model, \red{and $N_{\mathrm{iter}}^{\mathsf{\red{SIM}}}= N_{\mathrm{iter}}^{\mathsf{\red{LBFGS}}}= 300$ for the HC and Eades force models.}
+The maximum numbers of iterations of the simulation-based and L-BFGS algorithms are $N_{\mathrm{iter}}^{\mathsf{\red{SIM}}}= N_{\mathrm{iter}}^{\mathsf{\red{LBFGS}}}= \red{150}$ for the FR force model, \red{and $N_{\mathrm{iter}}^{\mathsf{\red{SIM}}}= N_{\mathrm{iter}}^{\mathsf{\red{LBFGS}}}= 300$ for the HC and Eades force models.}
 
 As parameters, we set the number of iterations $N_{\mathrm{iter}}^{\mathsf{CN}}= 2 \abs{V}^{3}/ \abs{E}$ for~\cref{alg:proposed}, and we also set the total number of iterations of Simulated Annealing (\textsf{SA}) in~\cref{ssec:preprocessing} to the same value.
 \red{For a random vector $r$ in \cref{alg:proposed}, the magnitude is set to $1-0.5\cdot m / N_{\mathrm{iter}}^{\mathsf{CN}}$ for the $m$-th iteration, and its direction is uniformly distributed in $[0, 2\pi)$.}
 Since \cref{alg:proposed} requires a computational time proportional to the degree of the selected vertex in each iteration, the expected computational time per iteration is $\order*{\abs{E}/\abs{V}}$.
 Consequently, we can roughly estimate that the total computational time of the proposed algorithm is $\order*{\abs{V}^2}$, equivalent to a few iterations of the FR or L-BFGS algorithms.
-All the codes are available at GitHub~\citep{ThisPaperGitHub}.
+All the code is available on GitHub~\citep{ThisPaperGitHub}.
 
 \subsection{Plots and Visualizations}
 \label{ssec:exprDetail}
 
 \begin{figure*}[p]
   \includegraphics[width=\columnwidth]{individual/table_FR.pdf}
-  \makebox[\columnwidth][r]{%
-    \makebox[0.8\columnwidth][c]{%
-      \includegraphics[width=0.5\columnwidth]{individual/legend.pdf}
-    }%
-  }
+  \par\smallskip
+  \noindent\begin{minipage}[c]{0.4\columnwidth}
+    \centering
+    \includegraphics[width=\linewidth]{individual/methods_legend_FR.pdf}
+  \end{minipage}\hfill%
+  \begin{minipage}[c]{0.59\columnwidth}
+    \centering
+    \includegraphics[width=0.85\linewidth]{individual/legend.pdf}
+  \end{minipage}
   \caption{
     Experimental results \red{for the FR force model.}
     Our proposed method \textsf{CN} yields improved results for both \red{the simulation-based} algorithm and L-BFGS.
+    The \textsf{BEST} column shows the reference layout obtained by running \textsf{CN-LBFGS} for 1000 iterations.
   }
   \label{fig:individual}
 \end{figure*}
@@ -609,7 +615,8 @@ Other graphs are from the Sparse Matrix Collection~\citep{davisUniversityFlorida
 \red{We provide more visualization results for various graphs in \cref{app:large_graphs}.}
 
 In \cref{fig:individual}, the plots on the left illustrate the objective function values $\red{\Phi}(X)$, the average of the \red{five} trials for each algorithm.
-The graphs on the right are at the \red{100}th iteration of the simulation-based and L-BFGS algorithms, and the graph at the bottom right is at the \red{1000}th iteration of \textsf{CN-LBFGS} as a reference for the best solution.
+The graphs on the right are at the \red{100}th iteration of the simulation-based and L-BFGS algorithms, and each graph in the \textsf{BEST} column is at the \red{1000}th iteration of \textsf{CN-LBFGS} as a reference for the best solution.
+The reference layouts in the \textsf{BEST} columns of \cref{fig:individual,fig:individual_2} use random seed 1.
 The vertices in the graphs are colored according to vertex indices.
 
 The observations and implications of \cref{fig:individual} are as follows.
@@ -635,11 +642,15 @@ The observations and implications of \cref{fig:individual} are as follows.
 
 \begin{figure*}[p]
   \includegraphics[width=\columnwidth]{individual/table_HC_and_Eades.pdf}
-  \makebox[\columnwidth][r]{%
-    \makebox[\columnwidth][c]{%
-      \includegraphics[width=0.5\columnwidth]{individual/legend.pdf}
-    }%
-  }
+  \par\smallskip
+  \noindent\begin{minipage}[c]{0.4\columnwidth}
+    \centering
+    \includegraphics[width=\linewidth]{individual/methods_legend_HC_and_Eades.pdf}
+  \end{minipage}\hfill%
+  \begin{minipage}[c]{0.59\columnwidth}
+    \centering
+    \includegraphics[width=0.85\linewidth]{individual/legend.pdf}
+  \end{minipage}
   \caption{
     \red{Experimental results for the HC and Eades force models.
       Our proposed method \textsf{CN} yields improved results.}
@@ -676,31 +687,43 @@ For the algorithms, we set $N_{\mathrm{iter}}^{\mathsf{\red{SIM}}} = N_{\mathrm{
 
   \begin{minipage}{0.475\columnwidth}
     \centering
-    \includegraphics[width=\columnwidth]{overall/plot/diff_FR_50.pdf}
+    \begin{tikzpicture}
+      \node[inner sep=0] (panel) {\includegraphics[width=\columnwidth]{overall/plot/diff_FR_50.pdf}};
+      \node[overlay, anchor=north west, fill=white, inner sep=2pt] at (panel.north west) {\textnormal{(a)}};
+    \end{tikzpicture}
   \end{minipage}
   \hfill
   \begin{minipage}{0.475\columnwidth}
     \centering
-    \includegraphics[width=\columnwidth]{overall/plot/diff_L-BFGS_50.pdf}
+    \begin{tikzpicture}
+      \node[inner sep=0] (panel) {\includegraphics[width=\columnwidth]{overall/plot/diff_L-BFGS_50.pdf}};
+      \node[overlay, anchor=north west, fill=white, inner sep=2pt] at (panel.north west) {\textnormal{(b)}};
+    \end{tikzpicture}
   \end{minipage}
 
   \vspace{1em}
 
   \begin{minipage}{0.475\columnwidth}
     \centering
-    \includegraphics[width=\columnwidth]{circle/plot/diff_FR_50.pdf}
+    \begin{tikzpicture}
+      \node[inner sep=0] (panel) {\includegraphics[width=\columnwidth]{circle/plot/diff_FR_50.pdf}};
+      \node[overlay, anchor=north west, fill=white, inner sep=2pt] at (panel.north west) {\textnormal{(c)}};
+    \end{tikzpicture}
   \end{minipage}
   \hfill
   \begin{minipage}{0.475\columnwidth}
     \centering
-    \includegraphics[width=\columnwidth]{circle/plot/diff_L-BFGS_50.pdf}
+    \begin{tikzpicture}
+      \node[inner sep=0] (panel) {\includegraphics[width=\columnwidth]{circle/plot/diff_L-BFGS_50.pdf}};
+      \node[overlay, anchor=north west, fill=white, inner sep=2pt] at (panel.north west) {\textnormal{(d)}};
+    \end{tikzpicture}
   \end{minipage}
 
   \caption{
     Comparison of \red{the initializations.
       The bins arranged along the x-axis correspond to the 124 graphs.
-      The y-axis shows the difference in $\Phi(X)$ between \textsf{CN} and the baseline initialization method.
-      The top panels compare \textsf{CN} with \textsf{RAND}, whereas the bottom panels compare \textsf{CN} with \textsf{SA}.
+      The y-axis shows the difference in $\Phi(X)$ between \textsf{CN} and the baseline initialization method, averaged over ten trials.
+      Panels (a) and (b) compare \textsf{CN} with \textsf{RAND}, whereas panels (c) and (d) compare \textsf{CN} with \textsf{SA}.
       Blue ones show results obtained using \textsf{SIM}, whereas orange ones show results obtained using \textsf{LBFGS}.
       In almost all cases for \textsf{RAND} and in most cases for \textsf{SA}, the differences are negative, meaning that the proposed initialization produced better final layouts than the baseline initialization methods.}
   }
@@ -748,16 +771,22 @@ Although the proposed method uses a hexagonal lattice $Q^{\mathrm{hex}}$, altern
     \centering
     \begin{minipage}{0.4\columnwidth}
       \centering
-      \includegraphics[height=2.8cm]{circle/vis/dense_CN-L-BFGS_10.png}
+      \begin{tikzpicture}
+        \node[inner sep=0] (panel) {\includegraphics[height=2.8cm]{circle/vis/dense_CN-L-BFGS_10.png}};
+        \node[overlay, anchor=north west, fill=white, inner sep=2pt, xshift=-2em] at (panel.north west) {\textnormal{(a)}};
+      \end{tikzpicture}
     \end{minipage}
     \begin{minipage}{0.4\columnwidth}
       \centering
-      \includegraphics[height=2.8cm]{circle/vis/dense_SA-L-BFGS_10.png}
+      \begin{tikzpicture}
+        \node[inner sep=0] (panel) {\includegraphics[height=2.8cm]{circle/vis/dense_SA-L-BFGS_10.png}};
+        \node[overlay, anchor=north west, fill=white, inner sep=2pt, xshift=-2em] at (panel.north west) {\textnormal{(b)}};
+      \end{tikzpicture}
     \end{minipage}
     \caption{
       An example \red{with a weighted graph. The color indicates the group of vertices.}
-      Left: the result of \textsf{CN}, which is better as the vertices are separated by colors.
-      Right: the result of \textsf{SA}, which is worse as there is no separation.
+      (a): the result of \textsf{CN}, which is better as the vertices are separated by colors.
+      (b): the result of \textsf{SA}, which is worse as there is no separation.
     }
     \label{fig:weightedDense}
   \end{minipage}
@@ -767,7 +796,7 @@ Furthermore, although this is a case not considered in Ref.~\citep{ghassemitoosi
 We generated a weighted graph with 100 vertices in three groups and 1000 edges randomly, and if the two vertices were in the same group, we set the edge weight to $1.0$; otherwise, we set it to $0.1$.
 The difference between the two initializations is shown in \cref{fig:weightedDense}.
 When we ignore the edge weights and just solve Problem~\eqref{eq:sa}, the graph is just an Erd\H{o}s--R\'enyi graph, and thus \textsf{SA} cannot find any meaningful structure in the initial placement.
-In contrast, the proposed algorithm can identify the graph's structure, and we can observe that the left graph in \cref{fig:weightedDense} is separated into groups, as indicated by the node colors.
+In contrast, the proposed algorithm can identify the graph's structure, and we can observe that the graph in \cref{fig:weightedDense}(a) is separated into groups, as indicated by the node colors.
 This result suggests that our proposed algorithm is effective even for weighted graphs, extending the applicability of the preprocessing step.
 
 
@@ -822,7 +851,7 @@ For each vertex $i$, define the local energy
 \begin{equation}\label{eq:fi}
   \red{\Phi}_{i}(x_{i}) \defeq \sum_{j \in V \setminus \{i\}} \red{\Phi}_{i,j}(\norm{x_i - x_j}),
 \end{equation}
-whose gradient (the net force on $i$) and Hessian are
+whose gradient (the negative of the net force on $i$) and Hessian are
 \begin{gather*}\label{eq:gradientFi}
   \nabla \red{\Phi}_{i}(x_{i}) = \sum_{j \in V \setminus \{i\}} \qty(\frac{a_{i,j}\norm{x_i - x_j}}{k}- \frac{k^{2}}{\norm{x_i - x_j}^{2}}) (x_{i}-x_{j}),\\
   \nabla^{2}\red{\Phi}_{i}(x_{i}) = \sum_{j \in V \setminus \{i\}}\left(\frac{a_{i,j}\norm{x_i - x_j}}{k} - \frac{k^{2}}{\norm{x_i - x_j}^{2}}\right) \mqty(1&0\\0&1)+ \\
@@ -940,7 +969,7 @@ This work was supported by JSPS KAKENHI Grant Numbers \red{JP26KJ0936}, JP23H033
 \red{
   We can observe a similar trend to that in \cref{fig:individual}.
   For the simulation-based algorithm, the effect of the proposed method is significant, and its visualization results well reflect the structure of the graph.
-  For L-BFGS algorithms, the positive effect is relatively smaller, but the objective function values in the plots are generally outperformed in most of the cases.
+  For L-BFGS algorithms, the positive effect is relatively smaller, but the proposed method generally achieves lower objective function values in most cases.
   It is also worth noting that the visualization results shown on the right were produced using a single random seed.
   They may appear worse than the expected performance shown in the plots.
   Developing methods that are more robust to random seed selection remains a direction for future work.
@@ -953,14 +982,19 @@ This work was supported by JSPS KAKENHI Grant Numbers \red{JP26KJ0936}, JP23H033
 
 \begin{figure*}[p]
   \includegraphics[width=\columnwidth]{individual/table_2.pdf}
-  \makebox[\columnwidth][r]{%
-    \makebox[0.8\columnwidth][c]{%
-      \includegraphics[width=0.5\columnwidth]{individual/legend.pdf}
-    }%
-  }
+  \par\smallskip
+  \noindent\begin{minipage}[c]{0.4\columnwidth}
+    \centering
+    \includegraphics[width=\linewidth]{individual/methods_legend_FR.pdf}
+  \end{minipage}\hfill%
+  \begin{minipage}[c]{0.59\columnwidth}
+    \centering
+    \includegraphics[width=0.85\linewidth]{individual/legend.pdf}
+  \end{minipage}
   \caption{
     \red{Additional experimental results for the FR force model.
       The objective function values at early states are generally improved for both simulation-based and L-BFGS algorithms, and the visual improvements by our proposed method \textsf{CN} are apparent for the simulation-based algorithms.}
+    The \textsf{BEST} column shows the reference layout obtained by running \textsf{CN-LBFGS} for 1000 iterations.
   }
   \label{fig:individual_2}
 \end{figure*}
@@ -1058,16 +1092,16 @@ Based on \cref{sec:preliminaries}, let us define the sum of terms associated wit
   \red{\Phi}_{i}(x_{i}) \coloneqq \sum_{j \in V \setminus \{i\}}\left( \red{\Phi}_{i,j}(\norm{x_{i}- x_{j}}
     ) + \red{\Phi}_{j,i}(\norm{x_{j}- x_{i}}) \right).
 \end{equation*}
-The $i$-th row of the gradient $\nabla \red{\Phi}(X) \in \mathbb{R}^{2 \times n}$ is
+The $i$-th column of the gradient $\nabla \red{\Phi}(X) \in \mathbb{R}^{2 \times n}$ is
 \begin{align*}
-  (\nabla \red{\Phi}(X))_{i}^{\top} & = \nabla \red{\Phi}_{i}(x_{i}) = \sum_{j \in V \setminus \{i\}}\left(\frac{(a_{i,j}+a_{j,i})\norm{ x_{i}- x_{j}}}{k}- \frac{2k^{2}}{\norm{ x_{i}- x_{j}}^{2}}\right) (x_{i}- x_{j}) \\
-                                    & = 2 \sum_{j \in V \setminus \{i\}}\left(\frac{a_{i,j}\norm{ x_{i}- x_{j}}}{k}- \frac{k^{2}}{\norm{ x_{i}- x_{j}}^{2}}\right) (x_{i}- x_{j}).
+  (\nabla \red{\Phi}(X))_{i} & = \nabla \red{\Phi}_{i}(x_{i}) = \sum_{j \in V \setminus \{i\}}\left(\frac{(a_{i,j}+a_{j,i})\norm{ x_{i}- x_{j}}}{k}- \frac{2k^{2}}{\norm{ x_{i}- x_{j}}^{2}}\right) (x_{i}- x_{j}) \\
+                             & = 2 \sum_{j \in V \setminus \{i\}}\left(\frac{a_{i,j}\norm{ x_{i}- x_{j}}}{k}- \frac{k^{2}}{\norm{ x_{i}- x_{j}}^{2}}\right) (x_{i}- x_{j}).
 \end{align*}
-To obtain the final layout while preventing the divergence, we need to minimize $\red{\Phi}(X) + f_{\mathrm{g}}(X)$, where $f_{\mathrm{g}}(X)$ is the additional term.
-Let the center of gravity of the $j$-th connected component $V_{j}$ ($1 \leq j \leq m$) be $g_{j}\coloneqq \frac{1}{|V_{j}|}\sum_{i \in V_j}x_{i}$.
-Then, using some constant $c_{\mathrm{g}}>0$, we define the additional force as
+To obtain the final layout while preventing the divergence, we need to minimize $\red{\Phi}(X) + \red{\Phi}_{\mathrm{g}}(X)$, where $\red{\Phi}_{\mathrm{g}}(X)$ is the additional term.
+Let the center of gravity of the $j$-th connected component $V_{j}$ ($1 \leq j \leq n_{\mathrm{comp}}$) be $g_{j}\coloneqq \frac{1}{|V_{j}|}\sum_{i \in V_j}x_{i}$.
+Then, using some constant $c_{\mathrm{g}}>0$, we define the additional energy term as
 \begin{equation*}
-  \red{\Phi}_{\mathrm{g}}(X) \coloneqq c_{\mathrm{g}}\sum_{j=1}^{m}\frac{\lvert V_{j}\rvert}{2}
+  \red{\Phi}_{\mathrm{g}}(X) \coloneqq c_{\mathrm{g}}\sum_{j=1}^{n_{\mathrm{comp}}}\frac{\lvert V_{j}\rvert}{2}
   \norm{ g_{j} - x_{\mathrm{center}}}_{2}^{2},
 \end{equation*}
 with the gradient
