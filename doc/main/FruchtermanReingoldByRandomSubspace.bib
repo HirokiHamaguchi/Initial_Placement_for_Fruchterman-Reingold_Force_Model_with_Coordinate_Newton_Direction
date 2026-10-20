@@ -12,7 +12,7 @@
 }
 
 @article{2020SciPy-NMeth,
-  title = {{{SciPy}} 1.0: {{Fundamental}} Algorithms for Scientific Computing in Python},
+  title = {{{SciPy}} 1.0: {{Fundamental}} Algorithms for Scientific Computing in {{Python}}},
   author = {Virtanen, Pauli and Gommers, Ralf and Oliphant, Travis E. and Haberland, Matt and Reddy, Tyler and Cournapeau, David and Burovski, Evgeni and Peterson, Pearu and Weckesser, Warren and Bright, Jonathan and {van der Walt}, St{\'e}fan J. and Brett, Matthew and Wilson, Joshua and Millman, K. Jarrod and Mayorov, Nikolay and Nelson, Andrew R. J. and Jones, Eric and Kern, Robert and Larson, Eric and Carey, C J and Polat, {\.I}lhan and Feng, Yu and Moore, Eric W. and VanderPlas, Jake and Laxalde, Denis and Perktold, Josef and Cimrman, Robert and Henriksen, Ian and Quintero, E. A. and Harris, Charles R. and Archibald, Anne M. and Ribeiro, Ant{\^o}nio H. and Pedregosa, Fabian and {van Mulbregt}, Paul and {SciPy 1.0 Contributors}},
   year = 2020,
   journal = {Nature Methods},
@@ -22,10 +22,11 @@
 }
 
 @incollection{3454287.3454343,
-  title = {{{RSN}}: Randomized Subspace Newton},
+  title = {{{RSN}}: {{Randomized Subspace Newton}}},
   booktitle = {Proceedings of the 33rd International Conference on Neural Information Processing Systems},
   author = {Gower, Robert M. and Kovalev, Dmitry and Lieder, Felix and Richt{\'a}rik, Peter},
   year = 2019,
+  pages = {614--623},
   publisher = {Curran Associates Inc.},
   address = {Red Hook, NY, USA},
   url = {https://dl.acm.org/doi/10.5555/3454287.3454343},
@@ -75,7 +76,7 @@
   author = {Ahmed, Reyan and De Luca, Felice and Devkota, Sabin and Kobourov, Stephen and Li, Mingwei},
   year = 2022,
   month = jun,
-  journal = {IEEE transactions on visualization and computer graphics},
+  journal = {IEEE Transactions on Visualization and Computer Graphics},
   volume = {28},
   number = {6},
   pages = {2388--2399},
@@ -118,18 +119,14 @@
 }
 
 @incollection{atallahAlgorithmsTheoryComputation2009,
-  title = {Graph {{Drawing Algorithms}}},
-  booktitle = {Algorithms and {{Theory}} of {{Computation Handbook}}},
-  author = {Peter, Eades and Carsten, Gutwenger and {Seok-Hee}, Hong and Petra, Mutzel},
-  year = 2009,
-  month = nov,
+  title = {Graph Drawing Algorithms},
+  booktitle = {Algorithms and Theory of Computation Handbook: {{Special}} Topics and Techniques},
+  author = {Eades, Peter and Gutwenger, Carsten and Hong, Seok-Hee and Mutzel, Petra},
+  year = 2010,
   edition = {2},
-  volume = {2},
-  publisher = {{Chapman and Hall/CRC}},
-  address = {New York},
-  doi = {10.1201/9781584888215},
-  abstract = {Algorithms and Theory of Computation Handbook, Second Edition: Special Topics and Techniques provides an up-to-date compendium of fundamental computer science topics and techniques. It also illustrates how the topics and techniques come together to deliver efficient solutions to important practical problems.Along with updating and revising many of},
-  isbn = {978-0-429-14466-0}
+  pages = {6-1--6-25},
+  publisher = {Chapman \& Hall/CRC},
+  isbn = {978-1-58488-820-8}
 }
 
 @article{barnesHierarchicalLogForcecalculation1986,
@@ -196,6 +193,7 @@
   eprint = {2211.09873},
   primaryclass = {math},
   publisher = {arXiv},
+  doi = {10.48550/arXiv.2211.09873},
   urldate = {2024-07-24},
   abstract = {We propose a general random subspace framework for unconstrained nonconvex optimization problems that requires a weak probabilistic assumption on the subspace gradient, which we show to be satisfied by various random matrix ensembles, such as Gaussian and sparse sketching, using Johnson-Lindenstrauss embedding properties. We show that, when safeguarded with trust region or quadratic regularization, this random subspace approach satisfies, with high probability, a complexity bound of order \$\textbackslash mathcal\textbraceleft O\textbraceright (\textbackslash epsilon\textasciicircum\textbraceleft -2\textbraceright )\$ to drive the (full) gradient below \$\textbackslash epsilon\$; matching in the accuracy order, deterministic counterparts of these methods and securing almost sure convergence. Furthermore, no problem dimension dependence appears explicitly in the projection size of the sketching matrix, allowing the choice of low-dimensional subspaces. We particularise this framework to Random Subspace Gauss-Newton (RS-GN) methods for nonlinear least squares problems, that only require the calculation of the Jacobian in the subspace; with similar complexity guarantees. Numerical experiments with RS-GN on CUTEst nonlinear least squares are also presented, with some encouraging results.},
   archiveprefix = {arXiv},
@@ -212,6 +210,7 @@
   eprint = {1009.4322},
   primaryclass = {math},
   publisher = {arXiv},
+  doi = {10.48550/arXiv.1009.4322},
   urldate = {2025-09-02},
   abstract = {A simple proof of Thue theorem on Circle Packing is given. The proof is only based on density analysis of Delaunay triangulation for the set of points that are centers of circles in a saturated circle configuration.},
   archiveprefix = {arXiv},
@@ -272,7 +271,7 @@
 }
 
 @article{davisUniversityFloridaSparse2011,
-  title = {The University of {{Florida}} Sparse Matrix Collection},
+  title = {The {{University}} of {{Florida}} Sparse Matrix Collection},
   author = {Davis, Timothy A. and Hu, Yifan},
   year = 2011,
   month = dec,
@@ -284,7 +283,7 @@
   doi = {10.1145/2049662.2049663},
   urldate = {2026-05-09},
   abstract = {We describe the University of Florida Sparse Matrix Collection, a large and actively growing set of sparse matrices that arise in real applications. The Collection is widely used by the numerical linear algebra community for the development and performance evaluation of sparse matrix algorithms. It allows for robust and repeatable experiments: robust because performance results with artificially generated matrices can be misleading, and repeatable because matrices are curated and made publicly available in many formats. Its matrices cover a wide spectrum of domains, include those arising from problems with underlying 2D or 3D geometry (as structural engineering, computational fluid dynamics, model reduction, electromagnetics, semiconductor devices, thermodynamics, materials, acoustics, computer graphics/vision, robotics/kinematics, and other discretizations) and those that typically do not have such geometry (optimization, circuit simulation, economic and financial modeling, theoretical and quantum chemistry, chemical process simulation, mathematics and statistics, power networks, and other networks and graphs). We provide software for accessing and managing the Collection, from MATLAB™, Mathematica™, Fortran, and C, as well as an online search capability. Graph visualization of the matrices is provided, and a new multilevel coarsening scheme is proposed to facilitate this task.},
-  file = {C:\Users\hirok\Zotero\storage\7LTI69L8\Davis and Hu - 2011 - The university of Florida sparse matrix collection.pdf}
+  file = {C:\Users\hirok\Zotero\storage\7LTI69L8\Davis and Hu - 2011 - The University of Florida sparse matrix collection.pdf}
 }
 
 @article{DOGRUSOZ2009980,
@@ -305,7 +304,7 @@
   title = {A Heuristic for Graph Drawing},
   author = {Eades, Peter},
   year = 1984,
-  journal = {Congressus numerantium},
+  journal = {Congressus Numerantium},
   volume = {42},
   number = {11},
   pages = {149--160}
@@ -460,17 +459,15 @@
   file = {C:\Users\hirok\Zotero\storage\NN4JIHXP\0021999187901409.html}
 }
 
-@article{hagbergExploringNetworkStructure2008,
-  title = {Exploring {{Network Structure}}, {{Dynamics}}, and {{Function}} Using {{NetworkX}}},
+@inproceedings{hagbergExploringNetworkStructure2008,
+  title = {Exploring Network Structure, Dynamics, and Function Using {{NetworkX}}},
+  booktitle = {Proceedings of the 7th Python in Science Conference},
   author = {Hagberg, Aric A. and Schult, Daniel A. and Swart, Pieter J.},
+  editor = {Varoquaux, Ga{\"e}l and Vaught, Travis and Millman, Jarrod},
   year = 2008,
-  month = may,
-  journal = {Python in Science Conference},
-  doi = {10.25080/TCWV9851},
-  urldate = {2026-05-09},
-  abstract = {NetworkX is a Python language package for exploration and analysis of networks and network algorithms. We discuss some of our recent work studying synchronization of coupled oscillators to demonstrate how NetworkX enables research in the field of computational networks.},
-  langid = {english},
-  file = {C:\Users\hirok\Zotero\storage\4ED7R9L2\Hagberg et al. - 2008 - Exploring Network Structure, Dynamics, and Function using NetworkX.pdf}
+  pages = {11--15},
+  address = {Pasadena, CA USA},
+  doi = {10.25080/TCWV9851}
 }
 
 @article{harelFastMultiScaleMethod2002,
@@ -491,7 +488,7 @@
 }
 
 @inproceedings{higuchiImprovingConvergenceGuarantees2024,
-  title = {Improving {{Convergence Guarantees}} of {{Random Subspace Second-order Algorithm}} for {{Nonconvex Optimization}}},
+  title = {Improving {{Convergence Guarantees}} of {{Random Subspace Second}}-Order {{Algorithm}} for {{Nonconvex Optimization}}},
   booktitle = {The {{Thirteenth International Conference}} on {{Learning Representations}}},
   author = {Higuchi, Rei and Poirion, Pierre-Louis and Takeda, Akiko},
   year = 2025,
@@ -506,11 +503,12 @@
 @article{Hu2006EfficientHF,
   title = {Efficient, High-Quality Force-Directed Graph Drawing},
   author = {Hu, Yifan},
-  year = 2006,
-  journal = {The Mathematica journal},
+  year = 2005,
+  journal = {The Mathematica Journal},
   volume = {10},
+  number = {1},
   pages = {37--71},
-  url = {https://api.semanticscholar.org/CorpusID:14599587}
+  url = {https://yifanhu.net/GALLERY/GRAPHS/citation.html}
 }
 
 @article{kamadaAlgorithmDrawingGeneral1989,
@@ -546,7 +544,7 @@
 }
 
 @inproceedings{khanManyobjectiveEvolutionaryAlgorithm2024,
-  title = {A {{Many-objective Evolutionary Algorithm Approach}} for {{Graph Visualization}}},
+  title = {A {{Many}}-Objective {{Evolutionary Algorithm Approach}} for {{Graph Visualization}}},
   booktitle = {2024 {{IEEE International Systems Conference}} ({{SysCon}})},
   author = {Khan, Burhan and Johnstone, Michael and Creighton, Douglas},
   year = 2024,
@@ -658,6 +656,7 @@
   number = {arXiv:2307.03335},
   eprint = {2307.03335},
   publisher = {arXiv},
+  doi = {10.48550/arXiv.2307.03335},
   urldate = {2024-10-22},
   abstract = {We propose randomized subspace gradient methods for high-dimensional constrained optimization. While there have been similarly purposed studies on unconstrained optimization problems, there have been few on constrained optimization problems due to the difficulty of handling constraints. Our algorithms project gradient vectors onto a subspace that is a random projection of the subspace spanned by the gradients of active constraints. We determine the worst-case iteration complexity under linear and nonlinear settings and theoretically confirm that our algorithms can take a larger step size than their deterministic version. From the advantages of taking longer step and randomized subspace gradients, we show that our algorithms are especially efficient in view of time complexity when gradients cannot be obtained easily. Numerical experiments show that they tend to find better solutions because of the randomness of their subspace selection. Furthermore, they performs well in cases where gradients could not be obtained directly, and instead, gradients are obtained using directional derivatives.},
   archiveprefix = {arXiv},
@@ -700,19 +699,6 @@
   keywords = {l-bfgs,l-bfgs-b,lbfgs-solver,lbfgsb-solver,limited-memory,optimization}
 }
 
-@article{s22145179,
-  title = {Fruchterman--Reingold Hexagon Empowered Node Deployment in Wireless Sensor Network Application},
-  author = {Li, Jiahao and Tao, Yuhao and Yuan, Kai and Tang, Rongxin and Hu, Zhiming and Yan, Weichao and Liu, Shiyun},
-  year = 2022,
-  journal = {Sensors},
-  volume = {22},
-  number = {5179},
-  issn = {1424-8220},
-  doi = {10.3390/s22145179},
-  abstract = {Internet of Things (IoT) and Big Data technologies are becoming increasingly significant parts of national defense and the military, as well as in the civilian usage. The proper deployment of large-scale wireless sensor network (WSN) provides the foundation for these advanced technologies. Based on the Fruchterman--Reingold graph layout, we propose the Fruchterman--Reingold Hexagon (FR-HEX) algorithm for the deployment of WSNs. By allocating edges of hexagonal topology to sensor nodes, the network forms hexagonal network topology. A comprehensive evaluation of 50 simulations is conducted, which utilizes three evaluation metrics: average moving distance, pair correlation diversion (PCD), and system coverage rate. The FR-HEX algorithm performs consistently, the WSN topologies are properly regulated, the PCD values are below 0.05, and the WSN system coverage rate reaches 94},
-  pubmedid = {35890858}
-}
-
 @article{sugiyamaMethodsVisualUnderstanding1981,
   title = {Methods for {{Visual Understanding}} of {{Hierarchical System Structures}}},
   author = {Sugiyama, Kozo and Tagawa, Shojiro and Toda, Mitsuhiko},
@@ -732,10 +718,10 @@
 
 @misc{ThisPaperGitHub,
   title = {{{HirokiHamaguchi}}/{{Initial Placement}} for {{Fruchterman}}--{{Reingold Force Model}} with {{Coordinate Newton Direction}}},
-  author = {Hiroki, Hiroki},
+  author = {Hamaguchi, Hiroki},
   year = 2026,
   url = {https://github.com/HirokiHamaguchi/Initial_Placement_for_Fruchterman-Reingold_Force_Model_with_Coordinate_Newton_Direction},
-  urldate = {2024-10-31},
+  urldate = {2026-10-20},
   file = {C:\Users\hirok\Zotero\storage\4DAQ2KPT\FruchtermanReingoldByRandomSubspace.html}
 }
 
@@ -760,6 +746,7 @@
   title = {A Numerical Optimization Approach to General Graph Drawing},
   author = {Tunkelang, Daniel},
   year = 1999,
+  url = {https://csd.cmu.edu/sites/default/files/phd-thesis/CMU-CS-98-189.pdf},
   school = {Carnegie Mellon University}
 }
 
@@ -805,6 +792,7 @@
   number = {arXiv:0712.1549},
   eprint = {0712.1549},
   publisher = {arXiv},
+  doi = {10.48550/arXiv.0712.1549},
   urldate = {2024-11-22},
   abstract = {We adapt multilevel, force-directed graph layout techniques to visualizing dynamic graphs in which vertices and edges are added and removed in an online fashion (i.e., unpredictably). We maintain multiple levels of coarseness using a dynamic, randomized coarsening algorithm. To ensure the vertices follow smooth trajectories, we employ dynamics simulation techniques, treating the vertices as point particles. We simulate fine and coarse levels of the graph simultaneously, coupling the dynamics of adjacent levels. Projection from coarser to finer levels is adaptive, with the projection determined by an affine transformation that evolves alongside the graph layouts. The result is a dynamic graph visualizer that quickly and smoothly adapts to changes in a graph.},
   archiveprefix = {arXiv},
