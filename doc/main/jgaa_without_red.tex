@@ -1,89 +1,33 @@
 % !LW recipe=pdflatex&bibtex
+\documentclass{jgaa-art}
 
-\documentclass[11pt]{article}
-
-\usepackage{hyperref} % \href{URL}{text}
-\hypersetup{colorlinks=true, linkcolor=blue, citecolor=blue, urlcolor=blue}
-
-\usepackage[linesnumbered, ruled, vlined]{algorithm2e} % \begin{algorithm2e}
-\usepackage{amsmath} % \begin{align*}
-\usepackage{amssymb} % \mathbb{A}
-\usepackage{amsthm} % \newtheorem
-\usepackage{bm, bbm} % \bm{A}, \bbm{1}
-\usepackage{booktabs} % \toprule, \midrule, \bottomrule
-\usepackage{cleveref} % \cref
-\usepackage{enumitem} % \begin{enumerate}[label=(\alph*)]
-\usepackage{ifthen} % \ifthenelse
-\usepackage{lipsum} % \lipsum
-\usepackage{makecell} % \makecell{L1\L2}
-\usepackage{mathrsfs} % \mathscr{A}
-\usepackage{mathtools} % \mathrlap
-\usepackage{multirow} % \multirow
+\usepackage[linesnumbered,ruled,vlined]{algorithm2e}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{mathtools}
 \usepackage[sort,numbers]{natbib}
-\usepackage{optidef} % \begin{mini*}{x}{U(x)}{}{}
-\usepackage{orcidlink} % \orcidlink
-\usepackage{physics} % \qty, \norm, \abs
-\usepackage{tikz} % \begin{tikzpicture}
-\usepackage{xparse} % \NewDocumentCommand
-\usepackage{siunitx} % \SI{1}{\second}
+\usepackage{optidef}
+\usepackage{physics}
+\usepackage{relsize}
+\usepackage{siunitx}
+\usepackage{tikz}
+% \usepackage[section]{placeins}
+\usepackage{cleveref}
 
-\usepackage[a4paper,margin=30mm]{geometry}
-
-% \usepackage{lineno} % 行番号用
-% \linenumbers
-
-\usepackage{CJK}
-
-\definecolor{cA}{HTML}{0072BD}
-\definecolor{cB}{HTML}{EDB120}
-\definecolor{cC}{HTML}{77AC30}
-\definecolor{cD}{HTML}{D95319}
-
-\newcommand{\red}[1]{\textcolor{red}{#1}}
-\newcommand{\blue}[1]{\textcolor{blue}{#1}}
-\newcommand{\cyan}[1]{\textcolor{cyan}{#1}}
-\newcommand{\gray}[1]{\textcolor{gray}{#1}}
-\newcommand{\green}[1]{\textcolor{green}{#1}}
-\newcommand{\brown}[1]{\textcolor{brown}{#1}}
-\newcommand{\black}[1]{\textcolor{black}{#1}}
-\newcommand{\orange}[1]{\textcolor{orange}{#1}}
-\newcommand{\st}{\text{ s.t. }}
-\newcommand{\Img}[1]{\mathrm{Im}\qty(#1)}
-\newcommand{\Ker}[1]{\mathrm{Ker}\qty(#1)}
-\newcommand{\Supp}[1]{\mathrm{supp}\qty(#1)}
-\newcommand{\Rank}[1]{\mathrm{rank}\qty(#1)}
-\newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
-\newcommand{\ceil}[1]{\left\lceil #1 \right\rceil}
-% C++ (https://tex.stackexchange.com/questions/4302/prettiest-way-to-typeset-c-cplusplus)
-\newcommand{\Cpp}{C
-\nolinebreak[4]
-\hspace{-.05em}\raisebox{.4ex}{\relsize{-3}{\textbf{++}}}}
-% https://tex.stackexchange.com/questions/28836/typesetting-the-define-equals-symbol
+\newcommand{\Cpp}{C\nolinebreak[4]\hspace{-.05em}\raisebox{.4ex}{\relsize{-3}{\textbf{++}}}}
 \newcommand{\defeq}{\coloneqq}
-\newcommand{\eqdef}{\eqqcolon}
-% https://tex.stackexchange.com/questions/5502/how-to-get-a-mid-binary-relation-that-grows
 \newcommand{\relmiddle}[1]{\mathrel{}\middle#1\mathrel{}}
 
-% https://tex.stackexchange.com/questions/564216/newcommand-for-each-letter
 \ExplSyntaxOn
-\NewDocumentCommand{\definealphabet}{mmmm}{ \int_step_inline:nnn{`#3}{`#4}{ \cs_new_protected:cpx{#1 \char_generate:nn{##1}{11}}{ \exp_not:N #2{\char_generate:nn{##1}{11}}}}}
+\NewDocumentCommand{\definealphabet}{mmmm}{\int_step_inline:nnn{`#3}{`#4}{\cs_new_protected:cpx{#1\char_generate:nn{##1}{11}}{\exp_not:N #2{\char_generate:nn{##1}{11}}}}}
 \ExplSyntaxOff
-
 \definealphabet{bb}{\mathbb}{A}{Z}
 \definealphabet{rm}{\mathrm}{A}{Z}
 \definealphabet{cal}{\mathcal}{A}{Z}
 \definealphabet{frak}{\mathfrak}{a}{z}
-% \definealphabet{scr}{\mathscr}{A}{Z}
-% \definealphabet{frak}{\mathfrak}{A}{Z}
-
-\newtheorem{theorem}{Theorem}
-\newtheorem{proposition}{Proposition}
-\newtheorem{lemma}{Lemma}
-\newtheorem{definition}{Definition}
-\newtheorem{corollary}{Corollary}
-\newtheorem{remark}{Remark}
-\newtheorem{example}{Example}
-\newtheorem{assumption}{Assumption}
 
 \crefname{equation}{Eq.}{Eqs.}
 \crefname{figure}{Fig.}{Figs.}
@@ -91,35 +35,54 @@
 \crefname{section}{Sec.}{Secs.}
 \crefname{subsection}{Sec.}{Secs.}
 \crefname{algorithm}{Algorithm}{Algorithms}
-
-% https://qiita.com/rityo_masu/items/efd44bc8f9229e014237
 \allowdisplaybreaks[4]
 
-\usetikzlibrary{
-  3d,
-  % fit,
-  calc,
-  math,
-  matrix,
-  patterns,
-  backgrounds,
-  arrows.meta,
-  shapes.geometric,
-  decorations.pathmorphing,
-}
-
-% \providecommand{\main}{.}
-\newboolean{isMain}
-\setboolean{isMain}{true}
-
 \begin{document}
-\title{ Initial Placement for Fruchterman--Reingold Force Model with % LLDisable
-  Coordinate Newton Direction }
-\author{ Hiroki Hamaguchi\,\orcidlink{0009-0005-7348-1356} Naoki Marumo\,\orcidlink{0000-0002-7372-4275}
-  Akiko Takeda\,\orcidlink{0000-0002-8846-4496}
-  % <-this % stops a space
-}
+% --------------------------------------------------------------------
+\doi{} % doi number
+% --------------------------------------------------------------------
+\Issue{0}{0}{0}{0}{0} % volume, number, start page, end page, year
+% --------------------------------------------------------------------
+\HeadingAuthor{Hamaguchi et al.} % short list of authors for header
+\HeadingTitle{Initial Placement for FR Force Model with Coordinate Newton Direction} % short title for header
+% --------------------------------------------------------------------
+\title{Initial Placement for Fruchterman--Reingold Force Model with Coordinate Newton Direction} % Paper title
+\Ack{This work was supported by JSPS KAKENHI Grant Numbers JP26KJ0936, JP23H03351, JP24K23853 and JST ERATO JPMJER1903.} % Grants Acknowledgments
+% --------------------------------------------------------------------
+
+\authorOrcid[aff:tokyo]{Hiroki Hamaguchi}{hirokihamaguchi0331@gmail.com}{0009-0005-7348-1356} % Authors
+\authorOrcid[aff:tokyo]{Naoki Marumo}{marumo@mist.i.u-tokyo.ac.jp}{0000-0002-7372-4275} % Authors
+\authorOrcid[aff:tokyo,aff:riken]{Akiko Takeda}{takeda@mist.i.u-tokyo.ac.jp}{0000-0002-8846-4496} % Authors
+
+
+\affiliation[aff:tokyo]{Department of Mathematical Informatics, The University of Tokyo, Tokyo, Japan} % Affiliations
+\affiliation[aff:riken]{RIKEN Center for Advanced Intelligence Project, Tokyo, Japan} % Affiliations
+
+
+%% --------------------------------------------------------------------
+%   Paper history
+%% --------------------------------------------------------------------
+% JGAA instructions.pdf, Sec. 2: Month Year; repeat \reviewed for each round.
+% https://jgaa.info/JGAA-LaTeX.zip
+% Exact dates: submitted 2025-10-14; reviewed 2026-04-08 and 2026-10-06;
+% revised 2026-06-22; accepted 2026-10-06; final submission planned for 2026-10-21.
+\submitted{October 2025}%
+\reviewed{April 2026}%
+\revised{June 2026}%
+\reviewed{October 2026}%
+\accepted{October 2026}%
+\final{October 2026}%
+\published{}%
+\type{Regular Paper}%
+\editor{Stephen Kobourov}%
+%% --------------------------------------------------------------------
+
 \maketitle
+
+%% --------------------------------------------------------------------
+%       Abstract
+%% --------------------------------------------------------------------
+
 
 \begin{abstract}
   The Fruchterman--Reingold (FR) force model is widely used in force-directed graph drawing, and multilevel approaches such as \textsf{sfdp} in Graphviz scale these methods effectively.
@@ -132,6 +95,8 @@
   We demonstrate the effectiveness of our method through numerical experiments, showing that our initial placement leads to faster convergence and higher-quality layouts compared to naive optimization approaches.
   We also discuss applications of our method, such as drawing for Hooke--Coulomb and Eades force models.
 \end{abstract}
+
+% The content of the paper goes here
 
 \section{Introduction}
 \label{sec:introduction}
@@ -387,7 +352,7 @@ Under these observations, we drop the second term and derive the problem as:
 This means that we avoid considering the $\order*{\abs{V}^2}$ pairs by fixing the possible point placement in advance, reducing the computational complexity to $\order{\abs{E}}$ and thus offering significant speedup.
 See \cref{fig:pi} for a visual explanation.
 
-In this study, we adopt a hexagonal lattice $Q^{\mathrm{hex}}$~\citep{patelHexagonalGrids2013,s22145179} defined by~\cref{eq:qHex} (see \cref{fig:pi}) as $Q$.
+In this study, we adopt a hexagonal lattice $Q^{\mathrm{hex}}$~\citep{patelHexagonalGrids2013} defined by~\cref{eq:qHex} (see \cref{fig:pi}) as $Q$.
 When minimizing the objective function that arises from the attractive energy $\Phi^{\mathrm{a}}$, it is advantageous for the points to cluster as closely as possible.
 In this context, the hexagonal lattice is known for its densest packing structure in space \citep{changSimpleProofThues2010} and offers computational simplicity.
 
@@ -523,7 +488,7 @@ Clearly, these objective functions have a similar structure to $\Phi_{\mathrm{FR
 
 Thus, our proposed approach can be applied to these force models as well.
 In these models, however, the Hessian matrix for the coordinate Newton direction may be indefinite, so the resulting Newton direction is not necessarily a descent direction.
-This issue can be addressed by standard remedies in the optimization literature, such as adding a damping term \citep{nocedal1999numerical}, or using regularization to ensure positive definiteness \citep{uedaRegularizedNewtonMethod2014a}.
+This issue can be addressed by standard remedies in the optimization literature, such as adding a damping term \citep{nocedalNumericalOptimization2006}, or using regularization to ensure positive definiteness \citep{uedaRegularizedNewtonMethod2014a}.
 Clipping the maximum step size can additionally prevent excessively large updates.
 Hence, the coordinate Newton direction can still be used in almost the same way as in the FR model.
 Another difference is that this direction depends on the scaling of $Q^{\mathrm{hex}}$; we therefore numerically optimized the scaling factor $s$ and applied this scaling before computing the initial placement.
@@ -585,7 +550,8 @@ All the code is available on GitHub~\citep{ThisPaperGitHub}.
 \label{ssec:exprDetail}
 
 \begin{figure*}[p]
-  \includegraphics[width=\columnwidth]{individual/table_FR.pdf}
+  \centering
+  \includegraphics[width=\columnwidth,height=0.86\textheight,keepaspectratio]{individual/table_FR.pdf}
   \par\smallskip
   \noindent\begin{minipage}[c]{0.4\columnwidth}
     \centering
@@ -939,16 +905,25 @@ The obtained initial placements have fewer twists than the random initialization
 Numerical experiments revealed that the proposed method is effective across various graphs, extending the applicability of the preprocessing step.
 The proposed method may advance graph drawing, and we also hope it highlights the potential of stochastic coordinate descent and its variants for addressing a broader range of graph-related optimization problems.
 
-\section*{Acknowledgment}
+%% --------------------------------------------------------------------
+%       Acknowledgements
+%% --------------------------------------------------------------------
+
+\section*{Acknowledgements}
 
 We want to express our sincere gratitude to PL Poirion and Andi Han for their insightful discussions, which have greatly inspired and influenced this research.
 We also thank the developers of NetworkX and Graphviz.
 Their excellent work has been a great help in conducting this research.
 
-This work was supported by JSPS KAKENHI Grant Numbers JP26KJ0936, JP23H03351, JP24K23853 and JST ERATO JPMJER1903.
 
-\bibliographystyle{abbrvurl}
+%% --------------------------------------------------------------------
+%       Bibliography
+%% --------------------------------------------------------------------
+
 \bibliography{FruchtermanReingoldByRandomSubspace}
+% \bibliographystyle{abbrv} % Used in template.tex.
+% instructions.pdf, Section 4, requires abbrvurl.
+\bibliographystyle{abbrvurl}
 
 \appendix
 
@@ -976,7 +951,8 @@ For further large-scale graphs with over ten thousand vertices, it will likely b
 
 
 \begin{figure*}[p]
-  \includegraphics[width=\columnwidth]{individual/table_2.pdf}
+  \centering
+  \includegraphics[width=\columnwidth,height=0.84\textheight,keepaspectratio]{individual/table_2.pdf}
   \par\smallskip
   \noindent\begin{minipage}[c]{0.4\columnwidth}
     \centering
@@ -1090,7 +1066,7 @@ Based on \cref{sec:preliminaries}, let us define the sum of terms associated wit
 The $i$-th column of the gradient $\nabla \Phi(X) \in \mathbb{R}^{2 \times n}$ is
 \begin{align*}
   (\nabla \Phi(X))_{i} & = \nabla \Phi_{i}(x_{i}) = \sum_{j \in V \setminus \{i\}}\left(\frac{(a_{i,j}+a_{j,i})\norm{ x_{i}- x_{j}}}{k}- \frac{2k^{2}}{\norm{ x_{i}- x_{j}}^{2}}\right) (x_{i}- x_{j}) \\
-                              & = 2 \sum_{j \in V \setminus \{i\}}\left(\frac{a_{i,j}\norm{ x_{i}- x_{j}}}{k}- \frac{k^{2}}{\norm{ x_{i}- x_{j}}^{2}}\right) (x_{i}- x_{j}).
+                       & = 2 \sum_{j \in V \setminus \{i\}}\left(\frac{a_{i,j}\norm{ x_{i}- x_{j}}}{k}- \frac{k^{2}}{\norm{ x_{i}- x_{j}}^{2}}\right) (x_{i}- x_{j}).
 \end{align*}
 To obtain the final layout while preventing the divergence, we need to minimize $\Phi(X) + \Phi_{\mathrm{g}}(X)$, where $\Phi_{\mathrm{g}}(X)$ is the additional term.
 Let the center of gravity of the $j$-th connected component $V_{j}$ ($1 \leq j \leq n_{\mathrm{comp}}$) be $g_{j}\coloneqq \frac{1}{|V_{j}|}\sum_{i \in V_j}x_{i}$.
