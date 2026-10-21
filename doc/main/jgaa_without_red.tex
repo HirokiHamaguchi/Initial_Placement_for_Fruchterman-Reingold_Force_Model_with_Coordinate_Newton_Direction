@@ -47,7 +47,7 @@
 \HeadingTitle{Initial Placement for FR Force Model with Coordinate Newton Direction} % short title for header
 % --------------------------------------------------------------------
 \title{Initial Placement for Fruchterman--Reingold Force Model with Coordinate Newton Direction} % Paper title
-\Ack{This work was supported by JSPS KAKENHI Grant Numbers JP26KJ0936, JP23H03351, JP24K23853 and JST ERATO JPMJER1903.} % Grants Acknowledgments
+\Ack{This work was supported by JSPS KAKENHI Grant Numbers JP26KJ0936, JP23H03351, JP24K23853 and JST CREST JPMJCR24Q2.} % Grants Acknowledgments
 % --------------------------------------------------------------------
 
 \authorOrcid[aff:tokyo]{Hiroki Hamaguchi}{hirokihamaguchi0331@gmail.com}{0009-0005-7348-1356} % Authors
@@ -220,7 +220,7 @@ We next summarize the existing literature relevant to our work.
 \label{sec:optimization_approach}
 
 Optimization-based methods for graph drawing have been actively investigated.
-Representative approaches include GPU acceleration~\citep{gajdosParallelFruchtermanReingold2016}, machine learning techniques~\citep{tiezziGraphNeuralNetworks2024}, multi-objective formulations~\citep{ahmedMulticriteriaScalableGraph2022a}, and stochastic gradient descent~\citep{zhengGraphDrawingStochastic2019}.
+Representative approaches include GPU acceleration~\citep{gajdosParallelFruchtermanReingold2016}, machine learning techniques~\citep{tiezziGraphNeuralNetworks2024}, multi-objective formulations~\citep{ahmedMulticriteriaScalableGraph2022a}, and Stochastic Gradient Descent (SGD)~\citep{zhengGraphDrawingStochastic2019}.
 Among these, our attention is on the underlying optimization algorithms themselves.
 
 The energy minimization problem can be interpreted as a continuous optimization problem.
@@ -438,7 +438,7 @@ We summarize the proposed algorithm in \cref{alg:proposed}.
   \label{alg:proposed} \KwIn{Graph $G = (V, E)$, Weight $(a_{i,j})_{(i,j) \in E}$, Parameter $N_{\mathrm{iter}}^{\mathsf{CN}}\in\bbN$.}
   \KwOut{Initial placement $X = (x_{1}, \dots, x_{n})$}
   Assign all vertices to distinct points in $Q^{\mathrm{hex}}$ randomly\;
-  \For{$m \gets 0$ \KwTo $N_{\mathrm{iter}}^{\mathsf{CN}}$}{
+  \For{$m \gets 0$ \KwTo $N_{\mathrm{iter}}^{\mathsf{CN}} - 1$}{
   Select vertex $i \in V$ randomly\;
   $x_{i}^{\mathrm{new}}\gets \mathrm{round}(x_{i}- \nabla^{2}\Phi_{i}^{\mathrm{a}}(x_{i})^{-1}\nabla \Phi_{i}^{\mathrm{a}}(x_{i}) + r)$ with $r$ being a random vector\;
     \If{$\exists j \in V$ such that $x_{j}= x_{i}^{\mathrm{new}}$}{
@@ -538,10 +538,11 @@ As algorithms to solve the energy minimization problem, we used
 \end{enumerate}
 The key remark is that we slightly modified the original simulation-based algorithm (presented in \cref{alg:fr}) so that it automatically adjusts the stepsize and isolates the effect of the initialization from that of the stepsize.
 Specifically, we applied a simple backtracking line search at the first iteration to suppress overshooting.
-The maximum numbers of iterations of the simulation-based and L-BFGS algorithms are $N_{\mathrm{iter}}^{\mathsf{SIM}}= N_{\mathrm{iter}}^{\mathsf{LBFGS}}= 150$ for the FR force model, and $N_{\mathrm{iter}}^{\mathsf{SIM}}= N_{\mathrm{iter}}^{\mathsf{LBFGS}}= 300$ for the HC and Eades force models.
+The maximum numbers of iterations of the simulation-based and L-BFGS algorithms are $N_{\mathrm{iter}}^{\mathsf{SIM}}= N_{\mathrm{iter}}^{\mathsf{LBFGS}}= 150$ for the FR force model, and $N_{\mathrm{iter}}^{\mathsf{LBFGS}}= 300$ for the HC and Eades force models.
 
 As parameters, we set the number of iterations $N_{\mathrm{iter}}^{\mathsf{CN}}= 2 \abs{V}^{3}/ \abs{E}$ for~\cref{alg:proposed}, and we also set the total number of iterations of Simulated Annealing (\textsf{SA}) in~\cref{ssec:preprocessing} to the same value.
-For a random vector $r$ in \cref{alg:proposed}, the magnitude is set to $1-0.5\cdot m / N_{\mathrm{iter}}^{\mathsf{CN}}$ for the $m$-th iteration, and its direction is uniformly distributed in $[0, 2\pi)$.
+For a random vector $r$ in \cref{alg:proposed}, the magnitude at iteration $m$ is drawn uniformly from $[0, \max\{(1 - 0.5 m / N_{\mathrm{iter}}^{\mathsf{CN}})\norm{d_i}, h\})$, and its direction is uniformly distributed in $[0, 2\pi)$.
+Here, $d_i$ is the coordinate Newton direction for the selected vertex $i$, and $h$ is the lattice spacing, which is one for the FR model.
 Since \cref{alg:proposed} requires a computational time proportional to the degree of the selected vertex in each iteration, the expected computational time per iteration is $\order*{\abs{E}/\abs{V}}$.
 Consequently, we can roughly estimate that the total computational time of the proposed algorithm is $\order*{\abs{V}^2}$, equivalent to a few iterations of the FR or L-BFGS algorithms.
 All the code is available on GitHub~\citep{ThisPaperGitHub}.
@@ -819,7 +820,7 @@ whose gradient (the negative of the net force on $i$) and Hessian are
   \sum_{j \in V \setminus \{i\}}\left(\frac{a_{i,j}}{k \norm{x_i - x_j}}+ \frac{2k^{2}}{\norm{x_i - x_j}^{4}}
   \right) (x_{i}- x_{j})(x_{i}- x_{j})^{\top}.
 \end{gather*}
-A direct SCD scheme randomly selects a vertex $i$, applies Newton's method (or a regularized variant) to $\Phi_{i}$ using the above gradient and Hessian, and updates $x_{i}$ iteratively until convergence.
+A direct stochastic coordinate descent scheme randomly selects a vertex $i$, applies Newton's method (or a regularized variant) to $\Phi_{i}$ using the above gradient and Hessian, and updates $x_{i}$ iteratively until convergence.
 
 Although reasonable in spirit, this approach is also ineffective in practice.
 In the following, we illustrate the reasons for this failure with nontrivial examples.

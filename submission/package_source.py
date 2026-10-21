@@ -1,4 +1,4 @@
-"""Build the final PDF and source ZIP without changing manuscript or figures."""
+"""Package compilation dependencies and verify the PDF rebuilt from the ZIP."""
 
 from collections import Counter
 from pathlib import Path
@@ -13,17 +13,16 @@ ROOT = Path(__file__).resolve().parents[1]
 MAIN = ROOT / "doc" / "main"
 ARCHIVE = ROOT / "submission" / "jgaa-source.zip"
 MANUSCRIPT = MAIN / "jgaa_without_red.tex"
+PDF = MAIN / "final.pdf"
 
 
 def source_files() -> set[Path]:
     files = {MANUSCRIPT}
     files.update(MAIN / name for name in (
-        "jgaa-art.cls", "abbrvurl.bst", "by.eps", "by.png",
-        "orcid.eps", "orcid.png", "cube-spread.pdf", "cube-spread.ps",
+        "jgaa-art.cls", "abbrvurl.bst", "by.png",
+        "orcid.png", "cube-spread.pdf",
         "FruchtermanReingoldByRandomSubspace.bib",
-        "individual/individual.ipynb", "individual/legend.py",
     ))
-    files.update((MAIN / "individual" / "hist").glob("*.txt"))
     pending = [MANUSCRIPT]
     visited = set()
     while pending:
@@ -40,17 +39,17 @@ def source_files() -> set[Path]:
                 raise FileNotFoundError(graphic)
             graphic = graphic.resolve()
             files.add(graphic)
-            for extension in (".tex", ".py", ".ipynb"):
-                sidecar = graphic.with_suffix(extension)
-                if sidecar.is_file():
-                    files.add(sidecar)
-                    if extension == ".tex":
-                        pending.append(sidecar)
     for path in files:
         path.resolve().relative_to(MAIN.resolve())
         if not path.is_file():
             raise FileNotFoundError(path)
     return files
+
+
+def pdf_without_metadata(path: Path) -> bytes:
+    data = path.read_bytes()
+    data = re.sub(rb"/(?:CreationDate|ModDate)\s*\(D:[^)]*\)", b"", data)
+    return re.sub(rb"/ID\s*\[\s*<[0-9A-Fa-f]+>\s*<[0-9A-Fa-f]+>\s*\]", b"", data)
 
 
 def main() -> None:
@@ -65,11 +64,19 @@ def main() -> None:
     with TemporaryDirectory(prefix="jgaa-source-") as directory:
         temporary = Path(directory)
         build = temporary / "jgaa-source"
-        for source in sorted(files):
-            name = Path("jgaa.tex") if source == MANUSCRIPT else source.relative_to(MAIN)
-            target = build / name
-            target.parent.mkdir(parents=True, exist_ok=True)
-            shutil.copyfile(source, target)
+        archive = temporary / "jgaa-source.zip"
+        with ZipFile(archive, "w", compression=ZIP_DEFLATED) as output:
+            for source in sorted(files):
+                name = Path("jgaa.tex") if source == MANUSCRIPT else source.relative_to(MAIN)
+                output.write(source, "jgaa-source/" + name.as_posix())
+        with ZipFile(archive) as output:
+            if output.testzip() is not None:
+                raise RuntimeError("ZIP integrity check failed")
+            for source in files:
+                name = Path("jgaa.tex") if source == MANUSCRIPT else source.relative_to(MAIN)
+                if output.read("jgaa-source/" + name.as_posix()) != source.read_bytes():
+                    raise RuntimeError(f"ZIP content differs: {source}")
+            output.extractall(temporary)
         result = subprocess.run(
             ["latexmk", "-norc", "-pdf", "-interaction=nonstopmode",
              "-halt-on-error", "-file-line-error", "jgaa.tex"],
@@ -83,21 +90,10 @@ def main() -> None:
         for warning in ("Overfull", "Float too large", "undefined references", "undefined citations"):
             if warning in log:
                 raise RuntimeError(f"Check compilation warning: {warning}")
-        archive = temporary / "jgaa-source.zip"
-        with ZipFile(archive, "w", compression=ZIP_DEFLATED) as output:
-            for source in sorted(files):
-                name = Path("jgaa.tex") if source == MANUSCRIPT else source.relative_to(MAIN)
-                output.write(build / name, "jgaa-source/" + name.as_posix())
-        with ZipFile(archive) as output:
-            if output.testzip() is not None:
-                raise RuntimeError("ZIP integrity check failed")
-            for source in files:
-                name = Path("jgaa.tex") if source == MANUSCRIPT else source.relative_to(MAIN)
-                if output.read("jgaa-source/" + name.as_posix()) != source.read_bytes():
-                    raise RuntimeError(f"ZIP content differs: {source}")
-        shutil.copyfile(build / "jgaa.pdf", MANUSCRIPT.with_suffix(".pdf"))
+        if pdf_without_metadata(build / "jgaa.pdf") != pdf_without_metadata(PDF):
+            raise RuntimeError("Rebuilt PDF differs beyond creation/modification dates and document ID")
         shutil.copyfile(archive, ARCHIVE)
-    print(f"Built PDF and {ARCHIVE} ({len(files)} source files).")
+    print(f"Created {ARCHIVE} ({len(files)} source files). Rebuilt PDF matches except metadata.")
 
 
 if __name__ == "__main__":
